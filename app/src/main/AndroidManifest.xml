@@ -13,8 +13,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         >
-        <activity android:name="com.martinwalls.pms.NewStockActivity">
-        </activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
@@ -25,6 +23,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name="com.martinwalls.nea.NewStockActivity">
         </activity>
     </application>
 
