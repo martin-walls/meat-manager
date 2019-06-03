@@ -1,3 +1,91 @@
 <resources>
     <string name="app_name">NEA</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- Button actions -->
+    <string name="action_undo">Undo</string>
+    <string name="action_redo">Redo</string>
+    <string name="action_done">Done</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_favourites">Favourites</string>
+
+    <!-- Common data -->
+    <string name="amount_kg">%f kg</string>
+    <plurals name="amount_lbs">
+        <item quantity="one">%f lb</item>
+        <item quantity="other">%f lbs</item>
+    </plurals>
+    <plurals name="amount_boxes">
+        <item quantity="one">%d box</item>
+        <item quantity="other">%d boxes</item>
+    </plurals>
+    <string name="quality_good">Good</string>
+    <string name="quality_pet_food">Pet food</string>
+    <string name="quality_waste">Waste</string>
+
+    <!-- Dashboard page -->
+    <string name="dashboard_title">Dashboard</string>
+
+    <!-- Stock page -->
+    <string name="stock_title">Stock</string>
+    <string name="stock_empty">No stock to show</string>
+    <string name="stock_new">Add new stock</string>
+    <string name="stock_product_new">Add new product</string>
+    <string name="stock_product_input_name">Name:</string>
+    <string name="stock_product_meat_type">Type of meat</string>
+    <string name="stock_product_meat_type_new">Add new meat type</string>
+    <string name="stock_product_meat_type_input_name">Name:</string>
+    <string name="stock_input_product">Product</string>
+    <string name="stock_input_supplier">Supplier</string>
+    <string name="stock_input_quantity_kg">Quantity (kg):</string>
+    <string name="stock_input_quantity_boxes">Number of boxes:</string>
+    <string name="stock_input_location">Location</string>
+    <string name="stock_input_destination">Destination</string>
+    <string name="stock_input_quality">Quality</string>
+
+    <!-- Locations page -->
+    <string name="locations_title">Locations</string>
+    <string name="locations_supplier">Supplier</string>
+    <string name="locations_storage">Storage</string>
+    <string name="locations_destination">Destination</string>
+    <string name="locations_new">Add new location</string>
+    <string name="locations_input_name">Name:</string>
+    <string name="locations_input_email">Email:</string>
+    <string name="locations_input_phone">Phone:</string>
+    <string name="locations_input_address_line_number">Address line %d:</string>
+    <string name="locations_input_city">City:</string>
+    <string name="locations_input_postcode">Postcode:</string>
+    <string name="locations_input_country">Country:</string>
+
+    <!-- Contracts page -->
+    <string name="contracts_title">Contracts</string>
+    <string name="contracts_input_customer">Customer</string>
+    <string name="contracts_input_repeat_every">Repeat every…</string>
+    <string name="contracts_input_repeat_on">On…</string>
+    <plurals name="contracts_input_reminder_time">
+        <item quantity="one">Reminder: %d day before</item>
+        <item quantity="other">Reminder: %d days before</item>
+    </plurals>
+    <string name="contracts_input_product">Product</string>
+    <string name="contracts_input_quantity">Quantity:</string>
+    <string name="contracts_add_product">Add another product…</string>
+
+    <!-- Exchange page -->
+    <string name="exchange_title">Exchange</string>
+    <string name="exchange_choose_currencies">Choose currencies</string>
+    <string name="exchange_all_currencies">All currencies</string>
+
+    <!-- Settings page -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_default_reminder_time">Default reminder time</string>
+    <string name="settings_mass_unit">Unit of mass to use</string>
+    <string name="settings_mass_unit_kg">kg</string>
+    <plurals name="settings_mass_unit_lbs">
+        <item quantity="one">lb</item>
+        <item quantity="other">lbs</item>
+    </plurals>
+    <string name="settings_backup_database">Backup database</string>
+    <string name="settings_dark_theme">Enable dark theme</string>
 </resources>
