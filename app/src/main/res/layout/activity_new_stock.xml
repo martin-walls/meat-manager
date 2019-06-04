@@ -10,13 +10,22 @@
     android:layout_margin="16dp"
     >
 
-    <include
-        android:id="@+id/input_product"
-        layout="@layout/input_dropdown"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/input_margin_vertical"
-        />
+        style="@style/TextInputLayout"
+        android:hint="@string/stock_input_product"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_product"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:imeOptions="actionNext"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <include
         android:id="@+id/input_supplier"
