@@ -15,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/input_margin_vertical"
-        style="@style/TextInputLayout"
         android:hint="@string/stock_input_product"
         >
 
@@ -23,7 +22,7 @@
             android:id="@+id/input_product_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
+            android:inputType="textCapWords"
             android:imeOptions="actionNext"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -47,7 +46,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            style="@style/TextInputLayout"
             android:hint="@string/stock_input_quantity_kg"
             android:layout_marginEnd="@dimen/input_margin_horizontal"
             >
@@ -65,7 +63,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            style="@style/TextInputLayout"
             android:hint="@string/stock_input_quantity_boxes"
             >
 
@@ -103,5 +100,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/input_margin_vertical"
         />
+
 
 </LinearLayout>
