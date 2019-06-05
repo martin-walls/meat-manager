@@ -11,32 +11,32 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_product"
+        style="@style/AppTextInputLayout.Searchable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/view_spacing_vertical"
         android:layout_marginStart="@dimen/activity_margin_horizontal"
         android:layout_marginEnd="@dimen/activity_margin_horizontal"
+        android:layout_marginBottom="@dimen/view_spacing_vertical"
         android:hint="@string/stock_input_product"
-        app:endIconDrawable="@drawable/ic_cancel"
-        app:endIconMode="custom"
         >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_product"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
+            android:imeOptions="actionUnspecified"
+            android:inputType="text"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_supplier"
+        style="@style/AppTextInputLayout.Searchable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/view_spacing_vertical"
         android:layout_marginStart="@dimen/activity_margin_horizontal"
         android:layout_marginEnd="@dimen/activity_margin_horizontal"
+        android:layout_marginBottom="@dimen/view_spacing_vertical"
         android:hint="@string/stock_input_supplier"
         >
 
@@ -44,8 +44,8 @@
             android:id="@+id/edit_text_supplier"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
+            android:imeOptions="actionUnspecified"
+            android:inputType="text"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -53,9 +53,9 @@
         android:id="@+id/input_row_quantity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/view_spacing_vertical"
         android:layout_marginStart="@dimen/activity_margin_horizontal"
         android:layout_marginEnd="@dimen/activity_margin_horizontal"
+        android:layout_marginBottom="@dimen/view_spacing_vertical"
         android:orientation="horizontal"
         >
 
@@ -95,11 +95,12 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_location"
+        style="@style/AppTextInputLayout.Searchable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/view_spacing_vertical"
         android:layout_marginStart="@dimen/activity_margin_horizontal"
         android:layout_marginEnd="@dimen/activity_margin_horizontal"
+        android:layout_marginBottom="@dimen/view_spacing_vertical"
         android:hint="@string/stock_input_location"
         >
 
@@ -107,18 +108,19 @@
             android:id="@+id/edit_text_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
+            android:imeOptions="actionUnspecified"
+            android:inputType="text"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_destination"
+        style="@style/AppTextInputLayout.Searchable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/view_spacing_vertical"
         android:layout_marginStart="@dimen/activity_margin_horizontal"
         android:layout_marginEnd="@dimen/activity_margin_horizontal"
+        android:layout_marginBottom="@dimen/view_spacing_vertical"
         android:hint="@string/stock_input_destination"
         >
 
@@ -126,18 +128,19 @@
             android:id="@+id/edit_text_destination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
+            android:imeOptions="actionUnspecified"
+            android:inputType="text"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_quality"
+        style="@style/AppTextInputLayout.Searchable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/view_spacing_vertical"
         android:layout_marginStart="@dimen/activity_margin_horizontal"
         android:layout_marginEnd="@dimen/activity_margin_horizontal"
+        android:layout_marginBottom="@dimen/view_spacing_vertical"
         android:hint="@string/stock_input_quality"
         >
 
@@ -145,13 +148,13 @@
             android:id="@+id/edit_text_quality"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
+            android:imeOptions="actionUnspecified"
+            android:inputType="text"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
     <RelativeLayout
-        android:id="@+id/recycler_view_wrapper"
+        android:id="@+id/search_results_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -170,8 +173,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/search_result_margin_left"
-            android:layout_marginEnd="@dimen/search_result_margin_right"
             android:layout_marginTop="@dimen/search_result_spacing"
+            android:layout_marginEnd="@dimen/search_result_margin_right"
             android:layout_marginBottom="@dimen/search_result_spacing"
             android:text="@string/stock_product_no_matches"
             />

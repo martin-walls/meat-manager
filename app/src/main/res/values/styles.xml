@@ -27,6 +27,11 @@
 
     </style>
 
+    <!-- shows clear icon at end -->
+    <style name="AppTextInputLayout.Searchable">
+        <item name="endIconMode">custom</item>
+        <item name="endIconDrawable">@drawable/ic_cancel</item>
+    </style>
 
     <style name="SelectDialogItemText">
         <item name="android:textSize">18sp</item>
