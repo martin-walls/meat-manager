@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +36,7 @@ public class SelectItemDialog extends DialogFragment {
 
         CustomRecyclerView recyclerView = dialogView.findViewById(R.id.recycler_view_results);
 
-        ItemAdapter adapter = new ItemAdapter(dummyOptions);
+        SearchItemAdapter adapter = new SearchItemAdapter(dummyOptions);
         recyclerView.setAdapter(adapter);
         recyclerView.setEmptyView(dialogView.findViewById(R.id.empty));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());

@@ -40,12 +40,12 @@
     <string name="stock_product_input_name">Name:</string>
     <string name="stock_product_meat_type">Type of meat</string>
     <string name="stock_product_meat_type_new">Add new meat type</string>
-    <string name="stock_product_meat_type_input_name">Name:</string>
+    <string name="stock_product_meat_type_input_name">Name</string>
     <string name="stock_input_product">Product</string>
     <string name="stock_input_supplier">Supplier</string>
-    <string name="stock_input_quantity_kg">Quantity (kg):</string>
-    <string name="stock_input_quantity_lbs">Quantity (lbs):</string>
-    <string name="stock_input_quantity_boxes">Number of boxes:</string>
+    <string name="stock_input_quantity_kg">Quantity (kg)</string>
+    <string name="stock_input_quantity_lbs">Quantity (lbs)</string>
+    <string name="stock_input_quantity_boxes">Number of boxes</string>
     <string name="stock_input_location">Location</string>
     <string name="stock_input_destination">Destination</string>
     <string name="stock_input_quality">Quality</string>
