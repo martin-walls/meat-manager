@@ -16,6 +16,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
 
     private List<String> itemList;
     private List<String> itemListFiltered;
+    private SearchItemAdapterListener listener;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView itemName;
@@ -23,12 +24,20 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         public ViewHolder(View view) {
             super(view);
             itemName = (TextView) view;
+
+            itemName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemSelected(((TextView) v).getText().toString());
+                }
+            });
         }
     }
 
-    public SearchItemAdapter(List<String> itemList) {
+    public SearchItemAdapter(List<String> itemList, SearchItemAdapterListener listener) {
         this.itemList = itemList;
         this.itemListFiltered = itemList;
+        this.listener = listener;
     }
 
     @Override
@@ -73,9 +82,13 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults results) {
                 //noinspection unchecked
-                itemListFiltered = (List<String>) results.values;
+                itemListFiltered = (ArrayList<String>) results.values;
                 notifyDataSetChanged();
             }
         };
+    }
+
+    public interface SearchItemAdapterListener {
+        void onItemSelected(String item);
     }
 }

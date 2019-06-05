@@ -3,10 +3,12 @@ package com.martinwalls.nea;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,9 +17,9 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
-public class NewStockActivity extends AppCompatActivity {
+public class NewStockActivity extends AppCompatActivity
+        implements SearchItemAdapter.SearchItemAdapterListener {
 
     private HashMap<String, Integer> inputViews = new HashMap<>();
 
@@ -36,8 +38,6 @@ public class NewStockActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_stock);
 
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-
         // store reference to each row to show/hide later
         inputViews.put("product", R.id.input_layout_product);
         inputViews.put("supplier", R.id.input_layout_supplier);
@@ -47,7 +47,7 @@ public class NewStockActivity extends AppCompatActivity {
         inputViews.put("quality", R.id.input_layout_quality);
 
         // setup recycler view
-        itemAdapter = new SearchItemAdapter(searchResultList);
+        itemAdapter = new SearchItemAdapter(searchResultList, this);
         TextView emptyView = findViewById(R.id.no_results);
         CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
         recyclerView.setAdapter(itemAdapter);
@@ -83,10 +83,22 @@ public class NewStockActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_new_stock, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //noinspection SwitchStatementWithTooFewBranches
         switch (item.getItemId()) {
-            case android.R.id.home:
+            case R.id.action_done:
+                //todo handle done action
+                Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
+                finish();
+                return true;
+            case R.id.action_cancel:
+                //todo confirm cancel
                 finish();
                 return true;
             default:
@@ -132,7 +144,6 @@ public class NewStockActivity extends AppCompatActivity {
     }
 
     private void openSearch(String rowName) {
-
         for (Integer view : inputViews.values()) {
             if (!view.equals(inputViews.get(rowName))) {
                 findViewById(view).setVisibility(View.GONE);
@@ -155,6 +166,10 @@ public class NewStockActivity extends AppCompatActivity {
         }
         itemAdapter.notifyDataSetChanged();
 
+        // filter data at start for when text is already entered
+        TextInputEditText editText = (TextInputEditText) getCurrentFocus();
+        itemAdapter.getFilter().filter(editText.getText());
+
         searchResultsLayout.setVisibility(View.VISIBLE);
     }
 
@@ -164,5 +179,16 @@ public class NewStockActivity extends AppCompatActivity {
         }
 
         searchResultsLayout.setVisibility(View.GONE);
+
+        searchResultList.clear();
+        itemAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemSelected(String name) {
+        TextInputEditText editText = (TextInputEditText) getCurrentFocus();
+        editText.setText(name);
+        editText.clearFocus();
+        cancelSearch();
     }
 }
