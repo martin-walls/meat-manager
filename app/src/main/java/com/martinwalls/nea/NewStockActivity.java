@@ -25,6 +25,12 @@ public class NewStockActivity extends AppCompatActivity {
     private ArrayList<String> searchResultList = new ArrayList<>();
     private RelativeLayout searchResultsLayout;
 
+    private final String INPUT_PRODUCT = "product";
+    private final String INPUT_SUPPLIER = "supplier";
+    private final String INPUT_LOCATION = "location";
+    private final String INPUT_DESTINATION = "destination";
+    private final String INPUT_QUALITY = "quality";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,23 +61,23 @@ public class NewStockActivity extends AppCompatActivity {
 
 
 
-        setListeners("product",
+        setListeners(INPUT_PRODUCT,
                 (TextInputLayout) findViewById(R.id.input_layout_product),
                 (TextInputEditText) findViewById(R.id.edit_text_product));
 
-        setListeners("supplier",
+        setListeners(INPUT_SUPPLIER,
                 (TextInputLayout) findViewById(R.id.input_layout_supplier),
                 (TextInputEditText) findViewById(R.id.edit_text_supplier));
 
-        setListeners("location",
+        setListeners(INPUT_LOCATION,
                 (TextInputLayout) findViewById(R.id.input_layout_location),
                 (TextInputEditText) findViewById(R.id.edit_text_location));
 
-        setListeners("destination",
+        setListeners(INPUT_DESTINATION,
                 (TextInputLayout) findViewById(R.id.input_layout_destination),
                 (TextInputEditText) findViewById(R.id.edit_text_destination));
 
-        setListeners("quality",
+        setListeners(INPUT_QUALITY,
                 (TextInputLayout) findViewById(R.id.input_layout_quality),
                 (TextInputEditText) findViewById(R.id.edit_text_quality));
     }
@@ -135,15 +141,15 @@ public class NewStockActivity extends AppCompatActivity {
 
         searchResultList.clear();
         switch (rowName) {
-            case "product":
+            case INPUT_PRODUCT:
                 searchResultList.addAll(SampleData.getSampleProducts());
                 break;
-            case "supplier":
-            case "destination":
-            case "location":
+            case INPUT_SUPPLIER:
+            case INPUT_DESTINATION:
+            case INPUT_LOCATION:
                 searchResultList.addAll(SampleData.getSampleLocations());
                 break;
-            case "quality":
+            case INPUT_QUALITY:
                 searchResultList.addAll(SampleData.getSampleQualities());
                 break;
         }

@@ -176,7 +176,7 @@
             android:layout_marginTop="@dimen/search_result_spacing"
             android:layout_marginEnd="@dimen/search_result_margin_right"
             android:layout_marginBottom="@dimen/search_result_spacing"
-            android:text="@string/stock_product_no_matches"
+            android:text="@string/stock_no_matches"
             />
     </RelativeLayout>
 
