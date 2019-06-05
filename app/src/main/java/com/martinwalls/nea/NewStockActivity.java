@@ -137,8 +137,15 @@ public class NewStockActivity extends AppCompatActivity {
         switch (rowName) {
             case "product":
                 searchResultList.addAll(SampleData.getSampleProducts());
+                break;
+            case "supplier":
+            case "destination":
             case "location":
                 searchResultList.addAll(SampleData.getSampleLocations());
+                break;
+            case "quality":
+                searchResultList.addAll(SampleData.getSampleQualities());
+                break;
         }
         itemAdapter.notifyDataSetChanged();
 

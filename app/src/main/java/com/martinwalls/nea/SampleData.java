@@ -50,11 +50,21 @@ public class SampleData {
             "UK1160"
     };
 
+    private static String[] qualities = new String[] {
+            "Good",
+            "Pet food",
+            "Waste"
+    };
+
     public static ArrayList<String> getSampleProducts() {
         return new ArrayList<>(Arrays.asList(products));
     }
 
     public static ArrayList<String> getSampleLocations() {
         return new ArrayList<>(Arrays.asList(locations));
+    }
+
+    public static ArrayList<String> getSampleQualities() {
+        return new ArrayList<>(Arrays.asList(qualities));
     }
 }
