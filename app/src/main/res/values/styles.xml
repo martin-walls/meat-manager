@@ -30,15 +30,17 @@
 
     <style name="SelectDialogItemText">
         <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/medium_grey</item>
     </style>
 
     <style name="SelectDialogItemText.Item">
         <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
     <style name="SelectDialogItemText.Empty">
-        <item name="android:textColor">#999</item>
-        <!-- TODO refactor colors etc. into theme attributes -->
+
     </style>
 
 </resources>

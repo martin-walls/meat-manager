@@ -5,7 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,10 +14,17 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NewStockActivity extends AppCompatActivity {
 
+    private HashMap<String, Integer> inputViews = new HashMap<>();
+
     private SearchItemAdapter itemAdapter;
+    private ArrayList<String> searchResultList = new ArrayList<>();
+    private TextView emptyView;
+    private CustomRecyclerView recyclerView;
+    private RelativeLayout recyclerViewWrapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +33,23 @@ public class NewStockActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        itemAdapter = new SearchItemAdapter(new ArrayList<String>());
+        inputViews.put("product", R.id.input_layout_product);
+        inputViews.put("supplier", R.id.input_layout_supplier);
+        inputViews.put("quantity", R.id.input_row_quantity);
+        inputViews.put("location", R.id.input_layout_location);
+        inputViews.put("destination", R.id.input_layout_destination);
+        inputViews.put("quality", R.id.input_layout_quality);
+
+        // setup recycler view
+        itemAdapter = new SearchItemAdapter(searchResultList);
+        emptyView = findViewById(R.id.no_results);
+        recyclerView = findViewById(R.id.recycler_view_results);
+        recyclerView.setAdapter(itemAdapter);
+        recyclerView.setEmptyView(emptyView);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerViewWrapper = findViewById(R.id.recycler_view_wrapper);
+
 
         final TextInputEditText inputProduct = findViewById(R.id.edit_text_product);
         final TextInputLayout inputLayoutProduct = findViewById(R.id.input_layout_product);
@@ -38,10 +61,7 @@ public class NewStockActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     inputLayoutProduct.setEndIconVisible(true);
-                    inputProductOnClick();
-                } else {
-                    inputLayoutProduct.setEndIconVisible(false);
-                    cancelInputProductOnClick();
+                    inputOnClick("product");
                 }
             }
         });
@@ -51,6 +71,8 @@ public class NewStockActivity extends AppCompatActivity {
             public void onClick(View v) {
                 inputProduct.setText("");
                 inputProduct.clearFocus();
+                inputLayoutProduct.setEndIconVisible(false);
+                cancelInputProductOnClick();
             }
         });
 
@@ -74,6 +96,7 @@ public class NewStockActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //noinspection SwitchStatementWithTooFewBranches
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -83,49 +106,32 @@ public class NewStockActivity extends AppCompatActivity {
         }
     }
 
-    private void inputProductOnClick() {
-//        DialogFragment dialog = new SelectItemDialog();
-//        dialog.show(getSupportFragmentManager(), "select item dialog");
+    private void inputOnClick(String rowName) {
 
-        TextInputLayout inputLayoutSupplier = findViewById(R.id.input_layout_supplier);
-        inputLayoutSupplier.setVisibility(View.GONE);
-        LinearLayout inputLayoutQuantity = findViewById(R.id.input_row_quantity);
-        inputLayoutQuantity.setVisibility(View.GONE);
-        TextInputLayout inputLayoutLocation = findViewById(R.id.input_layout_location);
-        inputLayoutLocation.setVisibility(View.GONE);
-        TextInputLayout inputLayoutDestination = findViewById(R.id.input_layout_destination);
-        inputLayoutDestination.setVisibility(View.GONE);
-        TextInputLayout inputLayoutQuality = findViewById(R.id.input_layout_quality);
-        inputLayoutQuality.setVisibility(View.GONE);
+        for (String view : inputViews.keySet()) {
+            if (!view.equals(rowName)) {
+                //noinspection ConstantConditions
+                findViewById(inputViews.get(view)).setVisibility(View.GONE);
+            }
+        }
 
-        ArrayList<String> products = SampleData.getSampleProducts();
+        searchResultList.clear();
+        switch (rowName) {
+            case "product":
+                searchResultList.addAll(SampleData.getSampleProducts());
+            case "location":
+                searchResultList.addAll(SampleData.getSampleLocations());
+        }
+        itemAdapter.notifyDataSetChanged();
 
-        CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
-        recyclerView.setVisibility(View.VISIBLE);
-
-        TextView noResults = findViewById(R.id.no_results);
-        recyclerView.setEmptyView(noResults);
-
-        itemAdapter = new SearchItemAdapter(products);
-        recyclerView.setAdapter(itemAdapter);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerViewWrapper.setVisibility(View.VISIBLE);
     }
 
     private void cancelInputProductOnClick() {
-        TextInputLayout inputLayoutSupplier = findViewById(R.id.input_layout_supplier);
-        inputLayoutSupplier.setVisibility(View.VISIBLE);
-        LinearLayout inputLayoutQuantity = findViewById(R.id.input_row_quantity);
-        inputLayoutQuantity.setVisibility(View.VISIBLE);
-        TextInputLayout inputLayoutLocation = findViewById(R.id.input_layout_location);
-        inputLayoutLocation.setVisibility(View.VISIBLE);
-        TextInputLayout inputLayoutDestination = findViewById(R.id.input_layout_destination);
-        inputLayoutDestination.setVisibility(View.VISIBLE);
-        TextInputLayout inputLayoutQuality = findViewById(R.id.input_layout_quality);
-        inputLayoutQuality.setVisibility(View.VISIBLE);
+        for (int view : inputViews.values()) {
+            findViewById(view).setVisibility(View.VISIBLE);
+        }
 
-        CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
-        recyclerView.setVisibility(View.GONE);
+        recyclerViewWrapper.setVisibility(View.GONE);
     }
 }

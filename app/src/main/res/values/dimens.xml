@@ -1,7 +1,19 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
 
-    <!-- Input fields spacing -->
-    <dimen name="input_margin_horizontal">8dp</dimen>
-    <dimen name="input_margin_vertical">16dp</dimen>
+
+    <!-- Screen margin -->
+    <dimen name="activity_margin_top">16dp</dimen>
+    <dimen name="activity_margin_horizontal">16dp</dimen>
+
+    <!-- View spacing -->
+    <dimen name="view_spacing_horizontal">8dp</dimen>
+    <dimen name="view_spacing_vertical">16dp</dimen>
+
+
+    <!-- actual spacing is *2 as it's set on top and bottom -->
+    <dimen name="search_result_spacing">16dp</dimen>
+    <dimen name="search_result_margin_left">24dp</dimen>
+    <dimen name="search_result_margin_right">16dp</dimen>
+
 </resources>

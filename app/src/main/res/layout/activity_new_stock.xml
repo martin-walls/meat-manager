@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginTop="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_marginTop="@dimen/activity_margin_top"
     android:orientation="vertical"
     tools:context=".NewStockActivity"
     >
@@ -15,7 +13,9 @@
         android:id="@+id/input_layout_product"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/input_margin_vertical"
+        android:layout_marginBottom="@dimen/view_spacing_vertical"
+        android:layout_marginStart="@dimen/activity_margin_horizontal"
+        android:layout_marginEnd="@dimen/activity_margin_horizontal"
         android:hint="@string/stock_input_product"
         app:endIconDrawable="@drawable/ic_cancel"
         app:endIconMode="custom"
@@ -34,7 +34,9 @@
         android:id="@+id/input_layout_supplier"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/input_margin_vertical"
+        android:layout_marginBottom="@dimen/view_spacing_vertical"
+        android:layout_marginStart="@dimen/activity_margin_horizontal"
+        android:layout_marginEnd="@dimen/activity_margin_horizontal"
         android:hint="@string/stock_input_supplier"
         >
 
@@ -51,14 +53,16 @@
         android:id="@+id/input_row_quantity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/input_margin_vertical"
+        android:layout_marginBottom="@dimen/view_spacing_vertical"
+        android:layout_marginStart="@dimen/activity_margin_horizontal"
+        android:layout_marginEnd="@dimen/activity_margin_horizontal"
         android:orientation="horizontal"
         >
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/input_margin_horizontal"
+            android:layout_marginEnd="@dimen/view_spacing_horizontal"
             android:layout_weight="1"
             android:hint="@string/stock_input_quantity_kg"
             >
@@ -93,7 +97,9 @@
         android:id="@+id/input_layout_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/input_margin_vertical"
+        android:layout_marginBottom="@dimen/view_spacing_vertical"
+        android:layout_marginStart="@dimen/activity_margin_horizontal"
+        android:layout_marginEnd="@dimen/activity_margin_horizontal"
         android:hint="@string/stock_input_location"
         >
 
@@ -110,7 +116,9 @@
         android:id="@+id/input_layout_destination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/input_margin_vertical"
+        android:layout_marginBottom="@dimen/view_spacing_vertical"
+        android:layout_marginStart="@dimen/activity_margin_horizontal"
+        android:layout_marginEnd="@dimen/activity_margin_horizontal"
         android:hint="@string/stock_input_destination"
         >
 
@@ -127,7 +135,9 @@
         android:id="@+id/input_layout_quality"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/input_margin_vertical"
+        android:layout_marginBottom="@dimen/view_spacing_vertical"
+        android:layout_marginStart="@dimen/activity_margin_horizontal"
+        android:layout_marginEnd="@dimen/activity_margin_horizontal"
         android:hint="@string/stock_input_quality"
         >
 
@@ -140,22 +150,33 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.martinwalls.nea.CustomRecyclerView
-        android:id="@+id/recycler_view_results"
+    <RelativeLayout
+        android:id="@+id/recycler_view_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:overScrollMode="never"
         android:visibility="gone"
-        />
+        >
 
-    <TextView
-        android:id="@+id/no_results"
-        style="@style/SelectDialogItemText.Empty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/stock_product_no_matches"
-        android:visibility="gone"
-        />
+        <com.martinwalls.nea.CustomRecyclerView
+            android:id="@+id/recycler_view_results"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            />
+
+        <TextView
+            android:id="@+id/no_results"
+            style="@style/SelectDialogItemText.Empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/search_result_margin_left"
+            android:layout_marginEnd="@dimen/search_result_margin_right"
+            android:layout_marginTop="@dimen/search_result_spacing"
+            android:layout_marginBottom="@dimen/search_result_spacing"
+            android:text="@string/stock_product_no_matches"
+            />
+    </RelativeLayout>
+
 
     <!--<TextView-->
     <!--android:id="@+id/no_products"-->
