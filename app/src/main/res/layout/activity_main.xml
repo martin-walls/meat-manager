@@ -24,6 +24,8 @@
         android:paddingTop="@dimen/nav_drawer_padding_top"
         android:fitsSystemWindows="true"
         app:menu="@menu/activity_main_drawer"
-        />
+        >
+
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>
