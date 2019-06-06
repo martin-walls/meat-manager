@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.ViewHolder>
@@ -99,8 +100,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
                 } else {
                     showAddView = false;
                 }
-                //noinspection StatementWithEmptyBody
-                while (itemListFiltered.remove(context.getString(R.string.stock_add_new))) {}
+                itemListFiltered.removeAll(Collections.singleton(context.getString(R.string.stock_add_new)));
                 if (showAddView) {
                     itemListFiltered.add(0, context.getString(R.string.stock_add_new));
                 }
