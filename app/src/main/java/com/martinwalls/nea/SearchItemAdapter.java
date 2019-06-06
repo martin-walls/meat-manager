@@ -1,5 +1,7 @@
 package com.martinwalls.nea;
 
+import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +16,12 @@ import java.util.List;
 public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.ViewHolder>
         implements Filterable {
 
+    private Context context;
+
     private List<String> itemList;
     private List<String> itemListFiltered;
     private SearchItemAdapterListener listener;
+    private boolean showAddNew;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView itemName;
@@ -34,10 +39,12 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         }
     }
 
-    public SearchItemAdapter(List<String> itemList, SearchItemAdapterListener listener) {
+    public SearchItemAdapter(List<String> itemList, SearchItemAdapterListener listener, Context context) {
         this.itemList = itemList;
         this.itemListFiltered = itemList;
         this.listener = listener;
+        this.context = context;
+        showAddNew = false;
     }
 
     @Override
@@ -51,6 +58,10 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         String item = itemListFiltered.get(position);
         holder.itemName.setText(item);
+        if (position == 0) {
+            holder.itemName.setTextColor(context.getColor(R.color.dark_grey));
+        }
+        // todo extend CustomRecyclerView to have add new view at top show when search doesn't match
     }
 
     @Override
@@ -83,6 +94,11 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
             protected void publishResults(CharSequence charSequence, FilterResults results) {
                 //noinspection unchecked
                 itemListFiltered = (ArrayList<String>) results.values;
+                if (itemListFiltered.size() > 0) {
+                    showAddNew = !itemListFiltered.get(0).toLowerCase().contentEquals(charSequence.toString().toLowerCase());
+                } else {
+                    showAddNew = false;
+                }
                 notifyDataSetChanged();
             }
         };

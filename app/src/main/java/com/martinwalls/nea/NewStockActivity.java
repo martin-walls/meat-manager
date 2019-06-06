@@ -47,7 +47,7 @@ public class NewStockActivity extends AppCompatActivity
         inputViews.put("quality", R.id.input_layout_quality);
 
         // setup recycler view
-        itemAdapter = new SearchItemAdapter(searchResultList, this);
+        itemAdapter = new SearchItemAdapter(searchResultList, this, this);
         TextView emptyView = findViewById(R.id.no_results);
         CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
         recyclerView.setAdapter(itemAdapter);
@@ -55,10 +55,6 @@ public class NewStockActivity extends AppCompatActivity
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         searchResultsLayout = findViewById(R.id.search_results_layout);
-
-
-        // todo add new product option at top of list - show what the user is typing with add new option if not exists
-
 
 
         setListeners(INPUT_PRODUCT,
