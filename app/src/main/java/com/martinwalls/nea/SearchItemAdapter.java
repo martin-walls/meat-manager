@@ -1,7 +1,6 @@
 package com.martinwalls.nea;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
     private List<String> itemList;
     private List<String> itemListFiltered;
     private SearchItemAdapterListener listener;
-    private boolean showAddNew;
+    private boolean showAddView;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView itemName;
@@ -44,7 +43,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         this.itemListFiltered = itemList;
         this.listener = listener;
         this.context = context;
-        showAddNew = false;
+        showAddView = true;
     }
 
     @Override
@@ -58,10 +57,11 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         String item = itemListFiltered.get(position);
         holder.itemName.setText(item);
-        if (position == 0) {
-            holder.itemName.setTextColor(context.getColor(R.color.dark_grey));
+        if (position == 0 && !showAddView) {
+            holder.itemName.setTextAppearance(R.style.SelectDialogItemText_Item_Emphasis);
+        } else {
+            holder.itemName.setTextAppearance(R.style.SelectDialogItemText_Item_Normal);
         }
-        // todo extend CustomRecyclerView to have add new view at top show when search doesn't match
     }
 
     @Override
@@ -95,10 +95,11 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
                 //noinspection unchecked
                 itemListFiltered = (ArrayList<String>) results.values;
                 if (itemListFiltered.size() > 0) {
-                    showAddNew = !itemListFiltered.get(0).toLowerCase().contentEquals(charSequence.toString().toLowerCase());
+                    showAddView = !itemListFiltered.get(0).toLowerCase().contentEquals(charSequence.toString().toLowerCase());
                 } else {
-                    showAddNew = false;
+                    showAddView = false;
                 }
+                listener.showAddNewView(showAddView);
                 notifyDataSetChanged();
             }
         };
@@ -106,5 +107,6 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
 
     public interface SearchItemAdapterListener {
         void onItemSelected(String item);
+        void showAddNewView(boolean showView);
     }
 }

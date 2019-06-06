@@ -6,7 +6,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +25,9 @@ public class NewStockActivity extends AppCompatActivity
 
     private SearchItemAdapter itemAdapter;
     private ArrayList<String> searchResultList = new ArrayList<>();
-    private RelativeLayout searchResultsLayout;
+    private LinearLayout searchResultsLayout;
+    private TextView addNewView;
+    private boolean addNewViewEnabled = true;
 
     private final String INPUT_PRODUCT = "product";
     private final String INPUT_SUPPLIER = "supplier";
@@ -45,6 +47,8 @@ public class NewStockActivity extends AppCompatActivity
         inputViews.put("location", R.id.input_layout_location);
         inputViews.put("destination", R.id.input_layout_destination);
         inputViews.put("quality", R.id.input_layout_quality);
+
+        addNewView = findViewById(R.id.add_new);
 
         // setup recycler view
         itemAdapter = new SearchItemAdapter(searchResultList, this, this);
@@ -140,6 +144,7 @@ public class NewStockActivity extends AppCompatActivity
     }
 
     private void openSearch(String rowName) {
+
         for (Integer view : inputViews.values()) {
             if (!view.equals(inputViews.get(rowName))) {
                 findViewById(view).setVisibility(View.GONE);
@@ -166,6 +171,9 @@ public class NewStockActivity extends AppCompatActivity
         TextInputEditText editText = (TextInputEditText) getCurrentFocus();
         itemAdapter.getFilter().filter(editText.getText());
 
+        // disable addNewView for quality input
+        addNewViewEnabled = !rowName.equals(INPUT_QUALITY);
+
         searchResultsLayout.setVisibility(View.VISIBLE);
     }
 
@@ -186,5 +194,12 @@ public class NewStockActivity extends AppCompatActivity
         editText.setText(name);
         editText.clearFocus();
         cancelSearch();
+    }
+
+    @Override
+    public void showAddNewView(boolean showView) {
+        if (addNewViewEnabled) {
+            addNewView.setVisibility(showView ? View.VISIBLE : View.GONE);
+        }
     }
 }

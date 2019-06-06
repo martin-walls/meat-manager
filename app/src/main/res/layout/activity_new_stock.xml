@@ -153,12 +153,25 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/search_results_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        android:orientation="vertical"
         >
+
+        <TextView
+            android:id="@+id/add_new"
+            style="@style/SelectDialogItemText.Item.Emphasis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/search_result_margin_left"
+            android:paddingTop="@dimen/search_result_spacing"
+            android:paddingEnd="@dimen/search_result_margin_right"
+            android:paddingBottom="@dimen/search_result_spacing"
+            android:text="@string/stock_add_new"
+            />
 
         <com.martinwalls.nea.CustomRecyclerView
             android:id="@+id/recycler_view_results"
@@ -172,13 +185,13 @@
             style="@style/SelectDialogItemText.Empty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/search_result_margin_left"
-            android:layout_marginTop="@dimen/search_result_spacing"
-            android:layout_marginEnd="@dimen/search_result_margin_right"
-            android:layout_marginBottom="@dimen/search_result_spacing"
+            android:paddingStart="@dimen/search_result_margin_left"
+            android:paddingTop="@dimen/search_result_spacing"
+            android:paddingEnd="@dimen/search_result_margin_right"
+            android:paddingBottom="@dimen/search_result_spacing"
             android:text="@string/stock_no_matches"
             />
-    </RelativeLayout>
+    </LinearLayout>
 
 
     <!--<TextView-->

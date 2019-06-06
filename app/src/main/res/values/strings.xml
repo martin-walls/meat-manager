@@ -34,6 +34,7 @@
     <string name="stock_new">Add new stock</string>
 
     <string name="stock_no_matches">No matching results found</string>
+    <string name="stock_add_new">Add new…</string>
     <string name="stock_product_new">Add new product…</string>
     <string name="stock_product_input_name">Name:</string>
     <string name="stock_product_meat_type">Type of meat</string>

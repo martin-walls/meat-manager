@@ -44,6 +44,15 @@
         <item name="android:focusable">true</item>
     </style>
 
+    <style name="SelectDialogItemText.Item.Normal">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="SelectDialogItemText.Item.Emphasis">
+        <item name="android:textColor">@color/dark_grey</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
     <style name="SelectDialogItemText.Empty">
 
     </style>
