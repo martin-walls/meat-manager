@@ -26,7 +26,6 @@ public class NewStockActivity extends AppCompatActivity
     private SearchItemAdapter itemAdapter;
     private ArrayList<String> searchResultList = new ArrayList<>();
     private LinearLayout searchResultsLayout;
-    private TextView addNewView;
     private boolean addNewViewEnabled = true;
 
     private final String INPUT_PRODUCT = "product";
@@ -48,7 +47,6 @@ public class NewStockActivity extends AppCompatActivity
         inputViews.put("destination", R.id.input_layout_destination);
         inputViews.put("quality", R.id.input_layout_quality);
 
-        addNewView = findViewById(R.id.add_new);
 
         // setup recycler view
         itemAdapter = new SearchItemAdapter(searchResultList, this, this);
@@ -198,8 +196,5 @@ public class NewStockActivity extends AppCompatActivity
 
     @Override
     public void showAddNewView(boolean showView) {
-        if (addNewViewEnabled) {
-            addNewView.setVisibility(showView ? View.VISIBLE : View.GONE);
-        }
     }
 }

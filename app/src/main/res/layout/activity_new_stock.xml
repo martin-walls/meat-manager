@@ -161,17 +161,17 @@
         android:orientation="vertical"
         >
 
-        <TextView
-            android:id="@+id/add_new"
-            style="@style/SelectDialogItemText.Item.Emphasis"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/search_result_margin_left"
-            android:paddingTop="@dimen/search_result_spacing"
-            android:paddingEnd="@dimen/search_result_margin_right"
-            android:paddingBottom="@dimen/search_result_spacing"
-            android:text="@string/stock_add_new"
-            />
+        <!--<TextView-->
+            <!--android:id="@+id/add_new"-->
+            <!--style="@style/SelectDialogItemText.Item.Emphasis"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:paddingStart="@dimen/search_result_margin_left"-->
+            <!--android:paddingTop="@dimen/search_result_spacing"-->
+            <!--android:paddingEnd="@dimen/search_result_margin_right"-->
+            <!--android:paddingBottom="@dimen/search_result_spacing"-->
+            <!--android:text="@string/stock_add_new"-->
+            <!--/>-->
 
         <com.martinwalls.nea.CustomRecyclerView
             android:id="@+id/recycler_view_results"
@@ -192,14 +192,5 @@
             android:text="@string/stock_no_matches"
             />
     </LinearLayout>
-
-
-    <!--<TextView-->
-    <!--android:id="@+id/no_products"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="@string/stock_product_no_products"-->
-    <!--style="@style/SelectDialogItemText.Empty"-->
-    <!--/>-->
 
 </LinearLayout>

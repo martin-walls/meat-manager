@@ -57,7 +57,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         String item = itemListFiltered.get(position);
         holder.itemName.setText(item);
-        if (position == 0 && !showAddView) {
+        if (position == 0) {
             holder.itemName.setTextAppearance(R.style.SelectDialogItemText_Item_Emphasis);
         } else {
             holder.itemName.setTextAppearance(R.style.SelectDialogItemText_Item_Normal);
@@ -99,7 +99,11 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
                 } else {
                     showAddView = false;
                 }
-                listener.showAddNewView(showAddView);
+                //noinspection StatementWithEmptyBody
+                while (itemListFiltered.remove(context.getString(R.string.stock_add_new))) {}
+                if (showAddView) {
+                    itemListFiltered.add(0, context.getString(R.string.stock_add_new));
+                }
                 notifyDataSetChanged();
             }
         };
