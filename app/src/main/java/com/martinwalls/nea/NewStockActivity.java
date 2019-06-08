@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -198,8 +199,14 @@ public class NewStockActivity extends AppCompatActivity
 
     private void addNewItem(AddNewTextView textView) {
         String searchItemType = textView.getSearchItemType();
-        Toast.makeText(this, searchItemType, Toast.LENGTH_SHORT).show();
-        //todo add new item dialog
+        DialogFragment dialog = new AddNewProductDialog();
+        switch (searchItemType) {
+            case INPUT_PRODUCT:
+                dialog.show(getSupportFragmentManager(), "add_new_product");
+                break;
+            default:
+                Toast.makeText(this, searchItemType, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void hideKeyboard() {

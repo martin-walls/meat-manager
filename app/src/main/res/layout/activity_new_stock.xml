@@ -24,7 +24,7 @@
             android:id="@+id/edit_text_product"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionUnspecified"
+            android:imeOptions="actionDone"
             android:inputType="text"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -44,7 +44,7 @@
             android:id="@+id/edit_text_supplier"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionUnspecified"
+            android:imeOptions="actionDone"
             android:inputType="text"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -87,7 +87,7 @@
                 android:id="@+id/edit_text_quantity_boxes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
+                android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -108,7 +108,7 @@
             android:id="@+id/edit_text_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionUnspecified"
+            android:imeOptions="actionDone"
             android:inputType="text"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -128,7 +128,7 @@
             android:id="@+id/edit_text_destination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionUnspecified"
+            android:imeOptions="actionDone"
             android:inputType="text"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -148,7 +148,7 @@
             android:id="@+id/edit_text_quality"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionUnspecified"
+            android:imeOptions="actionDone"
             android:inputType="text"
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -159,8 +159,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:orientation="vertical"
-        android:divider="@drawable/divider"
-        android:showDividers="middle"
+        style="@style/SearchResultsLayout"
         >
 
         <com.martinwalls.nea.AddNewTextView
@@ -171,8 +170,7 @@
             android:paddingEnd="@dimen/search_result_margin_right"
             android:paddingTop="@dimen/search_result_spacing"
             android:paddingBottom="@dimen/search_result_spacing"
-            android:text="@string/search_add_new"
-            style="@style/SelectDialogItemText.Selectable.AddNew"
+            style="@style/SearchResultsItemText.Selectable.AddNew"
             />
 
         <com.martinwalls.nea.CustomRecyclerView
@@ -184,14 +182,14 @@
 
         <TextView
             android:id="@+id/no_results"
-            style="@style/SelectDialogItemText"
+            style="@style/SearchResultsItemText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/search_result_margin_left"
             android:paddingTop="@dimen/search_result_spacing"
             android:paddingEnd="@dimen/search_result_margin_right"
             android:paddingBottom="@dimen/search_result_spacing"
-            android:text="@string/stock_no_matches"
+            android:text="@string/search_no_matches"
             />
     </LinearLayout>
 

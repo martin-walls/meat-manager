@@ -33,22 +33,28 @@
         <item name="endIconDrawable">@drawable/ic_cancel</item>
     </style>
 
-    <style name="SelectDialogItemText">
+    <style name="SearchResultsItemText">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/medium_grey</item>
     </style>
 
-    <style name="SelectDialogItemText.Selectable">
+    <style name="SearchResultsItemText.Selectable">
         <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
     </style>
 
-    <style name="SelectDialogItemText.Selectable.AddNew">
+    <style name="SearchResultsItemText.Selectable.AddNew">
         <item name="android:textStyle">italic</item>
         <item name="android:textColor">@color/dark_grey</item>
         <item name="android:drawableStart">@drawable/ic_add</item>
         <item name="android:drawablePadding">16dp</item>
+        <item name="android:text">@string/search_add_new</item>
+    </style>
+
+    <style name="SearchResultsLayout">
+        <item name="android:divider">@drawable/divider</item>
+        <item name="android:showDividers">middle</item>
     </style>
 
 </resources>

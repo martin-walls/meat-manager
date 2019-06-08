@@ -24,7 +24,10 @@
     <string name="quality_good">Good</string>
     <string name="quality_pet_food">Pet food</string>
     <string name="quality_waste">Waste</string>
+
+    <!-- Search -->
     <string name="search_add_new">Add new %s…</string>
+    <string name="search_no_matches">No matching results found</string>
 
     <!-- Dashboard page -->
     <string name="dashboard_title">Dashboard</string>
@@ -34,12 +37,13 @@
     <string name="stock_empty">No stock to show</string>
     <string name="stock_new">Add new stock</string>
 
-    <string name="stock_no_matches">No matching results found</string>
-    <string name="stock_product_new">Add new product…</string>
-    <string name="stock_product_input_name">Name:</string>
-    <string name="stock_product_meat_type">Type of meat</string>
+    <string name="stock_product_new">Add new product</string>
+    <string name="stock_product_input_name">Name</string>
+    <string name="stock_product_input_meat_type">Meat type</string>
     <string name="stock_product_meat_type_new">Add new meat type</string>
     <string name="stock_product_meat_type_input_name">Name</string>
+    <string name="stock_product_new_done">Done</string>
+    <string name="stock_product_new_cancel">Cancel</string>
     <string name="stock_input_product">Product</string>
     <string name="stock_input_supplier">Supplier</string>
     <string name="stock_input_quantity_kg">Quantity (kg)</string>

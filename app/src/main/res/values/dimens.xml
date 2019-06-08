@@ -7,6 +7,9 @@
     <dimen name="activity_margin_top">16dp</dimen>
     <dimen name="activity_margin_horizontal">16dp</dimen>
 
+    <dimen name="dialog_margin_vertical">16dp</dimen>
+    <dimen name="dialog_margin_horizontal">16dp</dimen>
+
     <!-- View spacing -->
     <dimen name="view_spacing_horizontal">8dp</dimen>
     <dimen name="view_spacing_vertical">16dp</dimen>
