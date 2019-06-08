@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/activity_margin_top"
     android:orientation="vertical"
     tools:context=".NewStockActivity"
+    android:id="@+id/root_layout"
     >
 
     <com.google.android.material.textfield.TextInputLayout
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_margin_horizontal"
         android:layout_marginEnd="@dimen/activity_margin_horizontal"
-        android:layout_marginBottom="@dimen/view_spacing_vertical"
+        android:layout_marginTop="@dimen/view_spacing_vertical"
         android:hint="@string/stock_input_product"
         >
 
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_margin_horizontal"
         android:layout_marginEnd="@dimen/activity_margin_horizontal"
-        android:layout_marginBottom="@dimen/view_spacing_vertical"
+        android:layout_marginTop="@dimen/view_spacing_vertical"
         android:hint="@string/stock_input_supplier"
         >
 
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_margin_horizontal"
         android:layout_marginEnd="@dimen/activity_margin_horizontal"
-        android:layout_marginBottom="@dimen/view_spacing_vertical"
+        android:layout_marginTop="@dimen/view_spacing_vertical"
         android:orientation="horizontal"
         >
 
@@ -100,7 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_margin_horizontal"
         android:layout_marginEnd="@dimen/activity_margin_horizontal"
-        android:layout_marginBottom="@dimen/view_spacing_vertical"
+        android:layout_marginTop="@dimen/view_spacing_vertical"
         android:hint="@string/stock_input_location"
         >
 
@@ -120,7 +120,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_margin_horizontal"
         android:layout_marginEnd="@dimen/activity_margin_horizontal"
-        android:layout_marginBottom="@dimen/view_spacing_vertical"
+        android:layout_marginTop="@dimen/view_spacing_vertical"
         android:hint="@string/stock_input_destination"
         >
 
@@ -140,7 +140,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_margin_horizontal"
         android:layout_marginEnd="@dimen/activity_margin_horizontal"
-        android:layout_marginBottom="@dimen/view_spacing_vertical"
+        android:layout_marginTop="@dimen/view_spacing_vertical"
         android:hint="@string/stock_input_quality"
         >
 
@@ -163,19 +163,16 @@
         android:showDividers="middle"
         >
 
-        <TextView
+        <com.martinwalls.nea.AddNewTextView
             android:id="@+id/add_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/search_result_margin_left"
             android:paddingEnd="@dimen/search_result_margin_right"
+            android:paddingTop="@dimen/search_result_spacing"
             android:paddingBottom="@dimen/search_result_spacing"
-            android:text="@string/stock_add_new"
-            style="@style/SelectDialogItemText.Item"
-            android:textStyle="italic"
-            android:textColor="@color/dark_grey"
-            android:drawableStart="@drawable/ic_add"
-            android:drawablePadding="16dp"
+            android:text="@string/search_add_new"
+            style="@style/SelectDialogItemText.Selectable.AddNew"
             />
 
         <com.martinwalls.nea.CustomRecyclerView
@@ -187,7 +184,7 @@
 
         <TextView
             android:id="@+id/no_results"
-            style="@style/SelectDialogItemText.Empty"
+            style="@style/SelectDialogItemText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/search_result_margin_left"

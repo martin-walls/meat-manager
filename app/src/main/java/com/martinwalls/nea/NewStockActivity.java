@@ -1,11 +1,13 @@
 package com.martinwalls.nea;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +28,7 @@ public class NewStockActivity extends AppCompatActivity
     private SearchItemAdapter itemAdapter;
     private ArrayList<String> searchResultList = new ArrayList<>();
     private LinearLayout searchResultsLayout;
-    private boolean addNewViewEnabled = true;
+    private AddNewTextView addNewView;
 
     private final String INPUT_PRODUCT = "product";
     private final String INPUT_SUPPLIER = "supplier";
@@ -47,6 +49,13 @@ public class NewStockActivity extends AppCompatActivity
         inputViews.put("destination", R.id.input_layout_destination);
         inputViews.put("quality", R.id.input_layout_quality);
 
+        addNewView = findViewById(R.id.add_new);
+        addNewView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNewItem((AddNewTextView) v);
+            }
+        });
 
         // setup recycler view
         itemAdapter = new SearchItemAdapter(searchResultList, this, this);
@@ -141,6 +150,9 @@ public class NewStockActivity extends AppCompatActivity
     }
 
     private void openSearch(String rowName) {
+        addNewView.setVisibility(rowName.equals(INPUT_QUALITY) ? View.GONE : View.VISIBLE);
+        addNewView.setText(getString(R.string.search_add_new, rowName));
+        addNewView.setSearchItemType(rowName);
 
         for (Integer view : inputViews.values()) {
             if (!view.equals(inputViews.get(rowName))) {
@@ -168,9 +180,6 @@ public class NewStockActivity extends AppCompatActivity
         TextInputEditText editText = (TextInputEditText) getCurrentFocus();
         itemAdapter.getFilter().filter(editText.getText());
 
-        // disable addNewView for quality input
-        addNewViewEnabled = !rowName.equals(INPUT_QUALITY);
-
         searchResultsLayout.setVisibility(View.VISIBLE);
     }
 
@@ -183,6 +192,19 @@ public class NewStockActivity extends AppCompatActivity
 
         searchResultList.clear();
         itemAdapter.notifyDataSetChanged();
+
+        hideKeyboard();
+    }
+
+    private void addNewItem(AddNewTextView textView) {
+        Toast.makeText(this, textView.getSearchItemType(), Toast.LENGTH_SHORT).show();
+        //todo add new item dialog
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = findViewById(R.id.root_layout);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override

@@ -38,14 +38,17 @@
         <item name="android:textColor">@color/medium_grey</item>
     </style>
 
-    <style name="SelectDialogItemText.Item">
+    <style name="SelectDialogItemText.Selectable">
         <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
     </style>
 
-    <style name="SelectDialogItemText.Empty">
-
+    <style name="SelectDialogItemText.Selectable.AddNew">
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">@color/dark_grey</item>
+        <item name="android:drawableStart">@drawable/ic_add</item>
+        <item name="android:drawablePadding">16dp</item>
     </style>
 
 </resources>
