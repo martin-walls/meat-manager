@@ -197,7 +197,8 @@ public class NewStockActivity extends AppCompatActivity
     }
 
     private void addNewItem(AddNewTextView textView) {
-        Toast.makeText(this, textView.getSearchItemType(), Toast.LENGTH_SHORT).show();
+        String searchItemType = textView.getSearchItemType();
+        Toast.makeText(this, searchItemType, Toast.LENGTH_SHORT).show();
         //todo add new item dialog
     }
 

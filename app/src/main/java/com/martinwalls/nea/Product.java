@@ -1,0 +1,40 @@
+package com.martinwalls.nea;
+
+public class Product {
+    private int productId;
+    private String productName;
+    private String meatType;
+
+    public Product() {
+    }
+
+    public Product(int productId, String productName, String meatType) {
+        this.productId = productId;
+        this.productName = productName;
+        this.meatType = meatType;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getMeatType() {
+        return meatType;
+    }
+
+    public void setMeatType(String meatType) {
+        this.meatType = meatType;
+    }
+}
