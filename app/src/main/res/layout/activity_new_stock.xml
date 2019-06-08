@@ -159,19 +159,24 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:orientation="vertical"
+        android:divider="@drawable/divider"
+        android:showDividers="middle"
         >
 
-        <!--<TextView-->
-            <!--android:id="@+id/add_new"-->
-            <!--style="@style/SelectDialogItemText.Item.Emphasis"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:paddingStart="@dimen/search_result_margin_left"-->
-            <!--android:paddingTop="@dimen/search_result_spacing"-->
-            <!--android:paddingEnd="@dimen/search_result_margin_right"-->
-            <!--android:paddingBottom="@dimen/search_result_spacing"-->
-            <!--android:text="@string/stock_add_new"-->
-            <!--/>-->
+        <TextView
+            android:id="@+id/add_new"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/search_result_margin_left"
+            android:paddingEnd="@dimen/search_result_margin_right"
+            android:paddingBottom="@dimen/search_result_spacing"
+            android:text="@string/stock_add_new"
+            style="@style/SelectDialogItemText.Item"
+            android:textStyle="italic"
+            android:textColor="@color/dark_grey"
+            android:drawableStart="@drawable/ic_add"
+            android:drawablePadding="16dp"
+            />
 
         <com.martinwalls.nea.CustomRecyclerView
             android:id="@+id/recycler_view_results"

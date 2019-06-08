@@ -88,7 +88,6 @@ public class NewStockActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //noinspection SwitchStatementWithTooFewBranches
         switch (item.getItemId()) {
             case R.id.action_done:
                 //todo handle done action
@@ -192,9 +191,5 @@ public class NewStockActivity extends AppCompatActivity
         editText.setText(name);
         editText.clearFocus();
         cancelSearch();
-    }
-
-    @Override
-    public void showAddNewView(boolean showView) {
     }
 }

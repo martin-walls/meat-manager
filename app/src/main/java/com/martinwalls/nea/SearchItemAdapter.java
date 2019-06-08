@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.ViewHolder>
@@ -21,7 +20,6 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
     private List<String> itemList;
     private List<String> itemListFiltered;
     private SearchItemAdapterListener listener;
-    private boolean showAddView;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView itemName;
@@ -44,7 +42,6 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         this.itemListFiltered = itemList;
         this.listener = listener;
         this.context = context;
-        showAddView = true;
     }
 
     @Override
@@ -58,11 +55,6 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         String item = itemListFiltered.get(position);
         holder.itemName.setText(item);
-        if (position == 0) {
-            holder.itemName.setTextAppearance(R.style.SelectDialogItemText_Item_Emphasis);
-        } else {
-            holder.itemName.setTextAppearance(R.style.SelectDialogItemText_Item_Normal);
-        }
     }
 
     @Override
@@ -95,15 +87,6 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
             protected void publishResults(CharSequence charSequence, FilterResults results) {
                 //noinspection unchecked
                 itemListFiltered = (ArrayList<String>) results.values;
-                if (itemListFiltered.size() > 0) {
-                    showAddView = !itemListFiltered.get(0).toLowerCase().contentEquals(charSequence.toString().toLowerCase());
-                } else {
-                    showAddView = false;
-                }
-                itemListFiltered.removeAll(Collections.singleton(context.getString(R.string.stock_add_new)));
-                if (showAddView) {
-                    itemListFiltered.add(0, context.getString(R.string.stock_add_new));
-                }
                 notifyDataSetChanged();
             }
         };
@@ -111,6 +94,5 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
 
     public interface SearchItemAdapterListener {
         void onItemSelected(String item);
-        void showAddNewView(boolean showView);
     }
 }
