@@ -56,6 +56,13 @@ public class SampleData {
             "Waste"
     };
 
+    private static String[] meatTypes = new String[] {
+            "Beef",
+            "Lamb",
+            "Pork",
+            "Chicken"
+    };
+
     public static ArrayList<String> getSampleProducts() {
         return new ArrayList<>(Arrays.asList(products));
     }
@@ -66,5 +73,9 @@ public class SampleData {
 
     public static ArrayList<String> getSampleQualities() {
         return new ArrayList<>(Arrays.asList(qualities));
+    }
+
+    public static ArrayList<String> getSampleMeatTypes() {
+        return new ArrayList<>(Arrays.asList(meatTypes));
     }
 }

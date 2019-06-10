@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class NewStockActivity extends AppCompatActivity
-        implements SearchItemAdapter.SearchItemAdapterListener {
+        implements SearchItemAdapter.SearchItemAdapterListener,
+        AddNewProductDialog.AddNewProductListener {
 
     private HashMap<String, Integer> inputViews = new HashMap<>();
 
@@ -221,5 +222,10 @@ public class NewStockActivity extends AppCompatActivity
         editText.setText(name);
         editText.clearFocus();
         cancelSearch();
+    }
+
+    @Override
+    public void onAddNewProductPositiveClick(Product newProduct) {
+        Toast.makeText(this, newProduct.getProductName() + " " + newProduct.getMeatType(), Toast.LENGTH_SHORT).show();
     }
 }

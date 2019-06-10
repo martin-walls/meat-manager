@@ -24,7 +24,7 @@
     </style>
 
     <style name="AppTextInputLayout" parent="Widget.Design.TextInputLayout">
-
+        <item name="errorTextColor">@color/errorRed</item>
     </style>
 
     <!-- shows clear icon at end -->
