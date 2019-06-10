@@ -29,6 +29,10 @@
     <string name="search_add_new">Add new %s…</string>
     <string name="search_no_matches">No matching results found</string>
 
+    <!-- Input -->
+    <string name="input_error_blank">Cannot be blank</string>
+    <string name="input_error_invalid">Invalid input</string>
+
     <!-- Dashboard page -->
     <string name="dashboard_title">Dashboard</string>
 

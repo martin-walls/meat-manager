@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dialog_margin_horizontal"
-        android:layout_marginTop="@dimen/dialog_margin_vertical"
+        android:layout_marginTop="@dimen/view_spacing_vertical"
         android:layout_marginEnd="@dimen/dialog_margin_horizontal"
         android:hint="@string/stock_product_input_meat_type"
         app:endIconDrawable="@drawable/ic_add"
@@ -82,8 +82,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/dialog_margin_horizontal"
-        android:paddingEnd="@dimen/dialog_margin_horizontal"
+        android:layout_marginStart="@dimen/dialog_margin_horizontal"
+        android:layout_marginEnd="@dimen/dialog_margin_horizontal"
+        android:layout_marginTop="@dimen/view_spacing_vertical"
         >
 
         <Button

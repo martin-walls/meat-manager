@@ -51,6 +51,7 @@ public class AddNewProductDialog extends DialogFragment {
                 }
             }
         });
+        //todo add button
 
         builder.setView(dialogView);
         builder.setTitle(R.string.stock_product_new);
@@ -67,14 +68,14 @@ public class AddNewProductDialog extends DialogFragment {
                 inputLayoutProductName.setError(null);
                 inputLayoutMeatType.setError(null);
                 if (newProductName.isEmpty()) {
-                    inputLayoutProductName.setError("Cannot be blank"); //todo string resource
+                    inputLayoutProductName.setError(getString(R.string.input_error_blank)); //todo string resource
                     isValid = false;
                 }
                 if (newMeatType.isEmpty()) {
-                    inputLayoutMeatType.setError("Cannot be blank");
+                    inputLayoutMeatType.setError(getString(R.string.input_error_blank));
                     isValid = false;
                 } else if (!isMeatTypeValid(newMeatType)) {
-                    inputLayoutMeatType.setError("Invalid meat type");
+                    inputLayoutMeatType.setError(getString(R.string.input_error_invalid));
                     isValid = false;
                 }
                 if (isValid) {
