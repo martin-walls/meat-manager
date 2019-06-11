@@ -68,7 +68,7 @@ public class AddNewProductDialog extends DialogFragment {
                 inputLayoutProductName.setError(null);
                 inputLayoutMeatType.setError(null);
                 if (newProductName.isEmpty()) {
-                    inputLayoutProductName.setError(getString(R.string.input_error_blank)); //todo string resource
+                    inputLayoutProductName.setError(getString(R.string.input_error_blank));
                     isValid = false;
                 }
                 if (newMeatType.isEmpty()) {

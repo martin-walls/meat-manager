@@ -8,16 +8,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String BACK_STACK_ROOT_TAG = "root_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // open dashboard screen at start
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // setup nav drawer
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -71,7 +77,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -79,22 +84,39 @@ public class MainActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.nav_dashboard:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_holder, new DashboardFragment())
-                        .commit();
+//                getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.fragment_holder, new DashboardFragment())
+//                        .commit();
+                replaceFragment(new DashboardFragment(), false);
                 break;
             case R.id.nav_stock:
-                getSupportFragmentManager().popBackStack();
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_holder, new StockFragment())
-                        .addToBackStack(null)
-                        .commit();
+//                getSupportFragmentManager().popBackStack();
+//                getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.fragment_holder, new StockFragment())
+//                        .addToBackStack(StockFragment.class.getSimpleName())
+//                        .commit();
+                replaceFragment(new StockFragment(), true);
                 break;
             case R.id.nav_contracts:
+//                getSupportFragmentManager().popBackStack();
+//                getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.fragment_holder, new ContractsFragment())
+//                        .addToBackStack(ContractsFragment.class.getSimpleName())
+//                        .commit();
+                replaceFragment(new ContractsFragment(), true);
                 break;
             case R.id.nav_exchange:
+//                getSupportFragmentManager().popBackStack();
+//
+//                getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.fragment_holder, new ExchangeFragment())
+//                        .addToBackStack(ExchangeFragment.class.getSimpleName())
+//                        .commit();
+                replaceFragment(new ExchangeFragment(), true);
                 break;
             case R.id.nav_settings:
                 break;
@@ -103,5 +125,19 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void replaceFragment(Fragment newFragment, boolean clearBackStack) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if (clearBackStack) {
+            fragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+        //todo maybe not this back stack implementation - maybe have back not go back to dashboard but stay on current tab?
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_holder, newFragment)
+                .addToBackStack(clearBackStack ? BACK_STACK_ROOT_TAG : null)
+                .commit();
     }
 }

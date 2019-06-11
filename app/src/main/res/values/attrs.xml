@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- todo theme attributes for text colours etc. -->
     <attr name="textColorPrimary" format="reference" />
     <attr name="textColorSecondary" format="reference" />
+
     <declare-styleable name="AddNewTextView">
         <attr name="searchItemType" format="string" />
     </declare-styleable>
