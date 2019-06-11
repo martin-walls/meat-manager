@@ -1,15 +1,14 @@
 package com.martinwalls.nea;
 
-import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.navigation.NavigationView;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+import android.view.Menu;
+import android.view.MenuItem;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -18,9 +17,16 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_holder, new DashboardFragment())
+                    .commit();
+        }
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -71,22 +77,28 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_stock) {
-            Intent intent = new Intent(this, NewStockActivity.class);
-            startActivity(intent);
+        switch (id) {
+            case R.id.nav_dashboard:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_holder, new DashboardFragment())
+                        .commit();
+                break;
+            case R.id.nav_stock:
+                getSupportFragmentManager().popBackStack();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_holder, new StockFragment())
+                        .addToBackStack(null)
+                        .commit();
+                break;
+            case R.id.nav_contracts:
+                break;
+            case R.id.nav_exchange:
+                break;
+            case R.id.nav_settings:
+                break;
         }
-            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

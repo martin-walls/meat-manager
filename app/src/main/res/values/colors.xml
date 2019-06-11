@@ -9,4 +9,6 @@
     <color name="dark_grey">#424242</color>
 
     <color name="errorRed">#f44336</color>
+
+    <color name="ripple">#2fff</color>
 </resources>

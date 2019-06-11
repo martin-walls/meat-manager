@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
     <com.martinwalls.nea.CustomRecyclerView
@@ -28,8 +29,10 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add"
-        android:tint="@android:color/white"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@android:color/black"
+        android:backgroundTint="@color/colorAccent"
+        app:rippleColor="@color/ripple"
         />
 
 </RelativeLayout>
