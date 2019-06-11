@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,6 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.Transition;
+import androidx.transition.TransitionInflater;
+import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -31,6 +35,7 @@ public class NewStockActivity extends AppCompatActivity
     private ArrayList<String> searchResultList = new ArrayList<>();
     private LinearLayout searchResultsLayout;
     private AddNewTextView addNewView;
+    private ViewGroup rootView;
 
     private final String INPUT_PRODUCT = "product";
     private final String INPUT_SUPPLIER = "supplier";
@@ -58,6 +63,8 @@ public class NewStockActivity extends AppCompatActivity
                 addNewItem((AddNewTextView) v);
             }
         });
+
+        rootView = findViewById(R.id.root_layout);
 
         // setup recycler view
         itemAdapter = new SearchItemAdapter(searchResultList, this, this);
@@ -152,10 +159,8 @@ public class NewStockActivity extends AppCompatActivity
     }
 
     private void openSearch(String rowName) {
-        addNewView.setVisibility(rowName.equals(INPUT_QUALITY) ? View.GONE : View.VISIBLE);
-        addNewView.setText(getString(R.string.search_add_new, rowName));
-        addNewView.setSearchItemType(rowName);
-
+        Transition moveTransition = TransitionInflater.from(this).inflateTransition(R.transition.search_open);
+        TransitionManager.beginDelayedTransition(rootView, moveTransition);
         for (Integer view : inputViews.values()) {
             if (!view.equals(inputViews.get(rowName))) {
                 findViewById(view).setVisibility(View.GONE);
@@ -182,12 +187,26 @@ public class NewStockActivity extends AppCompatActivity
         TextInputEditText editText = (TextInputEditText) getCurrentFocus();
         itemAdapter.getFilter().filter(editText.getText());
 
+        addNewView.setVisibility(rowName.equals(INPUT_QUALITY) ? View.GONE : View.VISIBLE);
+        addNewView.setText(getString(R.string.search_add_new, rowName));
+        addNewView.setSearchItemType(rowName);
+
+        searchResultsLayout.setAlpha(0f);
         searchResultsLayout.setVisibility(View.VISIBLE);
+
+        searchResultsLayout.animate()
+                .alpha(1f)
+                .setStartDelay(150)
+                .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
+                .setListener(null);
     }
 
     private void cancelSearch() {
+        Transition closeTransition = TransitionInflater.from(this).inflateTransition(R.transition.search_close);
+        TransitionManager.beginDelayedTransition(rootView, closeTransition);
         for (int view : inputViews.values()) {
-            findViewById(view).setVisibility(View.VISIBLE);
+            View viewToShow = findViewById(view);
+            viewToShow.setVisibility(View.VISIBLE);
         }
 
         searchResultsLayout.setVisibility(View.GONE);
