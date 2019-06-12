@@ -21,9 +21,13 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:paddingTop="@dimen/nav_drawer_padding_top"
-        app:menu="@menu/activity_main_drawer"
         >
+
+        <include
+            layout="@layout/nav_drawer"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            />
 
     </com.google.android.material.navigation.NavigationView>
 

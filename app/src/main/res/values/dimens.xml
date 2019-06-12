@@ -2,7 +2,7 @@
 
     <dimen name="fab_margin">24dp</dimen>
 
-    <dimen name="nav_drawer_padding_top">40dp</dimen>
+    <dimen name="nav_drawer_spacing_top">80dp</dimen>
 
     <!-- Screen margin -->
     <dimen name="activity_margin_top">16dp</dimen>

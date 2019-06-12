@@ -3,6 +3,7 @@ package com.martinwalls.nea;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,7 +16,15 @@ import com.google.android.material.navigation.NavigationView;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String BACK_STACK_ROOT_TAG = "root_fragment";
+
+    private enum Page {
+        DASHBOARD,
+        STOCK,
+        CONTRACTS,
+        EXCHANGE
+    }
+
+    private Page currentPage = Page.DASHBOARD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +37,7 @@ public class MainActivity extends AppCompatActivity
                     .beginTransaction()
                     .add(R.id.fragment_holder, new DashboardFragment())
                     .commit();
+            currentPage = Page.DASHBOARD;
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -78,7 +88,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -88,7 +98,7 @@ public class MainActivity extends AppCompatActivity
 //                        .beginTransaction()
 //                        .replace(R.id.fragment_holder, new DashboardFragment())
 //                        .commit();
-                replaceFragment(new DashboardFragment(), false);
+                replaceFragment(Page.DASHBOARD);
                 break;
             case R.id.nav_stock:
 //                getSupportFragmentManager().popBackStack();
@@ -97,7 +107,7 @@ public class MainActivity extends AppCompatActivity
 //                        .replace(R.id.fragment_holder, new StockFragment())
 //                        .addToBackStack(StockFragment.class.getSimpleName())
 //                        .commit();
-                replaceFragment(new StockFragment(), true);
+                replaceFragment(Page.STOCK);
                 break;
             case R.id.nav_contracts:
 //                getSupportFragmentManager().popBackStack();
@@ -106,7 +116,7 @@ public class MainActivity extends AppCompatActivity
 //                        .replace(R.id.fragment_holder, new ContractsFragment())
 //                        .addToBackStack(ContractsFragment.class.getSimpleName())
 //                        .commit();
-                replaceFragment(new ContractsFragment(), true);
+                replaceFragment(Page.CONTRACTS);
                 break;
             case R.id.nav_exchange:
 //                getSupportFragmentManager().popBackStack();
@@ -116,7 +126,7 @@ public class MainActivity extends AppCompatActivity
 //                        .replace(R.id.fragment_holder, new ExchangeFragment())
 //                        .addToBackStack(ExchangeFragment.class.getSimpleName())
 //                        .commit();
-                replaceFragment(new ExchangeFragment(), true);
+                replaceFragment(Page.EXCHANGE);
                 break;
             case R.id.nav_settings:
                 break;
@@ -127,17 +137,36 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void replaceFragment(Fragment newFragment, boolean clearBackStack) {
+    private void replaceFragment(Page newPage) {
+        Fragment newFragment;
+
+        switch (newPage) {
+            case DASHBOARD:
+                newFragment = new DashboardFragment();
+                break;
+            case STOCK:
+                newFragment = new StockFragment();
+                break;
+            case CONTRACTS:
+                newFragment = new ContractsFragment();
+                break;
+            case EXCHANGE:
+                newFragment = new ExchangeFragment();
+                break;
+            default:
+                newFragment = new Fragment();
+                break;
+        }
+
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if (clearBackStack) {
-            fragmentManager.popBackStack(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        }
-        //todo maybe not this back stack implementation - maybe have back not go back to dashboard but stay on current tab?
+        fragmentManager.popBackStack();
 
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_holder, newFragment)
-                .addToBackStack(clearBackStack ? BACK_STACK_ROOT_TAG : null)
+                .addToBackStack(newFragment.getClass().getSimpleName())
                 .commit();
+
+        currentPage = newPage;
     }
 }
