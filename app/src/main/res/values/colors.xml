@@ -3,6 +3,8 @@
     <color name="colorPrimary">#673ab7</color>
     <color name="colorPrimaryDark">#320b86</color>
     <color name="colorAccent">#ffc107</color>
+    <!-- semi transparent version of colorPrimary -->
+    <color name="colorPrimaryTransparent">#59673ab7</color>
 
     <color name="light_grey">#ADADAD</color>
     <color name="medium_grey">#8D8D8D</color>

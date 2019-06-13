@@ -42,6 +42,7 @@ public class NewStockActivity extends AppCompatActivity
     private final String INPUT_LOCATION = "location";
     private final String INPUT_DESTINATION = "destination";
     private final String INPUT_QUALITY = "quality";
+    //todo refactor to enum
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
