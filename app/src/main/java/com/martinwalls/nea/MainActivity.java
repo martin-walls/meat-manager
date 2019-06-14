@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private Page currentPage = Page.DASHBOARD;
+    private final String VISIBLE_FRAGMENT = "visible_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        //todo can be removed?
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -78,7 +80,8 @@ public class MainActivity extends AppCompatActivity
         navDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchPage(Page.DASHBOARD);
+                setNavItemActivated(Page.DASHBOARD);
+                replaceFragment(Page.DASHBOARD);
             }
         });
 
@@ -86,7 +89,8 @@ public class MainActivity extends AppCompatActivity
         navStock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchPage(Page.STOCK);
+                setNavItemActivated(Page.STOCK);
+                replaceFragment(Page.STOCK);
             }
         });
 
@@ -94,7 +98,8 @@ public class MainActivity extends AppCompatActivity
         navContracts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchPage(Page.CONTRACTS);
+                setNavItemActivated(Page.CONTRACTS);
+                replaceFragment(Page.CONTRACTS);
             }
         });
 
@@ -102,7 +107,8 @@ public class MainActivity extends AppCompatActivity
         navExchange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchPage(Page.EXCHANGE);
+                setNavItemActivated(Page.EXCHANGE);
+                replaceFragment(Page.EXCHANGE);
             }
         });
 
@@ -122,6 +128,19 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            Fragment visibleFragment = getSupportFragmentManager().findFragmentByTag(VISIBLE_FRAGMENT);
+            LinearLayout navDrawerContent = findViewById(R.id.nav_drawer_content);
+            if (visibleFragment instanceof DashboardFragment) {
+                currentPage = Page.DASHBOARD;
+            } else if (visibleFragment instanceof StockFragment) {
+                currentPage = Page.STOCK;
+            } else if (visibleFragment instanceof ContractsFragment) {
+                currentPage = Page.CONTRACTS;
+            } else if (visibleFragment instanceof ExchangeFragment) {
+                currentPage = Page.EXCHANGE;
+            }
+            setNavItemActivated(currentPage);
+            //fixme make it change back to previous page on back
         }
     }
 
@@ -197,15 +216,13 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void switchPage(Page newPage) {
+    private void setNavItemActivated(Page newPage) {
         findViewById(newPage.getNavItem()).setActivated(true);
         for (Page page : Page.values()) {
             if (page != newPage) {
                 findViewById(page.getNavItem()).setActivated(false);
             }
         }
-
-        replaceFragment(newPage);
     }
 
     private void replaceFragment(Page newPage) {
@@ -234,7 +251,7 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.popBackStack();
 
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_holder, newFragment)
+                .replace(R.id.fragment_holder, newFragment, VISIBLE_FRAGMENT)
                 .addToBackStack(newFragment.getClass().getSimpleName())
                 .commit();
 
