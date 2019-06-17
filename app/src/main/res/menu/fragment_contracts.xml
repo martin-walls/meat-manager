@@ -2,17 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
+
     <item
-        android:id="@+id/action_cancel"
-        android:title="@string/action_cancel"
-        android:icon="@drawable/ic_cancel"
+        android:id="@+id/action_undo"
+        android:title="@string/action_undo"
+        android:icon="@drawable/ic_undo"
         app:showAsAction="ifRoom"
         />
 
     <item
-        android:id="@+id/action_done"
-        android:title="@string/action_done"
-        android:icon="@drawable/ic_done"
+        android:id="@+id/action_redo"
+        android:title="@string/action_redo"
+        android:icon="@drawable/ic_redo"
         app:showAsAction="ifRoom"
         />
+
 </menu>
