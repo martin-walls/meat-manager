@@ -37,6 +37,7 @@ public class StockFragment extends Fragment {
         });
 
         setHasOptionsMenu(true);
+        getActivity().setTitle(R.string.stock_title);
         return fragmentView;
     }
 

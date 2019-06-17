@@ -12,6 +12,7 @@ public class ContractsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+        getActivity().setTitle(R.string.contracts_title);
         return inflater.inflate(R.layout.fragment_contracts, container, false);
     }
 
