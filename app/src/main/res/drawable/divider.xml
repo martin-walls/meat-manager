@@ -6,7 +6,7 @@
     <size android:height="1px" />
 
     <solid
-        android:color="@color/medium_grey"
+        android:color="?attr/dividerColor"
         />
 
 </shape>

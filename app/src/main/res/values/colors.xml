@@ -3,8 +3,6 @@
     <color name="colorPrimary">#673ab7</color>
     <color name="colorPrimaryDark">#320b86</color>
     <color name="colorAccent">#ffc107</color>
-    <!-- semi transparent version of colorPrimary -->
-    <color name="colorPrimaryTransparent">#59673ab7</color>
 
     <color name="light_grey">#eeeeee</color>
     <!-- for normal text -->
@@ -12,7 +10,12 @@
     <!-- for darker text -->
     <color name="dark_grey">#424242</color>
 
-    <color name="errorRed">#f44336</color>
+    <color name="text_medium">@color/medium_grey</color>
+    <color name="text_dark">@color/dark_grey</color>
+
+    <color name="divider">@color/medium_grey</color>
+
+    <color name="error_red">#f44336</color>
 
     <color name="fab_ripple_light">#2fff</color>
 </resources>

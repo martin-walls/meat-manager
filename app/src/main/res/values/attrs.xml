@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="textColorNormal" format="reference|color" />
+    <attr name="textColorDark" format="reference|color" />
+    <attr name="textColorError" format="reference|color" />
+
+    <attr name="dividerColor" format="reference|color" />
+
+    <attr name="selectedItemBackgroundColor" format="reference|color" />
+
 
     <declare-styleable name="AddNewTextView">
         <attr name="searchItemType" format="string" />

@@ -6,7 +6,16 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="floatingActionButtonStyle">@style/Fab</item>
+
         <item name="textInputStyle">@style/AppTextInputLayout</item>
+        
+        <item name="textColorNormal">@color/text_medium</item>
+        <item name="textColorDark">@color/text_dark</item>
+        <item name="textColorError">@color/error_red</item>
+
+        <item name="dividerColor">@color/divider</item>
+        <item name="selectedItemBackgroundColor">@color/light_grey</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -19,15 +28,21 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+    <style name="Fab" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="android:backgroundTint">?attr/colorAccent</item>
+        <item name="rippleColor">@color/fab_ripple_light</item>
+        <item name="tint">@android:color/black</item>
+    </style>
+
     <style name="NavDrawerItem">
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>
         <item name="android:paddingStart">24dp</item>
         <item name="android:drawablePadding">16dp</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">@color/dark_grey</item>
+        <item name="android:textColor">?attr/textColorDark</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:drawableTint">@color/dark_grey</item>
+        <item name="android:drawableTint">?attr/textColorDark</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:background">@drawable/nav_drawer_item_background</item>
@@ -38,7 +53,7 @@
     </style>
 
     <style name="AppTextInputLayout" parent="Widget.Design.TextInputLayout">
-        <item name="errorTextColor">@color/errorRed</item>
+        <item name="errorTextColor">?attr/textColorError</item>
     </style>
 
     <!-- shows clear icon at end -->
@@ -49,7 +64,7 @@
 
     <style name="SearchResultsItemText">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/medium_grey</item>
+        <item name="android:textColor">?attr/textColorNormal</item>
     </style>
 
     <style name="SearchResultsItemText.Selectable">
@@ -60,7 +75,7 @@
 
     <style name="SearchResultsItemText.Selectable.AddNew">
         <item name="android:textStyle">italic</item>
-        <item name="android:textColor">@color/dark_grey</item>
+        <item name="android:textColor">?attr/textColorDark</item>
         <item name="android:drawableStart">@drawable/ic_add</item>
         <item name="android:drawablePadding">16dp</item>
         <item name="android:text">@string/search_add_new</item>
@@ -74,7 +89,7 @@
     <!-- Exchange screen styles -->
     <style name="ExchangeRateText">
         <item name="android:textSize">48sp</item>
-        <item name="android:textColor">@color/dark_grey</item>
+        <item name="android:textColor">?attr/textColorDark</item>
         <item name="android:textStyle">bold</item>
     </style>
 

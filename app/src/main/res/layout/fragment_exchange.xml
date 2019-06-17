@@ -28,12 +28,12 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/ic_swap"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
+            app:srcCompat="@drawable/ic_swap"
             />
 
         <TextView
