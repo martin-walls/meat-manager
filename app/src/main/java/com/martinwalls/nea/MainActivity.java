@@ -71,6 +71,19 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                findViewById(currentPage.getNavItem()).setActivated(true);
+                for (Page page : Page.values()) {
+                    if (page != currentPage) {
+                        findViewById(page.getNavItem()).setActivated(false);
+                    }
+                }
+            }
+        });
+
         //todo can be removed?
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -80,7 +93,7 @@ public class MainActivity extends AppCompatActivity
         navDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNavItemActivated(Page.DASHBOARD);
+                currentPage = Page.DASHBOARD;
                 replaceFragment(Page.DASHBOARD);
             }
         });
@@ -89,7 +102,7 @@ public class MainActivity extends AppCompatActivity
         navStock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNavItemActivated(Page.STOCK);
+                currentPage = Page.STOCK;
                 replaceFragment(Page.STOCK);
             }
         });
@@ -98,7 +111,7 @@ public class MainActivity extends AppCompatActivity
         navContracts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNavItemActivated(Page.CONTRACTS);
+                currentPage = Page.CONTRACTS;
                 replaceFragment(Page.CONTRACTS);
             }
         });
@@ -107,7 +120,7 @@ public class MainActivity extends AppCompatActivity
         navExchange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNavItemActivated(Page.EXCHANGE);
+                currentPage = Page.EXCHANGE;
                 replaceFragment(Page.EXCHANGE);
             }
         });
@@ -128,19 +141,9 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-            Fragment visibleFragment = getSupportFragmentManager().findFragmentByTag(VISIBLE_FRAGMENT);
-            LinearLayout navDrawerContent = findViewById(R.id.nav_drawer_content);
-            if (visibleFragment instanceof DashboardFragment) {
+            if (currentPage != Page.DASHBOARD) {
                 currentPage = Page.DASHBOARD;
-            } else if (visibleFragment instanceof StockFragment) {
-                currentPage = Page.STOCK;
-            } else if (visibleFragment instanceof ContractsFragment) {
-                currentPage = Page.CONTRACTS;
-            } else if (visibleFragment instanceof ExchangeFragment) {
-                currentPage = Page.EXCHANGE;
             }
-            setNavItemActivated(currentPage);
-            //fixme make it change back to previous page on back
         }
     }
 
@@ -216,15 +219,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void setNavItemActivated(Page newPage) {
-        findViewById(newPage.getNavItem()).setActivated(true);
-        for (Page page : Page.values()) {
-            if (page != newPage) {
-                findViewById(page.getNavItem()).setActivated(false);
-            }
-        }
-    }
-
     private void replaceFragment(Page newPage) {
         Fragment newFragment = newPage.getFragment();
 
@@ -251,7 +245,7 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.popBackStack();
 
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_holder, newFragment, VISIBLE_FRAGMENT)
+                .replace(R.id.fragment_holder, newFragment, newPage.toString())
                 .addToBackStack(newFragment.getClass().getSimpleName())
                 .commit();
 
