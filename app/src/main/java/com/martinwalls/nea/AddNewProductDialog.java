@@ -82,7 +82,7 @@ public class AddNewProductDialog extends DialogFragment {
                     Product newProduct = new Product();
                     newProduct.setProductName(newProductName);
                     newProduct.setMeatType(newMeatType);
-                    listener.onAddNewProductPositiveClick(newProduct);
+                    listener.onAddNewProductDoneAction(newProduct);
                     getDialog().dismiss();
                 }
             }
@@ -110,7 +110,7 @@ public class AddNewProductDialog extends DialogFragment {
     }
 
     public interface AddNewProductListener {
-        void onAddNewProductPositiveClick(Product newProduct);
+        void onAddNewProductDoneAction(Product newProduct);
     }
 
     private boolean isMeatTypeValid(String meatType) {

@@ -109,7 +109,6 @@ public class NewStockActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                //todo handle done action
                 Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
                 finish();
                 return true;
@@ -245,7 +244,7 @@ public class NewStockActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAddNewProductPositiveClick(Product newProduct) {
+    public void onAddNewProductDoneAction(Product newProduct) {
         Toast.makeText(this, newProduct.getProductName() + " " + newProduct.getMeatType(), Toast.LENGTH_SHORT).show();
     }
 }

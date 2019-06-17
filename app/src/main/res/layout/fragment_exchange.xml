@@ -1,15 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     >
 
-    <TextView
+    <!-- top row with primary and secondary currencies, swap btn -->
+    <LinearLayout
+        android:id="@+id/current_currencies"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/exchange_title"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/currency_primary"
+            style="@style/ExchangeCurrentCurrency"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="end|center_vertical"
+            android:text="GBP"
+            />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_swap"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            />
+
+        <TextView
+            android:id="@+id/currency_secondary"
+            style="@style/ExchangeCurrentCurrency"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="start|center_vertical"
+            android:text="HKD"
+            />
+    </LinearLayout>
+
+    <!-- main view showing current rate -->
+    <LinearLayout
+        android:id="@+id/rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/current_currencies"
+        android:layout_toStartOf="@id/currency_spinner_right"
+        android:layout_toEndOf="@id/currency_spinner_left"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="40dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="40dp"
+        >
+
+        <TextView
+            style="@style/ExchangeRateText.Primary"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:text="1"
+            />
+
+        <TextView
+            style="@style/ExchangeRateText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text=":"
+            />
+
+        <TextView
+            style="@style/ExchangeRateText.Secondary"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="start|center_vertical"
+            android:text="2.35"
+            />
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/currency_spinner_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/current_currencies"
+        android:layout_alignParentStart="true"
         />
 
-</LinearLayout>
+    <Spinner
+        android:id="@+id/currency_spinner_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/current_currencies"
+        android:layout_alignParentEnd="true"
+        />
+
+    <LinearLayout
+        android:id="@+id/conversion_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rate"
+        android:layout_toStartOf="@id/currency_spinner_right"
+        android:layout_toEndOf="@id/currency_spinner_left"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            style="@style/ExchangeHistoryTimeDivider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="2 days ago"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
+
+            <TextView
+                style="@style/ExchangeHistoryItemText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="end|center_vertical"
+                android:text="30.00 GBP"
+                />
+
+            <TextView
+                style="@style/ExchangeHistoryItemText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:text=":"
+                />
+
+            <TextView
+                style="@style/ExchangeHistoryItemText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="start|center_vertical"
+                android:text="150.00 PLN"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

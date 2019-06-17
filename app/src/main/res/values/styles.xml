@@ -71,4 +71,33 @@
         <item name="android:showDividers">middle</item>
     </style>
 
+    <!-- Exchange screen styles -->
+    <style name="ExchangeRateText">
+        <item name="android:textSize">48sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ExchangeRateText.Primary" />
+
+    <style name="ExchangeRateText.Secondary">
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="ExchangeCurrentCurrency">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="ExchangeHistoryTimeDivider">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ExchangeHistoryItemText">
+        <item name="android:textSize">18sp</item>
+    </style>
+
 </resources>

@@ -32,7 +32,6 @@ public class StockFragment extends Fragment {
             public void onClick(View v) {
                 Intent newStockIntent = new Intent(getContext(), NewStockActivity.class);
                 startActivity(newStockIntent);
-                //todo startActivityForResult???
             }
         });
 
