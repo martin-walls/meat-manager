@@ -1,15 +1,14 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="floatingActionButtonStyle">@style/Fab</item>
 
+        <item name="floatingActionButtonStyle">@style/Fab</item>
         <item name="textInputStyle">@style/AppTextInputLayout</item>
-        
+
+        <!-- text -->
         <item name="textColorNormal">@color/text_medium</item>
         <item name="textColorDark">@color/text_dark</item>
         <item name="textColorError">@color/error_red</item>
@@ -62,6 +61,7 @@
         <item name="endIconDrawable">@drawable/ic_cancel</item>
     </style>
 
+    <!-- search -->
     <style name="SearchResultsItemText">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">?attr/textColorNormal</item>

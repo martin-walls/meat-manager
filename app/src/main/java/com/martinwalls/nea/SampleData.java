@@ -63,6 +63,14 @@ public class SampleData {
             "Chicken"
     };
 
+    private static String[] currencies = new String[] {
+            "GBP",
+            "HKD",
+            "PLN",
+            "USD",
+            "EUR"
+    };
+
     public static ArrayList<String> getSampleProducts() {
         return new ArrayList<>(Arrays.asList(products));
     }
@@ -77,5 +85,9 @@ public class SampleData {
 
     public static ArrayList<String> getSampleMeatTypes() {
         return new ArrayList<>(Arrays.asList(meatTypes));
+    }
+
+    public static String[] getSampleCurrencies() {
+        return currencies;
     }
 }
