@@ -45,6 +45,7 @@ public class ExchangeFragment extends Fragment {
         currencyPickerRight.setMinValue(0);
         currencyPickerRight.setMaxValue(currencies.length - 1);
         currencyPickerRight.setDisplayedValues(currencies);
+        currencyPickerRight.setValue(1);
         currencyPickerRight.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
         currencyPickerRight.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
@@ -53,6 +54,8 @@ public class ExchangeFragment extends Fragment {
             }
         });
         secondaryCurrencyText.setText(currencies[currencyPickerRight.getValue()]);
+
+        //todo ExchangeHistoryAdapter
 
         return fragmentView;
     }

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/day_divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/ExchangeHistoryTimeDivider"
+        tools:text="2 days ago"
+        android:gravity="center"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+            android:id="@+id/currency_primary"
+            style="@style/ExchangeHistoryItemText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            tools:text="30.00 GBP"
+            />
+
+        <TextView
+            style="@style/ExchangeHistoryItemText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="@string/exchange_currency_separator"
+            />
+
+        <TextView
+            android:id="@+id/currency_secondary"
+            style="@style/ExchangeHistoryItemText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="start|center_vertical"
+            tools:text="150.00 PLN"
+            />
+    </LinearLayout>
+
+</LinearLayout>

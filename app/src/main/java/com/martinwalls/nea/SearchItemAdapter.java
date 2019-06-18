@@ -1,6 +1,5 @@
 package com.martinwalls.nea;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,6 @@ import java.util.List;
 
 public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.ViewHolder>
         implements Filterable {
-
-    private Context context;
 
     private List<String> itemList;
     private List<String> itemListFiltered;
@@ -37,11 +34,10 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         }
     }
 
-    public SearchItemAdapter(List<String> itemList, SearchItemAdapterListener listener, Context context) {
+    public SearchItemAdapter(List<String> itemList, SearchItemAdapterListener listener) {
         this.itemList = itemList;
         this.itemListFiltered = itemList;
         this.listener = listener;
-        this.context = context;
     }
 
     @Override

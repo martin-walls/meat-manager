@@ -88,6 +88,7 @@
     <string name="exchange_title">Exchange</string>
     <string name="exchange_choose_currencies">Choose currencies</string>
     <string name="exchange_all_currencies">All currencies</string>
+    <string name="exchange_currency_separator">:</string>
 
     <!-- Settings page -->
     <string name="settings_title">Settings</string>
