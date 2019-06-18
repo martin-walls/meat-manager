@@ -98,18 +98,11 @@
             />
     </LinearLayout>
 
-
-
-
-
-
     <LinearLayout
         android:id="@+id/conversion_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/rate"
-        android:layout_toStartOf="@id/currency_picker_right"
-        android:layout_toEndOf="@id/currency_picker_left"
         android:orientation="vertical"
         >
 
