@@ -46,13 +46,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // open dashboard screen at start
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment_holder, new DashboardFragment())
-                .commit();
-        currentPage = Page.DASHBOARD;
-        findViewById(R.id.nav_dashboard).setActivated(true);
+        if (savedInstanceState == null) {
+            // open dashboard screen at start
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_holder, new DashboardFragment())
+                    .commit();
+            currentPage = Page.DASHBOARD;
+            findViewById(R.id.nav_dashboard).setActivated(true);
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
