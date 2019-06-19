@@ -68,7 +68,7 @@ public class NewStockActivity extends AppCompatActivity
         rootView = findViewById(R.id.root_layout);
 
         // setup recycler view
-        itemAdapter = new SearchItemAdapter(searchResultList, this, this);
+        itemAdapter = new SearchItemAdapter(searchResultList, this);
         TextView emptyView = findViewById(R.id.no_results);
         CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
         recyclerView.setAdapter(itemAdapter);

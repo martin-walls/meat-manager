@@ -35,7 +35,7 @@ public class ExchangeFragment extends Fragment {
         currencyPickerLeft.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                primaryCurrencyText.setText(currencies[newVal]);
+                setPrimaryCurrency(currencies[newVal]);
             }
         });
         primaryCurrencyText.setText(currencies[currencyPickerLeft.getValue()]);
@@ -46,14 +46,15 @@ public class ExchangeFragment extends Fragment {
         currencyPickerRight.setMaxValue(currencies.length - 1);
         currencyPickerRight.setDisplayedValues(currencies);
         currencyPickerRight.setValue(1);
+        currencyPickerRight.setWrapSelectorWheel(false);
         currencyPickerRight.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
         currencyPickerRight.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                secondaryCurrencyText.setText(currencies[newVal]);
+                setSecondaryCurrency(currencies[newVal]);
             }
         });
-        secondaryCurrencyText.setText(currencies[currencyPickerRight.getValue()]);
+        setSecondaryCurrency(currencies[currencyPickerRight.getValue()]);
 
         //todo ExchangeHistoryAdapter
 
@@ -73,5 +74,15 @@ public class ExchangeFragment extends Fragment {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setPrimaryCurrency(String currency) {
+        primaryCurrencyText.setText(currency);
+        //todo update rate values
+    }
+
+    private void setSecondaryCurrency(String currency) {
+        secondaryCurrencyText.setText(currency);
+        //todo update rate values
     }
 }
