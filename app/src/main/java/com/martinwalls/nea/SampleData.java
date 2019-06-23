@@ -2,6 +2,7 @@ package com.martinwalls.nea;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class SampleData {
     private static String[] products = new String[] {
@@ -71,6 +72,14 @@ public class SampleData {
             "EUR"
     };
 
+    private static Conversion[] conversions = new Conversion[] {
+            new Conversion(1561313195, "GBP", "HKD", "30.00", "150.00"),
+            new Conversion(1561313249, "HKD", "PLN", "20.00", "30.00"),
+            new Conversion(1561313004, "HKD", "PLN", "50.00", "75.00"),
+            new Conversion(1561311857, "GBP", "USD", "10.00", "12.35"),
+            new Conversion(1561185385, "USD", "EUR", "8.00", "7.89"),
+    };
+
     public static ArrayList<String> getSampleProducts() {
         return new ArrayList<>(Arrays.asList(products));
     }
@@ -89,5 +98,9 @@ public class SampleData {
 
     public static String[] getSampleCurrencies() {
         return currencies;
+    }
+
+    public static List<Conversion> getSampleConversions() {
+        return new ArrayList<>(Arrays.asList(conversions));
     }
 }

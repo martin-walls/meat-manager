@@ -18,7 +18,7 @@ public class DBHandler extends SQLiteOpenHelper {
         COL_MEAT_TYPE("MeatType");
 
         private String name;
-        public productsTable(String name) {
+        productsTable(String name) {
             this.name = name;
         }
         public String getName() {
@@ -31,7 +31,7 @@ public class DBHandler extends SQLiteOpenHelper {
         COL_MEAT_TYPE("MeatType");
 
         private String name;
-        public meatTypesTable(String name) {
+        meatTypesTable(String name) {
             this.name = name;
         }
         public String getName() {
@@ -50,7 +50,7 @@ public class DBHandler extends SQLiteOpenHelper {
         COL_QUALITY("Quality");
 
         private String name;
-        public stockTable(String name) {
+        stockTable(String name) {
             this.name = name;
         }
         public String getName() {
@@ -66,7 +66,7 @@ public class DBHandler extends SQLiteOpenHelper {
         COL_COMPLETED("Completed");
 
         private String name;
-        public ordersTable(String name) {
+        ordersTable(String name) {
             this.name = name;
         }
         public String getName() {
@@ -82,7 +82,7 @@ public class DBHandler extends SQLiteOpenHelper {
         COL_QUANTITY_BOXES("QuantityBoxes");
 
         private String name;
-        public orderProductsTable(String name) {
+        orderProductsTable(String name) {
             this.name = name;
         }
         public String getName() {
@@ -99,7 +99,7 @@ public class DBHandler extends SQLiteOpenHelper {
         COL_REMINDER("Reminder");
 
         private String name;
-        public contractsTable(String name) {
+        contractsTable(String name) {
             this.name = name;
         }
         public String getName() {
@@ -115,7 +115,7 @@ public class DBHandler extends SQLiteOpenHelper {
         COL_QUANTITY_BOXES("QuantityBoxes");
 
         private String name;
-        public contractProductsTable(String name) {
+        contractProductsTable(String name) {
             this.name = name;
         }
         public String getName() {
@@ -137,7 +137,7 @@ public class DBHandler extends SQLiteOpenHelper {
         COL_EMAIL("Email");
 
         private String name;
-        public locationsTable(String name) {
+        locationsTable(String name) {
             this.name = name;
         }
         public String getName() {
@@ -195,7 +195,7 @@ public class DBHandler extends SQLiteOpenHelper {
                     + stockTable.COL_SUPPLIER_ID.getName() + "), "
                 + "FOREIGN KEY ("+ stockTable.COL_PRODUCT_ID.getName() + ") REFERENCES "
                     + productsTable.TABLE_NAME.getName() + "(" + productsTable.COL_PRODUCT_ID.getName() + ") "
-                    + "ON DELETE RESTRICT,",
+                    + "ON DELETE RESTRICT,"
                 + "FOREIGN KEY (" + stockTable.COL_LOCATION_ID.getName() + ") REFERENCES "
                     + locationsTable.TABLE_NAME.getName() + "(" + locationsTable.COL_LOCATION_ID.getName() + ") "
                     + "ON DELETE RESTRICT,"
@@ -204,7 +204,7 @@ public class DBHandler extends SQLiteOpenHelper {
                     + "ON DELETE RESTRICT,"
                 + "FOREIGN KEY (" + stockTable.COL_DEST_ID.getName() + ") REFERENCES "
                     + locationsTable.TABLE_NAME.getName() + "(" + locationsTable.COL_LOCATION_ID.getName() + ") "
-                    + "ON DELETE RESTRICT )"
+                    + "ON DELETE RESTRICT )";
         db.execSQL(createStockTableQuery);
 
         String createOrdersTableQuery = "CREATE TABLE IF NOT EXISTS "
@@ -215,7 +215,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + ordersTable.COL_COMPLETED.getName() + " INTEGER NOT NULL, "
                 + "FOREIGN KEY (" + ordersTable.COL_DEST_ID.getName() + ") REFERENCES "
                     + locationsTable.TABLE_NAME.getName() + "(" + locationsTable.COL_LOCATION_ID.getName() + ") "
-                    + "ON DELETE RESTRICT )"
+                    + "ON DELETE RESTRICT )";
         db.execSQL(createOrdersTableQuery);
 
         String createOrderProductsTableQuery = "CREATE TABLE IF NOT EXISTS "
@@ -231,7 +231,7 @@ public class DBHandler extends SQLiteOpenHelper {
                     + "ON DELETE RESTRICT,"
                 + "FOREIGN KEY (" + orderProductsTable.COL_ORDER_ID.getName() + ") REFERENCES "
                     + ordersTable.TABLE_NAME.getName() + "(" + ordersTable.COL_ORDER_ID.getName() + ") "
-                    + "ON DELETE CASCADE )"
+                    + "ON DELETE CASCADE )";
         db.execSQL(createOrderProductsTableQuery);
     }
 

@@ -21,7 +21,7 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
         COL_SECONDARY_VALUE("SecondaryValue");
 
         private String name;
-        public conversionsTable(String name) {
+        conversionsTable(String name) {
             this.name = name;
         }
         public String getName() {
@@ -34,7 +34,7 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
         COL_CURRENCY_CODE("CurrencyCode");
 
         private String name;
-        public favouritesTable(String name) {
+        favouritesTable(String name) {
             this.name = name;
         }
         public String getName() {

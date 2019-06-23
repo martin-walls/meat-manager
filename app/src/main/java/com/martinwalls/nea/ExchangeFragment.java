@@ -7,6 +7,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 public class ExchangeFragment extends Fragment {
 
@@ -56,7 +60,15 @@ public class ExchangeFragment extends Fragment {
         });
         setSecondaryCurrency(currencies[currencyPickerRight.getValue()]);
 
-        //todo ExchangeHistoryAdapter
+        List<Conversion> conversionList = SampleData.getSampleConversions();
+        ExchangeHistoryAdapter exchangeHistoryAdapter = new ExchangeHistoryAdapter(conversionList);
+
+        TextView emptyView = fragmentView.findViewById(R.id.no_exchange_history);
+        CustomRecyclerView conversionHistoryView = fragmentView.findViewById(R.id.exchange_history);
+        conversionHistoryView.setAdapter(exchangeHistoryAdapter);
+        conversionHistoryView.setEmptyView(emptyView);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        conversionHistoryView.setLayoutManager(layoutManager);
 
         return fragmentView;
     }

@@ -15,11 +15,13 @@ public class ExchangeHistoryAdapter extends RecyclerView.Adapter<ExchangeHistory
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView primaryCurrencyText;
         private TextView secondaryCurrencyText;
+        private TextView dayDividerText;
 
         public ViewHolder(View view) {
             super(view);
             primaryCurrencyText = view.findViewById(R.id.currency_primary);
             secondaryCurrencyText = view.findViewById(R.id.currency_secondary);
+            dayDividerText = view.findViewById(R.id.day_divider);
         }
     }
 
@@ -38,6 +40,11 @@ public class ExchangeHistoryAdapter extends RecyclerView.Adapter<ExchangeHistory
         Conversion conversion = conversionList.get(position);
         viewHolder.primaryCurrencyText.setText(conversion.getPrimaryString());
         viewHolder.secondaryCurrencyText.setText(conversion.getSecondaryString());
+        viewHolder.dayDividerText.setVisibility(position % 3 == 0 ? View.VISIBLE : View.GONE);
+        viewHolder.dayDividerText.setText(position == 0
+                ? viewHolder.dayDividerText.getContext().getString(R.string.exchange_history_today)
+                : viewHolder.dayDividerText.getContext().getResources().getQuantityString(
+                        R.plurals.exchange_history_days_ago, position, position));
     }
 
     @Override

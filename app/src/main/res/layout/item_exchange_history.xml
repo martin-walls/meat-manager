@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     >
 
     <TextView
         android:id="@+id/day_divider"
+        style="@style/ExchangeHistoryTimeDivider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/ExchangeHistoryTimeDivider"
-        tools:text="2 days ago"
         android:gravity="center"
+        tools:text="2 days ago"
         />
 
     <LinearLayout

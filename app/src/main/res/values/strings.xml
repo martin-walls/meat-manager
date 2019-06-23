@@ -89,6 +89,12 @@
     <string name="exchange_choose_currencies">Choose currencies</string>
     <string name="exchange_all_currencies">All currencies</string>
     <string name="exchange_currency_separator">:</string>
+    <string name="exchange_no_history">No recent conversions</string>
+    <plurals name="exchange_history_days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <string name="exchange_history_today">Today</string>
 
     <!-- Settings page -->
     <string name="settings_title">Settings</string>
