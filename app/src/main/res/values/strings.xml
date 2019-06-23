@@ -95,6 +95,7 @@
         <item quantity="other">%d days ago</item>
     </plurals>
     <string name="exchange_history_today">Today</string>
+    <string name="exchange_choose_currencies_no_fav">No Currencies Starred</string>
 
     <!-- Settings page -->
     <string name="settings_title">Settings</string>

@@ -82,7 +82,7 @@
     </style>
 
     <style name="SearchResultsLayout">
-        <item name="android:divider">@drawable/divider</item>
+        <item name="android:divider">@drawable/divider_thin</item>
         <item name="android:showDividers">middle</item>
     </style>
 
@@ -113,6 +113,15 @@
 
     <style name="ExchangeHistoryItemText">
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ChooseCurrenciesItem">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?attr/textColorNormal</item>
+    </style>
+
+    <style name="ChooseCurrenciesItem.Star">
+        <item name="android:drawableEnd">@drawable/ic_star_outline</item>
     </style>
 
 </resources>
