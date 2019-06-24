@@ -1,4 +1,4 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +11,30 @@ public class DBHandler extends SQLiteOpenHelper {
     private final Context context;
 
     //region database constants
+    //todo refactor enums into private classes, eg:
+    private static final class productsTable_newForRefactor {
+        private static final String TABLE_NAME = "Products";
+        private static final String COL_PRODUCT_ID = "ProductId";
+        private static final String COL_PRODUCT_NAME = "ProductName";
+        private static final String COL_MEAT_TYPE = "MeatType";
+
+        public static String getTableName() {
+            return TABLE_NAME;
+        }
+
+        public static String getColProductId() {
+            return COL_PRODUCT_ID;
+        }
+
+        public static String getColProductName() {
+            return COL_PRODUCT_NAME;
+        }
+
+        public static String getColMeatType() {
+            return COL_MEAT_TYPE;
+        }
+    }
+
     private enum productsTable {
         TABLE_NAME("Products"),
         COL_PRODUCT_ID("ProductId"),
@@ -233,6 +257,28 @@ public class DBHandler extends SQLiteOpenHelper {
                     + ordersTable.TABLE_NAME.getName() + "(" + ordersTable.COL_ORDER_ID.getName() + ") "
                     + "ON DELETE CASCADE )";
         db.execSQL(createOrderProductsTableQuery);
+
+        String createContractsTableQuery = "CREATE TABLE IF NOT EXISTS "
+                + contractsTable.TABLE_NAME.getName() + " ("
+                + contractsTable.COL_CONTRACT_ID.getName() + " INTEGER PRIMARY KEY, "
+                + contractsTable.COL_DEST_ID.getName() + " INTEGER NOT NULL, "
+                + contractsTable.COL_REPEAT_INTERVAL.getName() + " TEXT NOT NULL, "
+                + contractsTable.COL_REPEAT_ON.getName() + " TEXT NOT NULL, "
+                + contractsTable.COL_REMINDER.getName() + " INTEGER NOT NULL, "
+                + "FOREIGN KEY (" + contractsTable.COL_DEST_ID.getName() + ") REFERENCES "
+                    + locationsTable.TABLE_NAME.getName() + "(" + locationsTable.COL_LOCATION_ID.getName() + ") "
+                    + "ON DELETE RESTRICT )";
+        db.execSQL(createContractsTableQuery);
+
+        String createContractProductsTableQuery = "CREATE TABLE IF NOT EXISTS "
+                + contractProductsTable.TABLE_NAME.getName() + " ("
+                + contractProductsTable.COL_CONTRACT_ID.getName() + " INTEGER NOT NULL, "
+                + contractProductsTable.COL_PRODUCT_ID.getName() + " INTEGER NOT NULL, "
+                + contractProductsTable.COL_QUANTITY_MASS.getName() + " REAL NOT NULL, "
+                + contractProductsTable.COL_QUANTITY_BOXES.getName() + " REAL, "
+                + "PRIMARY KEY (" + contractProductsTable.COL_CONTRACT_ID.getName() + ", "
+                    + contractProductsTable.COL_PRODUCT_ID + "), "
+                + "FOREIGN KEY (" + contractProductsTable.COL_CONTRACT_ID.getName(); //todo finish this
     }
 
     @Override

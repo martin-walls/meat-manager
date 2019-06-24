@@ -1,4 +1,4 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.screens.stock;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -14,6 +14,9 @@ import androidx.fragment.app.DialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.martinwalls.nea.data.Product;
+import com.martinwalls.nea.R;
+import com.martinwalls.nea.SampleData;
 
 import java.util.List;
 

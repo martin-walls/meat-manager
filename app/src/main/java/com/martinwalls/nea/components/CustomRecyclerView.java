@@ -1,10 +1,8 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.components;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CustomRecyclerView extends RecyclerView {

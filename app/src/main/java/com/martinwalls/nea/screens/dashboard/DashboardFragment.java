@@ -1,10 +1,11 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.screens.dashboard;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
+import com.martinwalls.nea.R;
 
 public class DashboardFragment extends Fragment {
 

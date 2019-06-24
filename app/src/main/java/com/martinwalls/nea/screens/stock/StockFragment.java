@@ -1,4 +1,4 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.screens.stock;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.martinwalls.nea.components.CustomRecyclerView;
+import com.martinwalls.nea.R;
 
 public class StockFragment extends Fragment {
 

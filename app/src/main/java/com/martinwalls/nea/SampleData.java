@@ -1,5 +1,7 @@
 package com.martinwalls.nea;
 
+import com.martinwalls.nea.screens.exchange.Conversion;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

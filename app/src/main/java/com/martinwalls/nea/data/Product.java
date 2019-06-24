@@ -1,4 +1,4 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.data;
 
 public class Product {
     private int productId;

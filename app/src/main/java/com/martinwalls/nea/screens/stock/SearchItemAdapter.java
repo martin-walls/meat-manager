@@ -1,4 +1,4 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.screens.stock;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +7,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+import com.martinwalls.nea.R;
 
 import java.util.ArrayList;
 import java.util.List;

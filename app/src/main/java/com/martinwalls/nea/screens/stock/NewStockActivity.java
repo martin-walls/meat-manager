@@ -1,4 +1,4 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.screens.stock;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -21,6 +21,10 @@ import androidx.transition.TransitionInflater;
 import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.martinwalls.nea.*;
+import com.martinwalls.nea.components.AddNewTextView;
+import com.martinwalls.nea.components.CustomRecyclerView;
+import com.martinwalls.nea.data.Product;
 
 import java.util.ArrayList;
 import java.util.HashMap;

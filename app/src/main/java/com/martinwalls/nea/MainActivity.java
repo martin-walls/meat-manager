@@ -12,6 +12,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import com.martinwalls.nea.screens.contracts.ContractsFragment;
+import com.martinwalls.nea.screens.dashboard.DashboardFragment;
+import com.martinwalls.nea.screens.exchange.ExchangeFragment;
+import com.martinwalls.nea.screens.stock.StockFragment;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,10 +1,11 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.components;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
+import com.martinwalls.nea.R;
 
 public class AddNewTextView extends AppCompatTextView {
 

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".NewStockActivity"
+    tools:context=".screens.stock.NewStockActivity"
     >
 
     <com.google.android.material.textfield.TextInputLayout
@@ -162,7 +162,7 @@
         android:visibility="gone"
         >
 
-        <com.martinwalls.nea.AddNewTextView
+        <com.martinwalls.nea.components.AddNewTextView
             android:id="@+id/add_new"
             style="@style/SearchResultsItemText.Selectable.AddNew"
             android:layout_width="match_parent"
@@ -173,7 +173,7 @@
             android:paddingBottom="@dimen/search_result_spacing"
             />
 
-        <com.martinwalls.nea.CustomRecyclerView
+        <com.martinwalls.nea.components.CustomRecyclerView
             android:id="@+id/recycler_view_results"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

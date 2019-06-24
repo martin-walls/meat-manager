@@ -1,10 +1,11 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.screens.contracts;
 
 import android.os.Bundle;
 import android.view.*;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import com.martinwalls.nea.R;
 
 public class ContractsFragment extends Fragment {
 

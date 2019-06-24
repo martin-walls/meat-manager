@@ -1,4 +1,4 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.screens.exchange;
 
 public class Currency {
     private String name;

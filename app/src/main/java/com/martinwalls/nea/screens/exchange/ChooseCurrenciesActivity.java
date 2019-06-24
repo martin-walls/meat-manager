@@ -1,4 +1,4 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.screens.exchange;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,6 +8,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.martinwalls.nea.components.CustomRecyclerView;
+import com.martinwalls.nea.R;
+import com.martinwalls.nea.SampleData;
 
 import java.util.ArrayList;
 import java.util.List;

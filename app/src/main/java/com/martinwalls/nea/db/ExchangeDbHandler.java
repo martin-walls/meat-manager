@@ -1,4 +1,4 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
