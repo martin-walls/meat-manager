@@ -71,8 +71,8 @@ public class NewStockActivity extends AppCompatActivity
         itemAdapter = new SearchItemAdapter(searchResultList, this);
         TextView emptyView = findViewById(R.id.no_results);
         CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
-        recyclerView.setAdapter(itemAdapter);
         recyclerView.setEmptyView(emptyView);
+        recyclerView.setAdapter(itemAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         searchResultsLayout = findViewById(R.id.search_results_layout);

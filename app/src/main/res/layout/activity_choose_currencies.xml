@@ -10,28 +10,64 @@
     tools:context=".ChooseCurrenciesActivity"
     >
 
-    <com.martinwalls.nea.CustomRecyclerView
-        android:id="@+id/favourite_currencies_list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:orientation="vertical"
+        >
 
-    <TextView
-        android:id="@+id/favourite_currencies_empty"
-        style="@style/ChooseCurrenciesItem"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="@dimen/choose_currencies_margin_left"
-        android:paddingTop="@dimen/choose_currencies_spacing"
-        android:paddingEnd="@dimen/choose_currencies_margin_right"
-        android:paddingBottom="@dimen/choose_currencies_spacing"
-        android:text="@string/exchange_choose_currencies_no_fav"
-        />
+        <TextView
+            style="@style/ChooseCurrenciesListTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/choose_currencies_margin_left"
+            android:paddingTop="@dimen/choose_currencies_spacing"
+            android:paddingEnd="@dimen/choose_currencies_margin_right"
+            android:text="@string/exchange_favourites"
+            />
 
-    <com.martinwalls.nea.CustomRecyclerView
-        android:id="@+id/all_currencies_list"
+        <com.martinwalls.nea.CustomRecyclerView
+            android:id="@+id/favourite_currencies_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            />
+
+        <TextView
+            android:id="@+id/favourite_currencies_empty"
+            style="@style/ChooseCurrenciesItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/choose_currencies_margin_left"
+            android:paddingTop="@dimen/choose_currencies_spacing"
+            android:paddingEnd="@dimen/choose_currencies_margin_right"
+            android:paddingBottom="@dimen/choose_currencies_spacing"
+            android:text="@string/exchange_choose_currencies_no_fav"
+            />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:orientation="vertical"
+        >
+
+        <TextView
+            style="@style/ChooseCurrenciesListTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/choose_currencies_margin_left"
+            android:paddingTop="@dimen/choose_currencies_spacing"
+            android:paddingEnd="@dimen/choose_currencies_margin_right"
+            android:text="@string/exchange_all_currencies"
+            />
+
+        <com.martinwalls.nea.CustomRecyclerView
+            android:id="@+id/all_currencies_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            />
+    </LinearLayout>
 
 </LinearLayout>

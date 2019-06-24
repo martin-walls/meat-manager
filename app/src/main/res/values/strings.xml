@@ -87,6 +87,7 @@
     <!-- Exchange page -->
     <string name="exchange_title">Exchange</string>
     <string name="exchange_choose_currencies">Choose currencies</string>
+    <string name="exchange_favourites">Favourites</string>
     <string name="exchange_all_currencies">All currencies</string>
     <string name="exchange_currency_separator">:</string>
     <string name="exchange_no_history">No recent conversions</string>

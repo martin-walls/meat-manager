@@ -21,7 +21,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView itemName;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             itemName = (TextView) view;
 

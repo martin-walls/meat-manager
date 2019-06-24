@@ -65,11 +65,11 @@ public class SampleData {
     };
 
     private static String[] currencies = new String[] {
+            "EUR",
             "GBP",
             "HKD",
             "PLN",
-            "USD",
-            "EUR"
+            "USD"
     };
 
     private static Conversion[] conversions = new Conversion[] {

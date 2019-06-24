@@ -1,10 +1,10 @@
 package com.martinwalls.nea;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -82,7 +82,8 @@ public class ExchangeFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_favourites) {
-            Toast.makeText(getContext(), "FAVOURITES", Toast.LENGTH_SHORT).show();
+            Intent favouritesIntent = new Intent(getContext(), ChooseCurrenciesActivity.class);
+            startActivity(favouritesIntent);
             return true;
         }
         return super.onOptionsItemSelected(item);
