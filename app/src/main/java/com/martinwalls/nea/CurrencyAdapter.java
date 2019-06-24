@@ -8,13 +8,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHolder> {
 
-    private List<Currency> currencyList = new ArrayList<>();
+    private List<Currency> currencyList;
     private CurrencyAdapterListener listener;
+    private boolean isFavList;
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView currencyText;
@@ -28,23 +28,16 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
             favouritesStar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onCurrencyStarClicked(currencyList.get(getLayoutPosition()));
+                    listener.onCurrencyStarClicked(getLayoutPosition(), isFavList);
                 }
             });
         }
     }
 
-    public CurrencyAdapter(List<Currency> currencyList, boolean onlyFavourites, CurrencyAdapterListener listener) {
+    public CurrencyAdapter(List<Currency> currencyList, CurrencyAdapterListener listener, boolean isFavList) {
         this.listener = listener;
-        if (onlyFavourites) {
-            for (Currency currency : currencyList) {
-                if (currency.isFavourite()) {
-                    this.currencyList.add(currency);
-                }
-            }
-        } else {
-            this.currencyList = currencyList;
-        }
+        this.currencyList = currencyList;
+        this.isFavList = isFavList;
     }
 
     @Override
@@ -68,6 +61,6 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
     }
 
     public interface CurrencyAdapterListener {
-        void onCurrencyStarClicked(Currency currency);
+        void onCurrencyStarClicked(int position, boolean isFavList);
     }
 }

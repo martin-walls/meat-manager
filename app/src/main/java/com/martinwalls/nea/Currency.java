@@ -28,4 +28,9 @@ public class Currency {
     public void setFavourite(boolean favourite) {
         isFavourite = favourite;
     }
+
+    public boolean toggleFavourite() {
+        isFavourite = !isFavourite;
+        return isFavourite;
+    }
 }

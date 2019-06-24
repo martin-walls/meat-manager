@@ -3,7 +3,6 @@ package com.martinwalls.nea;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,9 +13,10 @@ import java.util.List;
 public class ChooseCurrenciesActivity extends AppCompatActivity
         implements CurrencyAdapter.CurrencyAdapterListener {
 
-    private CurrencyAdapter currencyAdapterFav;
-    private CurrencyAdapter currencyAdapterAll;
-    private List<Currency> currencyList;
+    private CurrencyAdapter favCurrencyAdapter;
+    private CurrencyAdapter allCurrencyAdapter;
+    private List<Currency> allCurrencyList = new ArrayList<>();
+    private List<Currency> favCurrencyList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,25 +24,28 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
         setContentView(R.layout.activity_choose_currencies);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //todo recycler views with item_choose_currencies
-        //todo star/unstar change drawable
 
-        currencyList = new ArrayList<>();
         for (String currencyString : SampleData.getSampleCurrencies()) {
-            currencyList.add(new Currency(currencyString, currencyString.equals("GBP") || currencyString.equals("HKD")));
+            allCurrencyList.add(new Currency(currencyString, currencyString.equals("GBP") || currencyString.equals("HKD")));
+        }
+
+        for (Currency currency : allCurrencyList) {
+            if (currency.isFavourite()) {
+                favCurrencyList.add(currency);
+            }
         }
 
         TextView favouritesEmptyView = findViewById(R.id.favourite_currencies_empty);
         CustomRecyclerView favouritesList = findViewById(R.id.favourite_currencies_list);
-        currencyAdapterFav = new CurrencyAdapter(currencyList, true, this);
+        favCurrencyAdapter = new CurrencyAdapter(favCurrencyList, this, true);
         favouritesList.setEmptyView(favouritesEmptyView);
-        favouritesList.setAdapter(currencyAdapterFav);
+        favouritesList.setAdapter(favCurrencyAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         favouritesList.setLayoutManager(layoutManager);
 
         CustomRecyclerView allCurrenciesList = findViewById(R.id.all_currencies_list);
-        currencyAdapterAll = new CurrencyAdapter(currencyList, false, this);
-        allCurrenciesList.setAdapter(currencyAdapterAll);
+        allCurrencyAdapter = new CurrencyAdapter(allCurrencyList, this, false);
+        allCurrenciesList.setAdapter(allCurrencyAdapter);
         RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(this);
         allCurrenciesList.setLayoutManager(layoutManager1);
     }
@@ -60,8 +63,19 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
     }
 
     @Override
-    public void onCurrencyStarClicked(Currency currency) {
-        Toast.makeText(this, currency.isFavourite() ? "FAVOURITE" : "NORMAL", Toast.LENGTH_SHORT).show();
-        //todo on star clicked
+    public void onCurrencyStarClicked(int position, boolean isFavList) {
+        if (isFavList) {
+            favCurrencyList.get(position).toggleFavourite();
+            favCurrencyList.remove(position);
+        } else {
+            Currency currency = allCurrencyList.get(position);
+            if (currency.toggleFavourite()) {
+                favCurrencyList.add(currency);
+            } else {
+                favCurrencyList.remove(currency);
+            }
+        }
+        favCurrencyAdapter.notifyDataSetChanged();
+        allCurrencyAdapter.notifyDataSetChanged();
     }
 }
