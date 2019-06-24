@@ -13,8 +13,8 @@ import java.util.List;
 
 public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHolder> {
 
-    private List<Currency> currencyList;
-    private List<Currency> currencyListFiltered = new ArrayList<>();
+    private List<Currency> currencyList = new ArrayList<>();
+    private CurrencyAdapterListener listener;
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView currencyText;
@@ -24,19 +24,26 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
             super(view);
             currencyText = view.findViewById(R.id.currency_text);
             favouritesStar = view.findViewById(R.id.favourite_star);
+
+            favouritesStar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onCurrencyStarClicked(currencyList.get(getLayoutPosition()));
+                }
+            });
         }
     }
 
-    public CurrencyAdapter(List<Currency> currencyList, boolean onlyFavourites) {
-        this.currencyList = currencyList;
+    public CurrencyAdapter(List<Currency> currencyList, boolean onlyFavourites, CurrencyAdapterListener listener) {
+        this.listener = listener;
         if (onlyFavourites) {
             for (Currency currency : currencyList) {
                 if (currency.isFavourite()) {
-                    currencyListFiltered.add(currency);
+                    this.currencyList.add(currency);
                 }
             }
         } else {
-            currencyListFiltered = currencyList;
+            this.currencyList = currencyList;
         }
     }
 
@@ -48,7 +55,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Currency currency = currencyListFiltered.get(position);
+        Currency currency = currencyList.get(position);
         holder.currencyText.setText(currency.getName());
         holder.favouritesStar.setImageDrawable(currency.isFavourite()
                 ? holder.favouritesStar.getContext().getDrawable(R.drawable.ic_star_filled)
@@ -57,6 +64,10 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return currencyListFiltered.size();
+        return currencyList.size();
+    }
+
+    public interface CurrencyAdapterListener {
+        void onCurrencyStarClicked(Currency currency);
     }
 }
