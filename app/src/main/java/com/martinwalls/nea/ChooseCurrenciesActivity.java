@@ -1,8 +1,10 @@
 package com.martinwalls.nea;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,8 +24,6 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_currencies);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         for (String currencyString : SampleData.getSampleCurrencies()) {
             allCurrencyList.add(new Currency(currencyString, currencyString.equals("GBP") || currencyString.equals("HKD")));
@@ -51,12 +51,22 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_choose_currencies, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //todo rest of menu
-        //noinspection SwitchStatementWithTooFewBranches
+        //todo implement these
         switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
+            case R.id.action_done:
+                Toast.makeText(this, "DONE", Toast.LENGTH_SHORT).show();
+                finish();
+                return true;
+            case R.id.action_cancel:
+                Toast.makeText(this, "CANCEL", Toast.LENGTH_SHORT).show();
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
