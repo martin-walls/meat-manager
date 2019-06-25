@@ -11,163 +11,69 @@ public class DBHandler extends SQLiteOpenHelper {
     private final Context context;
 
     //region database constants
-    //todo refactor enums into private classes, eg:
-    private static final class productsTable_newForRefactor {
-        private static final String TABLE_NAME = "Products";
-        private static final String COL_PRODUCT_ID = "ProductId";
-        private static final String COL_PRODUCT_NAME = "ProductName";
-        private static final String COL_MEAT_TYPE = "MeatType";
+    // table names
+    private final String TABLE_PRODUCTS = "Products";
+    private final String TABLE_MEAT_TYPES = "MeatTypes";
+    private final String TABLE_STOCK = "Stock";
+    private final String TABLE_ORDERS = "Orders";
+    private final String TABLE_ORDER_PRODUCTS = "OrderProducts";
+    private final String TABLE_CONTRACTS = "Contracts";
+    private final String TABLE_CONTRACT_PRODUCTS = "ContractProducts";
+    private final String TABLE_LOCATIONS = "Locations";
+    
+    // cols for product table
+    private final String PRODUCTS_ID = "ProductId";
+    private final String PRODUCTS_NAME = "ProductName";
+    private final String PRODUCTS_MEAT_TYPE = "MeatType";
 
-        public static String getTableName() {
-            return TABLE_NAME;
-        }
+    // cols for meat types table
+    private final String MEAT_TYPES_TYPE = "MeatType";
+    
+    // cols for stock table
+    private final String STOCK_PRODUCT_ID = "ProductId";
+    private final String STOCK_LOCATION_ID = "LocationId";
+    private final String STOCK_SUPPLIER_ID = "SupplierId";
+    private final String STOCK_DEST_ID = "DestId";
+    private final String STOCK_MASS = "Mass";
+    private final String STOCK_NUM_BOXES = "NumBoxes";
+    private final String STOCK_QUALITY = "Quality";
 
-        public static String getColProductId() {
-            return COL_PRODUCT_ID;
-        }
+    // cols for orders table
+    private final String ORDERS_ID = "OrderId";
+    private final String ORDERS_DEST_ID = "DestId";
+    private final String ORDERS_DATE = "OrderDate";
+    private final String ORDERS_COMPLETED = "Completed";
+    
+    // cols for order products table
+    private final String ORDER_PRODUCTS_PRODUCT_ID = "ProductId";
+    private final String ORDER_PRODUCTS_ORDER_ID = "OrderId";
+    private final String ORDER_PRODUCTS_QUANTITY_MASS = "QuantityMass";
+    private final String ORDER_PRODUCTS_QUANTITY_BOXES = "QuantityBoxes";
 
-        public static String getColProductName() {
-            return COL_PRODUCT_NAME;
-        }
-
-        public static String getColMeatType() {
-            return COL_MEAT_TYPE;
-        }
-    }
-
-    private enum productsTable {
-        TABLE_NAME("Products"),
-        COL_PRODUCT_ID("ProductId"),
-        COL_PRODUCT_NAME("ProductName"),
-        COL_MEAT_TYPE("MeatType");
-
-        private String name;
-        productsTable(String name) {
-            this.name = name;
-        }
-        public String getName() {
-            return name;
-        }
-    }
-
-    private enum meatTypesTable {
-        TABLE_NAME("MeatTypes"),
-        COL_MEAT_TYPE("MeatType");
-
-        private String name;
-        meatTypesTable(String name) {
-            this.name = name;
-        }
-        public String getName() {
-            return name;
-        }
-    }
-    //todo maybe have data type eg INTEGER also stored in enums?
-    private enum stockTable {
-        TABLE_NAME("Stock"),
-        COL_PRODUCT_ID("ProductId"),
-        COL_LOCATION_ID("LocationId"),
-        COL_SUPPLIER_ID("SupplierId"),
-        COL_DEST_ID("DestId"),
-        COL_MASS("Mass"),
-        COL_NUM_BOXES("NumBoxes"),
-        COL_QUALITY("Quality");
-
-        private String name;
-        stockTable(String name) {
-            this.name = name;
-        }
-        public String getName() {
-            return name;
-        }
-    }
-
-    private enum ordersTable {
-        TABLE_NAME("Orders"),
-        COL_ORDER_ID("OrderId"),
-        COL_DEST_ID("DestId"),
-        COL_ORDER_DATE("OrderDate"),
-        COL_COMPLETED("Completed");
-
-        private String name;
-        ordersTable(String name) {
-            this.name = name;
-        }
-        public String getName() {
-            return name;
-        }
-    }
-
-    private enum orderProductsTable {
-        TABLE_NAME("OrderProducts"),
-        COL_PRODUCT_ID("ProductId"),
-        COL_ORDER_ID("OrderId"),
-        COL_QUANTITY_MASS("QuantityMass"),
-        COL_QUANTITY_BOXES("QuantityBoxes");
-
-        private String name;
-        orderProductsTable(String name) {
-            this.name = name;
-        }
-        public String getName() {
-            return name;
-        }
-    }
-
-    private enum contractsTable {
-        TABLE_NAME("Contracts"),
-        COL_CONTRACT_ID("ContractId"),
-        COL_DEST_ID("DestId"),
-        COL_REPEAT_INTERVAL("RepeatInterval"),
-        COL_REPEAT_ON("RepeatOn"),
-        COL_REMINDER("Reminder");
-
-        private String name;
-        contractsTable(String name) {
-            this.name = name;
-        }
-        public String getName() {
-            return name;
-        }
-    }
-
-    private enum contractProductsTable {
-        TABLE_NAME("ContractProducts"),
-        COL_CONTRACT_ID("ContractId"),
-        COL_PRODUCT_ID("ProductId"),
-        COL_QUANTITY_MASS("QuantityMass"),
-        COL_QUANTITY_BOXES("QuantityBoxes");
-
-        private String name;
-        contractProductsTable(String name) {
-            this.name = name;
-        }
-        public String getName() {
-            return name;
-        }
-    }
-
-    private enum locationsTable {
-        TABLE_NAME("Locations"),
-        COL_LOCATION_ID("LocationId"),
-        COL_LOCATION_NAME("LocationName"),
-        COL_LOCATION_TYPE("LocationType"),
-        COL_ADDR_1("AddrLine1"),
-        COL_ADDR_2("AddrLine2"),
-        COL_CITY("City"),
-        COL_POSTCODE("Postcode"),
-        COL_COUNTRY("Country"),
-        COL_PHONE("Phone"),
-        COL_EMAIL("Email");
-
-        private String name;
-        locationsTable(String name) {
-            this.name = name;
-        }
-        public String getName() {
-            return name;
-        }
-    }
+    // cols for contracts table
+    private final String CONTRACTS_ID = "ContractId";
+    private final String CONTRACTS_DEST_ID = "DestId";
+    private final String CONTRACTS_REPEAT_INTERVAL = "RepeatInterval";
+    private final String CONTRACTS_REPEAT_ON = "RepeatOn";
+    private final String CONTRACTS_REMINDER = "Reminder";
+    
+    // cols for contract products table
+    private final String CONTRACT_PRODUCTS_CONTRACT_ID = "ContractId";
+    private final String CONTRACT_PRODUCTS_PRODUCT_ID = "ProductId";
+    private final String CONTRACT_PRODUCTS_QUANTITY_MASS = "QuantityMass";
+    private final String CONTRACT_PRODUCTS_QUANTITY_BOXES = "QuantityBoxes";
+    
+    // cols for locations table
+    private final String LOCATIONS_ID = "LocationId";
+    private final String LOCATIONS_NAME = "LocationName";
+    private final String LOCATIONS_TYPE = "LocationType";
+    private final String LOCATIONS_ADDR_1 = "AddrLine1";
+    private final String LOCATIONS_ADDR_2 = "AddrLine2";
+    private final String LOCATIONS_CITY = "City";
+    private final String LOCATIONS_POSTCODE = "Postcode";
+    private final String LOCATIONS_COUNTRY = "Country";
+    private final String LOCATIONS_PHONE = "Phone";
+    private final String LOCATIONS_EMAIL = "Email";
     //endregion database constants
 
     public DBHandler(Context context) {
@@ -178,83 +84,83 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createMeatTypesTableQuery = "CREATE TABLE IF NOT EXISTS "
-                + meatTypesTable.TABLE_NAME.getName() + " ("
-                + meatTypesTable.COL_MEAT_TYPE.getName() + " TEXT PRIMARY KEY )";
+                + TABLE_MEAT_TYPES + " ("
+                + MEAT_TYPES_TYPE + " TEXT PRIMARY KEY )";
         db.execSQL(createMeatTypesTableQuery);
 
         String createProductsTableQuery = "CREATE TABLE IF NOT EXISTS "
-                + productsTable.TABLE_NAME.getName() + " ("
-                + productsTable.COL_PRODUCT_ID.getName() + " INTEGER PRIMARY KEY, "
-                + productsTable.COL_PRODUCT_NAME.getName() + " TEXT NOT NULL, "
-                + productsTable.COL_MEAT_TYPE.getName() + " TEXT, "
-                + "FOREIGN KEY (" + productsTable.COL_MEAT_TYPE.getName() + ") REFERENCES "
-                + meatTypesTable.TABLE_NAME.getName() + "(" + meatTypesTable.COL_MEAT_TYPE.getName() + ")";
+                + TABLE_PRODUCTS + " ("
+                + PRODUCTS_ID + " INTEGER PRIMARY KEY, "
+                + PRODUCTS_NAME + " TEXT NOT NULL, "
+                + PRODUCTS_MEAT_TYPE + " TEXT, "
+                + "FOREIGN KEY (" + PRODUCTS_MEAT_TYPE + ") REFERENCES "
+                + TABLE_MEAT_TYPES + "(" + MEAT_TYPES_TYPE + ")";
         db.execSQL(createProductsTableQuery);
 
         String createLocationsTableQuery = "CREATE TABLE IF NOT EXISTS "
-                + locationsTable.TABLE_NAME.getName() + " ("
-                + locationsTable.COL_LOCATION_ID.getName() + " INTEGER PRIMARY KEY, "
-                + locationsTable.COL_LOCATION_NAME.getName() + " TEXT NOT NULL, "
-                + locationsTable.COL_LOCATION_TYPE.getName() + " TEXT NOT NULL, "
-                + locationsTable.COL_ADDR_1.getName() + " TEXT NOT NULL, "
-                + locationsTable.COL_ADDR_2.getName() + " TEXT, "
-                + locationsTable.COL_CITY.getName() + " TEXT, "
-                + locationsTable.COL_POSTCODE.getName() + " TEXT NOT NULL, "
-                + locationsTable.COL_COUNTRY.getName() + " TEXT NOT NULL, "
-                + locationsTable.COL_PHONE.getName() + " TEXT, "
-                + locationsTable.COL_EMAIL.getName() + " TEXT )";
+                + TABLE_LOCATIONS + " ("
+                + LOCATIONS_ID + " INTEGER PRIMARY KEY, "
+                + LOCATIONS_NAME + " TEXT NOT NULL, "
+                + LOCATIONS_TYPE + " TEXT NOT NULL, "
+                + LOCATIONS_ADDR_1 + " TEXT NOT NULL, "
+                + LOCATIONS_ADDR_2 + " TEXT, "
+                + LOCATIONS_CITY + " TEXT, "
+                + LOCATIONS_POSTCODE + " TEXT NOT NULL, "
+                + LOCATIONS_COUNTRY + " TEXT NOT NULL, "
+                + LOCATIONS_PHONE + " TEXT, "
+                + LOCATIONS_EMAIL + " TEXT )";
         db.execSQL(createLocationsTableQuery);
 
         String createStockTableQuery = "CREATE TABLE IF NOT EXISTS "
-                + stockTable.TABLE_NAME.getName() + " ("
-                + stockTable.COL_PRODUCT_ID.getName() + " INTEGER NOT NULL, "
-                + stockTable.COL_LOCATION_ID.getName() + " INTEGER NOT NULL, "
-                + stockTable.COL_SUPPLIER_ID.getName() + " INTEGER NOT NULL, "
-                + stockTable.COL_DEST_ID.getName() + " INTEGER, "
-                + stockTable.COL_MASS.getName() + " REAL NOT NULL, "
-                + stockTable.COL_NUM_BOXES.getName() + " REAL, "
-                + stockTable.COL_QUALITY.getName() + " INTEGER NOT NULL, "
-                + "PRIMARY KEY (" + stockTable.COL_PRODUCT_ID.getName() + ", "
-                    + stockTable.COL_LOCATION_ID.getName() + ", "
-                    + stockTable.COL_SUPPLIER_ID.getName() + "), "
-                + "FOREIGN KEY ("+ stockTable.COL_PRODUCT_ID.getName() + ") REFERENCES "
-                    + productsTable.TABLE_NAME.getName() + "(" + productsTable.COL_PRODUCT_ID.getName() + ") "
+                + TABLE_STOCK + " ("
+                + STOCK_PRODUCT_ID + " INTEGER NOT NULL, "
+                + STOCK_LOCATION_ID + " INTEGER NOT NULL, "
+                + STOCK_SUPPLIER_ID + " INTEGER NOT NULL, "
+                + STOCK_DEST_ID + " INTEGER, "
+                + STOCK_MASS + " REAL NOT NULL, "
+                + STOCK_NUM_BOXES + " REAL, "
+                + STOCK_QUALITY + " INTEGER NOT NULL, "
+                + "PRIMARY KEY (" + STOCK_PRODUCT_ID + ", "
+                    + STOCK_LOCATION_ID + ", "
+                    + STOCK_SUPPLIER_ID + "), "
+                + "FOREIGN KEY ("+ STOCK_PRODUCT_ID + ") REFERENCES "
+                    + TABLE_PRODUCTS + "(" + PRODUCTS_ID + ") "
                     + "ON DELETE RESTRICT,"
-                + "FOREIGN KEY (" + stockTable.COL_LOCATION_ID.getName() + ") REFERENCES "
-                    + locationsTable.TABLE_NAME.getName() + "(" + locationsTable.COL_LOCATION_ID.getName() + ") "
+                + "FOREIGN KEY (" + STOCK_LOCATION_ID + ") REFERENCES "
+                    + TABLE_LOCATIONS + "(" + LOCATIONS_ID + ") "
                     + "ON DELETE RESTRICT,"
                 + "FOREIGN KEY (" + stockTable.COL_SUPPLIER_ID.getName() + ") REFERENCES "
-                    + locationsTable.TABLE_NAME.getName() + "(" + locationsTable.COL_LOCATION_ID.getName() + ") "
+                    + TABLE_LOCATIONS + "(" + LOCATIONS_ID + ") "
                     + "ON DELETE RESTRICT,"
                 + "FOREIGN KEY (" + stockTable.COL_DEST_ID.getName() + ") REFERENCES "
-                    + locationsTable.TABLE_NAME.getName() + "(" + locationsTable.COL_LOCATION_ID.getName() + ") "
+                    + TABLE_LOCATIONS + "(" + LOCATIONS_ID + ") "
                     + "ON DELETE RESTRICT )";
         db.execSQL(createStockTableQuery);
 
         String createOrdersTableQuery = "CREATE TABLE IF NOT EXISTS "
-                + ordersTable.TABLE_NAME.getName() + " ("
-                + ordersTable.COL_ORDER_ID.getName() + " INTEGER PRIMARY KEY, "
-                + ordersTable.COL_DEST_ID.getName() + " INTEGER NOT NULL, "
-                + ordersTable.COL_ORDER_DATE.getName() + " TEXT NOT NULL, "
-                + ordersTable.COL_COMPLETED.getName() + " INTEGER NOT NULL, "
-                + "FOREIGN KEY (" + ordersTable.COL_DEST_ID.getName() + ") REFERENCES "
-                    + locationsTable.TABLE_NAME.getName() + "(" + locationsTable.COL_LOCATION_ID.getName() + ") "
+                + TABLE_ORDERS + " ("
+                + ORDERS_ID + " INTEGER PRIMARY KEY, "
+                + ORDERS_DEST_ID + " INTEGER NOT NULL, "
+                + ORDERS_DATE + " TEXT NOT NULL, "
+                + ORDERS_COMPLETED + " INTEGER NOT NULL, "
+                + "FOREIGN KEY (" + ORDERS_DEST_ID + ") REFERENCES "
+                    + TABLE_LOCATIONS + "(" + LOCATIONS_ID + ") "
                     + "ON DELETE RESTRICT )";
         db.execSQL(createOrdersTableQuery);
 
         String createOrderProductsTableQuery = "CREATE TABLE IF NOT EXISTS "
-                + orderProductsTable.TABLE_NAME.getName() + " ("
-                + orderProductsTable.COL_PRODUCT_ID.getName() + " INTEGER NOT NULL, "
-                + orderProductsTable.COL_ORDER_ID.getName() + " INTEGER NOT NULL, "
-                + orderProductsTable.COL_QUANTITY_MASS.getName() + " REAL NOT NULL, "
-                + orderProductsTable.COL_QUANTITY_BOXES.getName() + " REAL, "
-                + "PRIMARY KEY (" + orderProductsTable.COL_PRODUCT_ID.getName() + ", "
-                    + orderProductsTable.COL_ORDER_ID + "), "
-                + "FOREIGN KEY (" + orderProductsTable.COL_PRODUCT_ID.getName() + ") REFERENCES "
-                    + productsTable.TABLE_NAME.getName() + "(" + productsTable.COL_PRODUCT_ID.getName() + ") "
+                + TABLE_ORDER_PRODUCTS + " ("
+                + ORDER_PRODUCTS_PRODUCT_ID + " INTEGER NOT NULL, "
+                + ORDER_PRODUCTS_ORDER_ID + " INTEGER NOT NULL, "
+                + ORDER_PRODUCTS_QUANTITY_MASS + " REAL NOT NULL, "
+                + ORDER_PRODUCTS_QUANTITY_BOXES + " REAL, "
+                + "PRIMARY KEY (" + ORDER_PRODUCTS_PRODUCT_ID + ", "
+                    + ORDER_PRODUCTS_ORDER_ID + "), "
+                + "FOREIGN KEY (" + ORDER_PRODUCTS_PRODUCT_ID + ") REFERENCES "
+                    + TABLE_PRODUCTS + "(" + PRODUCTS_ID + ") "
                     + "ON DELETE RESTRICT,"
-                + "FOREIGN KEY (" + orderProductsTable.COL_ORDER_ID.getName() + ") REFERENCES "
-                    + ordersTable.TABLE_NAME.getName() + "(" + ordersTable.COL_ORDER_ID.getName() + ") "
+                + "FOREIGN KEY (" + ORDER_PRODUCTS_ORDER_ID + ") REFERENCES "
+                    + TABLE_ORDERS + "(" + ORDERS_ID + ") "
                     + "ON DELETE CASCADE )";
         db.execSQL(createOrderProductsTableQuery);
 

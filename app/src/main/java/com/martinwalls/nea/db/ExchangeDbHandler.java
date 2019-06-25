@@ -11,36 +11,20 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
     private final Context context;
 
     //region database constants
-    private enum conversionsTable {
-        TABLE_NAME("Conversions"),
-        COL_CONVERSION_ID("ConversionId"),
-        COL_TIMESTAMP("Timestamp"),
-        COL_PRIMARY_CURRENCY("PrimaryCurrency"),
-        COL_PRIMARY_VALUE("PrimaryValue"),
-        COL_SECONDARY_CURRENCY("SecondaryCurrency"),
-        COL_SECONDARY_VALUE("SecondaryValue");
+    // table names
+    private final String TABLE_CONVERSIONS = "Conversions";
+    private final String TABLE_FAVOURITES = "Favourites";
 
-        private String name;
-        conversionsTable(String name) {
-            this.name = name;
-        }
-        public String getName() {
-            return name;
-        }
-    }
+    // cols for conversions table
+    private final String CONVERSIONS_ID = "ConversionId";
+    private final String CONVERSIONS_TIMESTAMP = "Timestamp";
+    private final String CONVERSION_PRIMARY_CURRENCY = "PrimaryCurrency";
+    private final String CONVERSION_PRIMARY_VALUE = "PrimaryValue";
+    private final String CONVERSION_SECONDARY_CURRENCY = "SecondaryCurrency";
+    private final String CONVERSION_SECONDARY_VALUE = "SecondaryValue";
 
-    private enum favouritesTable {
-        TABLE_NAME("Favourites"),
-        COL_CURRENCY_CODE("CurrencyCode");
-
-        private String name;
-        favouritesTable(String name) {
-            this.name = name;
-        }
-        public String getName() {
-            return name;
-        }
-    }
+    // cols for favourites table
+    private final String FAVOURITES_CURRENCY = "CurrencyCode";
     //endregion database constants
 
     public ExchangeDbHandler(Context context) {
@@ -50,7 +34,15 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        String createConversionsTableQuery = "CREATE TABLE IF NOT EXISTS "
+                + TABLE_CONVERSIONS + " ("
+                + CONVERSIONS_ID + " INTEGER PRIMARY KEY, "
+                + CONVERSIONS_TIMESTAMP + " INTEGER NOT NULL, "
+                + CONVERSION_PRIMARY_CURRENCY + " TEXT NOT NULL, "
+                + CONVERSION_PRIMARY_VALUE + " REAL NOT NULL, "
+                + CONVERSION_SECONDARY_CURRENCY + " TEXT NOT NULL, "
+                + CONVERSION_SECONDARY_VALUE + " REAL NOT NULL )";
+        db.execSQL(createConversionsTableQuery);
     }
 
     @Override
