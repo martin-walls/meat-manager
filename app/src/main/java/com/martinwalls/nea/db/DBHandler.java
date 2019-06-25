@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "stockDB.db";
     private static final int DATABASE_VERSION = 1;
@@ -83,6 +84,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        //region create table queries
         String createMeatTypesTableQuery = "CREATE TABLE IF NOT EXISTS "
                 + TABLE_MEAT_TYPES + " ("
                 + MEAT_TYPES_TYPE + " TEXT PRIMARY KEY )";
@@ -94,7 +96,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + PRODUCTS_NAME + " TEXT NOT NULL, "
                 + PRODUCTS_MEAT_TYPE + " TEXT, "
                 + "FOREIGN KEY (" + PRODUCTS_MEAT_TYPE + ") REFERENCES "
-                + TABLE_MEAT_TYPES + "(" + MEAT_TYPES_TYPE + ")";
+                + TABLE_MEAT_TYPES + "(" + MEAT_TYPES_TYPE + ") )";
         db.execSQL(createProductsTableQuery);
 
         String createLocationsTableQuery = "CREATE TABLE IF NOT EXISTS "
@@ -129,10 +131,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 + "FOREIGN KEY (" + STOCK_LOCATION_ID + ") REFERENCES "
                     + TABLE_LOCATIONS + "(" + LOCATIONS_ID + ") "
                     + "ON DELETE RESTRICT,"
-                + "FOREIGN KEY (" + stockTable.COL_SUPPLIER_ID.getName() + ") REFERENCES "
+                + "FOREIGN KEY (" + STOCK_SUPPLIER_ID + ") REFERENCES "
                     + TABLE_LOCATIONS + "(" + LOCATIONS_ID + ") "
                     + "ON DELETE RESTRICT,"
-                + "FOREIGN KEY (" + stockTable.COL_DEST_ID.getName() + ") REFERENCES "
+                + "FOREIGN KEY (" + STOCK_DEST_ID + ") REFERENCES "
                     + TABLE_LOCATIONS + "(" + LOCATIONS_ID + ") "
                     + "ON DELETE RESTRICT )";
         db.execSQL(createStockTableQuery);
@@ -165,26 +167,33 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(createOrderProductsTableQuery);
 
         String createContractsTableQuery = "CREATE TABLE IF NOT EXISTS "
-                + contractsTable.TABLE_NAME.getName() + " ("
-                + contractsTable.COL_CONTRACT_ID.getName() + " INTEGER PRIMARY KEY, "
-                + contractsTable.COL_DEST_ID.getName() + " INTEGER NOT NULL, "
-                + contractsTable.COL_REPEAT_INTERVAL.getName() + " TEXT NOT NULL, "
-                + contractsTable.COL_REPEAT_ON.getName() + " TEXT NOT NULL, "
-                + contractsTable.COL_REMINDER.getName() + " INTEGER NOT NULL, "
-                + "FOREIGN KEY (" + contractsTable.COL_DEST_ID.getName() + ") REFERENCES "
-                    + locationsTable.TABLE_NAME.getName() + "(" + locationsTable.COL_LOCATION_ID.getName() + ") "
+                + TABLE_CONTRACTS + " ("
+                + CONTRACTS_ID + " INTEGER PRIMARY KEY, "
+                + CONTRACTS_DEST_ID + " INTEGER NOT NULL, "
+                + CONTRACTS_REPEAT_INTERVAL + " TEXT NOT NULL, "
+                + CONTRACTS_REPEAT_ON + " TEXT NOT NULL, "
+                + CONTRACTS_REMINDER + " INTEGER NOT NULL, "
+                + "FOREIGN KEY (" + CONTRACTS_DEST_ID + ") REFERENCES "
+                    + TABLE_LOCATIONS + "(" + LOCATIONS_ID + ") "
                     + "ON DELETE RESTRICT )";
         db.execSQL(createContractsTableQuery);
 
         String createContractProductsTableQuery = "CREATE TABLE IF NOT EXISTS "
-                + contractProductsTable.TABLE_NAME.getName() + " ("
-                + contractProductsTable.COL_CONTRACT_ID.getName() + " INTEGER NOT NULL, "
-                + contractProductsTable.COL_PRODUCT_ID.getName() + " INTEGER NOT NULL, "
-                + contractProductsTable.COL_QUANTITY_MASS.getName() + " REAL NOT NULL, "
-                + contractProductsTable.COL_QUANTITY_BOXES.getName() + " REAL, "
-                + "PRIMARY KEY (" + contractProductsTable.COL_CONTRACT_ID.getName() + ", "
-                    + contractProductsTable.COL_PRODUCT_ID + "), "
-                + "FOREIGN KEY (" + contractProductsTable.COL_CONTRACT_ID.getName(); //todo finish this
+                + TABLE_CONTRACT_PRODUCTS + " ("
+                + CONTRACT_PRODUCTS_CONTRACT_ID + " INTEGER NOT NULL, "
+                + CONTRACT_PRODUCTS_PRODUCT_ID + " INTEGER NOT NULL, "
+                + CONTRACT_PRODUCTS_QUANTITY_MASS + " REAL NOT NULL, "
+                + CONTRACT_PRODUCTS_QUANTITY_BOXES + " REAL, "
+                + "PRIMARY KEY (" + CONTRACT_PRODUCTS_CONTRACT_ID + ", "
+                    + CONTRACT_PRODUCTS_PRODUCT_ID + "), "
+                + "FOREIGN KEY (" + CONTRACT_PRODUCTS_CONTRACT_ID + ") REFERENCES "
+                    + TABLE_CONTRACTS + "(" + CONTRACTS_ID + ") "
+                    + "ON DELETE CASCADE, "
+                + "FOREIGN KEY (" + CONTRACT_PRODUCTS_PRODUCT_ID + ") REFERENCES "
+                    + TABLE_PRODUCTS + "(" + PRODUCTS_ID + ") "
+                    + "ON DELETE RESTRICT )";
+        db.execSQL(createContractProductsTableQuery);
+        //endregion create table queries
     }
 
     @Override
