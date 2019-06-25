@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class ExchangeDbHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "exchangeDB.db";
     private static final int DATABASE_VERSION = 1;
@@ -43,6 +44,11 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
                 + CONVERSION_SECONDARY_CURRENCY + " TEXT NOT NULL, "
                 + CONVERSION_SECONDARY_VALUE + " REAL NOT NULL )";
         db.execSQL(createConversionsTableQuery);
+
+        String createFavouritesTableQuery = "CREATE TABLE IF NOT EXISTS "
+                + TABLE_FAVOURITES + " ("
+                + FAVOURITES_CURRENCY + " TEXT PRIMARY KEY )";
+        db.execSQL(createFavouritesTableQuery);
     }
 
     @Override
