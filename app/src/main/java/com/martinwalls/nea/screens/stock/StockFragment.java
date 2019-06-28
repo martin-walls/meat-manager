@@ -10,21 +10,31 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.R;
+import com.martinwalls.nea.SampleData;
+import com.martinwalls.nea.components.CustomRecyclerView;
+import com.martinwalls.nea.data.StockItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class StockFragment extends Fragment {
+
+    private StockItemAdapter stockAdapter;
+    private List<StockItem> stockList = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_stock, container, false);
 
+        stockList.addAll(SampleData.getSampleStock());
+
+        stockAdapter = new StockItemAdapter(stockList);
         CustomRecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
         TextView emptyView = fragmentView.findViewById(R.id.empty);
         recyclerView.setEmptyView(emptyView);
-
-        //todo set adapter
+        recyclerView.setAdapter(stockAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 

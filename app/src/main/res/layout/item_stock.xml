@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
+    android:paddingStart="24dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="16dp"
     >
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_margin="16dp"
-        android:layout_toStartOf="@id/amount"
-        android:layout_alignParentStart="true"
-        android:gravity="center|start"
+        android:layout_weight="1"
+        android:gravity="center_vertical|start"
+        android:textColor="?textColorDark"
         android:textSize="20sp"
-        android:textStyle="bold"
         tools:text="Product name"
         />
 
@@ -24,27 +26,29 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
         >
 
         <TextView
             android:id="@+id/mass"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center|start"
+            android:gravity="center_vertical|end"
+            android:textSize="16sp"
+            android:textColor="?textColorDark"
             tools:text="1900.00 kg"
             />
 
         <TextView
             android:id="@+id/boxes"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center|start"
+            android:gravity="center_vertical|end"
+            android:textSize="16sp"
+            android:textColor="?textColorNormal"
             tools:text="100 boxes"
             />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

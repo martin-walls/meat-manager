@@ -8,6 +8,11 @@ public class Product {
     public Product() {
     }
 
+    // for testing
+    public Product(String productName) {
+        this.productName = productName;
+    }
+
     public Product(int productId, String productName, String meatType) {
         this.productId = productId;
         this.productName = productName;

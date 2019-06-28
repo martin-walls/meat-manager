@@ -1,5 +1,7 @@
 package com.martinwalls.nea;
 
+import com.martinwalls.nea.data.Product;
+import com.martinwalls.nea.data.StockItem;
 import com.martinwalls.nea.screens.exchange.Conversion;
 
 import java.util.ArrayList;
@@ -7,6 +9,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SampleData {
+    private static StockItem[] stockItems = new StockItem[] {
+            new StockItem(new Product("Beef hearts"), 1900.00, 100),
+            new StockItem(new Product("Beef livers"), 1540, -1),
+            new StockItem(new Product("Beef kidney"), 3100.0, 0),
+            new StockItem(new Product("Lamb tripe"), 1401.74, 1),
+    };
+
     private static String[] products = new String[] {
             "Beef hearts",
             "Beef livers",
@@ -104,5 +113,9 @@ public class SampleData {
 
     public static List<Conversion> getSampleConversions() {
         return new ArrayList<>(Arrays.asList(conversions));
+    }
+
+    public static List<StockItem> getSampleStock() {
+        return new ArrayList<>(Arrays.asList(stockItems));
     }
 }

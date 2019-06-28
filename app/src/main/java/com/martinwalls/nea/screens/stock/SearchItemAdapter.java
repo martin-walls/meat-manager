@@ -19,7 +19,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
     private List<String> itemListFiltered;
     private SearchItemAdapterListener listener;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private TextView itemName;
 
         ViewHolder(View view) {
@@ -35,7 +35,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         }
     }
 
-    public SearchItemAdapter(List<String> itemList, SearchItemAdapterListener listener) {
+    SearchItemAdapter(List<String> itemList, SearchItemAdapterListener listener) {
         this.itemList = itemList;
         this.itemListFiltered = itemList;
         this.listener = listener;

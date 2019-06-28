@@ -121,7 +121,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + STOCK_DEST_ID + " INTEGER, "
                 + STOCK_MASS + " REAL NOT NULL, "
                 + STOCK_NUM_BOXES + " REAL, "
-                + STOCK_QUALITY + " INTEGER NOT NULL, "
+                + STOCK_QUALITY + " TEXT NOT NULL, "
                 + "PRIMARY KEY (" + STOCK_PRODUCT_ID + ", "
                     + STOCK_LOCATION_ID + ", "
                     + STOCK_SUPPLIER_ID + "), "
@@ -199,4 +199,6 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
+
+    //todo backup db
 }

@@ -12,10 +12,10 @@
     <string name="action_favourites">Favourites</string>
 
     <!-- Common data -->
-    <string name="amount_kg">%f kg</string>
+    <string name="amount_kg">%.2f kg</string>
     <plurals name="amount_lbs">
-        <item quantity="one">%f lb</item>
-        <item quantity="other">%f lbs</item>
+        <item quantity="one">%.2f lb</item>
+        <item quantity="other">%.2f lbs</item>
     </plurals>
     <plurals name="amount_boxes">
         <item quantity="one">%d box</item>
