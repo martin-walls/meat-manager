@@ -25,6 +25,7 @@ import com.martinwalls.nea.*;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.data.Product;
+import com.martinwalls.nea.data.StockItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +37,8 @@ public class NewStockActivity extends AppCompatActivity
     private HashMap<String, Integer> inputViews = new HashMap<>();
 
     private SearchItemAdapter itemAdapter;
-    private ArrayList<String> searchResultList = new ArrayList<>();
+    private ArrayList<SearchItem> searchItemList = new ArrayList<>();
+
     private LinearLayout searchResultsLayout;
     private AddNewTextView addNewView;
     private ViewGroup rootView;
@@ -54,6 +56,7 @@ public class NewStockActivity extends AppCompatActivity
         setContentView(R.layout.activity_new_stock);
 
         // store reference to each row to show/hide later
+        //todo make this an enum??
         inputViews.put("product", R.id.input_layout_product);
         inputViews.put("supplier", R.id.input_layout_supplier);
         inputViews.put("quantity", R.id.input_row_quantity);
@@ -72,7 +75,7 @@ public class NewStockActivity extends AppCompatActivity
         rootView = findViewById(R.id.root_layout);
 
         // setup recycler view
-        itemAdapter = new SearchItemAdapter(searchResultList, this);
+        itemAdapter = new SearchItemAdapter(searchItemList, this);
         TextView emptyView = findViewById(R.id.no_results);
         CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
         recyclerView.setEmptyView(emptyView);
@@ -171,18 +174,28 @@ public class NewStockActivity extends AppCompatActivity
             }
         }
 
-        searchResultList.clear();
+        searchItemList.clear();
+        int i;
         switch (rowName) {
             case INPUT_PRODUCT:
-                searchResultList.addAll(SampleData.getSampleProducts());
+                i = 0;
+                for (String product : SampleData.getSampleProducts()) {
+                    searchItemList.add(new SearchItem(product, i++));
+                }
                 break;
             case INPUT_SUPPLIER:
             case INPUT_DESTINATION:
             case INPUT_LOCATION:
-                searchResultList.addAll(SampleData.getSampleLocations());
+                i = 0;
+                for (String location : SampleData.getSampleLocations()) {
+                    searchItemList.add(new SearchItem(location, i++));
+                }
                 break;
             case INPUT_QUALITY:
-                searchResultList.addAll(SampleData.getSampleQualities());
+                i = 0;
+                for (String quality : SampleData.getSampleQualities()) {
+                    searchItemList.add(new SearchItem(quality, i++));
+                }
                 break;
         }
         itemAdapter.notifyDataSetChanged();
@@ -215,7 +228,7 @@ public class NewStockActivity extends AppCompatActivity
 
         searchResultsLayout.setVisibility(View.GONE);
 
-        searchResultList.clear();
+        searchItemList.clear();
         itemAdapter.notifyDataSetChanged();
 
         hideKeyboard();
@@ -240,15 +253,24 @@ public class NewStockActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemSelected(String name) {
+    public void onItemSelected(SearchItem item) {
         TextInputEditText editText = (TextInputEditText) getCurrentFocus();
-        editText.setText(name);
+        editText.setText(item.getName());
         editText.clearFocus();
         cancelSearch();
+        Toast.makeText(this, item.getId() + "", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onAddNewProductDoneAction(Product newProduct) {
         Toast.makeText(this, newProduct.getProductName() + " " + newProduct.getMeatType(), Toast.LENGTH_SHORT).show();
+    }
+
+    public boolean addStockToDb() {
+        StockItem newStockItem = new StockItem();
+        TextInputEditText editProduct = findViewById(R.id.edit_text_product);
+        //todo finish this
+        // maybe have variables storing ids of currently inputted items?
+        return true;
     }
 }

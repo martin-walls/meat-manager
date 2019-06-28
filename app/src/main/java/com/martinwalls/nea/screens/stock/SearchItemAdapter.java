@@ -8,6 +8,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
+import com.martinwalls.nea.SearchItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +16,8 @@ import java.util.List;
 public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.ViewHolder>
         implements Filterable {
 
-    private List<String> itemList;
-    private List<String> itemListFiltered;
+    private List<SearchItem> itemList;
+    private List<SearchItem> itemListFiltered;
     private SearchItemAdapterListener listener;
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -29,13 +30,13 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
             itemName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemSelected(((TextView) v).getText().toString());
+                    listener.onItemSelected(itemListFiltered.get(getAdapterPosition()));
                 }
             });
         }
     }
 
-    SearchItemAdapter(List<String> itemList, SearchItemAdapterListener listener) {
+    SearchItemAdapter(List<SearchItem> itemList, SearchItemAdapterListener listener) {
         this.itemList = itemList;
         this.itemListFiltered = itemList;
         this.listener = listener;
@@ -50,7 +51,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String item = itemListFiltered.get(position);
+        String item = itemListFiltered.get(position).getName();
         holder.itemName.setText(item);
     }
 
@@ -67,9 +68,9 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
                 if (charSequence.length() == 0) {
                     itemListFiltered = itemList;
                 } else {
-                    List<String> filteredList = new ArrayList<>();
-                    for (String item : itemList) {
-                        if (item.toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                    List<SearchItem> filteredList = new ArrayList<>();
+                    for (SearchItem item : itemList) {
+                        if (item.getName().toLowerCase().contains(charSequence.toString().toLowerCase())) {
                             filteredList.add(item);
                         }
                     }
@@ -83,13 +84,13 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults results) {
                 //noinspection unchecked
-                itemListFiltered = (ArrayList<String>) results.values;
+                itemListFiltered = (ArrayList<SearchItem>) results.values;
                 notifyDataSetChanged();
             }
         };
     }
 
     public interface SearchItemAdapterListener {
-        void onItemSelected(String item);
+        void onItemSelected(SearchItem item);
     }
 }

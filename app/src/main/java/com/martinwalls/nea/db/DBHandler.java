@@ -93,7 +93,7 @@ public class DBHandler extends SQLiteOpenHelper {
         String createProductsTableQuery = "CREATE TABLE IF NOT EXISTS "
                 + TABLE_PRODUCTS + " ("
                 + PRODUCTS_ID + " INTEGER PRIMARY KEY, "
-                + PRODUCTS_NAME + " TEXT NOT NULL, "
+                + PRODUCTS_NAME + " TEXT NOT NULL UNIQUE, "
                 + PRODUCTS_MEAT_TYPE + " TEXT, "
                 + "FOREIGN KEY (" + PRODUCTS_MEAT_TYPE + ") REFERENCES "
                 + TABLE_MEAT_TYPES + "(" + MEAT_TYPES_TYPE + ") )";
