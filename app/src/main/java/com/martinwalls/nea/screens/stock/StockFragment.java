@@ -13,6 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SampleData;
 import com.martinwalls.nea.components.CustomRecyclerView;
+import com.martinwalls.nea.components.RecyclerViewDivider;
 import com.martinwalls.nea.data.StockItem;
 
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ public class StockFragment extends Fragment {
         TextView emptyView = fragmentView.findViewById(R.id.empty);
         recyclerView.setEmptyView(emptyView);
         recyclerView.setAdapter(stockAdapter);
+        RecyclerViewDivider recyclerViewDivider = new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
+        recyclerView.addItemDecoration(recyclerViewDivider);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
