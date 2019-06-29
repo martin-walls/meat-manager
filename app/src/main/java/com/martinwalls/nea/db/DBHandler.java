@@ -1,6 +1,7 @@
 package com.martinwalls.nea.db;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.martinwalls.nea.data.Location;
@@ -203,18 +204,51 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
+    //todo finish dbHandler getters
     public Product getProduct(int productId) {
-        //todo dbHandler getters
-        return new Product();
+        Product result = new Product();
+        String query = "SELECT * FROM " + TABLE_PRODUCTS
+                + " WHERE " + PRODUCTS_ID + " = " + productId;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            result.setProductId(productId);
+            result.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_NAME)));
+            result.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_MEAT_TYPE)));
+        }
+        cursor.close();
+        db.close();
+        return result;
     }
 
     public Location getLocation(int locationId) {
-        //todo
-        return new Location();
+        Location result = new Location();
+        String query = "SELECT * FROM " + TABLE_LOCATIONS
+                + " WHERE " + LOCATIONS_ID + " = " + locationId;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            result.setLocationId(locationId);
+            result.setLocationName(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_NAME)));
+            String locationTypeString = cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_NAME));
+            for (Location.LocationType type : Location.LocationType.values()) {
+                if (type.name().equalsIgnoreCase(locationTypeString)) {
+                    result.setLocationType(type);
+                }
+            }
+            result.setAddrLine1(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_ADDR_1)));
+            result.setAddrLine2(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_ADDR_2)));
+            result.setCity(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_CITY)));
+            result.setPostcode(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_POSTCODE)));
+            result.setCountry(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_COUNTRY)));
+            result.setPhone(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_PHONE)));
+            result.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_EMAIL)));
+        }
+        return result;
     }
 
+    //todo dbHandler setters
     public boolean addStockItem(StockItem stockItem) {
-        //todo implement this
         return true;
     }
 

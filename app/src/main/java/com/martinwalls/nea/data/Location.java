@@ -1,7 +1,7 @@
 package com.martinwalls.nea.data;
 
 public class Location {
-    private enum LocationType {
+    public enum LocationType {
         STORAGE,
         SUPPLIER,
         DESTINATION;
