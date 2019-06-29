@@ -1,4 +1,4 @@
-package com.martinwalls.nea.screens.stock;
+package com.martinwalls.nea.stock;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -23,8 +23,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SampleData;
 import com.martinwalls.nea.SearchItem;
-import com.martinwalls.nea.components.AddNewTextView;
-import com.martinwalls.nea.components.CustomRecyclerView;
+import com.martinwalls.nea.db.DBHandler;
+import com.martinwalls.nea.ui_components.AddNewTextView;
+import com.martinwalls.nea.ui_components.CustomRecyclerView;
 import com.martinwalls.nea.data.Product;
 import com.martinwalls.nea.data.StockItem;
 
@@ -51,6 +52,14 @@ public class NewStockActivity extends AppCompatActivity
     private final String INPUT_QUALITY = "quality";
     //todo refactor to enum
 
+    private String currentSearchType = INPUT_PRODUCT; // default value so it's not null
+
+    //todo refactor to class
+    private int selectedProductId;
+    private int selectedSupplierId;
+    private int selectedLocationId;
+    private int selectedDestId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +85,7 @@ public class NewStockActivity extends AppCompatActivity
         rootView = findViewById(R.id.root_layout);
 
         // setup recycler view
-        itemAdapter = new SearchItemAdapter(searchItemList, this);
+        itemAdapter = new SearchItemAdapter(searchItemList, currentSearchType, this);
         TextView emptyView = findViewById(R.id.no_results);
         CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
         recyclerView.setEmptyView(emptyView);
@@ -116,8 +125,9 @@ public class NewStockActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
-                finish();
+                if (addStockToDb()) {
+                    finish();
+                }
                 return true;
             case R.id.action_cancel:
                 //todo confirm cancel
@@ -198,6 +208,7 @@ public class NewStockActivity extends AppCompatActivity
                 }
                 break;
         }
+        currentSearchType = rowName;
         itemAdapter.notifyDataSetChanged();
 
         // filter data at start for when text is already entered
@@ -242,6 +253,7 @@ public class NewStockActivity extends AppCompatActivity
                 dialog.show(getSupportFragmentManager(), "add_new_product");
                 break;
             default:
+                //todo implement the rest of the "add new" dialogs
                 Toast.makeText(this, searchItemType, Toast.LENGTH_SHORT).show();
         }
     }
@@ -253,12 +265,22 @@ public class NewStockActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemSelected(SearchItem item) {
+    public void onItemSelected(SearchItem item, String searchItemType) {
+        switch (searchItemType) {
+            case INPUT_PRODUCT:
+                selectedProductId = item.getId();
+            case INPUT_SUPPLIER:
+                selectedSupplierId = item.getId();
+            case INPUT_LOCATION:
+                selectedLocationId = item.getId();
+            case INPUT_DESTINATION:
+                selectedDestId = item.getId();
+        }
+
         TextInputEditText editText = (TextInputEditText) getCurrentFocus();
         editText.setText(item.getName());
         editText.clearFocus();
         cancelSearch();
-        Toast.makeText(this, item.getId() + "", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -267,10 +289,81 @@ public class NewStockActivity extends AppCompatActivity
     }
 
     public boolean addStockToDb() {
+        boolean isValid = true;
         StockItem newStockItem = new StockItem();
         TextInputEditText editProduct = findViewById(R.id.edit_text_product);
-        //todo finish this
-        // maybe have variables storing ids of currently inputted items?
-        return true;
+        TextInputLayout inputLayoutProduct = findViewById(R.id.input_layout_product);
+
+        TextInputEditText editSupplier = findViewById(R.id.edit_text_supplier);
+        TextInputLayout inputLayoutSupplier = findViewById(R.id.input_layout_supplier);
+
+        TextInputEditText editMass = findViewById(R.id.edit_text_quantity_mass);
+        TextInputLayout inputLayoutMass = findViewById(R.id.input_layout_quantity_mass);
+
+        TextInputEditText editNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
+
+        TextInputEditText editLocation = findViewById(R.id.edit_text_location);
+        TextInputLayout inputLayoutLocation = findViewById(R.id.input_layout_location);
+
+        TextInputEditText editDest = findViewById(R.id.edit_text_destination);
+
+        TextInputEditText editQuality = findViewById(R.id.edit_text_quality);
+        TextInputLayout inputLayoutQuality = findViewById(R.id.input_layout_quality);
+
+        if (editProduct.getText().length() == 0) {
+            inputLayoutProduct.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            inputLayoutProduct.setError(null);
+        }
+        if (editSupplier.getText().length() == 0) {
+            inputLayoutSupplier.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            inputLayoutSupplier.setError(null);
+        }
+        if (editMass.getText().length() == 0) {
+            inputLayoutMass.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            inputLayoutMass.setError(null);
+        }
+        if (editLocation.getText().length() == 0) {
+            inputLayoutLocation.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            inputLayoutLocation.setError(null);
+        }
+        if (editQuality.getText().length() == 0) {
+            inputLayoutQuality.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            inputLayoutQuality.setError(null);
+        }
+
+        if (isValid) {
+            DBHandler dbHandler = new DBHandler(this);
+
+            newStockItem.setProduct(dbHandler.getProduct(selectedProductId));
+            newStockItem.setSupplier(dbHandler.getLocation(selectedSupplierId));
+            newStockItem.setMass(Double.parseDouble(editMass.getText().toString()));
+            if (editNumBoxes.getText().length() != 0) {
+                newStockItem.setNumBoxes(Integer.parseInt(editNumBoxes.getText().toString()));
+            }
+            newStockItem.setLocation(dbHandler.getLocation(selectedLocationId));
+            if (editDest.getText().length() != 0) {
+                newStockItem.setDest(dbHandler.getLocation(selectedDestId));
+            }
+            for (StockItem.Quality quality : StockItem.Quality.values()) {
+                if (quality.name().equalsIgnoreCase(editQuality.getText().toString())) {
+                    newStockItem.setQuality(quality);
+                }
+            }
+
+            return dbHandler.addStockItem(newStockItem);
+        }
+
+        return false;
+        //todo error check in db for same stock item
     }
 }

@@ -3,6 +3,9 @@ package com.martinwalls.nea.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.martinwalls.nea.data.Location;
+import com.martinwalls.nea.data.Product;
+import com.martinwalls.nea.data.StockItem;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class DBHandler extends SQLiteOpenHelper {
@@ -198,6 +201,21 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
+
+    public Product getProduct(int productId) {
+        //todo dbHandler getters
+        return new Product();
+    }
+
+    public Location getLocation(int locationId) {
+        //todo
+        return new Location();
+    }
+
+    public boolean addStockItem(StockItem stockItem) {
+        //todo implement this
+        return true;
     }
 
     //todo backup db

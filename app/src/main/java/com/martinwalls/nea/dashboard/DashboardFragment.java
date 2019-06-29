@@ -1,4 +1,4 @@
-package com.martinwalls.nea.screens.dashboard;
+package com.martinwalls.nea.dashboard;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

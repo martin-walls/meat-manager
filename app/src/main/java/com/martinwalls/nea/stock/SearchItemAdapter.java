@@ -1,4 +1,4 @@
-package com.martinwalls.nea.screens.stock;
+package com.martinwalls.nea.stock;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +18,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
 
     private List<SearchItem> itemList;
     private List<SearchItem> itemListFiltered;
+    private String searchItemType;
     private SearchItemAdapterListener listener;
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -30,15 +31,16 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
             itemName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemSelected(itemListFiltered.get(getAdapterPosition()));
+                    listener.onItemSelected(itemListFiltered.get(getAdapterPosition()), searchItemType);
                 }
             });
         }
     }
 
-    SearchItemAdapter(List<SearchItem> itemList, SearchItemAdapterListener listener) {
+    SearchItemAdapter(List<SearchItem> itemList, String searchItemType, SearchItemAdapterListener listener) {
         this.itemList = itemList;
         this.itemListFiltered = itemList;
+        this.searchItemType = searchItemType;
         this.listener = listener;
     }
 
@@ -91,6 +93,6 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
     }
 
     public interface SearchItemAdapterListener {
-        void onItemSelected(SearchItem item);
+        void onItemSelected(SearchItem item, String searchItemType);
     }
 }

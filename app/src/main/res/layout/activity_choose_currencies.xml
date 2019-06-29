@@ -7,7 +7,7 @@
     android:divider="@drawable/divider_thick"
     android:orientation="vertical"
     android:showDividers="middle"
-    tools:context=".screens.exchange.ChooseCurrenciesActivity"
+    tools:context=".exchange.ChooseCurrenciesActivity"
     >
 
     <LinearLayout
@@ -26,7 +26,7 @@
             android:text="@string/exchange_favourites"
             />
 
-        <com.martinwalls.nea.components.CustomRecyclerView
+        <com.martinwalls.nea.ui_components.CustomRecyclerView
             android:id="@+id/favourite_currencies_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
             android:text="@string/exchange_all_currencies"
             />
 
-        <com.martinwalls.nea.components.CustomRecyclerView
+        <com.martinwalls.nea.ui_components.CustomRecyclerView
             android:id="@+id/all_currencies_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

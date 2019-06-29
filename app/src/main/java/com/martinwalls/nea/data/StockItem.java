@@ -1,7 +1,7 @@
 package com.martinwalls.nea.data;
 
 public class StockItem {
-    private enum Quality {
+    public enum Quality {
         GOOD,
         PET_FOOD,
         WASTE;

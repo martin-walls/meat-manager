@@ -2,7 +2,7 @@ package com.martinwalls.nea;
 
 import com.martinwalls.nea.data.Product;
 import com.martinwalls.nea.data.StockItem;
-import com.martinwalls.nea.screens.exchange.Conversion;
+import com.martinwalls.nea.exchange.Conversion;
 
 import java.util.ArrayList;
 import java.util.Arrays;

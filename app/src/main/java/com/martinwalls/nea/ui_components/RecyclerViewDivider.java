@@ -1,4 +1,4 @@
-package com.martinwalls.nea.components;
+package com.martinwalls.nea.ui_components;
 
 import android.content.Context;
 import android.graphics.Canvas;

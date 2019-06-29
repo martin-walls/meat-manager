@@ -1,4 +1,4 @@
-package com.martinwalls.nea.screens.exchange;
+package com.martinwalls.nea.exchange;
 
 import android.view.LayoutInflater;
 import android.view.View;

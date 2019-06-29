@@ -43,8 +43,8 @@
 
     <string name="stock_product_new">Add new product</string>
     <string name="stock_product_input_name">Name</string>
-    <string name="stock_product_input_meat_type">Meat type</string>
-    <string name="stock_product_meat_type_new">Add new meat type</string>
+    <string name="stock_product_input_meat_type">Meat searchItemType</string>
+    <string name="stock_product_meat_type_new">Add new meat searchItemType</string>
     <string name="stock_product_meat_type_input_name">Name</string>
     <string name="stock_product_new_done">Done</string>
     <string name="stock_product_new_cancel">Cancel</string>

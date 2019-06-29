@@ -1,4 +1,4 @@
-package com.martinwalls.nea.screens.exchange;
+package com.martinwalls.nea.exchange;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.*;
-import com.martinwalls.nea.components.CustomRecyclerView;
+import com.martinwalls.nea.ui_components.CustomRecyclerView;
 
 import java.util.List;
 

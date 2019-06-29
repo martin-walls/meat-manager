@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     >
 
-    <com.martinwalls.nea.components.CustomRecyclerView
+    <com.martinwalls.nea.ui_components.CustomRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

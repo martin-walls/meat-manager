@@ -1,4 +1,4 @@
-package com.martinwalls.nea.screens.stock;
+package com.martinwalls.nea.stock;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SampleData;
-import com.martinwalls.nea.components.CustomRecyclerView;
-import com.martinwalls.nea.components.RecyclerViewDivider;
+import com.martinwalls.nea.ui_components.CustomRecyclerView;
+import com.martinwalls.nea.ui_components.RecyclerViewDivider;
 import com.martinwalls.nea.data.StockItem;
 
 import java.util.ArrayList;

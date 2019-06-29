@@ -1,4 +1,4 @@
-package com.martinwalls.nea.screens.stock;
+package com.martinwalls.nea.stock;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;

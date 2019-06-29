@@ -1,4 +1,4 @@
-package com.martinwalls.nea.screens.contracts;
+package com.martinwalls.nea.contracts;
 
 import android.os.Bundle;
 import android.view.*;
