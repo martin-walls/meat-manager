@@ -5,6 +5,15 @@ public class StockItem {
         GOOD,
         PET_FOOD,
         WASTE;
+
+        public static Quality parseQuality(String name) {
+            for (Quality q : values()) {
+                if (q.name().equalsIgnoreCase(name)) {
+                    return q;
+                }
+            }
+            return null;
+        }
     }
 
     private Product product;
