@@ -251,12 +251,20 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public StockItem getStockItem(int stockId) {
-        //todo change for PK StockId
         StockItem result = new StockItem();
-        String query = "SELECT * FROM " + TABLE_STOCK
-                //+ " INNER JOIN " + TABLE_PRODUCTS + " ON "
-                //+ TABLE_STOCK + "." + STOCK_PRODUCT_ID + "=" + TABLE_PRODUCTS + "." + PRODUCTS_ID
-                //+ " INNER JOIN " //todo finish
+        final String ALIAS_SUPPLIER = "Supplier";
+        final String ALIAS_DEST = "Dest";
+        String query = "SELECT " + STOCK_ID + "," + STOCK_MASS + "," + STOCK_NUM_BOXES + "," + STOCK_QUALITY + ","
+                + TABLE_PRODUCTS + ".*," + TABLE_LOCATIONS + ".*," + ALIAS_SUPPLIER + ".*," + ALIAS_DEST + ".*" +
+                " FROM " + TABLE_STOCK
+                + " INNER JOIN " + TABLE_PRODUCTS + " ON "
+                + TABLE_STOCK + "." + STOCK_PRODUCT_ID + "=" + TABLE_PRODUCTS + "." + PRODUCTS_ID
+                + " INNER JOIN " + TABLE_LOCATIONS + " ON "
+                + TABLE_STOCK + "." + STOCK_LOCATION_ID + "=" + TABLE_LOCATIONS + "." + LOCATIONS_ID
+                + " INNER JOIN " + TABLE_LOCATIONS + " AS " + ALIAS_SUPPLIER + " ON "
+                + TABLE_STOCK + "." + STOCK_SUPPLIER_ID + "=" + ALIAS_SUPPLIER + "." + LOCATIONS_ID
+                + " INNER JOIN " + TABLE_LOCATIONS + " AS " + ALIAS_DEST + " ON "
+                + TABLE_STOCK + "." + STOCK_DEST_ID + "=" + ALIAS_DEST + "." + LOCATIONS_ID
                 + " WHERE " + STOCK_ID + "=" + stockId;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -266,6 +274,7 @@ public class DBHandler extends SQLiteOpenHelper {
         int destId = 0;
         boolean valid = false;
         if (cursor.moveToFirst()) {
+            //todo fix this to use inner join fields
             valid = true;
             productId = cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_PRODUCT_ID));
             locationId = cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_LOCATION_ID));
@@ -285,6 +294,11 @@ public class DBHandler extends SQLiteOpenHelper {
             result.setDest(getLocation(destId));
         }
         return result;
+    }
+
+    public List<StockItem> getAllStock() {
+        //todo
+        return new ArrayList<>();
     }
 
     public Location getLocation(int locationId) {
