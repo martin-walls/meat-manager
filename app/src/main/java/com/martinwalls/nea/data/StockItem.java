@@ -17,9 +17,9 @@ public class StockItem {
     }
 
     private Product product;
-    private Location location;
-    private Location supplier;
-    private Location dest;
+    private int locationId;
+    private int supplierId;
+    private int destId;
     private double mass; // stored in kg
     private int numBoxes;
     private Quality quality;
@@ -35,10 +35,10 @@ public class StockItem {
     }
 
     // db "not null" fields
-    public StockItem(Product product, Location location, Location supplier, double mass, Quality quality) {
+    public StockItem(Product product, int locationId, int supplierId, double mass, Quality quality) {
         this.product = product;
-        this.location = location;
-        this.supplier = supplier;
+        this.locationId = locationId;
+        this.supplierId = supplierId;
         this.mass = mass;
         this.quality = quality;
     }
@@ -51,28 +51,28 @@ public class StockItem {
         this.product = product;
     }
 
-    public Location getLocation() {
-        return location;
+    public int getLocationId() {
+        return locationId;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
     }
 
-    public Location getSupplier() {
-        return supplier;
+    public int getSupplierId() {
+        return supplierId;
     }
 
-    public void setSupplier(Location supplier) {
-        this.supplier = supplier;
+    public void setSupplierId(int supplierId) {
+        this.supplierId = supplierId;
     }
 
-    public Location getDest() {
-        return dest;
+    public int getDestId() {
+        return destId;
     }
 
-    public void setDest(Location dest) {
-        this.dest = dest;
+    public void setDestId(int destId) {
+        this.destId = destId;
     }
 
     public double getMass() {

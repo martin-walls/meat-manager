@@ -62,7 +62,7 @@
     <string name="locations_supplier">Supplier</string>
     <string name="locations_storage">Storage</string>
     <string name="locations_destination">Destination</string>
-    <string name="locations_new">Add new location</string>
+    <string name="locations_new">Add new locationId</string>
     <string name="locations_input_name">Name:</string>
     <string name="locations_input_email">Email:</string>
     <string name="locations_input_phone">Phone:</string>

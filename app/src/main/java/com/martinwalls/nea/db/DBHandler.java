@@ -252,34 +252,33 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public StockItem getStockItem(int stockId) {
         StockItem result = new StockItem();
-        final String ALIAS_SUPPLIER = "Supplier";
-        final String ALIAS_DEST = "Dest";
-        String query = "SELECT " + STOCK_ID + "," + STOCK_MASS + "," + STOCK_NUM_BOXES + "," + STOCK_QUALITY + ","
-                + TABLE_PRODUCTS + ".*," + TABLE_LOCATIONS + ".*," + ALIAS_SUPPLIER + ".*," + ALIAS_DEST + ".*" +
-                " FROM " + TABLE_STOCK
+        //final String ALIAS_SUPPLIER = "Supplier";
+        //final String ALIAS_DEST = "Dest";
+        String query = "SELECT " + STOCK_ID + "," + TABLE_STOCK + "." + STOCK_PRODUCT_ID + ","
+                + STOCK_LOCATION_ID + "," + STOCK_SUPPLIER_ID + "," + STOCK_DEST_ID + ","
+                + STOCK_MASS + "," + STOCK_NUM_BOXES + "," + STOCK_QUALITY + ","
+                + TABLE_PRODUCTS + "." + PRODUCTS_NAME + "," + TABLE_PRODUCTS + "." + PRODUCTS_MEAT_TYPE
+                + " FROM " + TABLE_STOCK
                 + " INNER JOIN " + TABLE_PRODUCTS + " ON "
                 + TABLE_STOCK + "." + STOCK_PRODUCT_ID + "=" + TABLE_PRODUCTS + "." + PRODUCTS_ID
-                + " INNER JOIN " + TABLE_LOCATIONS + " ON "
-                + TABLE_STOCK + "." + STOCK_LOCATION_ID + "=" + TABLE_LOCATIONS + "." + LOCATIONS_ID
-                + " INNER JOIN " + TABLE_LOCATIONS + " AS " + ALIAS_SUPPLIER + " ON "
-                + TABLE_STOCK + "." + STOCK_SUPPLIER_ID + "=" + ALIAS_SUPPLIER + "." + LOCATIONS_ID
-                + " INNER JOIN " + TABLE_LOCATIONS + " AS " + ALIAS_DEST + " ON "
-                + TABLE_STOCK + "." + STOCK_DEST_ID + "=" + ALIAS_DEST + "." + LOCATIONS_ID
+                //+ " INNER JOIN " + TABLE_LOCATIONS + " ON "
+                //+ TABLE_STOCK + "." + STOCK_LOCATION_ID + "=" + TABLE_LOCATIONS + "." + LOCATIONS_ID
+                //+ " INNER JOIN " + TABLE_LOCATIONS + " AS " + ALIAS_SUPPLIER + " ON "
+                //+ TABLE_STOCK + "." + STOCK_SUPPLIER_ID + "=" + ALIAS_SUPPLIER + "." + LOCATIONS_ID
+                //+ " INNER JOIN " + TABLE_LOCATIONS + " AS " + ALIAS_DEST + " ON "
+                //+ TABLE_STOCK + "." + STOCK_DEST_ID + "=" + ALIAS_DEST + "." + LOCATIONS_ID
                 + " WHERE " + STOCK_ID + "=" + stockId;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         int productId = 0;
-        int locationId = 0;
-        int supplierId = 0;
-        int destId = 0;
         boolean valid = false;
         if (cursor.moveToFirst()) {
             //todo fix this to use inner join fields
             valid = true;
             productId = cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_PRODUCT_ID));
-            locationId = cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_LOCATION_ID));
-            supplierId = cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_SUPPLIER_ID));
-            destId = cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_DEST_ID));
+            result.setLocationId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_LOCATION_ID)));
+            result.setSupplierId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_SUPPLIER_ID)));
+            result.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_DEST_ID)));
             result.setMass(cursor.getDouble(cursor.getColumnIndexOrThrow(STOCK_MASS)));
             result.setNumBoxes(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_NUM_BOXES)));
             result.setQuality(StockItem.Quality.parseQuality(cursor.getString(cursor.getColumnIndexOrThrow(STOCK_QUALITY))));
@@ -287,11 +286,8 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         if (valid) {
-            // these need to be here as the db needs to be closed before retrieving other fields
+            // this needs to be here as the db needs to be closed before retrieving other fields
             result.setProduct(getProduct(productId));
-            result.setLocation(getLocation(locationId));
-            result.setSupplier(getLocation(supplierId));
-            result.setDest(getLocation(destId));
         }
         return result;
     }

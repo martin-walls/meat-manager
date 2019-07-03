@@ -345,14 +345,14 @@ public class NewStockActivity extends AppCompatActivity
             DBHandler dbHandler = new DBHandler(this);
 
             newStockItem.setProduct(dbHandler.getProduct(selectedProductId));
-            newStockItem.setSupplier(dbHandler.getLocation(selectedSupplierId));
+            newStockItem.setSupplierId(dbHandler.getLocation(selectedSupplierId));
             newStockItem.setMass(Double.parseDouble(editMass.getText().toString()));
             if (editNumBoxes.getText().length() != 0) {
                 newStockItem.setNumBoxes(Integer.parseInt(editNumBoxes.getText().toString()));
             }
-            newStockItem.setLocation(dbHandler.getLocation(selectedLocationId));
+            newStockItem.setLocationId(dbHandler.getLocation(selectedLocationId));
             if (editDest.getText().length() != 0) {
-                newStockItem.setDest(dbHandler.getLocation(selectedDestId));
+                newStockItem.setDestId(dbHandler.getLocation(selectedDestId));
             }
             for (StockItem.Quality quality : StockItem.Quality.values()) {
                 if (quality.name().equalsIgnoreCase(editQuality.getText().toString())) {
