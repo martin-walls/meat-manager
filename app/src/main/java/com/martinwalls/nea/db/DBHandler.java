@@ -270,12 +270,13 @@ public class DBHandler extends SQLiteOpenHelper {
                 + " WHERE " + STOCK_ID + "=" + stockId;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        int productId = 0;
-        boolean valid = false;
         if (cursor.moveToFirst()) {
-            //todo fix this to use inner join fields
-            valid = true;
-            productId = cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_PRODUCT_ID));
+            // get product data from inner join
+            Product stockProduct = new Product();
+            stockProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_PRODUCT_ID))); // maybe needs to be Stock.ProductId
+            stockProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_NAME)));
+            stockProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_MEAT_TYPE)));
+            result.setProduct(stockProduct);
             result.setLocationId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_LOCATION_ID)));
             result.setSupplierId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_SUPPLIER_ID)));
             result.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_DEST_ID)));
@@ -285,15 +286,38 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        if (valid) {
-            // this needs to be here as the db needs to be closed before retrieving other fields
-            result.setProduct(getProduct(productId));
-        }
         return result;
     }
 
     public List<StockItem> getAllStock() {
-        //todo
+        List<StockItem> result = new ArrayList<>();
+        String query = "SELECT " + STOCK_ID + "," + TABLE_STOCK + "." + STOCK_PRODUCT_ID + ","
+                + STOCK_LOCATION_ID + "," + STOCK_SUPPLIER_ID + "," + STOCK_DEST_ID + ","
+                + STOCK_MASS + "," + STOCK_NUM_BOXES + "," + STOCK_QUALITY + ","
+                + TABLE_PRODUCTS + "." + PRODUCTS_NAME + "," + TABLE_PRODUCTS + "." + PRODUCTS_MEAT_TYPE
+                + " FROM " + TABLE_STOCK
+                + " INNER JOIN " + TABLE_PRODUCTS + " ON "
+                + TABLE_STOCK + "." + STOCK_PRODUCT_ID + "=" + TABLE_PRODUCTS + "." + PRODUCTS_ID;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        while (cursor.moveToNext()) {
+            StockItem stockItem = new StockItem();
+            // get product data from inner join
+            Product stockProduct = new Product();
+            stockProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_PRODUCT_ID))); // maybe needs to be Stock.ProductId
+            stockProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_NAME)));
+            stockProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_MEAT_TYPE)));
+            stockItem.setProduct(stockProduct);
+            stockItem.setLocationId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_LOCATION_ID)));
+            stockItem.setSupplierId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_SUPPLIER_ID)));
+            stockItem.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_DEST_ID)));
+            stockItem.setMass(cursor.getDouble(cursor.getColumnIndexOrThrow(STOCK_MASS)));
+            stockItem.setNumBoxes(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_NUM_BOXES)));
+            stockItem.setQuality(StockItem.Quality.parseQuality(cursor.getString(cursor.getColumnIndexOrThrow(STOCK_QUALITY))));
+            result.add(stockItem);
+        }
+        cursor.close();
+        db.close();
         return new ArrayList<>();
     }
 
