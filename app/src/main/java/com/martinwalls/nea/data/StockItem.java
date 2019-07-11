@@ -17,9 +17,14 @@ public class StockItem {
     }
 
     private Product product;
+    // names are also stored for locations so they can be displayed,
+    // the other data is only loaded as needed
     private int locationId;
+    private String locationName;
     private int supplierId;
+    private String supplierName;
     private int destId;
+    private String destName;
     private double mass; // stored in kg
     private int numBoxes;
     private Quality quality;
@@ -43,6 +48,17 @@ public class StockItem {
         this.quality = quality;
     }
 
+    public StockItem(Product product, int locationId, String locationName, 
+            int supplierId, String supplierName, double mass, Quality quality) {
+        this.product = product;
+        this.locationId = locationId;
+        this.locationName = locationName;
+        this.supplierId = supplierId;
+        this.supplierName = supplierName;
+        this.mass = mass;
+        this.quality = quality;
+    }
+
     public Product getProduct() {
         return product;
     }
@@ -59,6 +75,14 @@ public class StockItem {
         this.locationId = locationId;
     }
 
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+
     public int getSupplierId() {
         return supplierId;
     }
@@ -67,12 +91,28 @@ public class StockItem {
         this.supplierId = supplierId;
     }
 
+    public String getSupplierName() {
+        return locationName;
+    }
+
+    public void setSupplierName(String locationName) {
+        this.locationName = locationName;
+    }
+
     public int getDestId() {
         return destId;
     }
 
     public void setDestId(int destId) {
         this.destId = destId;
+    }
+
+    public String getDestName() {
+        return locationName;
+    }
+
+    public void setDestName(String locationName) {
+        this.locationName = locationName;
     }
 
     public double getMass() {
