@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.martinwalls.nea.data.Location;
+import com.martinwalls.nea.data.Order;
 import com.martinwalls.nea.data.Product;
 import com.martinwalls.nea.data.StockItem;
 
@@ -406,6 +407,51 @@ public class DBHandler extends SQLiteOpenHelper {
             location.setPhone(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_PHONE)));
             location.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_EMAIL)));
             result.add(location);
+        }
+        cursor.close();
+        db.close();
+        return result;
+    }
+
+    public Order getOrder(int orderId) {
+        Order result = new Order();
+        String query = "SELECT " + TABLE_ORDERS + ".*," + TABLE_PRODUCTS + ".*,"
+                + ORDER_PRODUCTS_QUANTITY_MASS + "," + ORDER_PRODUCTS_QUANTITY_BOXES + "," + LOCATIONS_NAME
+                + " FROM " + TABLE_ORDERS
+                + " INNER JOIN " + TABLE_ORDER_PRODUCTS + " ON "
+                + TABLE_ORDERS + "." + ORDERS_ID + "=" + TABLE_ORDER_PRODUCTS + "." + ORDER_PRODUCTS_ORDER_ID
+                + " INNER JOIN " + TABLE_PRODUCTS + " ON "
+                + TABLE_ORDER_PRODUCTS + "." + ORDER_PRODUCTS_PRODUCT_ID + "=" + TABLE_PRODUCTS + "." + PRODUCTS_ID
+                + " INNER JOIN " + TABLE_LOCATIONS + " ON "
+                + TABLE_ORDERS + "." + ORDERS_DEST_ID + "=" + TABLE_LOCATIONS + "." + LOCATIONS_ID
+                + " WHERE " + TABLE_ORDERS + "." + ORDERS_ID + "=" + orderId;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            result.setOrderId(orderId);
+            result.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(ORDERS_DEST_ID)));
+            result.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(TABLE_LOCATIONS + "." + LOCATIONS_NAME)));
+            result.setOrderDate(cursor.getString(cursor.getColumnIndexOrThrow(ORDERS_DATE)));
+            result.setCompleted(cursor.getInt(cursor.getColumnIndexOrThrow(ORDERS_COMPLETED)) == 1);
+
+            Product orderProduct = new Product();
+            orderProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCTS_ID)));
+            orderProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_NAME)));
+            orderProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_MEAT_TYPE)));
+            double quantityMass = cursor.getDouble(cursor.getColumnIndexOrThrow(TABLE_ORDER_PRODUCTS + "." + ORDER_PRODUCTS_QUANTITY_MASS));
+            int quantityBoxes = cursor.getInt(cursor.getColumnIndexOrThrow(TABLE_ORDER_PRODUCTS + "." + ORDER_PRODUCTS_QUANTITY_BOXES)); //todo handle if this is null
+            result.addProduct(orderProduct, quantityMass, quantityBoxes);
+        }
+
+        // get any other products
+        while (cursor.moveToNext()) {
+            Product orderProduct = new Product();
+            orderProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCTS_ID)));
+            orderProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_NAME)));
+            orderProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_MEAT_TYPE)));
+            double quantityMass = cursor.getDouble(cursor.getColumnIndexOrThrow(TABLE_ORDER_PRODUCTS + "." + ORDER_PRODUCTS_QUANTITY_MASS));
+            int quantityBoxes = cursor.getInt(cursor.getColumnIndexOrThrow(TABLE_ORDER_PRODUCTS + "." + ORDER_PRODUCTS_QUANTITY_BOXES)); //todo handle if this is null
+            result.addProduct(orderProduct, quantityMass, quantityBoxes);
         }
         cursor.close();
         db.close();
