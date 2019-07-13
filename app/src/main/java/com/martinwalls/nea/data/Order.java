@@ -4,39 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
-    /**
-     * Class to store quantity of product held as well as Product object
-     */
-    private class ProductQuantity {
-        private Product product;
-        private double quantityMass;
-        private int quantityBoxes;
-
-        public ProductQuantity(Product product, double quantityMass) {
-            this.product = product;
-            this.quantityMass = quantityMass;
-            this.quantityBoxes = -1;
-        }
-
-        public ProductQuantity(Product product, double quantityMass, int quantityBoxes) {
-            this.product = product;
-            this.quantityMass = quantityMass;
-            this.quantityBoxes = quantityBoxes;
-        }
-
-        public Product getProduct() {
-            return product;
-        }
-
-        public double getQuantityMass() {
-            return quantityMass;
-        }
-
-        public int getQuantityBoxes() {
-            return quantityBoxes;
-        }
-    }
-
     private int orderId;
     private int destId;
     private String destName;
@@ -102,5 +69,13 @@ public class Order {
 
     public void setProductList(List<ProductQuantity> productList) {
         this.productList = productList;
+    }
+
+    public void addProduct(Product product, double quantityMass) {
+        productList.add(new ProductQuantity(product, quantityMass));
+    }
+
+    public void addProduct(Product product, double quantityMass, int quantityBoxes) {
+        productList.add(new ProductQuantity(product, quantityMass, quantityBoxes));
     }
 }
