@@ -252,34 +252,47 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public StockItem getStockItem(int stockId) {
         StockItem result = new StockItem();
-        //final String ALIAS_SUPPLIER = "Supplier";
-        //final String ALIAS_DEST = "Dest";
+        final String ALIAS_LOCATION = "Location";
+        final String ALIAS_SUPPLIER = "Supplier";
+        final String ALIAS_SUPPLIER_ID = "SupplierId";
+        final String ALIAS_SUPPLIER_NAME = "SupplierName";
+        final String ALIAS_DEST = "Dest";
+        final String ALIAS_DEST_ID = "DestId";
+        final String ALIAS_DEST_NAME = "DestName";
         String query = "SELECT " + STOCK_ID + "," + TABLE_STOCK + "." + STOCK_PRODUCT_ID + ","
-                + STOCK_LOCATION_ID + "," + STOCK_SUPPLIER_ID + "," + STOCK_DEST_ID + ","
+                + ALIAS_LOCATION + "." + LOCATIONS_ID + ","
+                + ALIAS_LOCATION + "." + LOCATIONS_NAME + ","
+                + ALIAS_SUPPLIER + "." + LOCATIONS_ID + " AS " + ALIAS_SUPPLIER_ID + ","
+                + ALIAS_SUPPLIER + "." + LOCATIONS_NAME + " AS " + ALIAS_SUPPLIER_NAME + ","
+                + ALIAS_DEST + "." + LOCATIONS_ID + " AS " + ALIAS_DEST_ID + ","
+                + ALIAS_DEST + "." + LOCATIONS_NAME + " AS " + ALIAS_DEST_NAME + ","
                 + STOCK_MASS + "," + STOCK_NUM_BOXES + "," + STOCK_QUALITY + ","
                 + TABLE_PRODUCTS + "." + PRODUCTS_NAME + "," + TABLE_PRODUCTS + "." + PRODUCTS_MEAT_TYPE
                 + " FROM " + TABLE_STOCK
                 + " INNER JOIN " + TABLE_PRODUCTS + " ON "
                 + TABLE_STOCK + "." + STOCK_PRODUCT_ID + "=" + TABLE_PRODUCTS + "." + PRODUCTS_ID
-                //+ " INNER JOIN " + TABLE_LOCATIONS + " ON "
-                //+ TABLE_STOCK + "." + STOCK_LOCATION_ID + "=" + TABLE_LOCATIONS + "." + LOCATIONS_ID
-                //+ " INNER JOIN " + TABLE_LOCATIONS + " AS " + ALIAS_SUPPLIER + " ON "
-                //+ TABLE_STOCK + "." + STOCK_SUPPLIER_ID + "=" + ALIAS_SUPPLIER + "." + LOCATIONS_ID
-                //+ " INNER JOIN " + TABLE_LOCATIONS + " AS " + ALIAS_DEST + " ON "
-                //+ TABLE_STOCK + "." + STOCK_DEST_ID + "=" + ALIAS_DEST + "." + LOCATIONS_ID
+                + " INNER JOIN " + TABLE_LOCATIONS + " AS " + ALIAS_LOCATION + " ON "
+                + TABLE_STOCK + "." + STOCK_LOCATION_ID + "=" + ALIAS_LOCATION + "." + LOCATIONS_ID
+                + " INNER JOIN " + TABLE_LOCATIONS + " AS " + ALIAS_SUPPLIER + " ON "
+                + TABLE_STOCK + "." + STOCK_SUPPLIER_ID + "=" + ALIAS_SUPPLIER + "." + LOCATIONS_ID
+                + " INNER JOIN " + TABLE_LOCATIONS + " AS " + ALIAS_DEST + " ON "
+                + TABLE_STOCK + "." + STOCK_DEST_ID + "=" + ALIAS_DEST + "." + LOCATIONS_ID
                 + " WHERE " + STOCK_ID + "=" + stockId;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             // get product data from inner join
             Product stockProduct = new Product();
-            stockProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_PRODUCT_ID))); // maybe needs to be Stock.ProductId
-            stockProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_NAME)));
-            stockProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_MEAT_TYPE)));
+            stockProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(TABLE_STOCK + "." + STOCK_PRODUCT_ID))); // Stock.ProductId
+            stockProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(TABLE_PRODUCTS + "." + PRODUCTS_NAME))); // Products.ProductName
+            stockProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(TABLE_PRODUCTS + "." + PRODUCTS_MEAT_TYPE))); // Products.MeatType
             result.setProduct(stockProduct);
-            result.setLocationId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_LOCATION_ID)));
-            result.setSupplierId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_SUPPLIER_ID)));
-            result.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_DEST_ID)));
+            result.setLocationId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_LOCATION + "." + LOCATIONS_ID)));
+            result.setLocationName(cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_LOCATION + "." + LOCATIONS_NAME)));
+            result.setSupplierId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_SUPPLIER_ID)));
+            result.setSupplierName(cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_SUPPLIER_NAME)));
+            result.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_DEST_ID)));
+            result.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_DEST_NAME)));
             result.setMass(cursor.getDouble(cursor.getColumnIndexOrThrow(STOCK_MASS)));
             result.setNumBoxes(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_NUM_BOXES)));
             result.setQuality(StockItem.Quality.parseQuality(cursor.getString(cursor.getColumnIndexOrThrow(STOCK_QUALITY))));
@@ -291,26 +304,47 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public List<StockItem> getAllStock() {
         List<StockItem> result = new ArrayList<>();
+        final String ALIAS_LOCATION = "Location";
+        final String ALIAS_SUPPLIER = "Supplier";
+        final String ALIAS_SUPPLIER_ID = "SupplierId";
+        final String ALIAS_SUPPLIER_NAME = "SupplierName";
+        final String ALIAS_DEST = "Dest";
+        final String ALIAS_DEST_ID = "DestId";
+        final String ALIAS_DEST_NAME = "DestName";
         String query = "SELECT " + STOCK_ID + "," + TABLE_STOCK + "." + STOCK_PRODUCT_ID + ","
-                + STOCK_LOCATION_ID + "," + STOCK_SUPPLIER_ID + "," + STOCK_DEST_ID + ","
+                + ALIAS_LOCATION + "." + LOCATIONS_ID + ","
+                + ALIAS_LOCATION + "." + LOCATIONS_NAME + ","
+                + ALIAS_SUPPLIER + "." + LOCATIONS_ID + " AS " + ALIAS_SUPPLIER_ID + ","
+                + ALIAS_SUPPLIER + "." + LOCATIONS_NAME + " AS " + ALIAS_SUPPLIER_NAME + ","
+                + ALIAS_DEST + "." + LOCATIONS_ID + " AS " + ALIAS_DEST_ID + ","
+                + ALIAS_DEST + "." + LOCATIONS_NAME + " AS " + ALIAS_DEST_NAME + ","
                 + STOCK_MASS + "," + STOCK_NUM_BOXES + "," + STOCK_QUALITY + ","
                 + TABLE_PRODUCTS + "." + PRODUCTS_NAME + "," + TABLE_PRODUCTS + "." + PRODUCTS_MEAT_TYPE
                 + " FROM " + TABLE_STOCK
                 + " INNER JOIN " + TABLE_PRODUCTS + " ON "
-                + TABLE_STOCK + "." + STOCK_PRODUCT_ID + "=" + TABLE_PRODUCTS + "." + PRODUCTS_ID;
+                + TABLE_STOCK + "." + STOCK_PRODUCT_ID + "=" + TABLE_PRODUCTS + "." + PRODUCTS_ID
+                + " INNER JOIN " + TABLE_LOCATIONS + " AS " + ALIAS_LOCATION + " ON "
+                + TABLE_STOCK + "." + STOCK_LOCATION_ID + "=" + ALIAS_LOCATION + "." + LOCATIONS_ID
+                + " INNER JOIN " + TABLE_LOCATIONS + " AS " + ALIAS_SUPPLIER + " ON "
+                + TABLE_STOCK + "." + STOCK_SUPPLIER_ID + "=" + ALIAS_SUPPLIER + "." + LOCATIONS_ID
+                + " INNER JOIN " + TABLE_LOCATIONS + " AS " + ALIAS_DEST + " ON "
+                + TABLE_STOCK + "." + STOCK_DEST_ID + "=" + ALIAS_DEST + "." + LOCATIONS_ID;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         while (cursor.moveToNext()) {
             StockItem stockItem = new StockItem();
             // get product data from inner join
             Product stockProduct = new Product();
-            stockProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_PRODUCT_ID))); // maybe needs to be Stock.ProductId
-            stockProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_NAME)));
-            stockProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_MEAT_TYPE)));
+            stockProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(TABLE_STOCK + "." + STOCK_PRODUCT_ID))); // Stock.ProductId
+            stockProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(TABLE_PRODUCTS + "." + PRODUCTS_NAME))); // Products.ProductName
+            stockProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(TABLE_PRODUCTS + "." + PRODUCTS_MEAT_TYPE))); // Products.MeatType
             stockItem.setProduct(stockProduct);
-            stockItem.setLocationId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_LOCATION_ID)));
-            stockItem.setSupplierId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_SUPPLIER_ID)));
-            stockItem.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_DEST_ID)));
+            stockItem.setLocationId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_LOCATION + "." + LOCATIONS_ID)));
+            stockItem.setLocationName(cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_LOCATION + "." + LOCATIONS_NAME)));
+            stockItem.setSupplierId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_SUPPLIER_ID)));
+            stockItem.setSupplierName(cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_SUPPLIER_NAME)));
+            stockItem.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_DEST_ID)));
+            stockItem.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_DEST_NAME)));
             stockItem.setMass(cursor.getDouble(cursor.getColumnIndexOrThrow(STOCK_MASS)));
             stockItem.setNumBoxes(cursor.getInt(cursor.getColumnIndexOrThrow(STOCK_NUM_BOXES)));
             stockItem.setQuality(StockItem.Quality.parseQuality(cursor.getString(cursor.getColumnIndexOrThrow(STOCK_QUALITY))));
@@ -318,7 +352,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        return new ArrayList<>();
+        return result;
     }
 
     public Location getLocation(int locationId) {
@@ -343,6 +377,35 @@ public class DBHandler extends SQLiteOpenHelper {
             result.setCountry(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_COUNTRY)));
             result.setPhone(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_PHONE)));
             result.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_EMAIL)));
+        }
+        cursor.close();
+        db.close();
+        return result;
+    }
+
+    public List<Location> getAllLocations() {
+        List<Location> result = new ArrayList<>();
+        String query = "SELECT * FROM " + TABLE_LOCATIONS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        while (cursor.moveToNext()) {
+            Location location = new Location();
+            location.setLocationId(cursor.getInt(cursor.getColumnIndexOrThrow(LOCATIONS_ID)));
+            location.setLocationName(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_NAME)));
+            String locationTypeString = cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_NAME));
+            for (Location.LocationType type : Location.LocationType.values()) {
+                if (type.name().equalsIgnoreCase(locationTypeString)) {
+                    location.setLocationType(type);
+                }
+            }
+            location.setAddrLine1(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_ADDR_1)));
+            location.setAddrLine2(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_ADDR_2)));
+            location.setCity(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_CITY)));
+            location.setPostcode(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_POSTCODE)));
+            location.setCountry(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_COUNTRY)));
+            location.setPhone(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_PHONE)));
+            location.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(LOCATIONS_EMAIL)));
+            result.add(location);
         }
         cursor.close();
         db.close();

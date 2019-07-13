@@ -5,7 +5,7 @@ package com.martinwalls.nea.data;
  */
 public class ProductQuantity {
     private Product product;
-    private double quantityMass;
+    private double quantityMass; // in kg
     private int quantityBoxes;
 
     public ProductQuantity(Product product, double quantityMass) {
