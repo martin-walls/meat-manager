@@ -6,6 +6,7 @@ import java.util.List;
 public class Contract {
     private int contractId;
     private int destId;
+    private String destName;
     private String repeatInterval; // TODO make date class to handle dates, see Order
     private String repeatOn;
     private int reminder;
@@ -38,6 +39,14 @@ public class Contract {
 
     public void setDestId(int destId) {
         this.destId = destId;
+    }
+
+    public String getDestName() {
+        return destName;
+    }
+
+    public void setDestName(String destName) {
+        this.destName = destName;
     }
 
     public String getRepeatInterval() {
