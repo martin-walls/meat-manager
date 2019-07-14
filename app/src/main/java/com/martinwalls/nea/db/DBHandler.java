@@ -550,7 +550,7 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         int lastContractId = -1;
         while (cursor.moveToNext()) {
-            int thisContractId = cursor.getInt(cursor.getColumnIndexOrThrow(TABLE_CONTRACTS + "." + CONTRACTS_ID))
+            int thisContractId = cursor.getInt(cursor.getColumnIndexOrThrow(TABLE_CONTRACTS + "." + CONTRACTS_ID));
             // if new contract
             if (thisContractId != lastContractId) {
                 Contract contract = new Contract();
