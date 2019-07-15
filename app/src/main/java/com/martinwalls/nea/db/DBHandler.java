@@ -249,6 +249,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public StockItem getStockItem(int stockId) {
+        // TODO check for null values
         StockItem stockResult = new StockItem();
         final String ALIAS_LOCATION = "Location";
         final String ALIAS_SUPPLIER = "Supplier";
