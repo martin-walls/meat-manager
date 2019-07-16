@@ -14,6 +14,82 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "stockDB.db";
     private static final int DATABASE_VERSION = 1;
 
+    //todo rename id fields to just id in ER model?
+
+    //TODO refactor to classes?
+
+    //todo don't need to be public? maybe default access modifier will work
+    private final class ProductsTable {
+        public final String TABLE_NAME = "Products";
+        public final String ID = "ProductId";
+        public final String NAME = "ProductName";
+        public final String MEAT_TYPE = "MeatType";
+    }
+
+    private final class MeatTypesTable {
+        public final String TABLE_NAME = "MeatTypes";
+        public final String MEAT_TYPE = "MeatType";
+    }
+    
+    private final class StockTable {
+        public final String TABLE_NAME = "Stock";
+        public final String ID = "StockId";
+        public final String PRODUCT_ID = "ProductId";
+        public final String LOCATION_ID = "LocationId";
+        public final String SUPPLIER_ID = "SupplierId";
+        public final String DEST_ID = "DestId";
+        public final String MASS = "Mass";
+        public final String NUM_BOXES = "NumBoxes";
+        public final String QUALITY = "Quality";
+    }
+
+    private final class OrdersTable {
+        public final String TABLE_NAME = "Orders";
+        public final String ID = "OrderId";
+        public final String DEST_ID = "DestId";
+        public final String ORDER_DATE = "OrderDate";
+        public final String COMPLETED = "Completed";
+    }
+
+    private final class OrderProductsTable {
+        final String TABLE_NAME = "OrderProducts";
+        final String PRODUCT_ID = "ProductId";
+        final String ORDER_ID = "OrderId";
+        final String QUANTITY_MASS = "QuantityMass";
+        final String QUANTITY_BOXES = "QuantityBoxes";
+    }
+
+    private final class ContractsTable {
+        final String TABLE_NAME = "Contracts";
+        final String ID = "ContractId";
+        final String DEST_ID = "DestId";
+        final String REPEAT_INTERVAL = "RepeatInterval";
+        final String REPEAT_ON = "RepeatOn";
+        final String REMINDER = "Reminder";
+    }
+
+    private final class ContractProductsTable {
+        final String TABLE_NAME = "ContractProducts";
+        final String CONTRACT_ID = "ContractId";
+        final String PRODUCT_ID = "ProductId";
+        final String QUANTITY_MASS = "QuantityMass";
+        final String QUANTITY_BOXES = "QuantityBoxes";
+    }
+
+    private final class LocationsTable {
+        final String TABLE_NAME = "Locations";
+        final String ID = "LocationId";
+        final String NAME = "LocationName";
+        final String TYPE = "LocationType";
+        final String ADDR_1 = "AddrLine1";
+        final String ADDR_2 = "AddrLine2";
+        final String CITY = "City";
+        final String POSTCODE = "Postcode";
+        final String COUNTRY = "Country";
+        final String PHONE = "Phone";
+        final String EMAIL = "Email";
+    }
+
     //region database constants
     // table names
     private final String TABLE_PRODUCTS = "Products";
