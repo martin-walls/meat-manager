@@ -582,7 +582,20 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //todo dbHandler setters
     public boolean addStockItem(StockItem stockItem) {
-        return true;
+        ContentValues values = new ContentValues();
+        values.put(STOCK_PRODUCT_ID, stockItem.productId);
+        values.put(STOCK_LOCATION_ID, stockItem.locationId);
+        values.put(STOCK_SUPPLIER_ID, stockItem.supplierId);
+        values.put(STOCK_DEST_ID, stockItem.destId);
+        values.put(STOCK_MASS, stockItem.mass);
+        values.put(STOCK_NUM_BOXES, stockItem.numBoxes);
+        values.put(STOCK_QUALITY, stockItem.quality);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        // id of inserted row, -1 if error
+        long newRowId = db.insert(TABLE_STOCK, null, values);
+        db.close();
+        return newRowId != -1;
     }
 
     //todo backup db
