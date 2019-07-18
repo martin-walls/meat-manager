@@ -16,8 +16,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //todo rename id fields to just id in ER model?
 
-    //TODO refactor to classes?
-
     //todo don't need to be public? maybe default access modifier will work
     private final class ProductsTable {
         public final String TABLE_NAME = "Products";
@@ -661,22 +659,50 @@ public class DBHandler extends SQLiteOpenHelper {
         return contractResultList;
     }
 
+    public boolean addProduct(Product product) {
+        ContentValues values = new ContentValues();
+        values.put(ProductsTable.ID, product.getProductId());
+        values.put(ProductsTable.NAME, product.getProductName());
+        values.put(ProductsTable.MEAT_TYPE, product.getMeatType());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long newRowId = db.insert(ProductsTable.TABLE_NAME, null, values);
+        db.close();
+        return newRowId != -1;
+    }
+
+    public boolean addMeatType(String meatType) {
+        //todo addMeatType
+    }
+
     //todo dbHandler setters
     public boolean addStockItem(StockItem stockItem) {
         ContentValues values = new ContentValues();
-        values.put(StockTable.PRODUCT_ID, stockItem.productId);
-        values.put(StockTable.LOCATION_ID, stockItem.locationId);
-        values.put(StockTable.SUPPLIER_ID, stockItem.supplierId);
-        values.put(StockTable.DEST_ID, stockItem.destId);
-        values.put(StockTable.MASS, stockItem.mass);
-        values.put(StockTable.NUM_BOXES, stockItem.numBoxes);
-        values.put(StockTable.QUALITY, stockItem.quality);
+        values.put(StockTable.PRODUCT_ID, stockItem.getProductId());
+        values.put(StockTable.LOCATION_ID, stockItem.getLocationId());
+        values.put(StockTable.SUPPLIER_ID, stockItem.getSupplierId());
+        values.put(StockTable.DEST_ID, stockItem.getDestId());
+        values.put(StockTable.MASS, stockItem.getMass());
+        values.put(StockTable.NUM_BOXES, stockItem.getNumBoxes());
+        values.put(StockTable.QUALITY, stockItem.getQuality().name()); //todo check this
 
         SQLiteDatabase db = this.getWritableDatabase();
         // id of inserted row, -1 if error
-        long newRowId = db.insert(TABLE_STOCK, null, values);
+        long newRowId = db.insert(StockTable.TABLE_NAME, null, values);
         db.close();
         return newRowId != -1;
+    }
+
+    public boolean addLocation(Location location) {
+        //todo addLocation
+    }
+
+    public boolean addOrder(Order order) {
+        //todo addOrder
+    }
+
+    public boolean addContract(Contract contract) {
+        //todo addContract
     }
 
     //todo backup db
