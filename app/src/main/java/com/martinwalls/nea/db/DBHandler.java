@@ -15,8 +15,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "stockDB.db";
     private static final int DATABASE_VERSION = 1;
 
-    //todo rename id fields to just id in ER model?
-
+    //region db constants
     private final class ProductsTable {
         static final String TABLE_NAME = "Products";
         static final String ID = "ProductId";
@@ -87,75 +86,10 @@ public class DBHandler extends SQLiteOpenHelper {
         static final String PHONE = "Phone";
         static final String EMAIL = "Email";
     }
+    //endregion db constants
 
-    /* TODO remove this if no errors with refactoring
-    //region database constants
-    // table names
-    private final String TABLE_PRODUCTS = "Products";
-    private final String TABLE_MEAT_TYPES = "MeatTypes";
-    private final String TABLE_STOCK = "Stock";
-    private final String TABLE_ORDERS = "Orders";
-    private final String TABLE_ORDER_PRODUCTS = "OrderProducts";
-    private final String TABLE_CONTRACTS = "Contracts";
-    private final String TABLE_CONTRACT_PRODUCTS = "ContractProducts";
-    private final String TABLE_LOCATIONS = "Locations";
-    
-    // cols for product table
-    private final String PRODUCTS_ID = "ProductId";
-    private final String PRODUCTS_NAME = "ProductName";
-    private final String PRODUCTS_MEAT_TYPE = "MeatType";
-
-    // cols for meat types table
-    private final String MEAT_TYPES_TYPE = "MeatType";
-    
-    // cols for stock table
-    private final String STOCK_ID = "StockId";
-    private final String STOCK_PRODUCT_ID = "ProductId";
-    private final String STOCK_LOCATION_ID = "LocationId";
-    private final String STOCK_SUPPLIER_ID = "SupplierId";
-    private final String STOCK_DEST_ID = "DestId";
-    private final String STOCK_MASS = "Mass";
-    private final String STOCK_NUM_BOXES = "NumBoxes";
-    private final String STOCK_QUALITY = "Quality";
-
-    // cols for orders table
-    private final String ORDERS_ID = "OrderId";
-    private final String ORDERS_DEST_ID = "DestId";
-    private final String ORDERS_DATE = "OrderDate";
-    private final String ORDERS_COMPLETED = "Completed";
-    
-    // cols for order products table
-    private final String ORDER_PRODUCTS_PRODUCT_ID = "ProductId";
-    private final String ORDER_PRODUCTS_ORDER_ID = "OrderId";
-    private final String ORDER_PRODUCTS_QUANTITY_MASS = "QuantityMass";
-    private final String ORDER_PRODUCTS_QUANTITY_BOXES = "QuantityBoxes";
-
-    // cols for contracts table
-    private final String CONTRACTS_ID = "ContractId";
-    private final String CONTRACTS_DEST_ID = "DestId";
-    private final String CONTRACTS_REPEAT_INTERVAL = "RepeatInterval";
-    private final String CONTRACTS_REPEAT_ON = "RepeatOn";
-    private final String CONTRACTS_REMINDER = "Reminder";
-    
-    // cols for contract products table
-    private final String CONTRACT_PRODUCTS_CONTRACT_ID = "ContractId";
-    private final String CONTRACT_PRODUCTS_PRODUCT_ID = "ProductId";
-    private final String CONTRACT_PRODUCTS_QUANTITY_MASS = "QuantityMass";
-    private final String CONTRACT_PRODUCTS_QUANTITY_BOXES = "QuantityBoxes";
-    
-    // cols for locations table
-    private final String LOCATIONS_ID = "LocationId";
-    private final String LOCATIONS_NAME = "LocationName";
-    private final String LOCATIONS_TYPE = "LocationType";
-    private final String LOCATIONS_ADDR_1 = "AddrLine1";
-    private final String LOCATIONS_ADDR_2 = "AddrLine2";
-    private final String LOCATIONS_CITY = "City";
-    private final String LOCATIONS_POSTCODE = "Postcode";
-    private final String LOCATIONS_COUNTRY = "Country";
-    private final String LOCATIONS_PHONE = "Phone";
-    private final String LOCATIONS_EMAIL = "Email";
-    //endregion database constants
-    */
+    //todo do something about having to open and close the db every time, this is expensive
+    // maybe have a global instance of DBHandler in activity and keep db open?
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -277,7 +211,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
-    //todo finish dbHandler getters
+    //region db getters
     public Product getProduct(int productId) {
         Product productResult = new Product();
         String query = "SELECT * FROM " + ProductsTable.TABLE_NAME
@@ -658,7 +592,9 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return contractResultList;
     }
+    //endregion db getters
 
+    //region db setters
     public boolean addProduct(Product product) {
         ContentValues values = new ContentValues();
         values.put(ProductsTable.ID, product.getProductId());
@@ -672,11 +608,14 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public boolean addMeatType(String meatType) {
-        //todo addMeatType
-        return true;
+        ContentValues values = new ContentValues();
+        values.put(MeatTypesTable.MEAT_TYPE, meatType);
+        SQLiteDatabase db = this.getWritableDatabase();
+        long newRowId = db.insert(MeatTypesTable.TABLE_NAME, null, values);
+        db.close();
+        return newRowId != -1;
     }
 
-    //todo dbHandler setters
     public boolean addStockItem(StockItem stockItem) {
         ContentValues values = new ContentValues();
         values.put(StockTable.PRODUCT_ID, stockItem.getProduct().getProductId());
@@ -695,7 +634,17 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public boolean addLocation(Location location) {
-        //todo addLocation
+        ContentValues values = new ContentValues();
+        values.put(LocationsTable.ID, location.getLocationId());
+        values.put(LocationsTable.NAME, location.getLocationName());
+        values.put(LocationsTable.TYPE, location.getLocationType().name());
+        values.put(LocationsTable.ADDR_1, location.getAddrLine1());
+        values.put(LocationsTable.ADDR_2, location.getAddrLine2());
+        values.put(LocationsTable.CITY, location.getCity());
+        values.put(LocationsTable.POSTCODE, location.getPostcode());
+        values.put(LocationsTable.COUNTRY, location.getCountry());
+        values.put(LocationsTable.PHONE, location.getPhone());
+        values.put(LocationsTable.EMAIL, location.getEmail());
         return true;
     }
 
@@ -708,6 +657,7 @@ public class DBHandler extends SQLiteOpenHelper {
         //todo addContract
         return true;
     }
+    //endregion db setters
 
     //todo backup db
 }
