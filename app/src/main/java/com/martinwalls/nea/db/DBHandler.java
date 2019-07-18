@@ -577,16 +577,16 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public Contract getContract(int contractId) {
         Contract contractResult = new Contract();
-        String query = "SELECT " + TABLE_CONTRACTS + ".*," + TABLE_PRODUCTS + ".*,"
-                + ORDER_PRODUCTS_QUANTITY_MASS + "," + ORDER_PRODUCTS_QUANTITY_BOXES
-                + " FROM " + TABLE_CONTRACTS
-                + " INNER JOIN " + TABLE_CONTRACT_PRODUCTS + " ON "
-                + TABLE_CONTRACTS + "." + CONTRACTS_ID + "=" + TABLE_CONTRACT_PRODUCTS + "." + CONTRACT_PRODUCTS_CONTRACT_ID
-                + " INNER JOIN " + TABLE_PRODUCTS + " ON "
-                + TABLE_CONTRACT_PRODUCTS + "." + CONTRACT_PRODUCTS_PRODUCT_ID + "=" + TABLE_PRODUCTS + "." + PRODUCTS_ID
-                + " INNER JOIN " + TABLE_LOCATIONS + " ON "
-                + TABLE_CONTRACTS + "." + CONTRACTS_DEST_ID + "=" + TABLE_LOCATIONS + "." + LOCATIONS_ID
-                + " WHERE " + TABLE_CONTRACTS + "." + CONTRACTS_ID + "=" + contractId;
+        String query = "SELECT " + ContractsTable.TABLE_NAME + ".*," + ProductsTable.TABLE_NAME + ".*,"
+                + ContractProductsTable.QUANTITY_MASS + "," + ContractProductsTable.QUANTITY_BOXES
+                + " FROM " + ContractsTable.TABLE_NAME
+                + " INNER JOIN " + ContractProductsTable.TABLE_NAME + " ON "
+                + ContractsTable.TABLE_NAME + "." + ContractsTable.ID + "=" + ContractProductsTable.TABLE_NAME + "." + ContractProductsTable.CONTRACT_ID
+                + " INNER JOIN " + ProductsTable.TABLE_NAME + " ON "
+                + ContractProductsTable.TABLE_NAME + "." + ContractProductsTable.PRODUCT_ID + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID
+                + " INNER JOIN " + LocationsTable.TABLE_NAME + " ON "
+                + ContractsTable.TABLE_NAME + "." + ContractsTable.DEST_ID + "=" + LocationsTable.TABLE_NAME + "." + LocationsTable.ID
+                + " WHERE " + ContractsTable.TABLE_NAME + "." + ContractsTable.ID + "=" + contractId;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         boolean gotContractData = false;
@@ -594,21 +594,21 @@ public class DBHandler extends SQLiteOpenHelper {
             // only query contract data once
             if (!gotContractData) {
                 contractResult.setContractId(contractId);
-                contractResult.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(CONTRACTS_DEST_ID)));
-                contractResult.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(TABLE_LOCATIONS + "." + LOCATIONS_NAME)));
-                contractResult.setRepeatInterval(cursor.getString(cursor.getColumnIndexOrThrow(CONTRACTS_REPEAT_INTERVAL)));
-                contractResult.setRepeatOn(cursor.getString(cursor.getColumnIndexOrThrow(CONTRACTS_REPEAT_ON)));
-                contractResult.setReminder(cursor.getInt(cursor.getColumnIndexOrThrow(CONTRACTS_REMINDER)));
+                contractResult.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.DEST_ID)));
+                contractResult.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.TABLE_NAME + "." + LocationsTable.NAME)));
+                contractResult.setRepeatInterval(cursor.getString(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_INTERVAL)));
+                contractResult.setRepeatOn(cursor.getString(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_ON)));
+                contractResult.setReminder(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REMINDER)));
                 gotContractData = true;
             }
 
             // get data for each product in the contract
             Product contractProduct = new Product();
-            contractProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCTS_ID)));
-            contractProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_NAME)));
-            contractProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_MEAT_TYPE)));
-            double quantityMass = cursor.getDouble(cursor.getColumnIndexOrThrow(TABLE_CONTRACT_PRODUCTS + "." + ORDER_PRODUCTS_QUANTITY_MASS));
-            int quantityBoxes = cursor.getInt(cursor.getColumnIndexOrThrow(TABLE_CONTRACT_PRODUCTS + "." + ORDER_PRODUCTS_QUANTITY_BOXES));
+            contractProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(ProductsTable.ID)));
+            contractProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.NAME)));
+            contractProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.MEAT_TYPE)));
+            double quantityMass = cursor.getDouble(cursor.getColumnIndexOrThrow(ContractProductsTable.TABLE_NAME + "." + ContractProductsTable.QUANTITY_MASS));
+            int quantityBoxes = cursor.getInt(cursor.getColumnIndexOrThrow(ContractProductsTable.TABLE_NAME + "." + ContractProductsTable.QUANTITY_BOXES));
             contractResult.addProduct(contractProduct, quantityMass, quantityBoxes);
         }
         cursor.close();
@@ -619,29 +619,29 @@ public class DBHandler extends SQLiteOpenHelper {
     public List<Contract> getAllContracts() {
         List<Contract> contractResultList = new ArrayList<>();
         //todo refactor these queries into global variables, for getting a single order just append the WHERE clause - eliminate repetition
-        String query = "SELECT " + TABLE_CONTRACTS + ".*," + TABLE_PRODUCTS + ".*,"
-                + ORDER_PRODUCTS_QUANTITY_MASS + "," + ORDER_PRODUCTS_QUANTITY_BOXES
-                + " FROM " + TABLE_CONTRACTS
-                + " INNER JOIN " + TABLE_CONTRACT_PRODUCTS + " ON "
-                + TABLE_CONTRACTS + "." + CONTRACTS_ID + "=" + TABLE_CONTRACT_PRODUCTS + "." + CONTRACT_PRODUCTS_CONTRACT_ID
-                + " INNER JOIN " + TABLE_PRODUCTS + " ON "
-                + TABLE_CONTRACT_PRODUCTS + "." + CONTRACT_PRODUCTS_PRODUCT_ID + "=" + TABLE_PRODUCTS + "." + PRODUCTS_ID
-                + " INNER JOIN " + TABLE_LOCATIONS + " ON "
-                + TABLE_CONTRACTS + "." + CONTRACTS_DEST_ID + "=" + TABLE_LOCATIONS + "." + LOCATIONS_ID;
+        String query = "SELECT " + ContractsTable.TABLE_NAME + ".*," + ProductsTable.TABLE_NAME + ".*,"
+                + ContractsProductsTable.QUANTITY_MASS + "," + ContractsProductsTable.QUANTITY_BOXES
+                + " FROM " + ContractsTable.TABLE_NAME
+                + " INNER JOIN " + ContractProductsTable.TABLE_NAME + " ON "
+                + ContractsTable.TABLE_NAME + "." + ContractsTable.ID + "=" + ContractProductsTable.TABLE_NAME + "." + ContractProductsTable.CONTRACT_ID
+                + " INNER JOIN " + ProductsTable.TABLE_NAME + " ON "
+                + ContractProductsTable.TABLE_NAME + "." + ContractProductsTable.PRODUCT_ID + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID
+                + " INNER JOIN " + LocationsTable.TABLE_NAME + " ON "
+                + ContractsTable.TABLE_NAME + "." + ContractsTable.DEST_ID + "=" + LocationsTable.TABLE_NAME + "." + LocationsTable.ID;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         int lastContractId = -1;
         while (cursor.moveToNext()) {
-            int thisContractId = cursor.getInt(cursor.getColumnIndexOrThrow(TABLE_CONTRACTS + "." + CONTRACTS_ID));
+            int thisContractId = cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.TABLE_NAME + "." + ContractsTable.ID));
             // if new contract
             if (thisContractId != lastContractId) {
                 Contract contract = new Contract();
                 contract.setContractId(thisContractId);
-                contract.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(CONTRACTS_DEST_ID)));
-                contract.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(TABLE_LOCATIONS + "." + LOCATIONS_NAME)));
-                contract.setRepeatInterval(cursor.getString(cursor.getColumnIndexOrThrow(CONTRACTS_REPEAT_INTERVAL)));
-                contract.setRepeatOn(cursor.getString(cursor.getColumnIndexOrThrow(CONTRACTS_REPEAT_ON)));
-                contract.setReminder(cursor.getInt(cursor.getColumnIndexOrThrow(CONTRACTS_REMINDER)));
+                contract.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.DEST_ID)));
+                contract.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.TABLE_NAME + "." + LocationsTable.NAME)));
+                contract.setRepeatInterval(cursor.getString(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_INTERVAL)));
+                contract.setRepeatOn(cursor.getString(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_ON)));
+                contract.setReminder(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REMINDER)));
                 contractResultList.add(contract);
             }
 
@@ -649,11 +649,11 @@ public class DBHandler extends SQLiteOpenHelper {
             Contract thisContract = contractResultList.get(contractResultList.size() - 1);
             // get data for each product in the contract
             Product contractProduct = new Product();
-            contractProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCTS_ID)));
-            contractProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_NAME)));
-            contractProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(PRODUCTS_MEAT_TYPE)));
-            double quantityMass = cursor.getDouble(cursor.getColumnIndexOrThrow(TABLE_CONTRACT_PRODUCTS + "." + ORDER_PRODUCTS_QUANTITY_MASS));
-            int quantityBoxes = cursor.getInt(cursor.getColumnIndexOrThrow(TABLE_CONTRACT_PRODUCTS + "." + ORDER_PRODUCTS_QUANTITY_BOXES));
+            contractProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(ProductsTable.ID)));
+            contractProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.NAME)));
+            contractProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.MEAT_TYPE)));
+            double quantityMass = cursor.getDouble(cursor.getColumnIndexOrThrow(ContractsProductsTable.TABLE_NAME + "." + ContractProductsTable.QUANTITY_MASS));
+            int quantityBoxes = cursor.getInt(cursor.getColumnIndexOrThrow(ContractsProductsTable.TABLE_NAME + "." + ContractProductsTable.QUANTITY_BOXES));
             thisContract.addProduct(contractProduct, quantityMass, quantityBoxes);
         }
         cursor.close();
@@ -664,13 +664,13 @@ public class DBHandler extends SQLiteOpenHelper {
     //todo dbHandler setters
     public boolean addStockItem(StockItem stockItem) {
         ContentValues values = new ContentValues();
-        values.put(STOCK_PRODUCT_ID, stockItem.productId);
-        values.put(STOCK_LOCATION_ID, stockItem.locationId);
-        values.put(STOCK_SUPPLIER_ID, stockItem.supplierId);
-        values.put(STOCK_DEST_ID, stockItem.destId);
-        values.put(STOCK_MASS, stockItem.mass);
-        values.put(STOCK_NUM_BOXES, stockItem.numBoxes);
-        values.put(STOCK_QUALITY, stockItem.quality);
+        values.put(StockTable.PRODUCT_ID, stockItem.productId);
+        values.put(StockTable.LOCATION_ID, stockItem.locationId);
+        values.put(StockTable.SUPPLIER_ID, stockItem.supplierId);
+        values.put(StockTable.DEST_ID, stockItem.destId);
+        values.put(StockTable.MASS, stockItem.mass);
+        values.put(StockTable.NUM_BOXES, stockItem.numBoxes);
+        values.put(StockTable.QUALITY, stockItem.quality);
 
         SQLiteDatabase db = this.getWritableDatabase();
         // id of inserted row, -1 if error
