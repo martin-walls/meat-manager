@@ -90,6 +90,7 @@ public class DBHandler extends SQLiteOpenHelper {
         final String EMAIL = "Email";
     }
 
+    /* TODO remove this if no errors with refactoring
     //region database constants
     // table names
     private final String TABLE_PRODUCTS = "Products";
@@ -156,6 +157,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private final String LOCATIONS_PHONE = "Phone";
     private final String LOCATIONS_EMAIL = "Email";
     //endregion database constants
+    */
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -572,8 +574,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return orderResultList;
     }
-
-    //todo got to here with refactoring - replacing db constants variables with class variables
 
     public Contract getContract(int contractId) {
         Contract contractResult = new Contract();
