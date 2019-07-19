@@ -14,11 +14,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import com.martinwalls.nea.contracts.ContractsFragment;
 import com.martinwalls.nea.dashboard.DashboardFragment;
+import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.exchange.ExchangeFragment;
 import com.martinwalls.nea.stock.StockFragment;
 
 public class MainActivity extends AppCompatActivity {
-
 
     private enum Page {
         DASHBOARD(new DashboardFragment(), R.id.nav_dashboard),
@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Page currentPage = Page.DASHBOARD;
+
+    private DBHandler dbHandler; //todo keep this open as constantly re-opening it is expensive
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

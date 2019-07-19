@@ -1,4 +1,4 @@
-package com.martinwalls.nea.data;
+package com.martinwalls.nea.db.models;
 
 import java.util.ArrayList;
 import java.util.List;

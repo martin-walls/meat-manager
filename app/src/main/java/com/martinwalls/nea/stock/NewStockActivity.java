@@ -26,8 +26,8 @@ import com.martinwalls.nea.SearchItem;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.ui_components.AddNewTextView;
 import com.martinwalls.nea.ui_components.CustomRecyclerView;
-import com.martinwalls.nea.data.Product;
-import com.martinwalls.nea.data.StockItem;
+import com.martinwalls.nea.db.models.Product;
+import com.martinwalls.nea.db.models.StockItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;

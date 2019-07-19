@@ -14,7 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.martinwalls.nea.data.Product;
+import com.martinwalls.nea.db.models.Product;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SampleData;
 

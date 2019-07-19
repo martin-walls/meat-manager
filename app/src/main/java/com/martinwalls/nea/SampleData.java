@@ -1,7 +1,7 @@
 package com.martinwalls.nea;
 
-import com.martinwalls.nea.data.Product;
-import com.martinwalls.nea.data.StockItem;
+import com.martinwalls.nea.db.models.Product;
+import com.martinwalls.nea.db.models.StockItem;
 import com.martinwalls.nea.exchange.Conversion;
 
 import java.util.ArrayList;

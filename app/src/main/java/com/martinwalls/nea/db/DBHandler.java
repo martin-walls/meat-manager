@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.martinwalls.nea.data.*;
+import com.martinwalls.nea.db.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,9 +87,6 @@ public class DBHandler extends SQLiteOpenHelper {
         static final String EMAIL = "Email";
     }
     //endregion db constants
-
-    //todo do something about having to open and close the db every time, this is expensive
-    // maybe have a global instance of DBHandler in activity and keep db open?
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -625,7 +622,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(StockTable.DEST_ID, stockItem.getDestId());
         values.put(StockTable.MASS, stockItem.getMass());
         values.put(StockTable.NUM_BOXES, stockItem.getNumBoxes());
-        values.put(StockTable.QUALITY, stockItem.getQuality().name()); //todo check this
+        values.put(StockTable.QUALITY, stockItem.getQuality().name());
 
         SQLiteDatabase db = this.getWritableDatabase();
         long newRowId = db.insert(StockTable.TABLE_NAME, null, values);

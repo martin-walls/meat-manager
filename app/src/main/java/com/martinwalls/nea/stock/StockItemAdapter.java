@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.data.StockItem;
+import com.martinwalls.nea.db.models.StockItem;
 
 import java.util.List;
 

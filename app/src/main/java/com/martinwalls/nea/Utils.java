@@ -1,4 +1,4 @@
-package com.martinwalls.nea.data;
+package com.martinwalls.nea;
 
 public class Utils {
     // 1 kg = 2.20462 lbs

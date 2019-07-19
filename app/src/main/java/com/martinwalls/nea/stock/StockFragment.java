@@ -14,7 +14,7 @@ import com.martinwalls.nea.R;
 import com.martinwalls.nea.SampleData;
 import com.martinwalls.nea.ui_components.CustomRecyclerView;
 import com.martinwalls.nea.ui_components.RecyclerViewDivider;
-import com.martinwalls.nea.data.StockItem;
+import com.martinwalls.nea.db.models.StockItem;
 
 import java.util.ArrayList;
 import java.util.List;
