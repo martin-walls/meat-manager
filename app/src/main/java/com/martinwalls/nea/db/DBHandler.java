@@ -611,6 +611,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(MeatTypesTable.MEAT_TYPE, meatType);
         SQLiteDatabase db = this.getWritableDatabase();
+        // id of inserted row, -1 if error
         long newRowId = db.insert(MeatTypesTable.TABLE_NAME, null, values);
         db.close();
         return newRowId != -1;
@@ -627,7 +628,6 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(StockTable.QUALITY, stockItem.getQuality().name()); //todo check this
 
         SQLiteDatabase db = this.getWritableDatabase();
-        // id of inserted row, -1 if error
         long newRowId = db.insert(StockTable.TABLE_NAME, null, values);
         db.close();
         return newRowId != -1;
@@ -645,17 +645,57 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(LocationsTable.COUNTRY, location.getCountry());
         values.put(LocationsTable.PHONE, location.getPhone());
         values.put(LocationsTable.EMAIL, location.getEmail());
-        return true;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long newRowId = db.insert(LocationsTable.TABLE_NAME, null, values);
+        db.close();
+        return newRowId != -1;
     }
 
     public boolean addOrder(Order order) {
-        //todo addOrder
-        return true;
+        ContentValues values = new ContentValues();
+        values.put(OrdersTable.ID, order.getOrderId());
+        values.put(OrdersTable.DEST_ID, order.getDestId());
+        values.put(OrdersTable.ORDER_DATE, order.getOrderDate());
+        values.put(OrdersTable.COMPLETED, order.isCompleted() ? 1 : 0);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long newRowId = db.insert(OrdersTable.TABLE_NAME, null, values);
+
+        // insert each product linked to the order into OrderProducts table
+        for (ProductQuantity productQuantity : order.getProductList()) {
+            ContentValues productValues = new ContentValues();
+            productValues.put(OrderProductsTable.PRODUCT_ID, productQuantity.getProduct().getProductId());
+            productValues.put(OrderProductsTable.ORDER_ID, order.getOrderId());
+            productValues.put(OrderProductsTable.QUANTITY_MASS, productQuantity.getQuantityMass());
+            productValues.put(OrderProductsTable.QUANTITY_BOXES, productQuantity.getQuantityBoxes());
+            db.insert(OrderProductsTable.TABLE_NAME, null, productValues);
+        }
+        db.close();
+        return newRowId != 1;
     }
 
     public boolean addContract(Contract contract) {
-        //todo addContract
-        return true;
+        ContentValues values = new ContentValues();
+        values.put(ContractsTable.ID, contract.getContractId());
+        values.put(ContractsTable.DEST_ID, contract.getDestId());
+        values.put(ContractsTable.REPEAT_INTERVAL, contract.getRepeatInterval());
+        values.put(ContractsTable.REPEAT_ON, contract.getRepeatOn());
+        values.put(ContractsTable.REMINDER, contract.getReminder());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long newRowId = db.insert(ContractsTable.TABLE_NAME, null, values);
+
+        for (ProductQuantity productQuantity : contract.getProductList()) {
+            ContentValues productValues = new ContentValues();
+            productValues.put(ContractProductsTable.PRODUCT_ID, productQuantity.getProduct().getProductId());
+            productValues.put(ContractProductsTable.CONTRACT_ID, contract.getContractId());
+            productValues.put(ContractProductsTable.QUANTITY_MASS, productQuantity.getQuantityMass());
+            productValues.put(ContractProductsTable.QUANTITY_BOXES, productQuantity.getQuantityBoxes());
+            db.insert(ContractProductsTable.TABLE_NAME, null, productValues);
+        }
+        db.close();
+        return newRowId != -1;
     }
     //endregion db setters
 
