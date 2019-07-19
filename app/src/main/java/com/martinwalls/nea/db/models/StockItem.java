@@ -7,11 +7,20 @@ public class StockItem {
         WASTE;
 
         public static Quality parseQuality(String name) {
-            for (Quality q : values()) {
-                if (q.name().equalsIgnoreCase(name)) {
-                    return q;
-                }
+            //todo improve this logic, this is a quick fix due to the space in "pet food"
+            switch (name.toLowerCase()) {
+                case "good":
+                    return Quality.GOOD;
+                case "pet food":
+                    return Quality.PET_FOOD;
+                case "waste":
+                    return Quality.WASTE;
             }
+//            for (Quality q : values()) {
+//                if (q.name().equalsIgnoreCase(name)) {
+//                    return q;
+//                }
+//            }
             return null;
         }
     }

@@ -62,6 +62,10 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         return itemListFiltered.size();
     }
 
+    public void setSearchItemType(String searchItemType) {
+        this.searchItemType = searchItemType;
+    }
+
     @Override
     public Filter getFilter() {
         return new Filter() {

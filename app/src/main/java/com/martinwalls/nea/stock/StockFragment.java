@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.SampleData;
+import com.martinwalls.nea.db.DBHandler;
+import com.martinwalls.nea.db.models.StockItem;
 import com.martinwalls.nea.ui_components.CustomRecyclerView;
 import com.martinwalls.nea.ui_components.RecyclerViewDivider;
-import com.martinwalls.nea.db.models.StockItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,35 +24,51 @@ public class StockFragment extends Fragment {
     private StockItemAdapter stockAdapter;
     private List<StockItem> stockList = new ArrayList<>();
 
+    private DBHandler dbHandler;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        dbHandler = new DBHandler(getContext());
+
         View fragmentView = inflater.inflate(R.layout.fragment_stock, container, false);
 
-        stockList.addAll(SampleData.getSampleStock());
+//        stockList.addAll(SampleData.getSampleStock());
 
-        stockAdapter = new StockItemAdapter(stockList);
         CustomRecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
         TextView emptyView = fragmentView.findViewById(R.id.empty);
         recyclerView.setEmptyView(emptyView);
+
+        stockAdapter = new StockItemAdapter(stockList);
         recyclerView.setAdapter(stockAdapter);
+        loadStock();
+
         RecyclerViewDivider recyclerViewDivider = new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
         recyclerView.addItemDecoration(recyclerViewDivider);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
         FloatingActionButton fab = fragmentView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newStockIntent = new Intent(getContext(), NewStockActivity.class);
-                startActivity(newStockIntent);
-            }
+        fab.setOnClickListener(v -> {
+            Intent newStockIntent = new Intent(getContext(), NewStockActivity.class);
+            startActivity(newStockIntent);
         });
 
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.stock_title);
         return fragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadStock(); //todo maybe needs to be in onStart()?
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        dbHandler.close();
     }
 
     @Override
@@ -73,5 +89,11 @@ public class StockFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void loadStock() { //todo currently not returning any data due to inner joins, no data in other tables
+        stockList.clear();
+        stockList.addAll(dbHandler.getAllStock());
+        stockAdapter.notifyDataSetChanged();
     }
 }

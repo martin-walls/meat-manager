@@ -190,7 +190,8 @@ public class NewStockActivity extends AppCompatActivity
             case INPUT_PRODUCT:
                 i = 0;
                 for (String product : SampleData.getSampleProducts()) {
-                    searchItemList.add(new SearchItem(product, i++));
+                    searchItemList.add(new SearchItem(product, i));
+                    i++;
                 }
                 break;
             case INPUT_SUPPLIER:
@@ -198,17 +199,20 @@ public class NewStockActivity extends AppCompatActivity
             case INPUT_LOCATION:
                 i = 0;
                 for (String location : SampleData.getSampleLocations()) {
-                    searchItemList.add(new SearchItem(location, i++));
+                    searchItemList.add(new SearchItem(location, i));
+                    i++;
                 }
                 break;
             case INPUT_QUALITY:
                 i = 0;
                 for (String quality : SampleData.getSampleQualities()) {
-                    searchItemList.add(new SearchItem(quality, i++));
+                    searchItemList.add(new SearchItem(quality, i));
+                    i++;
                 }
                 break;
         }
         currentSearchType = rowName;
+        itemAdapter.setSearchItemType(currentSearchType);
         itemAdapter.notifyDataSetChanged();
 
         // filter data at start for when text is already entered
@@ -255,6 +259,7 @@ public class NewStockActivity extends AppCompatActivity
             default:
                 //todo implement the rest of the "add new" dialogs
                 Toast.makeText(this, searchItemType, Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
@@ -269,12 +274,16 @@ public class NewStockActivity extends AppCompatActivity
         switch (searchItemType) {
             case INPUT_PRODUCT:
                 selectedProductId = item.getId();
+                break;
             case INPUT_SUPPLIER:
                 selectedSupplierId = item.getId();
+                break;
             case INPUT_LOCATION:
                 selectedLocationId = item.getId();
+                break;
             case INPUT_DESTINATION:
                 selectedDestId = item.getId();
+                break;
         }
 
         TextInputEditText editText = (TextInputEditText) getCurrentFocus();
@@ -342,23 +351,24 @@ public class NewStockActivity extends AppCompatActivity
         }
 
         if (isValid) {
-            DBHandler dbHandler = new DBHandler(this);
+            DBHandler dbHandler = new DBHandler(this); //todo maybe needs to be a global variable if used more than once
 
             newStockItem.setProduct(dbHandler.getProduct(selectedProductId));
-            newStockItem.setSupplierId(dbHandler.getLocation(selectedSupplierId));
+            newStockItem.setSupplierId(selectedSupplierId);
             newStockItem.setMass(Double.parseDouble(editMass.getText().toString()));
             if (editNumBoxes.getText().length() != 0) {
                 newStockItem.setNumBoxes(Integer.parseInt(editNumBoxes.getText().toString()));
             }
-            newStockItem.setLocationId(dbHandler.getLocation(selectedLocationId));
+            newStockItem.setLocationId(selectedLocationId);
             if (editDest.getText().length() != 0) {
-                newStockItem.setDestId(dbHandler.getLocation(selectedDestId));
+                newStockItem.setDestId(selectedDestId);
             }
-            for (StockItem.Quality quality : StockItem.Quality.values()) {
-                if (quality.name().equalsIgnoreCase(editQuality.getText().toString())) {
-                    newStockItem.setQuality(quality);
-                }
-            }
+            newStockItem.setQuality(StockItem.Quality.parseQuality(editQuality.getText().toString()));
+//            for (StockItem.Quality quality : StockItem.Quality.values()) {
+//                if (quality.name().equalsIgnoreCase(editQuality.getText().toString())) {
+//                    newStockItem.setQuality(quality);
+//                }
+//            }
 
             return dbHandler.addStockItem(newStockItem);
         }
