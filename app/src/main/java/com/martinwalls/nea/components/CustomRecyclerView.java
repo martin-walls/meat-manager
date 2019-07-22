@@ -1,4 +1,4 @@
-package com.martinwalls.nea.ui_components;
+package com.martinwalls.nea.components;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -31,6 +31,10 @@ public class CustomRecyclerView extends RecyclerView {
 
     public void setEmptyView(View emptyView) {
         this.emptyView = emptyView;
+        // if adapter already set, make sure the empty view is visible/hidden as required
+        if (getAdapter() != null) {
+            updateEmptyView();
+        }
     }
 
     @Override

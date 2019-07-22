@@ -1,4 +1,4 @@
-package com.martinwalls.nea.ui_components;
+package com.martinwalls.nea.components;
 
 import android.content.Context;
 import android.content.res.TypedArray;
