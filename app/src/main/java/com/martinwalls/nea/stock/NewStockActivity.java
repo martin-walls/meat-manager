@@ -24,10 +24,10 @@ import com.martinwalls.nea.R;
 import com.martinwalls.nea.SampleData;
 import com.martinwalls.nea.SearchItem;
 import com.martinwalls.nea.db.DBHandler;
-import com.martinwalls.nea.ui_components.AddNewTextView;
-import com.martinwalls.nea.ui_components.CustomRecyclerView;
 import com.martinwalls.nea.db.models.Product;
 import com.martinwalls.nea.db.models.StockItem;
+import com.martinwalls.nea.components.AddNewTextView;
+import com.martinwalls.nea.components.CustomRecyclerView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,6 +64,8 @@ public class NewStockActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_stock);
+
+        getSupportActionBar().setTitle(R.string.stock_new);
 
         // store reference to each row to show/hide later
         //todo make this an enum??
@@ -127,6 +129,8 @@ public class NewStockActivity extends AppCompatActivity
             case R.id.action_done:
                 if (addStockToDb()) {
                     finish();
+                } else {
+                    Toast.makeText(this, getString(R.string.db_error_insert, "stock"), Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.action_cancel:
@@ -141,24 +145,18 @@ public class NewStockActivity extends AppCompatActivity
     private void setListeners(final String name, final TextInputLayout inputLayout, final TextInputEditText editText) {
         inputLayout.setEndIconVisible(false);
 
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    inputLayout.setEndIconVisible(true);
-                    openSearch(name);
-                }
+        editText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                inputLayout.setEndIconVisible(true);
+                openSearch(name);
             }
         });
 
-        inputLayout.setEndIconOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        inputLayout.setEndIconOnClickListener(v -> {
                 editText.setText("");
                 editText.clearFocus();
                 inputLayout.setEndIconVisible(false);
                 cancelSearch();
-            }
         });
 
         editText.addTextChangedListener(new TextWatcher() {

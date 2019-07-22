@@ -2,9 +2,9 @@ package com.martinwalls.nea.db.models;
 
 public class Location {
     public enum LocationType {
-        STORAGE,
-        SUPPLIER,
-        DESTINATION;
+        Storage,
+        Supplier,
+        Destination
     }
 
     private int locationId;

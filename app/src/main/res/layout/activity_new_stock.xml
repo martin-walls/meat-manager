@@ -164,7 +164,7 @@
         android:visibility="gone"
         >
 
-        <com.martinwalls.nea.ui_components.AddNewTextView
+        <com.martinwalls.nea.components.AddNewTextView
             android:id="@+id/add_new"
             style="@style/SearchResultsItemText.Selectable.AddNew"
             android:layout_width="match_parent"
@@ -175,7 +175,7 @@
             android:paddingBottom="@dimen/search_result_spacing"
             />
 
-        <com.martinwalls.nea.ui_components.CustomRecyclerView
+        <com.martinwalls.nea.components.CustomRecyclerView
             android:id="@+id/recycler_view_results"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

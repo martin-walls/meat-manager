@@ -101,7 +101,7 @@
             />
     </LinearLayout>
 
-    <com.martinwalls.nea.ui_components.CustomRecyclerView
+    <com.martinwalls.nea.components.CustomRecyclerView
         android:id="@+id/exchange_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

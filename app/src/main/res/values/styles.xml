@@ -47,6 +47,11 @@
         <item name="android:background">@drawable/nav_drawer_item_background</item>
     </style>
 
+    <style name="ItemTextNormal">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?textColorNormal</item>
+    </style>
+
     <style name="EmptyView">
         <item name="android:textSize">20sp</item>
     </style>
@@ -62,7 +67,7 @@
     </style>
 
     <!-- search -->
-    <style name="SearchResultsItemText">
+    <style name="SearchResultsItemText"> <!-- todo make this extend ItemTextNormal? -->
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">?attr/textColorNormal</item>
     </style>

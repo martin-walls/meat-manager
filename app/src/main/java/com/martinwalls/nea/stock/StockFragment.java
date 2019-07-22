@@ -13,8 +13,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.db.models.StockItem;
-import com.martinwalls.nea.ui_components.CustomRecyclerView;
-import com.martinwalls.nea.ui_components.RecyclerViewDivider;
+import com.martinwalls.nea.components.CustomRecyclerView;
+import com.martinwalls.nea.components.RecyclerViewDivider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,12 +62,13 @@ public class StockFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        dbHandler = new DBHandler(getContext());
         loadStock(); //todo maybe needs to be in onStart()?
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         dbHandler.close();
     }
 
@@ -85,6 +86,10 @@ public class StockFragment extends Fragment {
                 return true;
             case R.id.action_redo:
                 Toast.makeText(getContext(), "REDO", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_view_locations:
+                Intent locationsIntent = new Intent(getContext(), ViewLocationsActivity.class);
+                startActivity(locationsIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

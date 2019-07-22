@@ -8,7 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.martinwalls.nea.ui_components.CustomRecyclerView;
+import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SampleData;
 
@@ -27,6 +27,8 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_currencies);
+
+        getSupportActionBar().setTitle(R.string.exchange_choose_currencies);
 
         for (String currencyString : SampleData.getSampleCurrencies()) {
             allCurrencyList.add(new Currency(currencyString, currencyString.equals("GBP") || currencyString.equals("HKD")));

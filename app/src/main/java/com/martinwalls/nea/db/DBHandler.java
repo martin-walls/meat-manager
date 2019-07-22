@@ -3,6 +3,7 @@ package com.martinwalls.nea.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.martinwalls.nea.db.models.*;
@@ -206,6 +207,12 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
+
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        // make sure foreign keys are enabled
+        db.setForeignKeyConstraintsEnabled(true);
     }
 
     //region db getters
@@ -614,7 +621,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return newRowId != -1;
     }
 
-    public boolean addStockItem(StockItem stockItem) {
+    public boolean addStockItem(StockItem stockItem) throws SQLiteConstraintException {
         ContentValues values = new ContentValues();
         values.put(StockTable.PRODUCT_ID, stockItem.getProduct().getProductId());
         values.put(StockTable.LOCATION_ID, stockItem.getLocationId());
