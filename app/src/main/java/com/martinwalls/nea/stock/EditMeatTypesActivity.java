@@ -3,17 +3,22 @@ package com.martinwalls.nea.stock;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.components.CustomRecyclerView;
+import com.martinwalls.nea.components.RecyclerViewDivider;
 import com.martinwalls.nea.db.DBHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditMeatTypesActivity extends AppCompatActivity {
+public class EditMeatTypesActivity extends AppCompatActivity
+        implements AddNewMeatTypeDialog.AddNewMeatTypeListener {
 
     private DBHandler dbHandler;
 
@@ -35,19 +40,22 @@ public class EditMeatTypesActivity extends AppCompatActivity {
         TextView emptyView = findViewById(R.id.empty);
         recyclerView.setEmptyView(emptyView);
 
-        meatTypesAdapter = new MeatTypesAdapter(meatTypesList);
+        meatTypesAdapter = new MeatTypesAdapter(meatTypesList, this);
         recyclerView.setAdapter(meatTypesAdapter);
         loadMeatTypes();
 
-//        RecyclerViewDivider recyclerViewDivider = new RecyclerViewDivider(this, R.drawable.divider_thin);
-//        recyclerView.addItemDecoration(recyclerViewDivider);
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-//        recyclerView.setLayoutManager(layoutManager);
+        RecyclerViewDivider recyclerViewDivider = new RecyclerViewDivider(this, R.drawable.divider_thin);
+        recyclerView.addItemDecoration(recyclerViewDivider);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(meatTypesAdapter, this));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            //todo start new meat type activity
-            Toast.makeText(this, "FAB", Toast.LENGTH_SHORT).show();
+            DialogFragment addNewMeatTypeDialog = new AddNewMeatTypeDialog();
+            addNewMeatTypeDialog.show(getSupportFragmentManager(), "add_new_meat_type");
         });
     }
 
@@ -73,5 +81,11 @@ public class EditMeatTypesActivity extends AppCompatActivity {
         meatTypesList.clear();
         meatTypesList.addAll(dbHandler.getAllMeatTypes());
         meatTypesAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAddNewMeatTypeDoneAction(String meatType) {
+        dbHandler.addMeatType(meatType);
+        loadMeatTypes();
     }
 }

@@ -703,5 +703,11 @@ public class DBHandler extends SQLiteOpenHelper {
     }
     //endregion db setters
 
+    public boolean deleteMeatType(String meatType) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int deletedRows = db.delete(MeatTypesTable.TABLE_NAME, MeatTypesTable.MEAT_TYPE + "=?", new String[]{meatType});
+        return deletedRows > 0;
+    }
+
     //todo backup db
 }

@@ -42,6 +42,9 @@
     <string name="input_error_invalid">Invalid input</string>
     <string name="input_error_duplicate">Already added</string>
 
+    <!-- Snackbars -->
+    <string name="snackbar_item_deleted">Item deleted</string>
+
     <!-- Dashboard page -->
     <string name="dashboard_title">Dashboard</string>
 
@@ -53,7 +56,7 @@
     <string name="stock_product_new">Add new product</string>
     <string name="stock_product_input_name">Name</string>
     <string name="stock_product_input_meat_type">Meat type</string>
-    <string name="stock_product_meat_type_new">"%s" is not a valid meat type</string>
+    <string name="stock_product_meat_type_new">Add new meat type</string>
     <string name="stock_product_meat_type_new_confirm">Do you want to add it?</string>
     <string name="stock_product_meat_type_input">Meat type</string>
     <string name="stock_product_new_done">Done</string>
@@ -67,6 +70,7 @@
     <string name="stock_input_destination">Destination</string>
     <string name="stock_input_quality">Quality</string>
 
+    <!-- Edit meat types page -->
     <string name="meat_types_empty">No meat types to show</string>
     <string name="meat_types_title">Meat Types</string>
 

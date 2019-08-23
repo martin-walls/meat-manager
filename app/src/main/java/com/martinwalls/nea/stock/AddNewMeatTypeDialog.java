@@ -2,7 +2,6 @@ package com.martinwalls.nea.stock;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +15,7 @@ import com.martinwalls.nea.db.DBHandler;
 
 import java.util.List;
 
-public class AddNewMeatTypeDialog extends DialogFragment
-        implements DialogInterface.OnDismissListener {
+public class AddNewMeatTypeDialog extends DialogFragment {
 
     private AddNewMeatTypeListener listener;
 
@@ -39,10 +37,10 @@ public class AddNewMeatTypeDialog extends DialogFragment
         buttonDone.setOnClickListener(v -> {
             String newMeatType = editTextMeatType.getText().toString();
             inputLayoutMeatType.setError(null);
-            if (isNewMeatTypeAlreadyAdded(newMeatType)) {
-                inputLayoutMeatType.setError(getString(R.string.input_error_duplicate));
-            } else if (newMeatType.isEmpty()) {
+            if (newMeatType.isEmpty()) {
                 inputLayoutMeatType.setError(getString(R.string.input_error_blank));
+            } else if (isNewMeatTypeAlreadyAdded(newMeatType)) {
+                inputLayoutMeatType.setError(getString(R.string.input_error_duplicate));
             } else {
                 listener.onAddNewMeatTypeDoneAction(newMeatType);
                 getDialog().dismiss();
@@ -53,7 +51,6 @@ public class AddNewMeatTypeDialog extends DialogFragment
             getDialog().dismiss();
         });
 
-        builder.setOnDismissListener(this);
 
 //        dialog -> {
 //            DialogFragment addNewProductDialog = new AddNewProductDialog();
@@ -73,12 +70,6 @@ public class AddNewMeatTypeDialog extends DialogFragment
                     " must implement " + AddNewMeatTypeListener.class.getSimpleName());
         }
     }
-
-//    @Override
-//    public void onDismiss(DialogInterface dialog) {
-//        DialogFragment addNewProductDialog = new AddNewProductDialog();
-//        addNewProductDialog.show(getFragmentManager(), "add_new_product");
-//    }
 
     public interface AddNewMeatTypeListener {
         void onAddNewMeatTypeDoneAction(String meatType);
