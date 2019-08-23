@@ -14,13 +14,15 @@ import androidx.fragment.app.DialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.martinwalls.nea.db.models.Product;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.SampleData;
+import com.martinwalls.nea.db.DBHandler;
+import com.martinwalls.nea.db.models.Product;
 
 import java.util.List;
 
 public class AddNewProductDialog extends DialogFragment {
+    private DBHandler dbHandler;
+
     private AddNewProductListener listener;
     private TextInputLayout inputLayoutProductName;
     private TextInputEditText editTextProductName;
@@ -40,21 +42,19 @@ public class AddNewProductDialog extends DialogFragment {
         editTextMeatType = dialogView.findViewById(R.id.edit_text_meat_type);
         inputLayoutMeatType = dialogView.findViewById(R.id.input_layout_meat_type);
 
-        List<String> meatTypes = SampleData.getSampleMeatTypes();
+        dbHandler = new DBHandler(getContext());
+
+        List<String> meatTypesList = dbHandler.getAllMeatTypes();
         ArrayAdapter<String> autocompleteAdapter =
-                new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, meatTypes);
+                new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, meatTypesList);
         editTextMeatType.setAdapter(autocompleteAdapter);
         editTextMeatType.setThreshold(0);
 
-        editTextMeatType.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    editTextMeatType.showDropDown();
-                }
+        editTextMeatType.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                editTextMeatType.showDropDown();
             }
         });
-        //todo add button
 
         builder.setView(dialogView);
         builder.setTitle(R.string.stock_product_new);
@@ -62,41 +62,33 @@ public class AddNewProductDialog extends DialogFragment {
         Button buttonDone = dialogView.findViewById(R.id.btn_done);
         Button buttonCancel = dialogView.findViewById(R.id.btn_cancel);
 
-        buttonDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isValid = true;
-                String newProductName = editTextProductName.getText().toString();
-                String newMeatType = editTextMeatType.getText().toString();
-                inputLayoutProductName.setError(null);
-                inputLayoutMeatType.setError(null);
-                if (newProductName.isEmpty()) {
-                    inputLayoutProductName.setError(getString(R.string.input_error_blank));
-                    isValid = false;
-                }
-                if (newMeatType.isEmpty()) {
-                    inputLayoutMeatType.setError(getString(R.string.input_error_blank));
-                    isValid = false;
-                } else if (!isMeatTypeValid(newMeatType)) {
-                    inputLayoutMeatType.setError(getString(R.string.input_error_invalid));
-                    isValid = false;
-                }
-                if (isValid) {
-                    Product newProduct = new Product();
-                    newProduct.setProductName(newProductName);
-                    newProduct.setMeatType(newMeatType);
-                    listener.onAddNewProductDoneAction(newProduct);
-                    getDialog().dismiss();
-                }
+        buttonDone.setOnClickListener(v -> {
+            boolean isValid = true;
+            String newProductName = editTextProductName.getText().toString();
+            String newMeatType = editTextMeatType.getText().toString();
+            inputLayoutProductName.setError(null);
+            inputLayoutMeatType.setError(null);
+            if (newProductName.isEmpty()) {
+                inputLayoutProductName.setError(getString(R.string.input_error_blank));
+                isValid = false;
             }
-        });
-
-        buttonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            if (newMeatType.isEmpty()) {
+                inputLayoutMeatType.setError(getString(R.string.input_error_blank));
+                isValid = false;
+            } else if (!isMeatTypeValid(newMeatType)) {
+                inputLayoutMeatType.setError(getString(R.string.input_error_invalid));
+                isValid = false;
+            }
+            if (isValid) {
+                Product newProduct = new Product();
+                newProduct.setProductName(newProductName);
+                newProduct.setMeatType(newMeatType);
+                listener.onAddNewProductDoneAction(newProduct);
                 getDialog().dismiss();
             }
         });
+
+        buttonCancel.setOnClickListener(v -> getDialog().dismiss());
 
         return builder.create();
     }
@@ -117,11 +109,7 @@ public class AddNewProductDialog extends DialogFragment {
     }
 
     private boolean isMeatTypeValid(String meatType) {
-        List<String> meatTypes = SampleData.getSampleMeatTypes();
+        List<String> meatTypes = dbHandler.getAllMeatTypes();
         return meatTypes.contains(meatType);
-    }
-
-    private void showProductNameError(String message) {
-        editTextProductName.setError(message);
     }
 }

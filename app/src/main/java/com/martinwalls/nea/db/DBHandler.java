@@ -283,13 +283,13 @@ public class DBHandler extends SQLiteOpenHelper {
                 + ProductsTable.TABLE_NAME + "." + ProductsTable.NAME + "," 
                 + ProductsTable.TABLE_NAME + "." + ProductsTable.MEAT_TYPE
                 + " FROM " + StockTable.TABLE_NAME
-                + " INNER JOIN " + ProductsTable.TABLE_NAME + " ON "
+                + " LEFT JOIN " + ProductsTable.TABLE_NAME + " ON "
                 + StockTable.TABLE_NAME + "." + StockTable.PRODUCT_ID + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID
-                + " INNER JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_LOCATION + " ON "
+                + " LEFT JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_LOCATION + " ON "
                 + StockTable.TABLE_NAME + "." + StockTable.LOCATION_ID + "=" + ALIAS_LOCATION + "." + LocationsTable.ID
-                + " INNER JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_SUPPLIER + " ON "
+                + " LEFT JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_SUPPLIER + " ON "
                 + StockTable.TABLE_NAME + "." + StockTable.SUPPLIER_ID + "=" + ALIAS_SUPPLIER + "." + LocationsTable.ID
-                + " INNER JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_DEST + " ON "
+                + " LEFT JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_DEST + " ON "
                 + StockTable.TABLE_NAME + "." + StockTable.DEST_ID + "=" + ALIAS_DEST + "." + LocationsTable.ID
                 + " WHERE " + StockTable.ID + "=" + stockId;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -336,13 +336,13 @@ public class DBHandler extends SQLiteOpenHelper {
                 + ProductsTable.TABLE_NAME + "." + ProductsTable.NAME + "," 
                 + ProductsTable.TABLE_NAME + "." + ProductsTable.MEAT_TYPE
                 + " FROM " + StockTable.TABLE_NAME
-                + " INNER JOIN " + ProductsTable.TABLE_NAME + " ON "
+                + " LEFT JOIN " + ProductsTable.TABLE_NAME + " ON " //todo this should be INNER JOIN, left join used for testing
                 + StockTable.TABLE_NAME + "." + StockTable.PRODUCT_ID + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID
-                + " INNER JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_LOCATION + " ON "
+                + " LEFT JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_LOCATION + " ON "
                 + StockTable.TABLE_NAME + "." + StockTable.LOCATION_ID + "=" + ALIAS_LOCATION + "." + LocationsTable.ID
-                + " INNER JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_SUPPLIER + " ON "
+                + " LEFT JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_SUPPLIER + " ON "
                 + StockTable.TABLE_NAME + "." + StockTable.SUPPLIER_ID + "=" + ALIAS_SUPPLIER + "." + LocationsTable.ID
-                + " INNER JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_DEST + " ON "
+                + " LEFT JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_DEST + " ON "
                 + StockTable.TABLE_NAME + "." + StockTable.DEST_ID + "=" + ALIAS_DEST + "." + LocationsTable.ID;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -350,12 +350,12 @@ public class DBHandler extends SQLiteOpenHelper {
             StockItem stockItem = new StockItem();
             // get product data from inner join
             Product stockProduct = new Product();
-            stockProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.TABLE_NAME + "." + StockTable.PRODUCT_ID))); // Stock.ProductId
-            stockProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.TABLE_NAME + "." + ProductsTable.NAME))); // Products.ProductName
-            stockProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.TABLE_NAME + "." + ProductsTable.MEAT_TYPE))); // Products.MeatType
+            stockProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.PRODUCT_ID))); // Stock.ProductId
+            stockProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.NAME))); // Products.ProductName
+            stockProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.MEAT_TYPE))); // Products.MeatType
             stockItem.setProduct(stockProduct);
-            stockItem.setLocationId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_LOCATION + "." + LocationsTable.ID)));
-            stockItem.setLocationName(cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_LOCATION + "." + LocationsTable.NAME)));
+            stockItem.setLocationId(cursor.getInt(cursor.getColumnIndexOrThrow(LocationsTable.ID)));
+            stockItem.setLocationName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
             stockItem.setSupplierId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_SUPPLIER_ID)));
             stockItem.setSupplierName(cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_SUPPLIER_NAME)));
             stockItem.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_DEST_ID)));

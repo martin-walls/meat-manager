@@ -17,7 +17,7 @@ import com.martinwalls.nea.db.models.Location;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewLocationsActivity extends AppCompatActivity {
+public class EditLocationsActivity extends AppCompatActivity {
 
     private LocationsAdapter locationsAdapter;
     private List<Location> locationList = new ArrayList<>();
@@ -27,7 +27,7 @@ public class ViewLocationsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_locations);
+        setContentView(R.layout.activity_edit_locations);
 
         getSupportActionBar().setTitle(R.string.locations_title);
 
@@ -58,25 +58,19 @@ public class ViewLocationsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        dbHandler = new DBHandler(this);
+        if (dbHandler == null) {
+            dbHandler = new DBHandler(this);
+        }
         loadLocations();
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        dbHandler.close();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                super.onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            super.onBackPressed();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void loadLocations() {

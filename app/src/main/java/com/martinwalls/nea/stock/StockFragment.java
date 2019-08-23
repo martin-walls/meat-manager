@@ -87,16 +87,20 @@ public class StockFragment extends Fragment {
             case R.id.action_redo:
                 Toast.makeText(getContext(), "REDO", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.action_view_locations:
-                Intent locationsIntent = new Intent(getContext(), ViewLocationsActivity.class);
+            case R.id.action_edit_locations:
+                Intent locationsIntent = new Intent(getContext(), EditLocationsActivity.class);
                 startActivity(locationsIntent);
+                return true;
+            case R.id.action_edit_meat_types:
+                Intent meatTypesIntent = new Intent(getContext(), EditMeatTypesActivity.class);
+                startActivity(meatTypesIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void loadStock() { //todo currently not returning any data due to inner joins, no data in other tables
+    private void loadStock() {
         stockList.clear();
         stockList.addAll(dbHandler.getAllStock());
         stockAdapter.notifyDataSetChanged();

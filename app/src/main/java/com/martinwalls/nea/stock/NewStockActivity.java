@@ -34,7 +34,10 @@ import java.util.HashMap;
 
 public class NewStockActivity extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener,
-        AddNewProductDialog.AddNewProductListener {
+        AddNewProductDialog.AddNewProductListener,
+        AddNewMeatTypeDialog.AddNewMeatTypeListener {
+
+    private DBHandler dbHandler;
 
     private HashMap<String, Integer> inputViews = new HashMap<>();
 
@@ -66,6 +69,8 @@ public class NewStockActivity extends AppCompatActivity
         setContentView(R.layout.activity_new_stock);
 
         getSupportActionBar().setTitle(R.string.stock_new);
+
+        dbHandler = new DBHandler(this);
 
         // store reference to each row to show/hide later
         //todo make this an enum??
@@ -115,6 +120,20 @@ public class NewStockActivity extends AppCompatActivity
         setListeners(INPUT_QUALITY,
                 (TextInputLayout) findViewById(R.id.input_layout_quality),
                 (TextInputEditText) findViewById(R.id.edit_text_quality));
+    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        dbHandler.close();
+//    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (dbHandler == null) {
+            dbHandler = new DBHandler(this);
+        }
     }
 
     @Override
@@ -186,10 +205,8 @@ public class NewStockActivity extends AppCompatActivity
         int i;
         switch (rowName) {
             case INPUT_PRODUCT:
-                i = 0;
-                for (String product : SampleData.getSampleProducts()) {
-                    searchItemList.add(new SearchItem(product, i));
-                    i++;
+                for (Product product : dbHandler.getAllProducts()) {
+                    searchItemList.add(new SearchItem(product.getProductName(), product.getProductId()));
                 }
                 break;
             case INPUT_SUPPLIER:
@@ -292,7 +309,13 @@ public class NewStockActivity extends AppCompatActivity
 
     @Override
     public void onAddNewProductDoneAction(Product newProduct) {
-        Toast.makeText(this, newProduct.getProductName() + " " + newProduct.getMeatType(), Toast.LENGTH_SHORT).show();
+        boolean completed = dbHandler.addProduct(newProduct);
+        Toast.makeText(this, completed ? "true" : "false", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onAddNewMeatTypeDoneAction(String meatType) {
+        dbHandler.addMeatType(meatType);
     }
 
     public boolean addStockToDb() {
@@ -349,8 +372,6 @@ public class NewStockActivity extends AppCompatActivity
         }
 
         if (isValid) {
-            DBHandler dbHandler = new DBHandler(this); //todo maybe needs to be a global variable if used more than once
-
             newStockItem.setProduct(dbHandler.getProduct(selectedProductId));
             newStockItem.setSupplierId(selectedSupplierId);
             newStockItem.setMass(Double.parseDouble(editMass.getText().toString()));

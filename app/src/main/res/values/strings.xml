@@ -10,7 +10,11 @@
     <string name="action_done">Done</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_favourites">Favourites</string>
-    <string name="action_view_locations">View locations</string>
+    <string name="action_edit_locations">Edit locations</string>
+    <string name="action_edit_meat_types">Edit Meat Types</string>
+    <string name="action_edit_products">Edit Products</string>
+    <string name="action_yes">Yes</string>
+    <string name="action_no">No</string>
 
     <!-- Common data -->
     <string name="amount_kg">%.2f kg</string>
@@ -36,6 +40,7 @@
     <!-- Input -->
     <string name="input_error_blank">Cannot be blank</string>
     <string name="input_error_invalid">Invalid input</string>
+    <string name="input_error_duplicate">Already added</string>
 
     <!-- Dashboard page -->
     <string name="dashboard_title">Dashboard</string>
@@ -47,9 +52,10 @@
 
     <string name="stock_product_new">Add new product</string>
     <string name="stock_product_input_name">Name</string>
-    <string name="stock_product_input_meat_type">Meat searchItemType</string>
-    <string name="stock_product_meat_type_new">Add new meat searchItemType</string>
-    <string name="stock_product_meat_type_input_name">Name</string>
+    <string name="stock_product_input_meat_type">Meat type</string>
+    <string name="stock_product_meat_type_new">"%s" is not a valid meat type</string>
+    <string name="stock_product_meat_type_new_confirm">Do you want to add it?</string>
+    <string name="stock_product_meat_type_input">Meat type</string>
     <string name="stock_product_new_done">Done</string>
     <string name="stock_product_new_cancel">Cancel</string>
     <string name="stock_input_product">Product</string>
@@ -60,6 +66,9 @@
     <string name="stock_input_location">Location</string>
     <string name="stock_input_destination">Destination</string>
     <string name="stock_input_quality">Quality</string>
+
+    <string name="meat_types_empty">No meat types to show</string>
+    <string name="meat_types_title">Meat Types</string>
 
     <!-- Locations page -->
     <string name="locations_title">Locations</string>

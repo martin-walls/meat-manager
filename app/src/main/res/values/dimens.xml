@@ -25,4 +25,8 @@
     <dimen name="choose_currencies_margin_left">24dp</dimen>
     <dimen name="choose_currencies_margin_right">16dp</dimen>
 
+    <dimen name="item_spacing">16dp</dimen>
+    <dimen name="item_padding_start">24dp</dimen>
+    <dimen name="item_padding_end">16dp</dimen>
+
 </resources>
