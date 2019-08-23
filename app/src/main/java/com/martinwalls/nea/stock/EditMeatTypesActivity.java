@@ -12,6 +12,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.components.RecyclerViewDivider;
+import com.martinwalls.nea.components.SwipeToDeleteCallback;
 import com.martinwalls.nea.db.DBHandler;
 
 import java.util.ArrayList;

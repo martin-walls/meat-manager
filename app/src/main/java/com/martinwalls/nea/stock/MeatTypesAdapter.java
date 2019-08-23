@@ -7,12 +7,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
+import com.martinwalls.nea.BaseAdapter;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
 
 import java.util.List;
 
-public class MeatTypesAdapter extends RecyclerView.Adapter<MeatTypesAdapter.ViewHolder> {
+public class MeatTypesAdapter extends BaseAdapter<MeatTypesAdapter.ViewHolder> {
 
     private List<String> meatTypesList;
 
@@ -52,6 +53,7 @@ public class MeatTypesAdapter extends RecyclerView.Adapter<MeatTypesAdapter.View
         return meatTypesList.size();
     }
 
+    @Override
     public void deleteItem(int position) {
         recentlyDeletedItem = meatTypesList.get(position);
         recentlyDeletedItemPosition = position;

@@ -1,4 +1,4 @@
-package com.martinwalls.nea.stock;
+package com.martinwalls.nea.components;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,18 +9,20 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import com.martinwalls.nea.BaseAdapter;
 import com.martinwalls.nea.R;
 
+//todo generalise this for other adapters?
 public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
 
-    private MeatTypesAdapter meatTypesAdapter;
+    private BaseAdapter adapter;
 
     private Drawable deleteIcon;
     private final ColorDrawable background;
 
-    public SwipeToDeleteCallback(MeatTypesAdapter adapter, Context context) {
+    public SwipeToDeleteCallback(BaseAdapter adapter, Context context) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
-        this.meatTypesAdapter = adapter;
+        this.adapter = adapter;
         deleteIcon = context.getDrawable(R.drawable.ic_delete);
         deleteIcon.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
         background = new ColorDrawable(Color.RED); //todo custom colour resource?
@@ -29,7 +31,7 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onSwiped(RecyclerView.ViewHolder holder, int direction) {
         int position = holder.getAdapterPosition();
-        meatTypesAdapter.deleteItem(position);
+        adapter.deleteItem(position);
     }
 
     @Override
