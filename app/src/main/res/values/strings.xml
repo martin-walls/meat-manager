@@ -15,6 +15,7 @@
     <string name="action_edit_products">Edit products</string>
     <string name="action_yes">Yes</string>
     <string name="action_no">No</string>
+    <string name="action_sort">Sort</string>
 
     <!-- Common data -->
     <string name="amount_kg">%.2f kg</string>

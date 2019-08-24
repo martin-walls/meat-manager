@@ -73,8 +73,9 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
                 Toast.makeText(this, "CANCEL", Toast.LENGTH_SHORT).show();
                 finish();
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

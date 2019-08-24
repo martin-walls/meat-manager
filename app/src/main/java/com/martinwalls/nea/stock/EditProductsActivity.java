@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
+import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.components.RecyclerViewDivider;
 import com.martinwalls.nea.components.SwipeToDeleteCallback;
@@ -80,7 +81,7 @@ public class EditProductsActivity extends AppCompatActivity
 
     private void loadProducts() {
         productList.clear();
-        productList.addAll(dbHandler.getAllProducts());
+        productList.addAll(Utils.mergeSort(dbHandler.getAllProducts()));
         productsAdapter.notifyDataSetChanged();
     }
 
@@ -89,4 +90,6 @@ public class EditProductsActivity extends AppCompatActivity
         dbHandler.addProduct(newProduct);
         loadProducts();
     }
+
+    //todo be able to edit products
 }

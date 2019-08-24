@@ -1,6 +1,6 @@
 package com.martinwalls.nea.db.models;
 
-public class Product {
+public class Product implements Comparable<Product> {
     private int productId;
     private String productName;
     private String meatType;
@@ -41,5 +41,10 @@ public class Product {
 
     public void setMeatType(String meatType) {
         this.meatType = meatType;
+    }
+
+    @Override
+    public int compareTo(Product otherProduct) {
+        return this.getProductName().compareTo(otherProduct.getProductName());
     }
 }
