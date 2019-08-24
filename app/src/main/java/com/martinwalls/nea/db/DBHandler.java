@@ -601,7 +601,6 @@ public class DBHandler extends SQLiteOpenHelper {
     //region db setters
     public boolean addProduct(Product product) {
         ContentValues values = new ContentValues();
-        values.put(ProductsTable.ID, product.getProductId());
         values.put(ProductsTable.NAME, product.getProductName());
         values.put(ProductsTable.MEAT_TYPE, product.getMeatType());
 
@@ -639,7 +638,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public boolean addLocation(Location location) {
         ContentValues values = new ContentValues();
-        values.put(LocationsTable.ID, location.getLocationId());
         values.put(LocationsTable.NAME, location.getLocationName());
         values.put(LocationsTable.TYPE, location.getLocationType().name());
         values.put(LocationsTable.ADDR_1, location.getAddrLine1());
@@ -658,7 +656,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public boolean addOrder(Order order) {
         ContentValues values = new ContentValues();
-        values.put(OrdersTable.ID, order.getOrderId());
         values.put(OrdersTable.DEST_ID, order.getDestId());
         values.put(OrdersTable.ORDER_DATE, order.getOrderDate());
         values.put(OrdersTable.COMPLETED, order.isCompleted() ? 1 : 0);
@@ -681,7 +678,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public boolean addContract(Contract contract) {
         ContentValues values = new ContentValues();
-        values.put(ContractsTable.ID, contract.getContractId());
         values.put(ContractsTable.DEST_ID, contract.getDestId());
         values.put(ContractsTable.REPEAT_INTERVAL, contract.getRepeatInterval());
         values.put(ContractsTable.REPEAT_ON, contract.getRepeatOn());
