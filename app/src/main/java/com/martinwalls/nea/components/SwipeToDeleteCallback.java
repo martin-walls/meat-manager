@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.BaseAdapter;
 import com.martinwalls.nea.R;
 
-//todo generalise this for other adapters?
 public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
 
     private BaseAdapter adapter;
@@ -25,7 +24,7 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
         this.adapter = adapter;
         deleteIcon = context.getDrawable(R.drawable.ic_delete);
         deleteIcon.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-        background = new ColorDrawable(Color.RED); //todo custom colour resource?
+        background = new ColorDrawable(context.getColor(R.color.delete));
     }
 
     @Override

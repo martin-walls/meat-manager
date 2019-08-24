@@ -18,4 +18,6 @@
     <color name="error_red">#f44336</color>
 
     <color name="fab_ripple_light">#2fff</color>
+
+    <color name="delete">#FF0000</color>
 </resources>

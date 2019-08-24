@@ -15,7 +15,7 @@
         android:paddingEnd="@dimen/item_padding_end"
         android:paddingTop="@dimen/item_spacing"
         android:paddingBottom="@dimen/item_spacing"
-        style="@style/ItemTextNormal"
+        style="@style/ItemTextNormal.Dark"
         />
 
 </LinearLayout>

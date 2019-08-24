@@ -52,6 +52,10 @@
         <item name="android:textColor">?textColorNormal</item>
     </style>
 
+    <style name="ItemTextNormal.Dark">
+        <item name="android:textColor">?textColorDark</item>
+    </style>
+
     <style name="EmptyView">
         <item name="android:textSize">20sp</item>
     </style>
