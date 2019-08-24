@@ -107,7 +107,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 + ProductsTable.NAME + " TEXT NOT NULL UNIQUE, "
                 + ProductsTable.MEAT_TYPE + " TEXT, "
                 + "FOREIGN KEY (" + ProductsTable.MEAT_TYPE + ") REFERENCES "
-                + MeatTypesTable.TABLE_NAME + "(" + MeatTypesTable.MEAT_TYPE + ") )";
+                + MeatTypesTable.TABLE_NAME + "(" + MeatTypesTable.MEAT_TYPE + ")"
+                + " ON DELETE NO ACTION )";
         db.execSQL(createProductsTableQuery);
 
         String createLocationsTableQuery = "CREATE TABLE IF NOT EXISTS "
@@ -699,11 +700,21 @@ public class DBHandler extends SQLiteOpenHelper {
     }
     //endregion db setters
 
+    //region db delete
     public boolean deleteMeatType(String meatType) {
         SQLiteDatabase db = this.getWritableDatabase();
         int deletedRows = db.delete(MeatTypesTable.TABLE_NAME, MeatTypesTable.MEAT_TYPE + "=?", new String[]{meatType});
-        return deletedRows > 0;
+        db.close();
+        return deletedRows == 1;
     }
+
+    public boolean deleteProduct(int productId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int deletedRows = db.delete(ProductsTable.TABLE_NAME, ProductsTable.ID + "=?", new String[]{productId + ""});
+        db.close();
+        return deletedRows == 1;
+    }
+    //endregion db delete
 
     //todo backup db
 }

@@ -18,6 +18,12 @@
         />
 
     <item
+        android:id="@+id/action_edit_products"
+        android:title="@string/action_edit_products"
+        app:showAsAction="never"
+        />
+
+    <item
         android:id="@+id/action_edit_locations"
         android:title="@string/action_edit_locations"
         app:showAsAction="never"
@@ -26,12 +32,6 @@
     <item
         android:id="@+id/action_edit_meat_types"
         android:title="@string/action_edit_meat_types"
-        app:showAsAction="never"
-        />
-
-    <item
-        android:id="@+id/action_edit_products"
-        android:title="@string/action_edit_products"
         app:showAsAction="never"
         />
 

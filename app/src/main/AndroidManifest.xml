@@ -13,7 +13,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         >
-        <activity android:name=".stock.EditMeatTypesActivity"></activity>
+        <activity android:name=".stock.EditProductsActivity"></activity>
+        <activity android:name=".stock.EditMeatTypesActivity" />
         <activity android:name=".stock.EditLocationsActivity" />
         <activity android:name=".exchange.ChooseCurrenciesActivity" />
         <activity
