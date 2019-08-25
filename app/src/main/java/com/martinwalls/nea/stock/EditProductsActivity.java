@@ -18,6 +18,7 @@ import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.db.models.Product;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class EditProductsActivity extends AppCompatActivity
@@ -80,8 +81,23 @@ public class EditProductsActivity extends AppCompatActivity
     }
 
     private void loadProducts() {
+        String sortBy = "meatType"; //todo shared preferences
         productList.clear();
-        productList.addAll(Utils.mergeSort(dbHandler.getAllProducts()));
+        productList.addAll(Utils.mergeSort(dbHandler.getAllProducts(), new Comparator<Product>() {
+            @Override
+            public int compare(Product product1, Product product2) {
+                if (sortBy == "name") {
+                    return product1.getProductName().compareTo(product2.getProductName());
+                } else if (sortBy == "meatType") {
+                    if (product1.getMeatType().equals(product2.getMeatType())) {
+                        return product1.getProductName().compareTo(product2.getProductName());
+                    } else {
+                        return product1.getMeatType().compareTo(product2.getMeatType());
+                    }
+                }
+                return 0;
+            }
+        }));
         productsAdapter.notifyDataSetChanged();
     }
 

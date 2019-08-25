@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.martinwalls.nea.BaseAdapter;
@@ -57,11 +58,16 @@ public class MeatTypesAdapter extends BaseAdapter<MeatTypesAdapter.ViewHolder> {
     public void deleteItem(int position) {
         recentlyDeletedItem = meatTypesList.get(position);
         recentlyDeletedItemPosition = position;
-        meatTypesList.remove(position);
-        notifyItemRemoved(position);
         DBHandler dbHandler = new DBHandler(parentActivity);
-        dbHandler.deleteMeatType(recentlyDeletedItem);
-        showUndoSnackbar();
+        boolean success = dbHandler.deleteMeatType(recentlyDeletedItem);
+        if (success) {
+            meatTypesList.remove(position);
+            notifyItemRemoved(position);
+            showUndoSnackbar();
+        } else {
+            Toast.makeText(parentActivity, parentActivity.getString(R.string.db_error_delete_meat_type, recentlyDeletedItem.toLowerCase()), Toast.LENGTH_SHORT).show();
+            notifyItemChanged(position);
+        }
     }
 
     private void showUndoSnackbar() {

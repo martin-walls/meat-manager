@@ -14,7 +14,7 @@ import java.util.List;
 @SuppressWarnings("FieldCanBeLocal")
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "stockDB.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     //region db constants
     private final class ProductsTable {
@@ -108,7 +108,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + ProductsTable.MEAT_TYPE + " TEXT, "
                 + "FOREIGN KEY (" + ProductsTable.MEAT_TYPE + ") REFERENCES "
                 + MeatTypesTable.TABLE_NAME + "(" + MeatTypesTable.MEAT_TYPE + ")"
-                + " ON DELETE NO ACTION )";
+                + " ON DELETE RESTRICT )";
         db.execSQL(createProductsTableQuery);
 
         String createLocationsTableQuery = "CREATE TABLE IF NOT EXISTS "
@@ -703,9 +703,14 @@ public class DBHandler extends SQLiteOpenHelper {
     //region db delete
     public boolean deleteMeatType(String meatType) {
         SQLiteDatabase db = this.getWritableDatabase();
-        int deletedRows = db.delete(MeatTypesTable.TABLE_NAME, MeatTypesTable.MEAT_TYPE + "=?", new String[]{meatType});
+        boolean success;
+        try {
+            success = db.delete(MeatTypesTable.TABLE_NAME, MeatTypesTable.MEAT_TYPE + "=?", new String[]{meatType}) == 1;
+        } catch (SQLiteConstraintException e) {
+            success = false;
+        }
         db.close();
-        return deletedRows == 1;
+        return success;
     }
 
     public boolean deleteProduct(int productId) {

@@ -32,7 +32,8 @@
     <string name="quality_waste">Waste</string>
 
     <!-- db errors -->
-    <string name="db_error_insert">Error adding %s.</string>
+    <string name="db_error_insert">Error adding %s</string>
+    <string name="db_error_delete_meat_type">Cannot delete %s while products still exist</string>
 
     <!-- Search -->
     <string name="search_add_new">Add new %s…</string>
