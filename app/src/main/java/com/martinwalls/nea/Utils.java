@@ -1,6 +1,7 @@
 package com.martinwalls.nea;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Utils {
@@ -17,7 +18,7 @@ public class Utils {
         return lbs * lbsToKgs;
     }
 
-    public static <T extends Comparable<T>> List<T> mergeSort(List<T> list) {
+    public static <T> List<T> mergeSort(List<T> list, Comparator<T> comparator) {
         if (list.size() <= 1) {
             return list;
         }
@@ -26,14 +27,14 @@ public class Utils {
         List<T> firstHalf = list.subList(0, midpoint);
         List<T> lastHalf = list.subList(midpoint, list.size());
 
-        firstHalf = mergeSort(firstHalf);
-        lastHalf = mergeSort(lastHalf);
+        firstHalf = mergeSort(firstHalf, comparator);
+        lastHalf = mergeSort(lastHalf, comparator);
 
         int i = 0, j = 0;
         List<T> merged = new ArrayList<>();
 
         while (i < firstHalf.size() && j < lastHalf.size()) {
-            if (firstHalf.get(i).compareTo(lastHalf.get(j)) < 0) {
+            if (comparator.compare(firstHalf.get(i), lastHalf.get(j)) < 0) {
                 merged.add(firstHalf.get(i));
                 i++;
             } else {
