@@ -28,8 +28,8 @@ public class ProductsAdapter extends BaseAdapter<ProductsAdapter.ViewHolder> {
 
         ViewHolder(View view) {
             super(view);
-            name = view.findViewById(R.id.name);
-            meatType = view.findViewById(R.id.meat_type);
+            name = view.findViewById(R.id.info_primary);
+            meatType = view.findViewById(R.id.info_secondary);
         }
     }
 
@@ -40,7 +40,7 @@ public class ProductsAdapter extends BaseAdapter<ProductsAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_secondary_info, parent, false);
         return new ViewHolder(itemView);
     }
 
@@ -60,7 +60,7 @@ public class ProductsAdapter extends BaseAdapter<ProductsAdapter.ViewHolder> {
     public void deleteItem(int position) {
         recentlyDeletedItem = productList.get(position);
         recentlyDeletedItemPosition = position;
-        productList.remove(position);
+        productList.remove(position); //todo check if item is safe to delete (ie. foreign key constraints, if used in stock item) before allowing delete
         notifyItemRemoved(position);
         showUndoSnackbar();
     }

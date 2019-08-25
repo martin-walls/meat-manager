@@ -28,7 +28,7 @@ public class MeatTypesAdapter extends BaseAdapter<MeatTypesAdapter.ViewHolder> {
 
         ViewHolder(View view) {
             super(view);
-            name = view.findViewById(R.id.name);
+            name = view.findViewById(R.id.info_primary);
         }
     }
 
@@ -39,7 +39,7 @@ public class MeatTypesAdapter extends BaseAdapter<MeatTypesAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_meat_type, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_single_info, parent, false);
         return new ViewHolder(itemView);
     }
 

@@ -5,12 +5,14 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.components.RecyclerViewDivider;
+import com.martinwalls.nea.components.SwipeToDeleteCallback;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.db.models.Location;
 
@@ -48,9 +50,12 @@ public class EditLocationsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(locationsAdapter, this));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            //todo start new locations activity
+            //todo start new locations activity / dialog
             Toast.makeText(this, "FAB", Toast.LENGTH_SHORT).show();
         });
     }
@@ -78,4 +83,6 @@ public class EditLocationsActivity extends AppCompatActivity {
         locationList.addAll(dbHandler.getAllLocations());
         locationsAdapter.notifyDataSetChanged();
     }
+
+    //todo be able to edit locations
 }

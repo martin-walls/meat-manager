@@ -719,6 +719,10 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return deletedRows == 1;
     }
+
+    public boolean deleteLocation(int locationId) {
+        //todo delete location
+    }
     //endregion db delete
 
     //todo backup db

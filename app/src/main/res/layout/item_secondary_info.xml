@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     >
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/info_primary"
         style="@style/ItemTextNormal.Dark"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -16,6 +16,19 @@
         android:paddingTop="@dimen/item_spacing"
         android:paddingEnd="@dimen/item_padding_end"
         android:paddingBottom="@dimen/item_spacing"
+        tools:text="Beef hearts"
+        />
+
+    <TextView
+        android:id="@+id/info_secondary"
+        style="@style/ItemTextNormal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/item_padding_start"
+        android:paddingTop="@dimen/item_spacing"
+        android:paddingEnd="@dimen/item_padding_end"
+        android:paddingBottom="@dimen/item_spacing"
+        tools:text="Beef"
         />
 
 </LinearLayout>
