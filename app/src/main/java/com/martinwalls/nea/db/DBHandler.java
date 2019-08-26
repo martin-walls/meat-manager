@@ -621,7 +621,9 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(StockTable.PRODUCT_ID, stockItem.getProduct().getProductId());
         values.put(StockTable.LOCATION_ID, stockItem.getLocationId());
         values.put(StockTable.SUPPLIER_ID, stockItem.getSupplierId());
-        values.put(StockTable.DEST_ID, stockItem.getDestId());
+        if (stockItem.getDestId() != -1) {
+            values.put(StockTable.DEST_ID, stockItem.getDestId());
+        }
         values.put(StockTable.MASS, stockItem.getMass());
         values.put(StockTable.NUM_BOXES, stockItem.getNumBoxes());
         values.put(StockTable.QUALITY, stockItem.getQuality().name());

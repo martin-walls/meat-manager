@@ -23,13 +23,15 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SampleData;
 import com.martinwalls.nea.SearchItem;
-import com.martinwalls.nea.db.DBHandler;
-import com.martinwalls.nea.db.models.Product;
-import com.martinwalls.nea.db.models.StockItem;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
+import com.martinwalls.nea.db.DBHandler;
+import com.martinwalls.nea.db.models.Location;
+import com.martinwalls.nea.db.models.Product;
+import com.martinwalls.nea.db.models.StockItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class NewStockActivity extends AppCompatActivity
@@ -197,7 +199,6 @@ public class NewStockActivity extends AppCompatActivity
         }
 
         searchItemList.clear();
-        int i;
         switch (rowName) {
             case INPUT_PRODUCT:
                 for (Product product : dbHandler.getAllProducts()) {
@@ -207,14 +208,12 @@ public class NewStockActivity extends AppCompatActivity
             case INPUT_SUPPLIER:
             case INPUT_DESTINATION:
             case INPUT_LOCATION:
-                i = 0;
-                for (String location : SampleData.getSampleLocations()) {
-                    searchItemList.add(new SearchItem(location, i));
-                    i++;
+                for (Location location : dbHandler.getAllLocations()) {
+                    searchItemList.add(new SearchItem(location.getLocationName(), location.getLocationId()));
                 }
                 break;
             case INPUT_QUALITY:
-                i = 0;
+                int i = 0;
                 for (String quality : SampleData.getSampleQualities()) {
                     searchItemList.add(new SearchItem(quality, i));
                     i++;
@@ -366,6 +365,12 @@ public class NewStockActivity extends AppCompatActivity
             inputLayoutQuality.setError(null);
         }
 
+        if (dbHandler.getAllStock().stream().map(stockItem -> new int[] {stockItem.getProduct().getProductId(), stockItem.getLocationId()})
+                .anyMatch(x -> Arrays.equals(x, new int[] {selectedProductId, selectedLocationId}))) {
+            inputLayoutLocation.setError(getString(R.string.input_error_stock_already_in_location));
+            isValid = false;
+        }
+
         if (isValid) {
             newStockItem.setProduct(dbHandler.getProduct(selectedProductId));
             newStockItem.setSupplierId(selectedSupplierId);
@@ -376,6 +381,8 @@ public class NewStockActivity extends AppCompatActivity
             newStockItem.setLocationId(selectedLocationId);
             if (editDest.getText().length() != 0) {
                 newStockItem.setDestId(selectedDestId);
+            } else {
+                newStockItem.setDestId(-1);
             }
             newStockItem.setQuality(StockItem.Quality.parseQuality(editQuality.getText().toString()));
 
@@ -383,6 +390,5 @@ public class NewStockActivity extends AppCompatActivity
         }
 
         return false;
-        //todo error check in db for same stock item
     }
 }

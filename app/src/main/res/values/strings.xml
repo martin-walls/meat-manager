@@ -47,6 +47,7 @@
     <string name="input_error_duplicate">Already added</string>
     <string name="input_error_invalid_email">Invalid email</string>
     <string name="input_error_invalid_location_type">Invalid location type. Please select from the dropdown.</string>
+    <string name="input_error_stock_already_in_location">This product has already been added in this location.</string>
 
     <!-- Snackbars -->
     <string name="snackbar_item_deleted">Item deleted</string>
