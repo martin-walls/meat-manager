@@ -4,7 +4,16 @@ public class Location {
     public enum LocationType {
         Storage,
         Supplier,
-        Destination
+        Destination;
+
+        public static LocationType parseLocationType(String name) {
+            for (LocationType type : values()) {
+                if (type.name().equalsIgnoreCase(name)) {
+                    return type;
+                }
+            }
+            return null;
+        }
     }
 
     private int locationId;
