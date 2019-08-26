@@ -89,9 +89,11 @@
     <string name="locations_destination">Destination</string>
     <string name="locations_new">Add new locationId</string>
     <string name="locations_input_name">Name:</string>
+    <string name="locations_input_type">Type:</string>
     <string name="locations_input_email">Email:</string>
     <string name="locations_input_phone">Phone:</string>
-    <string name="locations_input_address_line_number">Address line %d:</string>
+    <string name="locations_input_addr_line_1">Address line 1:</string>
+    <string name="locations_input_addr_line_2">Address line 2:</string>
     <string name="locations_input_city">City:</string>
     <string name="locations_input_postcode">Postcode:</string>
     <string name="locations_input_country">Country:</string>

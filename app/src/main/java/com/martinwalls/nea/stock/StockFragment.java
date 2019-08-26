@@ -92,7 +92,7 @@ public class StockFragment extends Fragment {
                 startActivity(productsIntent);
                 return true;
             case R.id.action_edit_locations:
-                Intent locationsIntent = new Intent(getContext(), EditLocationsActivity.class);
+                Intent locationsIntent = new Intent(getContext(), LocationsActivity.class);
                 startActivity(locationsIntent);
                 return true;
             case R.id.action_edit_meat_types:
