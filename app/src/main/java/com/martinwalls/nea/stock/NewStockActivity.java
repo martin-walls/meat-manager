@@ -82,12 +82,7 @@ public class NewStockActivity extends AppCompatActivity
         inputViews.put("quality", R.id.input_layout_quality);
 
         addNewView = findViewById(R.id.add_new);
-        addNewView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addNewItem((AddNewTextView) v);
-            }
-        });
+        addNewView.setOnClickListener(v -> addNewItem((AddNewTextView) v));
 
         rootView = findViewById(R.id.root_layout);
 
@@ -318,7 +313,7 @@ public class NewStockActivity extends AppCompatActivity
         dbHandler.addMeatType(meatType);
     }
 
-    public boolean addStockToDb() {
+    private boolean addStockToDb() {
         boolean isValid = true;
         StockItem newStockItem = new StockItem();
         TextInputEditText editProduct = findViewById(R.id.edit_text_product);
@@ -383,11 +378,6 @@ public class NewStockActivity extends AppCompatActivity
                 newStockItem.setDestId(selectedDestId);
             }
             newStockItem.setQuality(StockItem.Quality.parseQuality(editQuality.getText().toString()));
-//            for (StockItem.Quality quality : StockItem.Quality.values()) {
-//                if (quality.name().equalsIgnoreCase(editQuality.getText().toString())) {
-//                    newStockItem.setQuality(quality);
-//                }
-//            }
 
             return dbHandler.addStockItem(newStockItem);
         }

@@ -45,6 +45,7 @@
     <string name="input_error_blank">Cannot be blank</string>
     <string name="input_error_invalid">Invalid input</string>
     <string name="input_error_duplicate">Already added</string>
+    <string name="input_error_email_invalid">Invalid email</string>
 
     <!-- Snackbars -->
     <string name="snackbar_item_deleted">Item deleted</string>
@@ -97,7 +98,7 @@
     <string name="locations_input_city">City:</string>
     <string name="locations_input_postcode">Postcode:</string>
     <string name="locations_input_country">Country:</string>
-
+    <string name="locations_add_new_title">Add new location</string>
     <string name="locations_empty">No locations to show</string>
 
     <!-- Contracts page -->

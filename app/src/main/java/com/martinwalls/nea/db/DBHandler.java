@@ -381,12 +381,7 @@ public class DBHandler extends SQLiteOpenHelper {
             locationResult.setLocationId(locationId);
             locationResult.setLocationName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
             String locationTypeString = cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.TYPE));
-            //todo make parseLocationType method in LocationType enum
-            for (Location.LocationType type : Location.LocationType.values()) {
-                if (type.name().equalsIgnoreCase(locationTypeString)) {
-                    locationResult.setLocationType(type);
-                }
-            }
+            locationResult.setLocationType(Location.LocationType.parseLocationType(locationTypeString));
             locationResult.setAddrLine1(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.ADDR_1)));
             locationResult.setAddrLine2(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.ADDR_2)));
             locationResult.setCity(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.CITY)));

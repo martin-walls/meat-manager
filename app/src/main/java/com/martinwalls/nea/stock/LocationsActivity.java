@@ -1,9 +1,9 @@
 package com.martinwalls.nea.stock;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -57,8 +57,8 @@ public class LocationsActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            //todo start new locations activity / dialog
-            Toast.makeText(this, "FAB", Toast.LENGTH_SHORT).show();
+            Intent editLocationIntent = new Intent(this, EditLocationsActivity.class);
+            startActivity(editLocationIntent);
         });
     }
 
