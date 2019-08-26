@@ -91,7 +91,5 @@ public class LocationsActivity extends AppCompatActivity {
         locationsAdapter.notifyDataSetChanged();
     }
 
-    //todo add locations
-
     //todo be able to edit locations
 }

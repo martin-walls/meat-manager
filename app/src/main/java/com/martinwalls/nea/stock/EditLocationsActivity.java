@@ -17,9 +17,9 @@ import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.db.models.Location;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class EditLocationsActivity extends AppCompatActivity {
 
@@ -35,7 +35,7 @@ public class EditLocationsActivity extends AppCompatActivity {
         dbHandler = new DBHandler(this);
 
         // get enum values as a list of strings
-        List<String> locationTypesList = Stream.of(Location.LocationType.values())
+        List<String> locationTypesList = Arrays.stream(Location.LocationType.values())
                 .map(Location.LocationType::name)
                 .collect(Collectors.toList());
         ArrayAdapter<String> autocompleteAdapter =
@@ -119,10 +119,12 @@ public class EditLocationsActivity extends AppCompatActivity {
 
         TextInputEditText editTextPhone= findViewById(R.id.edit_text_phone);
 
-        //todo check for adding duplicate name
         if (TextUtils.isEmpty(editTextName.getText())) {
             inputLayoutName.setError(getString(R.string.input_error_blank));
             isValid = false;
+        } else if (dbHandler.getAllLocations().stream().map(Location::getLocationName).collect(Collectors.toList())
+                .contains(editTextName.getText().toString())) {
+            inputLayoutName.setError(getString(R.string.input_error_duplicate));
         } else {
             inputLayoutName.setError(null);
         }
@@ -151,7 +153,6 @@ public class EditLocationsActivity extends AppCompatActivity {
             inputLayoutCountry.setError(null);
         }
         // check for valid email address
-        // possibly need null check first?
         if (!TextUtils.isEmpty(editTextEmail.getText()) && !Patterns.EMAIL_ADDRESS.matcher(editTextEmail.getText()).matches()) {
             inputLayoutEmail.setError(getString(R.string.input_error_email_invalid));
             isValid = false;
