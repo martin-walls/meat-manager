@@ -722,8 +722,34 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public boolean deleteLocation(int locationId) {
         //todo delete location
+        SQLiteDatabase db = this.getWritableDatabase();
+        int deletedRows = db.delete(LocationsTable.TABLE_NAME, LocationsTable.ID + "=?", new String[]{locationId + ""});
+        db.close();
+        return deletedRows == 1;
     }
     //endregion db delete
+
+    public boolean isProductSafeToDelete(int productId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String stockQuery = "SELECT * FROM " + StockTable.TABLE_NAME
+                + " WHERE " + StockTable.PRODUCT_ID + "=?";
+        String contractsQuery = "SELECT * FROM " + ContractProductsTable.TABLE_NAME
+                + " WHERE " + ContractProductsTable.PRODUCT_ID + "=?";
+        String ordersQuery = "SELECT * FROM " + OrderProductsTable.TABLE_NAME
+                + " WHERE " + OrderProductsTable.PRODUCT_ID + "=?";
+        String[] selectionArgs = new String[] {productId + ""};
+        boolean safeToDelete = true;
+        for (String query : new String[]{stockQuery, contractsQuery, ordersQuery}) {
+            if (safeToDelete) {
+                Cursor cursor = db.rawQuery(query, selectionArgs);
+                int numRows = cursor.getCount();
+                safeToDelete = numRows == 0;
+                cursor.close();
+            }
+        }
+        db.close();
+        return safeToDelete;
+    }
 
     //todo backup db
 }

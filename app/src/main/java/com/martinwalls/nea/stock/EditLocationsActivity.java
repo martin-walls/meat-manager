@@ -41,7 +41,7 @@ public class EditLocationsActivity extends AppCompatActivity {
         TextView emptyView = findViewById(R.id.empty);
         recyclerView.setEmptyView(emptyView);
 
-        locationsAdapter = new LocationsAdapter(locationList);
+        locationsAdapter = new LocationsAdapter(locationList, this);
         recyclerView.setAdapter(locationsAdapter);
         loadLocations();
 
@@ -83,6 +83,8 @@ public class EditLocationsActivity extends AppCompatActivity {
         locationList.addAll(dbHandler.getAllLocations());
         locationsAdapter.notifyDataSetChanged();
     }
+
+    //todo add locations
 
     //todo be able to edit locations
 }

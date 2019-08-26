@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.martinwalls.nea.BaseAdapter;
@@ -58,11 +59,17 @@ public class ProductsAdapter extends BaseAdapter<ProductsAdapter.ViewHolder> {
 
     @Override
     public void deleteItem(int position) {
-        recentlyDeletedItem = productList.get(position);
-        recentlyDeletedItemPosition = position;
-        productList.remove(position); //todo check if item is safe to delete (ie. foreign key constraints, if used in stock item) before allowing delete
-        notifyItemRemoved(position);
-        showUndoSnackbar();
+        DBHandler dbHandler = new DBHandler(parentActivity);
+        boolean safeToDelete = dbHandler.isProductSafeToDelete(productList.get(position).getProductId());
+        if (safeToDelete) {
+            recentlyDeletedItem = productList.get(position);
+            recentlyDeletedItemPosition = position;
+            productList.remove(position);
+            notifyItemRemoved(position);
+            showUndoSnackbar();
+        } else {
+            Toast.makeText(parentActivity, parentActivity.getString(R.string.db_error_delete_product, productList.get(position).getProductName()), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showUndoSnackbar() {
