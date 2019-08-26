@@ -125,11 +125,16 @@ public class EditLocationsActivity extends AppCompatActivity {
         } else if (dbHandler.getAllLocations().stream().map(Location::getLocationName).collect(Collectors.toList())
                 .contains(editTextName.getText().toString())) {
             inputLayoutName.setError(getString(R.string.input_error_duplicate));
+            isValid = false;
         } else {
             inputLayoutName.setError(null);
         }
         if (editTextType.getText().length() == 0) {
             inputLayoutType.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else if (!Arrays.stream(Location.LocationType.values()).map(Location.LocationType::name)
+                .collect(Collectors.toList()).contains(editTextType.getText().toString())) {
+            inputLayoutType.setError(getString(R.string.input_error_invalid_location_type));
             isValid = false;
         } else {
             inputLayoutType.setError(null);
@@ -154,7 +159,7 @@ public class EditLocationsActivity extends AppCompatActivity {
         }
         // check for valid email address
         if (!TextUtils.isEmpty(editTextEmail.getText()) && !Patterns.EMAIL_ADDRESS.matcher(editTextEmail.getText()).matches()) {
-            inputLayoutEmail.setError(getString(R.string.input_error_email_invalid));
+            inputLayoutEmail.setError(getString(R.string.input_error_invalid_email));
             isValid = false;
         } else {
             inputLayoutEmail.setError(null);
