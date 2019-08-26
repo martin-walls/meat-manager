@@ -740,12 +740,39 @@ public class DBHandler extends SQLiteOpenHelper {
         String[] selectionArgs = new String[] {productId + ""};
         boolean safeToDelete = true;
         for (String query : new String[]{stockQuery, contractsQuery, ordersQuery}) {
-            if (safeToDelete) {
-                Cursor cursor = db.rawQuery(query, selectionArgs);
-                int numRows = cursor.getCount();
-                safeToDelete = numRows == 0;
-                cursor.close();
+            if (!safeToDelete) {
+                break;
             }
+            Cursor cursor = db.rawQuery(query, selectionArgs);
+            int numRows = cursor.getCount();
+            safeToDelete = numRows == 0;
+            cursor.close();
+        }
+        db.close();
+        return safeToDelete;
+    }
+
+    public boolean isLocationSafeToDelete(int locationId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String stockQuery = "SELECT * FROM " + StockTable.TABLE_NAME
+                + " WHERE " + StockTable.LOCATION_ID + "=?"
+                + " OR " + StockTable.SUPPLIER_ID + "=?"
+                + " OR " + StockTable.DEST_ID + "=?";
+        String ordersQuery = "SELECT * FROM " + OrdersTable.TABLE_NAME
+                + " WHERE " + OrdersTable.DEST_ID + "=?";
+        String contractsQuery = "SELECT * FROM " + ContractsTable.TABLE_NAME
+                + " WHERE " + ContractsTable.DEST_ID + "=?";
+        String[] stockSelectionArgs = new String[] {locationId + "", locationId + "", locationId + ""};
+        String[] selectionArgs = new String[] {locationId + ""};
+        boolean safeToDelete = true;
+        for (String query : new String[]{stockQuery, ordersQuery, contractsQuery}) {
+            if (!safeToDelete) {
+                break;
+            }
+            Cursor cursor = db.rawQuery(query, query.equals(stockQuery) ? stockSelectionArgs : selectionArgs);
+            int numRows = cursor.getCount();
+            safeToDelete = numRows == 0;
+            cursor.close();
         }
         db.close();
         return safeToDelete;

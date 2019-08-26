@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.martinwalls.nea.BaseAdapter;
@@ -58,11 +59,17 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
 
     @Override
     public void deleteItem(int position) {
-        recentlyDeletedItem = locationList.get(position);
-        recentlyDeletedItemPosition = position;
-        locationList.remove(position);
-        notifyItemRemoved(position);
-        showUndoSnackbar();
+        DBHandler dbHandler = new DBHandler(parentActivity);
+        boolean safeToDelete = dbHandler.isLocationSafeToDelete(locationList.get(position).getLocationId());
+        if (safeToDelete) {
+            recentlyDeletedItem = locationList.get(position);
+            recentlyDeletedItemPosition = position;
+            locationList.remove(position);
+            notifyItemRemoved(position);
+            showUndoSnackbar();
+        } else {
+            Toast.makeText(parentActivity, parentActivity.getString(R.string.db_error_delete_location, locationList.get(position).getLocationName()), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showUndoSnackbar() {
