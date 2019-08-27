@@ -1,5 +1,7 @@
 package com.martinwalls.nea.db.models;
 
+import java.util.Comparator;
+
 public class Product {
     private int productId;
     private String productName;
@@ -41,5 +43,19 @@ public class Product {
 
     public void setMeatType(String meatType) {
         this.meatType = meatType;
+    }
+
+    public static Comparator<Product> comparatorAlpha() {
+        return (product1, product2) -> product1.getProductName().compareTo(product2.getProductName());
+    }
+
+    public static Comparator<Product> comparatorMeatType() {
+        return (product1, product2) -> {
+            if (product1.getMeatType().equals(product2.getMeatType())) {
+                return product1.getProductName().compareTo(product2.getProductName());
+            } else {
+                return product1.getMeatType().compareTo(product2.getMeatType());
+            }
+        };
     }
 }

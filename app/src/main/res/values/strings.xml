@@ -100,7 +100,7 @@
     <string name="locations_input_city">City:</string>
     <string name="locations_input_postcode">Postcode:</string>
     <string name="locations_input_country">Country:</string>
-    <string name="locations_add_new_title">Add new location</string>
+    <string name="locations_add_new_title">Add new %s</string>
     <string name="locations_empty">No locations to show</string>
 
     <!-- Orders page -->

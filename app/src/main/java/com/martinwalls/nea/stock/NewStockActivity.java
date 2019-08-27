@@ -1,6 +1,7 @@
 package com.martinwalls.nea.stock;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,6 +24,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SearchItem;
+import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.DBHandler;
@@ -36,8 +38,7 @@ import java.util.HashMap;
 
 public class NewStockActivity extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener,
-        AddNewProductDialog.AddNewProductListener,
-        AddNewMeatTypeDialog.AddNewMeatTypeListener {
+        AddNewProductDialog.AddNewProductListener {
 
     private DBHandler dbHandler;
 
@@ -64,6 +65,8 @@ public class NewStockActivity extends AppCompatActivity
     private int selectedSupplierId;
     private int selectedLocationId;
     private int selectedDestId;
+
+    private final int REQUEST_REFRESH_ON_DONE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,22 +204,22 @@ public class NewStockActivity extends AppCompatActivity
         searchItemList.clear();
         switch (rowName) {
             case INPUT_PRODUCT:
-                for (Product product : dbHandler.getAllProducts()) {
+                for (Product product : Utils.mergeSort(dbHandler.getAllProducts(), Product.comparatorAlpha())) {
                     searchItemList.add(new SearchItem(product.getProductName(), product.getProductId()));
                 }
                 break;
             case INPUT_SUPPLIER:
-                for (Location location : dbHandler.getAllLocations(Location.LocationType.Supplier)) {
+                for (Location location : Utils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Supplier), Location.comparatorAlpha())) {
                     searchItemList.add(new SearchItem(location.getLocationName(), location.getLocationId()));
                 }
                 break;
             case INPUT_DESTINATION:
-                for (Location location : dbHandler.getAllLocations(Location.LocationType.Destination)) {
+                for (Location location : Utils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Destination), Location.comparatorAlpha())) {
                     searchItemList.add(new SearchItem(location.getLocationName(), location.getLocationId()));
                 }
                 break;
             case INPUT_LOCATION:
-                for (Location location : dbHandler.getAllLocations(Location.LocationType.Storage)) {
+                for (Location location : Utils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Storage), Location.comparatorAlpha())) {
                     searchItemList.add(new SearchItem(location.getLocationName(), location.getLocationId()));
                 }
                 break;
@@ -273,10 +276,34 @@ public class NewStockActivity extends AppCompatActivity
             case INPUT_PRODUCT:
                 dialog.show(getSupportFragmentManager(), "add_new_product");
                 break;
+            case INPUT_SUPPLIER:
+                Intent newSupplierIntent = new Intent(this, EditLocationsActivity.class);
+                newSupplierIntent.putExtra(EditLocationsActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Supplier.name());
+                startActivityForResult(newSupplierIntent, REQUEST_REFRESH_ON_DONE);
+                break;
+            case INPUT_LOCATION:
+                Intent newLocationIntent = new Intent(this, EditLocationsActivity.class);
+                newLocationIntent.putExtra(EditLocationsActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Storage.name());
+                startActivityForResult(newLocationIntent, REQUEST_REFRESH_ON_DONE);
+                break;
+            case INPUT_DESTINATION:
+                Intent newDestIntent = new Intent(this, EditLocationsActivity.class);
+                newDestIntent.putExtra(EditLocationsActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Destination.name());
+                startActivityForResult(newDestIntent, REQUEST_REFRESH_ON_DONE);
+                break;
             default:
                 //todo implement the rest of the "add new" dialogs
                 Toast.makeText(this, searchItemType, Toast.LENGTH_SHORT).show();
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_REFRESH_ON_DONE) {
+            cancelSearch();
+            openSearch(currentSearchType);
         }
     }
 
@@ -311,13 +338,12 @@ public class NewStockActivity extends AppCompatActivity
 
     @Override
     public void onAddNewProductDoneAction(Product newProduct) {
-        boolean completed = dbHandler.addProduct(newProduct);
-        Toast.makeText(this, completed ? "true" : "false", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onAddNewMeatTypeDoneAction(String meatType) {
-        dbHandler.addMeatType(meatType);
+        boolean successful = dbHandler.addProduct(newProduct);
+        if (successful) {
+            // refresh list
+            cancelSearch();
+            openSearch(currentSearchType);
+        }
     }
 
     private boolean addStockToDb() {

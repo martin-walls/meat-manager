@@ -18,7 +18,6 @@ import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.db.models.Location;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class LocationsActivity extends AppCompatActivity {
@@ -82,12 +81,7 @@ public class LocationsActivity extends AppCompatActivity {
 
     private void loadLocations() {
         locationList.clear();
-        locationList.addAll(Utils.mergeSort(dbHandler.getAllLocations(), new Comparator<Location>() {
-            @Override
-            public int compare(Location location1, Location location2) {
-                return location1.getLocationName().compareTo(location2.getLocationName());
-            }
-        }));
+        locationList.addAll(Utils.mergeSort(dbHandler.getAllLocations(), Location.comparatorAlpha()));
         locationsAdapter.notifyDataSetChanged();
     }
 

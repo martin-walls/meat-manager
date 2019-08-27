@@ -23,14 +23,24 @@ import java.util.stream.Collectors;
 
 public class EditLocationsActivity extends AppCompatActivity {
 
-    DBHandler dbHandler;
+    private DBHandler dbHandler;
+
+    public static final String EXTRA_LOCATION_TYPE = "location_type";
+    private final String LOCATION_TYPE_DEFAULT = "location";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_locations);
 
-        getSupportActionBar().setTitle(R.string.locations_add_new_title);
+        String locationType = LOCATION_TYPE_DEFAULT;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            locationType = extras.getString(EXTRA_LOCATION_TYPE, LOCATION_TYPE_DEFAULT);
+        }
+
+        getSupportActionBar().setTitle(getString(R.string.locations_add_new_title,
+                locationType.equals(Location.LocationType.Storage.name()) ? LOCATION_TYPE_DEFAULT : locationType.toLowerCase()));
 
         dbHandler = new DBHandler(this);
 
@@ -50,6 +60,10 @@ public class EditLocationsActivity extends AppCompatActivity {
                 hideKeyboard();
             }
         });
+
+        if (locationType != LOCATION_TYPE_DEFAULT) {
+            editTextLocationType.setText(locationType);
+        }
     }
 
     @Override

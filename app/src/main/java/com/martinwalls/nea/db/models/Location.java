@@ -1,5 +1,7 @@
 package com.martinwalls.nea.db.models;
 
+import java.util.Comparator;
+
 public class Location {
     public enum LocationType {
         Storage,
@@ -108,5 +110,9 @@ public class Location {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public static Comparator<Location> comparatorAlpha() {
+        return (location1, location2) -> location1.getLocationName().compareTo(location2.getLocationName());
     }
 }

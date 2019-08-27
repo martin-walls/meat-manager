@@ -10,6 +10,11 @@ public class StockItem {
         Pet_Food,
         Waste;
 
+        // replace underscore with space for display on screen
+        public String getDisplayName() {
+            return name().replace("_", " ");
+        }
+
         public static Quality parseQuality(String name) {
             //todo improve this logic, this is a quick fix due to the space in "pet food"
 //            switch (name.toLowerCase()) {
@@ -22,7 +27,7 @@ public class StockItem {
 //            }
 
             for (Quality q : values()) {
-                if (q.name().replace("_", " ").equalsIgnoreCase(name)) {
+                if (q.getDisplayName().equalsIgnoreCase(name)) {
                     return q;
                 }
             }
@@ -30,7 +35,7 @@ public class StockItem {
         }
 
         public static List<String> getQualityStrings() {
-            return Arrays.stream(values()).map(quality -> quality.name().replace("_", " ")).collect(Collectors.toList());
+            return Arrays.stream(values()).map(Quality::getDisplayName).collect(Collectors.toList());
         }
     }
 
