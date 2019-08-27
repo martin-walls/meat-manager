@@ -1,4 +1,4 @@
-package com.martinwalls.nea.contracts;
+package com.martinwalls.nea.orders;
 
 import android.os.Bundle;
 import android.view.*;
@@ -7,19 +7,18 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.martinwalls.nea.R;
 
-public class ContractsFragment extends Fragment {
+public class OrdersFragment extends Fragment {
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        getActivity().setTitle(R.string.contracts_title);
-        return inflater.inflate(R.layout.fragment_contracts, container, false);
+        getActivity().setTitle(R.string.orders_title);
+        return inflater.inflate(R.layout.fragment_orders, container, false);
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_contracts, menu);
+        inflater.inflate(R.menu.fragment_orders, menu);
     }
 
     @Override

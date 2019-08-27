@@ -33,8 +33,6 @@ public class StockFragment extends Fragment {
 
         View fragmentView = inflater.inflate(R.layout.fragment_stock, container, false);
 
-//        stockList.addAll(SampleData.getSampleStock());
-
         CustomRecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
         TextView emptyView = fragmentView.findViewById(R.id.empty);
         recyclerView.setEmptyView(emptyView);

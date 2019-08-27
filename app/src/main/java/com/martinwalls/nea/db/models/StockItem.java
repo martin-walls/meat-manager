@@ -1,27 +1,36 @@
 package com.martinwalls.nea.db.models;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class StockItem {
     public enum Quality {
-        GOOD,
-        PET_FOOD,
-        WASTE;
+        Good,
+        Pet_Food,
+        Waste;
 
         public static Quality parseQuality(String name) {
             //todo improve this logic, this is a quick fix due to the space in "pet food"
-            switch (name.toLowerCase()) {
-                case "good":
-                    return Quality.GOOD;
-                case "pet food":
-                    return Quality.PET_FOOD;
-                case "waste":
-                    return Quality.WASTE;
-            }
-//            for (Quality q : values()) {
-//                if (q.name().equalsIgnoreCase(name)) {
-//                    return q;
-//                }
+//            switch (name.toLowerCase()) {
+//                case "good":
+//                    return Quality.Good;
+//                case "pet food":
+//                    return Quality.Pet_Food;
+//                case "waste":
+//                    return Quality.Waste;
 //            }
+
+            for (Quality q : values()) {
+                if (q.name().replace("_", " ").equalsIgnoreCase(name)) {
+                    return q;
+                }
+            }
             return null;
+        }
+
+        public static List<String> getQualityStrings() {
+            return Arrays.stream(values()).map(quality -> quality.name().replace("_", " ")).collect(Collectors.toList());
         }
     }
 

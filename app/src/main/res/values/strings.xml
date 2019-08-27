@@ -103,6 +103,9 @@
     <string name="locations_add_new_title">Add new location</string>
     <string name="locations_empty">No locations to show</string>
 
+    <!-- Orders page -->
+    <string name="orders_title">Orders</string>
+
     <!-- Contracts page -->
     <string name="contracts_title">Contracts</string>
     <string name="contracts_input_customer">Customer</string>

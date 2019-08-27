@@ -69,6 +69,7 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
             showUndoSnackbar();
         } else {
             Toast.makeText(parentActivity, parentActivity.getString(R.string.db_error_delete_location, locationList.get(position).getLocationName()), Toast.LENGTH_SHORT).show();
+            notifyItemChanged(position);
         }
     }
 

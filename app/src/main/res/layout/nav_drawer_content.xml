@@ -48,6 +48,15 @@
             />
 
         <TextView
+            android:id="@+id/nav_orders"
+            style="@style/NavDrawerItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_orders"
+            android:text="@string/orders_title"
+            />
+
+        <TextView
             android:id="@+id/nav_contracts"
             style="@style/NavDrawerItem"
             android:layout_width="match_parent"

@@ -424,6 +424,34 @@ public class DBHandler extends SQLiteOpenHelper {
         return locationResultList;
     }
 
+    public List<Location> getAllLocations(Location.LocationType locationType) {
+        if (locationType == null) {
+            return getAllLocations();
+        }
+        List<Location> locationResultList = new ArrayList<>();
+        String query = "SELECT * FROM " + LocationsTable.TABLE_NAME
+                + " WHERE " + LocationsTable.TYPE + "=?";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, new String[]{locationType.name()});
+        while (cursor.moveToNext()) {
+            Location location = new Location();
+            location.setLocationId(cursor.getInt(cursor.getColumnIndexOrThrow(LocationsTable.ID)));
+            location.setLocationName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
+            location.setLocationType(locationType);
+            location.setAddrLine1(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.ADDR_1)));
+            location.setAddrLine2(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.ADDR_2)));
+            location.setCity(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.CITY)));
+            location.setPostcode(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.POSTCODE)));
+            location.setCountry(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.COUNTRY)));
+            location.setPhone(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.PHONE)));
+            location.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.EMAIL)));
+            locationResultList.add(location);
+        }
+        cursor.close();
+        db.close();
+        return locationResultList;
+    }
+
     public Order getOrder(int orderId) {
         Order orderResult = new Order();
         String query = "SELECT " + OrdersTable.TABLE_NAME + ".*," + ProductsTable.TABLE_NAME + ".*,"

@@ -69,6 +69,7 @@ public class ProductsAdapter extends BaseAdapter<ProductsAdapter.ViewHolder> {
             showUndoSnackbar();
         } else {
             Toast.makeText(parentActivity, parentActivity.getString(R.string.db_error_delete_product, productList.get(position).getProductName()), Toast.LENGTH_SHORT).show();
+            notifyItemChanged(position);
         }
     }
 

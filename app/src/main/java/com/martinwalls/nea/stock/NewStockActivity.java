@@ -3,6 +3,7 @@ package com.martinwalls.nea.stock;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +22,6 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.SampleData;
 import com.martinwalls.nea.SearchItem;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
@@ -99,24 +99,24 @@ public class NewStockActivity extends AppCompatActivity
 
 
         setListeners(INPUT_PRODUCT,
-                (TextInputLayout) findViewById(R.id.input_layout_product),
-                (TextInputEditText) findViewById(R.id.edit_text_product));
+                findViewById(R.id.input_layout_product),
+                findViewById(R.id.edit_text_product));
 
         setListeners(INPUT_SUPPLIER,
-                (TextInputLayout) findViewById(R.id.input_layout_supplier),
-                (TextInputEditText) findViewById(R.id.edit_text_supplier));
+                findViewById(R.id.input_layout_supplier),
+                findViewById(R.id.edit_text_supplier));
 
         setListeners(INPUT_LOCATION,
-                (TextInputLayout) findViewById(R.id.input_layout_location),
-                (TextInputEditText) findViewById(R.id.edit_text_location));
+                findViewById(R.id.input_layout_location),
+                findViewById(R.id.edit_text_location));
 
         setListeners(INPUT_DESTINATION,
-                (TextInputLayout) findViewById(R.id.input_layout_destination),
-                (TextInputEditText) findViewById(R.id.edit_text_destination));
+                findViewById(R.id.input_layout_destination),
+                findViewById(R.id.edit_text_destination));
 
         setListeners(INPUT_QUALITY,
-                (TextInputLayout) findViewById(R.id.input_layout_quality),
-                (TextInputEditText) findViewById(R.id.edit_text_quality));
+                findViewById(R.id.input_layout_quality),
+                findViewById(R.id.edit_text_quality));
     }
 //
 //    @Override
@@ -206,15 +206,23 @@ public class NewStockActivity extends AppCompatActivity
                 }
                 break;
             case INPUT_SUPPLIER:
+                for (Location location : dbHandler.getAllLocations(Location.LocationType.Supplier)) {
+                    searchItemList.add(new SearchItem(location.getLocationName(), location.getLocationId()));
+                }
+                break;
             case INPUT_DESTINATION:
+                for (Location location : dbHandler.getAllLocations(Location.LocationType.Destination)) {
+                    searchItemList.add(new SearchItem(location.getLocationName(), location.getLocationId()));
+                }
+                break;
             case INPUT_LOCATION:
-                for (Location location : dbHandler.getAllLocations()) {
+                for (Location location : dbHandler.getAllLocations(Location.LocationType.Storage)) {
                     searchItemList.add(new SearchItem(location.getLocationName(), location.getLocationId()));
                 }
                 break;
             case INPUT_QUALITY:
                 int i = 0;
-                for (String quality : SampleData.getSampleQualities()) {
+                for (String quality : StockItem.Quality.getQualityStrings()) {
                     searchItemList.add(new SearchItem(quality, i));
                     i++;
                 }
@@ -375,11 +383,13 @@ public class NewStockActivity extends AppCompatActivity
             newStockItem.setProduct(dbHandler.getProduct(selectedProductId));
             newStockItem.setSupplierId(selectedSupplierId);
             newStockItem.setMass(Double.parseDouble(editMass.getText().toString()));
-            if (editNumBoxes.getText().length() != 0) {
+            if (!TextUtils.isEmpty(editNumBoxes.getText())) {
                 newStockItem.setNumBoxes(Integer.parseInt(editNumBoxes.getText().toString()));
+            } else {
+                newStockItem.setNumBoxes(-1);
             }
             newStockItem.setLocationId(selectedLocationId);
-            if (editDest.getText().length() != 0) {
+            if (!TextUtils.isEmpty(editDest.getText())) {
                 newStockItem.setDestId(selectedDestId);
             } else {
                 newStockItem.setDestId(-1);

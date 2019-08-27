@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import com.martinwalls.nea.contracts.ContractsFragment;
 import com.martinwalls.nea.dashboard.DashboardFragment;
 import com.martinwalls.nea.exchange.ExchangeFragment;
+import com.martinwalls.nea.orders.OrdersFragment;
 import com.martinwalls.nea.stock.StockFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private enum Page {
         DASHBOARD(new DashboardFragment(), R.id.nav_dashboard),
         STOCK(new StockFragment(), R.id.nav_stock),
+        ORDERS(new OrdersFragment(), R.id.nav_orders),
         CONTRACTS(new ContractsFragment(), R.id.nav_contracts),
         EXCHANGE(new ExchangeFragment(), R.id.nav_exchange);
 
@@ -85,48 +87,37 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout navDrawerContent = findViewById(R.id.nav_drawer_content);
         TextView navDashboard = navDrawerContent.findViewById(R.id.nav_dashboard);
-        navDashboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentPage = Page.DASHBOARD;
-                replaceFragment(Page.DASHBOARD);
-            }
+        navDashboard.setOnClickListener(v -> {
+            currentPage = Page.DASHBOARD;
+            replaceFragment(Page.DASHBOARD);
         });
 
         TextView navStock = navDrawerContent.findViewById(R.id.nav_stock);
-        navStock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentPage = Page.STOCK;
-                replaceFragment(Page.STOCK);
-            }
+        navStock.setOnClickListener(v -> {
+            currentPage = Page.STOCK;
+            replaceFragment(Page.STOCK);
+        });
+
+        TextView navOrders = navDrawerContent.findViewById(R.id.nav_orders);
+        navOrders.setOnClickListener(v -> {
+            currentPage = Page.ORDERS;
+            replaceFragment(Page.ORDERS);
         });
 
         TextView navContracts = navDrawerContent.findViewById(R.id.nav_contracts);
-        navContracts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentPage = Page.CONTRACTS;
-                replaceFragment(Page.CONTRACTS);
-            }
+        navContracts.setOnClickListener(v -> {
+            currentPage = Page.CONTRACTS;
+            replaceFragment(Page.CONTRACTS);
         });
 
         TextView navExchange = navDrawerContent.findViewById(R.id.nav_exchange);
-        navExchange.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentPage = Page.EXCHANGE;
-                replaceFragment(Page.EXCHANGE);
-            }
+        navExchange.setOnClickListener(v -> {
+            currentPage = Page.EXCHANGE;
+            replaceFragment(Page.EXCHANGE);
         });
 
         TextView navSettings = navDrawerContent.findViewById(R.id.nav_settings);
-        navSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
-            }
-        });
+        navSettings.setOnClickListener(v -> Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show());
     }
 
     @Override
