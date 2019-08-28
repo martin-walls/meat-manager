@@ -1,4 +1,4 @@
-package com.martinwalls.nea.db.models;
+package com.martinwalls.nea.models;
 
 import java.util.Comparator;
 

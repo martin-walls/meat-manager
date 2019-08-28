@@ -11,7 +11,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.martinwalls.nea.BaseAdapter;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
-import com.martinwalls.nea.db.models.Location;
+import com.martinwalls.nea.models.Location;
 
 import java.util.List;
 

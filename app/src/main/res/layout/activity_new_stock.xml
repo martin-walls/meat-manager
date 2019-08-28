@@ -9,151 +9,149 @@
     tools:context=".stock.NewStockActivity"
     >
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_product"
-        style="@style/AppTextInputLayout.Searchable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_margin_horizontal"
-        android:layout_marginTop="@dimen/view_spacing_vertical"
-        android:layout_marginEnd="@dimen/activity_margin_horizontal"
-        android:hint="@string/stock_input_product"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_text_product"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
-            android:inputType="textCapWords"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_supplier"
-        style="@style/AppTextInputLayout.Searchable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_margin_horizontal"
-        android:layout_marginTop="@dimen/view_spacing_vertical"
-        android:layout_marginEnd="@dimen/activity_margin_horizontal"
-        android:hint="@string/stock_input_supplier"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_text_supplier"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
-            android:inputType="textCapWords"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
-
     <LinearLayout
-        android:id="@+id/input_row_quantity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_margin_horizontal"
-        android:layout_marginTop="@dimen/view_spacing_vertical"
-        android:layout_marginEnd="@dimen/activity_margin_horizontal"
-        android:orientation="horizontal"
+        android:layout_marginStart="@dimen/screen_margin_horizontal"
+        android:layout_marginEnd="@dimen/screen_margin_horizontal"
+        android:orientation="vertical"
         >
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_quantity_mass"
-            android:layout_width="0dp"
+            android:id="@+id/input_layout_product"
+            style="@style/AppTextInputLayout.Searchable"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/view_spacing_horizontal"
-            android:layout_weight="1"
-            android:hint="@string/stock_input_quantity_kg"
+            android:layout_marginTop="@dimen/input_spacing_vertical"
+            android:hint="@string/stock_input_product"
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_text_quantity_mass"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:inputType="numberDecimal"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_quantity_boxes"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/stock_input_quantity_boxes"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_text_quantity_boxes"
+                android:id="@+id/edit_text_product"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
-                android:inputType="number"
+                android:inputType="textCapWords"
                 />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_supplier"
+            style="@style/AppTextInputLayout.Searchable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/input_spacing_vertical"
+            android:hint="@string/stock_input_supplier"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_supplier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="textCapWords"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/input_row_quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/input_spacing_vertical"
+            android:orientation="horizontal"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_quantity_mass"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/input_spacing_horizontal"
+                android:layout_weight="1"
+                android:hint="@string/stock_input_quantity_kg"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_quantity_mass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_quantity_boxes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/stock_input_quantity_boxes"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_quantity_boxes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_location"
+            style="@style/AppTextInputLayout.Searchable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/input_spacing_vertical"
+            android:hint="@string/stock_input_location"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="textCapWords"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_destination"
+            style="@style/AppTextInputLayout.Searchable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/input_spacing_vertical"
+            android:hint="@string/stock_input_destination"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_destination"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="textCapWords"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_quality"
+            style="@style/AppTextInputLayout.Searchable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/input_spacing_vertical"
+            android:hint="@string/stock_input_quality"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_quality"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="textCapWords"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_location"
-        style="@style/AppTextInputLayout.Searchable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_margin_horizontal"
-        android:layout_marginTop="@dimen/view_spacing_vertical"
-        android:layout_marginEnd="@dimen/activity_margin_horizontal"
-        android:hint="@string/stock_input_location"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_text_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
-            android:inputType="textCapWords"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_destination"
-        style="@style/AppTextInputLayout.Searchable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_margin_horizontal"
-        android:layout_marginTop="@dimen/view_spacing_vertical"
-        android:layout_marginEnd="@dimen/activity_margin_horizontal"
-        android:hint="@string/stock_input_destination"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_text_destination"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
-            android:inputType="textCapWords"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_quality"
-        style="@style/AppTextInputLayout.Searchable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_margin_horizontal"
-        android:layout_marginTop="@dimen/view_spacing_vertical"
-        android:layout_marginEnd="@dimen/activity_margin_horizontal"
-        android:hint="@string/stock_input_quality"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_text_quality"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
-            android:inputType="textCapWords"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:id="@+id/search_results_layout"
@@ -169,10 +167,10 @@
             style="@style/SearchResultsItemText.Selectable.AddNew"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/search_result_margin_left"
-            android:paddingTop="@dimen/search_result_spacing"
-            android:paddingEnd="@dimen/search_result_margin_right"
-            android:paddingBottom="@dimen/search_result_spacing"
+            android:paddingStart="24dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="16dp"
             />
 
         <com.martinwalls.nea.components.CustomRecyclerView
@@ -187,10 +185,10 @@
             style="@style/SearchResultsItemText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/search_result_margin_left"
-            android:paddingTop="@dimen/search_result_spacing"
-            android:paddingEnd="@dimen/search_result_margin_right"
-            android:paddingBottom="@dimen/search_result_spacing"
+            android:paddingStart="24dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="16dp"
             android:text="@string/search_no_matches"
             />
     </LinearLayout>

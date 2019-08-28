@@ -105,9 +105,11 @@
 
     <!-- Orders page -->
     <string name="orders_title">Orders</string>
+    <string name="orders_empty">No orders to show</string>
 
     <!-- Contracts page -->
     <string name="contracts_title">Contracts</string>
+    <string name="contracts_empty">No contracts to show</string>
     <string name="contracts_input_customer">Customer</string>
     <string name="contracts_input_repeat_every">Repeat every…</string>
     <string name="contracts_input_repeat_on">On…</string>

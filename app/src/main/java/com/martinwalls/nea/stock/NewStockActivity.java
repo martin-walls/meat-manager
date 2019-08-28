@@ -28,9 +28,9 @@ import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.DBHandler;
-import com.martinwalls.nea.db.models.Location;
-import com.martinwalls.nea.db.models.Product;
-import com.martinwalls.nea.db.models.StockItem;
+import com.martinwalls.nea.models.Location;
+import com.martinwalls.nea.models.Product;
+import com.martinwalls.nea.models.StockItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;

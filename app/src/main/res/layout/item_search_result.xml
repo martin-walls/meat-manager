@@ -4,9 +4,9 @@
     style="@style/SearchResultsItemText.Selectable"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="@dimen/search_result_margin_left"
-    android:paddingEnd="@dimen/search_result_margin_right"
-    android:paddingTop="@dimen/search_result_spacing"
-    android:paddingBottom="@dimen/search_result_spacing"
+    android:paddingStart="24dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="16dp"
     tools:text="Item"
     />

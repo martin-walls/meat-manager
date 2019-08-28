@@ -15,7 +15,7 @@ import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.components.RecyclerViewDivider;
 import com.martinwalls.nea.components.SwipeToDeleteCallback;
 import com.martinwalls.nea.db.DBHandler;
-import com.martinwalls.nea.db.models.Product;
+import com.martinwalls.nea.models.Product;
 
 import java.util.ArrayList;
 import java.util.List;

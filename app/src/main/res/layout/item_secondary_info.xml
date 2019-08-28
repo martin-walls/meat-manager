@@ -12,10 +12,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingStart="@dimen/item_padding_start"
-        android:paddingTop="@dimen/item_spacing"
-        android:paddingEnd="@dimen/item_padding_end"
-        android:paddingBottom="@dimen/item_spacing"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
         tools:text="Beef hearts"
         />
 
@@ -24,10 +24,10 @@
         style="@style/ItemTextNormal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/item_padding_start"
-        android:paddingTop="@dimen/item_spacing"
-        android:paddingEnd="@dimen/item_padding_end"
-        android:paddingBottom="@dimen/item_spacing"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
         tools:text="Beef"
         />
 

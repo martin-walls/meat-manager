@@ -1,4 +1,4 @@
-package com.martinwalls.nea.db.models;
+package com.martinwalls.nea.models;
 
 /**
  * Class to store quantity with product in Order / Contract

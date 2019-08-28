@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
-import com.martinwalls.nea.db.models.StockItem;
+import com.martinwalls.nea.models.StockItem;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.components.RecyclerViewDivider;
 
@@ -29,9 +29,12 @@ public class StockFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        dbHandler = new DBHandler(getContext());
+        setHasOptionsMenu(true);
+        getActivity().setTitle(R.string.stock_title);
 
         View fragmentView = inflater.inflate(R.layout.fragment_stock, container, false);
+
+        dbHandler = new DBHandler(getContext());
 
         CustomRecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
         TextView emptyView = fragmentView.findViewById(R.id.empty);
@@ -52,8 +55,6 @@ public class StockFragment extends Fragment {
             startActivity(newStockIntent);
         });
 
-        setHasOptionsMenu(true);
-        getActivity().setTitle(R.string.stock_title);
         return fragmentView;
     }
 

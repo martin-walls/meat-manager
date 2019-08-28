@@ -20,9 +20,9 @@
             style="@style/ChooseCurrenciesListTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/choose_currencies_margin_left"
-            android:paddingTop="@dimen/choose_currencies_spacing"
-            android:paddingEnd="@dimen/choose_currencies_margin_right"
+            android:paddingStart="24dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="24dp"
             android:text="@string/exchange_favourites"
             />
 
@@ -38,10 +38,10 @@
             style="@style/ChooseCurrenciesItem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/choose_currencies_margin_left"
-            android:paddingTop="@dimen/choose_currencies_spacing"
-            android:paddingEnd="@dimen/choose_currencies_margin_right"
-            android:paddingBottom="@dimen/choose_currencies_spacing"
+            android:paddingStart="24dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="16dp"
             android:text="@string/exchange_choose_currencies_no_fav"
             />
     </LinearLayout>
@@ -56,9 +56,9 @@
             style="@style/ChooseCurrenciesListTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/choose_currencies_margin_left"
-            android:paddingTop="@dimen/choose_currencies_spacing"
-            android:paddingEnd="@dimen/choose_currencies_margin_right"
+            android:paddingStart="24dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="24dp"
             android:text="@string/exchange_all_currencies"
             />
 

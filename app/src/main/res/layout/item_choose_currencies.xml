@@ -13,10 +13,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingStart="@dimen/choose_currencies_margin_left"
-        android:paddingTop="@dimen/choose_currencies_spacing"
-        android:paddingEnd="@dimen/choose_currencies_margin_right"
-        android:paddingBottom="@dimen/choose_currencies_spacing"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
         tools:text="GBP"
     />
 
