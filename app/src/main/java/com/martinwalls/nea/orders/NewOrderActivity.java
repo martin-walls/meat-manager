@@ -1,6 +1,8 @@
-package com.martinwalls.nea.stock;
+package com.martinwalls.nea.orders;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,9 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,70 +29,76 @@ import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.Location;
+import com.martinwalls.nea.models.Order;
 import com.martinwalls.nea.models.Product;
-import com.martinwalls.nea.models.StockItem;
+import com.martinwalls.nea.models.ProductQuantity;
+import com.martinwalls.nea.stock.AddNewProductDialog;
+import com.martinwalls.nea.stock.EditLocationsActivity;
+import com.martinwalls.nea.stock.SearchItemAdapter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
-public class NewStockActivity extends AppCompatActivity
+import static android.view.View.GONE;
+
+public class NewOrderActivity extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener,
-        AddNewProductDialog.AddNewProductListener {
+        AddNewProductDialog.AddNewProductListener,
+        DatePickerDialog.OnDateSetListener,
+        TimePickerDialog.OnTimeSetListener {
 
     private DBHandler dbHandler;
 
     private HashMap<String, Integer> inputViews = new HashMap<>();
 
     private SearchItemAdapter itemAdapter;
-    private ArrayList<SearchItem> searchItemList = new ArrayList<>();
+    private List<SearchItem> searchItemList = new ArrayList<>();
 
     private LinearLayout searchResultsLayout;
     private AddNewTextView addNewView;
     private ViewGroup rootView;
 
     private final String INPUT_PRODUCT = "product";
-    private final String INPUT_SUPPLIER = "supplier";
     private final String INPUT_QUANTITY = "quantity";
-    private final String INPUT_LOCATION = "location";
+    private final String BTN_ADD_PRODUCT = "add_product";
     private final String INPUT_DESTINATION = "destination";
-    private final String INPUT_QUALITY = "quality";
-    //todo refactor to enum?
+    private final String INPUT_DATE = "date";
 
-    private String currentSearchType = INPUT_PRODUCT; // default value so it's not null
+    private String currentSearchType = INPUT_PRODUCT; // default initial value
 
-    //todo refactor to class
     private int selectedProductId;
-    private int selectedSupplierId;
-    private int selectedLocationId;
     private int selectedDestId;
+    private LocalDate selectedDate;
+    private LocalDateTime selectedDateTime;
+
+    private final String DATE_FORMAT = "dd MMMM yyyy, HH:mm";
 
     private final int REQUEST_REFRESH_ON_DONE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_stock);
+        setContentView(R.layout.activity_new_order);
 
-        getSupportActionBar().setTitle(R.string.stock_new);
+        getSupportActionBar().setTitle(R.string.orders_new_title);
 
-        dbHandler = new DBHandler(this);
-
-        // store reference to each row to show/hide later
-        //todo make this an enum??
         inputViews.put(INPUT_PRODUCT, R.id.input_layout_product);
-        inputViews.put(INPUT_SUPPLIER, R.id.input_layout_supplier);
         inputViews.put(INPUT_QUANTITY, R.id.input_row_quantity);
-        inputViews.put(INPUT_LOCATION, R.id.input_layout_location);
+        inputViews.put(BTN_ADD_PRODUCT, R.id.add_product);
         inputViews.put(INPUT_DESTINATION, R.id.input_layout_destination);
-        inputViews.put(INPUT_QUALITY, R.id.input_layout_quality);
+        inputViews.put(INPUT_DATE, R.id.input_layout_date);
 
         addNewView = findViewById(R.id.add_new);
         addNewView.setOnClickListener(v -> addNewItem());
 
         rootView = findViewById(R.id.root_layout);
 
-        // setup recycler view
         itemAdapter = new SearchItemAdapter(searchItemList, currentSearchType, this);
         TextView emptyView = findViewById(R.id.no_results);
         CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
@@ -101,33 +107,32 @@ public class NewStockActivity extends AppCompatActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         searchResultsLayout = findViewById(R.id.search_results_layout);
 
-
         setListeners(INPUT_PRODUCT,
                 findViewById(R.id.input_layout_product),
                 findViewById(R.id.edit_text_product));
-
-        setListeners(INPUT_SUPPLIER,
-                findViewById(R.id.input_layout_supplier),
-                findViewById(R.id.edit_text_supplier));
-
-        setListeners(INPUT_LOCATION,
-                findViewById(R.id.input_layout_location),
-                findViewById(R.id.edit_text_location));
 
         setListeners(INPUT_DESTINATION,
                 findViewById(R.id.input_layout_destination),
                 findViewById(R.id.edit_text_destination));
 
-        setListeners(INPUT_QUALITY,
-                findViewById(R.id.input_layout_quality),
-                findViewById(R.id.edit_text_quality));
+        TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
+        editTextDate.setOnClickListener(v -> {
+            final Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+            datePickerDialog.show();
+        });
+
+        TextView addProductBtn = findViewById(R.id.add_product);
+        addProductBtn.setOnClickListener(v -> {
+            Toast.makeText(this, "ADD PRODUCT", Toast.LENGTH_SHORT).show();
+            //todo
+        });
     }
-//
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        dbHandler.close();
-//    }
 
     @Override
     public void onResume() {
@@ -139,7 +144,7 @@ public class NewStockActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_new_stock, menu);
+        getMenuInflater().inflate(R.menu.activity_new_order, menu);
         return true;
     }
 
@@ -147,10 +152,10 @@ public class NewStockActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                if (addStockToDb()) {
+                if (addOrderToDb()) {
                     finish();
                 } else {
-                    Toast.makeText(this, getString(R.string.db_error_insert, "stock"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.db_error_insert, "order"), Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.action_cancel:
@@ -173,10 +178,10 @@ public class NewStockActivity extends AppCompatActivity
         });
 
         inputLayout.setEndIconOnClickListener(v -> {
-                editText.setText("");
-                editText.clearFocus();
-                inputLayout.setEndIconVisible(false);
-                cancelSearch();
+            editText.setText("");
+            editText.clearFocus();
+            inputLayout.setEndIconVisible(false);
+            cancelSearch();
         });
 
         editText.addTextChangedListener(new TextWatcher() {
@@ -193,25 +198,20 @@ public class NewStockActivity extends AppCompatActivity
         });
     }
 
-    private void openSearch(String rowName) {
+    private void openSearch(String inputName) {
         Transition moveTransition = TransitionInflater.from(this).inflateTransition(R.transition.search_open);
         TransitionManager.beginDelayedTransition(rootView, moveTransition);
         for (Integer view : inputViews.values()) {
-            if (!view.equals(inputViews.get(rowName))) {
-                findViewById(view).setVisibility(View.GONE);
+            if (!view.equals(inputViews.get(inputName))) {
+                findViewById(view).setVisibility(GONE);
             }
         }
 
         searchItemList.clear();
-        switch (rowName) {
+        switch (inputName) {
             case INPUT_PRODUCT:
                 for (Product product : Utils.mergeSort(dbHandler.getAllProducts(), Product.comparatorAlpha())) {
                     searchItemList.add(new SearchItem(product.getProductName(), product.getProductId()));
-                }
-                break;
-            case INPUT_SUPPLIER:
-                for (Location location : Utils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Supplier), Location.comparatorAlpha())) {
-                    searchItemList.add(new SearchItem(location.getLocationName(), location.getLocationId()));
                 }
                 break;
             case INPUT_DESTINATION:
@@ -219,30 +219,18 @@ public class NewStockActivity extends AppCompatActivity
                     searchItemList.add(new SearchItem(location.getLocationName(), location.getLocationId()));
                 }
                 break;
-            case INPUT_LOCATION:
-                for (Location location : Utils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Storage), Location.comparatorAlpha())) {
-                    searchItemList.add(new SearchItem(location.getLocationName(), location.getLocationId()));
-                }
-                break;
-            case INPUT_QUALITY:
-                int i = 0;
-                for (String quality : StockItem.Quality.getQualityStrings()) {
-                    searchItemList.add(new SearchItem(quality, i));
-                    i++;
-                }
-                break;
         }
-        currentSearchType = rowName;
+        currentSearchType = inputName;
         itemAdapter.setSearchItemType(currentSearchType);
         itemAdapter.notifyDataSetChanged();
 
-        // filter data at start for when text is already entered
+        // filter already in case some text is already entered
         TextInputEditText editText = (TextInputEditText) getCurrentFocus();
         itemAdapter.getFilter().filter(editText.getText());
 
-        addNewView.setVisibility(rowName.equals(INPUT_QUALITY) ? View.GONE : View.VISIBLE);
-        addNewView.setText(getString(R.string.search_add_new, rowName));
-        addNewView.setSearchItemType(rowName);
+        addNewView.setVisibility(View.VISIBLE);
+        addNewView.setText(getString(R.string.search_add_new, inputName));
+        addNewView.setSearchItemType(inputName);
 
         searchResultsLayout.setAlpha(0f);
         searchResultsLayout.setVisibility(View.VISIBLE);
@@ -250,7 +238,7 @@ public class NewStockActivity extends AppCompatActivity
         searchResultsLayout.animate()
                 .alpha(1f)
                 .setStartDelay(150)
-                .setDuration(200)
+                .setDuration(200) //todo refactor to resource value
                 .setListener(null);
     }
 
@@ -262,10 +250,7 @@ public class NewStockActivity extends AppCompatActivity
             viewToShow.setVisibility(View.VISIBLE);
         }
 
-        searchResultsLayout.setVisibility(View.GONE);
-
-        searchItemList.clear();
-        itemAdapter.notifyDataSetChanged();
+        searchResultsLayout.setVisibility(GONE);
 
         hideKeyboard();
     }
@@ -277,16 +262,6 @@ public class NewStockActivity extends AppCompatActivity
                 DialogFragment dialog = new AddNewProductDialog();
                 dialog.show(getSupportFragmentManager(), "add_new_product");
                 break;
-            case INPUT_SUPPLIER:
-                Intent newSupplierIntent = new Intent(this, EditLocationsActivity.class);
-                newSupplierIntent.putExtra(EditLocationsActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Supplier.name());
-                startActivityForResult(newSupplierIntent, REQUEST_REFRESH_ON_DONE);
-                break;
-            case INPUT_LOCATION:
-                Intent newLocationIntent = new Intent(this, EditLocationsActivity.class);
-                newLocationIntent.putExtra(EditLocationsActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Storage.name());
-                startActivityForResult(newLocationIntent, REQUEST_REFRESH_ON_DONE);
-                break;
             case INPUT_DESTINATION:
                 Intent newDestIntent = new Intent(this, EditLocationsActivity.class);
                 newDestIntent.putExtra(EditLocationsActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Destination.name());
@@ -296,7 +271,7 @@ public class NewStockActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_REFRESH_ON_DONE) {
             cancelSearch();
@@ -315,12 +290,6 @@ public class NewStockActivity extends AppCompatActivity
         switch (searchItemType) {
             case INPUT_PRODUCT:
                 selectedProductId = item.getId();
-                break;
-            case INPUT_SUPPLIER:
-                selectedSupplierId = item.getId();
-                break;
-            case INPUT_LOCATION:
-                selectedLocationId = item.getId();
                 break;
             case INPUT_DESTINATION:
                 selectedDestId = item.getId();
@@ -343,85 +312,82 @@ public class NewStockActivity extends AppCompatActivity
         }
     }
 
-    private boolean addStockToDb() {
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int day) {
+        selectedDate = LocalDate.of(year, month, day);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, this, 12, 0, true);
+        timePickerDialog.show();
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Calendar now = Calendar.getInstance();
+        //noinspection MagicConstant
+        if (selectedDate.getYear() == now.get(Calendar.YEAR) && selectedDate.getMonthValue() == now.get(Calendar.MONTH)
+                && selectedDate.getDayOfMonth() == now.get(Calendar.DAY_OF_MONTH)
+                && (hourOfDay < now.get(Calendar.HOUR_OF_DAY)
+                || (hourOfDay == now.get(Calendar.HOUR_OF_DAY) && minute <= now.get(Calendar.MINUTE) + 10))) {
+            Toast.makeText(this, R.string.input_error_time_must_be_future, Toast.LENGTH_SHORT).show();
+
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, this, 12, 0, true);
+            timePickerDialog.show();
+        } else {
+            selectedDateTime = LocalDateTime.of(selectedDate, LocalTime.of(hourOfDay, minute));
+            String formatDate = selectedDateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+            TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
+            editTextDate.setText(formatDate);
+        }
+    }
+
+    private boolean addOrderToDb() {
         boolean isValid = true;
-        StockItem newStockItem = new StockItem();
-        TextInputEditText editProduct = findViewById(R.id.edit_text_product);
+        Order newOrder = new Order();
+
+        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
         TextInputLayout inputLayoutProduct = findViewById(R.id.input_layout_product);
 
-        TextInputEditText editSupplier = findViewById(R.id.edit_text_supplier);
-        TextInputLayout inputLayoutSupplier = findViewById(R.id.input_layout_supplier);
-
-        TextInputEditText editMass = findViewById(R.id.edit_text_quantity_mass);
+        TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
         TextInputLayout inputLayoutMass = findViewById(R.id.input_layout_quantity_mass);
 
-        TextInputEditText editNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
+        TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
 
-        TextInputEditText editLocation = findViewById(R.id.edit_text_location);
-        TextInputLayout inputLayoutLocation = findViewById(R.id.input_layout_location);
+        TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
+        TextInputLayout inputLayoutDest = findViewById(R.id.input_layout_destination);
 
-        TextInputEditText editDest = findViewById(R.id.edit_text_destination);
+        TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
+        TextInputLayout inputLayoutDate = findViewById(R.id.input_layout_date);
 
-        TextInputEditText editQuality = findViewById(R.id.edit_text_quality);
-        TextInputLayout inputLayoutQuality = findViewById(R.id.input_layout_quality);
-
-        if (editProduct.getText().length() == 0) {
+        if (TextUtils.isEmpty(editTextProduct.getText())) {
             inputLayoutProduct.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutProduct.setError(null);
         }
-        if (editSupplier.getText().length() == 0) {
-            inputLayoutSupplier.setError(getString(R.string.input_error_blank));
-            isValid = false;
-        } else {
-            inputLayoutSupplier.setError(null);
-        }
-        if (editMass.getText().length() == 0) {
+        if (TextUtils.isEmpty(editTextMass.getText())) {
             inputLayoutMass.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutMass.setError(null);
         }
-        if (editLocation.getText().length() == 0) {
-            inputLayoutLocation.setError(getString(R.string.input_error_blank));
+        if (TextUtils.isEmpty(editTextDest.getText())) {
+            inputLayoutDest.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
-            inputLayoutLocation.setError(null);
-        }
-        if (editQuality.getText().length() == 0) {
-            inputLayoutQuality.setError(getString(R.string.input_error_blank));
-            isValid = false;
-        } else {
-            inputLayoutQuality.setError(null);
-        }
-
-        if (dbHandler.getAllStock().stream().map(stockItem -> new int[] {stockItem.getProduct().getProductId(), stockItem.getLocationId()})
-                .anyMatch(x -> Arrays.equals(x, new int[] {selectedProductId, selectedLocationId}))) {
-            inputLayoutLocation.setError(getString(R.string.input_error_stock_already_in_location));
-            isValid = false;
+            inputLayoutDest.setError(null);
         }
 
         if (isValid) {
-            newStockItem.setProduct(dbHandler.getProduct(selectedProductId));
-            newStockItem.setSupplier(dbHandler.getLocation(selectedSupplierId));
-            newStockItem.setMass(Double.parseDouble(editMass.getText().toString()));
-            if (!TextUtils.isEmpty(editNumBoxes.getText())) {
-                newStockItem.setNumBoxes(Integer.parseInt(editNumBoxes.getText().toString()));
-            } else {
-                newStockItem.setNumBoxes(-1);
-            }
-            newStockItem.setLocation(dbHandler.getLocation(selectedLocationId));
-            if (!TextUtils.isEmpty(editDest.getText())) {
-                newStockItem.setDest(dbHandler.getLocation(selectedDestId));
-            } else {
-                newStockItem.setDestId(-1);
-            }
-            newStockItem.setQuality(StockItem.Quality.parseQuality(editQuality.getText().toString()));
+            List<ProductQuantity> productList = new ArrayList<>();
+            productList.add(new ProductQuantity(dbHandler.getProduct(selectedProductId),
+                    Double.parseDouble(editTextMass.getText().toString()),
+                    TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1 : Integer.parseInt(editTextNumBoxes.getText().toString())));
+            newOrder.setProductList(productList);
+            newOrder.setDest(dbHandler.getLocation(selectedDestId));
+            newOrder.setOrderDate(LocalDateTime.parse(editTextDate.getText().toString(), DateTimeFormatter.ofPattern(DATE_FORMAT)));
+            newOrder.setCompleted(false);
 
-            return dbHandler.addStockItem(newStockItem);
+            return dbHandler.addOrder(newOrder);
         }
-
         return false;
     }
 }

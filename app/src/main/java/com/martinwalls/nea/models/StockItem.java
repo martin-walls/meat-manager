@@ -106,6 +106,11 @@ public class StockItem {
         this.locationName = locationName;
     }
 
+    public void setLocation(Location location) {
+        this.locationId = location.getLocationId();
+        this.locationName = location.getLocationName();
+    }
+
     public int getSupplierId() {
         return supplierId;
     }
@@ -122,6 +127,11 @@ public class StockItem {
         this.locationName = locationName;
     }
 
+    public void setSupplier(Location supplier) {
+        this.supplierId = supplier.getLocationId();
+        this.supplierName = supplier.getLocationName();
+    }
+
     public int getDestId() {
         return destId;
     }
@@ -136,6 +146,11 @@ public class StockItem {
 
     public void setDestName(String locationName) {
         this.locationName = locationName;
+    }
+
+    public void setDest(Location dest) {
+        this.destId = dest.getLocationId();
+        this.destName = dest.getLocationName();
     }
 
     public double getMass() {

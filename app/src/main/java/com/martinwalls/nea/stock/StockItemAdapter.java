@@ -23,7 +23,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             super(view);
             itemName = view.findViewById(R.id.name);
             itemMass = view.findViewById(R.id.mass);
-            itemNumBoxes = view.findViewById(R.id.boxes);
+            itemNumBoxes = view.findViewById(R.id.num_boxes);
         }
     }
 

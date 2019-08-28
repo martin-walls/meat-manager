@@ -1,4 +1,4 @@
-package com.martinwalls.nea.stock;
+package com.martinwalls.nea.stock; // todo refactor to different package, not just used in stock
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +37,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         }
     }
 
-    SearchItemAdapter(List<SearchItem> itemList, String searchItemType, SearchItemAdapterListener listener) {
+    public SearchItemAdapter(List<SearchItem> itemList, String searchItemType, SearchItemAdapterListener listener) {
         this.itemList = itemList;
         this.itemListFiltered = itemList;
         this.searchItemType = searchItemType;

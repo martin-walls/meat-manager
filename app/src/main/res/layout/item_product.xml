@@ -4,25 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingStart="24dp"
-    android:paddingTop="16dp"
-    android:paddingEnd="24dp"
-    android:paddingBottom="16dp"
+    android:paddingBottom="8dp"
     >
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/product_name"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_vertical|start"
         android:textColor="?textColorDark"
         android:textSize="20sp"
-        tools:text="Product name"
+        tools:text="Product"
         />
 
     <LinearLayout
-        android:id="@+id/amount"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -34,8 +30,8 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical|end"
-            android:textSize="16sp"
             android:textColor="?textColorDark"
+            android:textSize="16sp"
             tools:text="1900.00 kg"
             />
 
@@ -45,10 +41,9 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical|end"
-            android:textSize="16sp"
             android:textColor="?textColorNormal"
+            android:textSize="16sp"
             tools:text="100 boxes"
             />
     </LinearLayout>
-
 </LinearLayout>

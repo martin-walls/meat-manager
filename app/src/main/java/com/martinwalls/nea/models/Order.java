@@ -1,5 +1,6 @@
 package com.martinwalls.nea.models;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ public class Order {
     private int orderId;
     private int destId;
     private String destName;
-    private String orderDate; //TODO make this a custom date object
+    private LocalDateTime orderDate;
     private boolean isCompleted;
 
     private List<ProductQuantity> productList = new ArrayList<>();
@@ -15,7 +16,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(int orderId, int destId, String destName, String orderDate, boolean isCompleted) {
+    public Order(int orderId, int destId, String destName, LocalDateTime orderDate, boolean isCompleted) {
         this.orderId = orderId;
         this.destId = destId;
         this.destName = destName;
@@ -47,11 +48,16 @@ public class Order {
         this.destName = destName;
     }
 
-    public String getOrderDate() {
+    public void setDest(Location dest) {
+        this.destId = dest.getLocationId();
+        this.destName = dest.getLocationName();
+    }
+
+    public LocalDateTime getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(String orderDate) {
+    public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 

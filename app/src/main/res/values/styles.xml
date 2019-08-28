@@ -56,6 +56,11 @@
         <item name="android:textColor">?textColorDark</item>
     </style>
 
+    <style name="TextEmphasisSmall">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
     <style name="EmptyView">
         <item name="android:textSize">20sp</item>
     </style>
@@ -71,9 +76,7 @@
     </style>
 
     <!-- search -->
-    <style name="SearchResultsItemText"> <!-- todo make this extend ItemTextNormal? -->
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?attr/textColorNormal</item>
+    <style name="SearchResultsItemText" parent="ItemTextNormal">
     </style>
 
     <style name="SearchResultsItemText.Selectable">
@@ -93,6 +96,13 @@
     <style name="SearchResultsLayout">
         <item name="android:divider">@drawable/divider_thin</item>
         <item name="android:showDividers">middle</item>
+    </style>
+
+    <style name="DateDividerText">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">?colorPrimary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <!-- Exchange screen styles -->

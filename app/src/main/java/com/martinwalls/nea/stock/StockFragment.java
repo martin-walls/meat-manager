@@ -61,14 +61,10 @@ public class StockFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        dbHandler = new DBHandler(getContext());
+        if (dbHandler == null) {
+            dbHandler = new DBHandler(getContext());
+        }
         loadStock(); //todo maybe needs to be in onStart()?
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        dbHandler.close();
     }
 
     @Override

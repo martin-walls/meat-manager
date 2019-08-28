@@ -48,6 +48,7 @@
     <string name="input_error_invalid_email">Invalid email</string>
     <string name="input_error_invalid_location_type">Invalid location type. Please select from the dropdown.</string>
     <string name="input_error_stock_already_in_location">This product has already been added in this location.</string>
+    <string name="input_error_time_must_be_future">Please select a time at least 10 minutes from now</string>
 
     <!-- Snackbars -->
     <string name="snackbar_item_deleted">Item deleted</string>
@@ -106,6 +107,14 @@
     <!-- Orders page -->
     <string name="orders_title">Orders</string>
     <string name="orders_empty">No orders to show</string>
+    <string name="orders_new_title">Add new order</string>
+    <string name="orders_input_product">Product:</string>
+    <string name="orders_input_quantity_kg">Quantity (kg)</string>
+    <string name="orders_input_quantity_lbs">Quantity (lbs)</string>
+    <string name="orders_input_quantity_boxes">Number of boxes</string>
+    <string name="orders_add_product">Add another product</string>
+    <string name="orders_input_destination">Destination:</string>
+    <string name="orders_input_date">Date:</string>
 
     <!-- Contracts page -->
     <string name="contracts_title">Contracts</string>

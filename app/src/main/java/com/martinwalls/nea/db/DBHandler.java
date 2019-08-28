@@ -8,13 +8,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.martinwalls.nea.models.*;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "stockDB.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     //region db constants
     private final class ProductsTable {
@@ -153,7 +155,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + OrdersTable.TABLE_NAME + " ("
                 + OrdersTable.ID + " INTEGER PRIMARY KEY, "
                 + OrdersTable.DEST_ID + " INTEGER NOT NULL, "
-                + OrdersTable.ORDER_DATE + " TEXT NOT NULL, "
+                + OrdersTable.ORDER_DATE + " INTEGER NOT NULL, "
                 + OrdersTable.COMPLETED + " INTEGER NOT NULL, "
                 + "FOREIGN KEY (" + OrdersTable.DEST_ID + ") REFERENCES "
                     + LocationsTable.TABLE_NAME + "(" + LocationsTable.ID + ") "
@@ -180,8 +182,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 + ContractsTable.TABLE_NAME + " ("
                 + ContractsTable.ID + " INTEGER PRIMARY KEY, "
                 + ContractsTable.DEST_ID + " INTEGER NOT NULL, "
-                + ContractsTable.REPEAT_INTERVAL + " TEXT NOT NULL, "
-                + ContractsTable.REPEAT_ON + " TEXT NOT NULL, "
+                + ContractsTable.REPEAT_INTERVAL + " INTEGER NOT NULL, "
+                + ContractsTable.REPEAT_ON + " INTEGER NOT NULL, "
                 + ContractsTable.REMINDER + " INTEGER NOT NULL, "
                 + "FOREIGN KEY (" + ContractsTable.DEST_ID + ") REFERENCES "
                     + LocationsTable.TABLE_NAME + "(" + LocationsTable.ID + ") "
@@ -473,7 +475,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 orderResult.setOrderId(orderId);
                 orderResult.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(OrdersTable.DEST_ID)));
                 orderResult.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.TABLE_NAME + "." + LocationsTable.NAME)));
-                orderResult.setOrderDate(cursor.getString(cursor.getColumnIndexOrThrow(OrdersTable.ORDER_DATE)));
+                orderResult.setOrderDate(Instant.ofEpochSecond(cursor.getInt(cursor.getColumnIndexOrThrow(OrdersTable.ORDER_DATE))).atZone(ZoneId.systemDefault()).toLocalDateTime());
                 orderResult.setCompleted(cursor.getInt(cursor.getColumnIndexOrThrow(OrdersTable.COMPLETED)) == 1);
                 gotOrderData = true;
             }
@@ -507,14 +509,14 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         int lastOrderId = -1;
         while (cursor.moveToNext()) {
-            int thisOrderId = cursor.getInt(cursor.getColumnIndexOrThrow(OrdersTable.TABLE_NAME + "." + OrdersTable.ID));
+            int thisOrderId = cursor.getInt(cursor.getColumnIndexOrThrow(OrdersTable.ID));
             // if new order rather than just extra product
             if (thisOrderId != lastOrderId) {
                 Order order = new Order();
                 order.setOrderId(thisOrderId);
                 order.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(OrdersTable.DEST_ID)));
-                order.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.TABLE_NAME + "." + LocationsTable.NAME)));
-                order.setOrderDate(cursor.getString(cursor.getColumnIndexOrThrow(OrdersTable.ORDER_DATE)));
+                order.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
+                order.setOrderDate(Instant.ofEpochSecond(cursor.getInt(cursor.getColumnIndexOrThrow(OrdersTable.ORDER_DATE))).atZone(ZoneId.systemDefault()).toLocalDateTime());
                 order.setCompleted(cursor.getInt(cursor.getColumnIndexOrThrow(OrdersTable.COMPLETED)) == 1);
                 orderResultList.add(order);
             }
@@ -526,8 +528,8 @@ public class DBHandler extends SQLiteOpenHelper {
             orderProduct.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(ProductsTable.ID)));
             orderProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.NAME)));
             orderProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.MEAT_TYPE)));
-            double quantityMass = cursor.getDouble(cursor.getColumnIndexOrThrow(OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.QUANTITY_MASS));
-            int quantityBoxes = cursor.getInt(cursor.getColumnIndexOrThrow(OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.QUANTITY_BOXES));
+            double quantityMass = cursor.getDouble(cursor.getColumnIndexOrThrow(OrderProductsTable.QUANTITY_MASS));
+            int quantityBoxes = cursor.getInt(cursor.getColumnIndexOrThrow(OrderProductsTable.QUANTITY_BOXES));
             thisOrder.addProduct(orderProduct, quantityMass, quantityBoxes);
         }
         cursor.close();
@@ -683,7 +685,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public boolean addOrder(Order order) {
         ContentValues values = new ContentValues();
         values.put(OrdersTable.DEST_ID, order.getDestId());
-        values.put(OrdersTable.ORDER_DATE, order.getOrderDate());
+        values.put(OrdersTable.ORDER_DATE, order.getOrderDate().atZone(ZoneId.systemDefault()).toEpochSecond());
         values.put(OrdersTable.COMPLETED, order.isCompleted() ? 1 : 0);
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -693,7 +695,7 @@ public class DBHandler extends SQLiteOpenHelper {
         for (ProductQuantity productQuantity : order.getProductList()) {
             ContentValues productValues = new ContentValues();
             productValues.put(OrderProductsTable.PRODUCT_ID, productQuantity.getProduct().getProductId());
-            productValues.put(OrderProductsTable.ORDER_ID, order.getOrderId());
+            productValues.put(OrderProductsTable.ORDER_ID, newRowId);
             productValues.put(OrderProductsTable.QUANTITY_MASS, productQuantity.getQuantityMass());
             productValues.put(OrderProductsTable.QUANTITY_BOXES, productQuantity.getQuantityBoxes());
             db.insert(OrderProductsTable.TABLE_NAME, null, productValues);
@@ -715,7 +717,7 @@ public class DBHandler extends SQLiteOpenHelper {
         for (ProductQuantity productQuantity : contract.getProductList()) {
             ContentValues productValues = new ContentValues();
             productValues.put(ContractProductsTable.PRODUCT_ID, productQuantity.getProduct().getProductId());
-            productValues.put(ContractProductsTable.CONTRACT_ID, contract.getContractId());
+            productValues.put(ContractProductsTable.CONTRACT_ID, newRowId);
             productValues.put(ContractProductsTable.QUANTITY_MASS, productQuantity.getQuantityMass());
             productValues.put(ContractProductsTable.QUANTITY_BOXES, productQuantity.getQuantityBoxes());
             db.insert(ContractProductsTable.TABLE_NAME, null, productValues);
