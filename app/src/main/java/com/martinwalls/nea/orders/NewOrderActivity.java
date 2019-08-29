@@ -8,10 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
@@ -130,6 +127,7 @@ public class NewOrderActivity extends AppCompatActivity
         TextView addProductBtn = findViewById(R.id.add_product);
         addProductBtn.setOnClickListener(v -> {
             Toast.makeText(this, "ADD PRODUCT", Toast.LENGTH_SHORT).show();
+            addProduct();
             //todo
         });
     }
@@ -300,6 +298,17 @@ public class NewOrderActivity extends AppCompatActivity
         editText.setText(item.getName());
         editText.clearFocus();
         cancelSearch();
+    }
+
+    private void addProduct() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        ViewGroup inputLayout = findViewById(R.id.product_input_layout);
+
+        View inflatedLayout = inflater.inflate(R.layout.input_product, inputLayout, false);
+        TextView addProductBtn = inputLayout.findViewById(R.id.add_product);
+        int index = inputLayout.indexOfChild(addProductBtn);
+        inputLayout.addView(inflatedLayout, index);
     }
 
     @Override

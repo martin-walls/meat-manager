@@ -9,129 +9,79 @@
     tools:context=".orders.NewOrderActivity"
     >
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/screen_margin_horizontal"
-        android:layout_marginEnd="@dimen/screen_margin_horizontal"
-        android:orientation="vertical"
         >
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_product"
-            style="@style/AppTextInputLayout.Searchable"
+        <LinearLayout
+            android:id="@+id/product_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/input_spacing_vertical"
-            android:hint="@string/orders_input_product"
+            android:layout_marginStart="@dimen/screen_margin_horizontal"
+            android:layout_marginEnd="@dimen/screen_margin_horizontal"
+            android:orientation="vertical"
             >
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_text_product"
+            <include
+                layout="@layout/input_product"
+                />
+
+            <TextView
+                android:id="@+id/add_product"
+                style="@style/TextEmphasisSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="end|center_vertical"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="8dp"
+                android:text="@string/orders_add_product"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_destination"
+                style="@style/AppTextInputLayout.Searchable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="textCapWords"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <LinearLayout
-            android:id="@+id/input_row_quantity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/input_spacing_vertical"
-            android:orientation="horizontal"
-            >
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_layout_quantity_mass"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/input_spacing_horizontal"
-                android:layout_weight="1"
-                android:hint="@string/orders_input_quantity_kg"
+                android:layout_marginTop="@dimen/input_spacing_vertical"
+                android:hint="@string/orders_input_destination"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_quantity_mass"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
-                    android:inputType="numberDecimal"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_layout_quantity_boxes"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/orders_input_quantity_boxes"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_quantity_boxes"
+                    android:id="@+id/edit_text_destination"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
-                    android:inputType="number"
+                    android:inputType="textCapWords"
                     />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/input_spacing_vertical"
+                android:hint="@string/orders_input_date"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="false"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/add_product"
-            style="@style/TextEmphasisSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="8dp"
-            android:background="?selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="end|center_vertical"
-            android:paddingStart="8dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="8dp"
-            android:text="@string/orders_add_product"
-            />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_destination"
-            style="@style/AppTextInputLayout.Searchable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/input_spacing_vertical"
-            android:hint="@string/orders_input_destination"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_text_destination"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="textCapWords"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/input_spacing_vertical"
-            android:hint="@string/orders_input_date"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_text_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusableInTouchMode="false"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/search_results_layout"

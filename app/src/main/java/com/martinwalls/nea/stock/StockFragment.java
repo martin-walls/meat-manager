@@ -64,7 +64,7 @@ public class StockFragment extends Fragment {
         if (dbHandler == null) {
             dbHandler = new DBHandler(getContext());
         }
-        loadStock(); //todo maybe needs to be in onStart()?
+        loadStock();
     }
 
     @Override
