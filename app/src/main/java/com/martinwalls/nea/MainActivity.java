@@ -117,7 +117,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         TextView navSettings = navDrawerContent.findViewById(R.id.nav_settings);
-        navSettings.setOnClickListener(v -> Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show());
+        navSettings.setOnClickListener(
+                v -> Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show());
     }
 
     @Override

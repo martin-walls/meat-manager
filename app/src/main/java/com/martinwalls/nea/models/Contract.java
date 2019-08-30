@@ -16,7 +16,8 @@ public class Contract {
     public Contract() {
     }
 
-    public Contract(int contractId, int destId, String repeatInterval, String repeatOn, int reminder, List<ProductQuantity> productList) {
+    public Contract(int contractId, int destId, String repeatInterval, String repeatOn,
+                    int reminder, List<ProductQuantity> productList) {
         this.contractId = contractId;
         this.destId = destId;
         this.repeatInterval = repeatInterval;

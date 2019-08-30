@@ -1,6 +1,6 @@
 package com.martinwalls.nea;
 
-import com.martinwalls.nea.exchange.Conversion;
+import com.martinwalls.nea.models.Conversion;
 
 import java.util.ArrayList;
 import java.util.Arrays;

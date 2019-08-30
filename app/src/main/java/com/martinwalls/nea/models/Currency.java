@@ -1,4 +1,4 @@
-package com.martinwalls.nea.exchange;
+package com.martinwalls.nea.models;
 
 public class Currency {
     private String name;

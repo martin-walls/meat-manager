@@ -29,7 +29,8 @@ public class Utils {
     }
 
     /**
-     * Merge sort algorithm (recursive). Takes a list of objects that implement {@link Comparable}.
+     * Merge sort algorithm (recursive). Takes a list of objects
+     * that implement {@link Comparable}.
      */
     public static <T extends Comparable<T>> List<T> mergeSort(@NonNull List<T> list) {
         if (list.size() <= 1) {
@@ -70,7 +71,8 @@ public class Utils {
     }
 
     /**
-     * Merge sort algorithm (recursive). Takes a list of objects and a {@link Comparator} describing how to compare objects.
+     * Merge sort algorithm (recursive). Takes a list of objects and
+     * a {@link Comparator} describing how to compare objects.
      */
     public static <T> List<T> mergeSort(@NonNull List<T> list, Comparator<T> comparator) {
         if (list.size() <= 1) {

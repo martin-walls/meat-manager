@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.*;
 import com.martinwalls.nea.components.CustomRecyclerView;
+import com.martinwalls.nea.models.Conversion;
 
 import java.util.List;
 
@@ -38,12 +39,8 @@ public class ExchangeFragment extends Fragment {
         currencyPickerLeft.setDisplayedValues(currencies);
         currencyPickerLeft.setWrapSelectorWheel(false);
         currencyPickerLeft.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-        currencyPickerLeft.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                setPrimaryCurrency(currencies[newVal]);
-            }
-        });
+        currencyPickerLeft.setOnValueChangedListener(
+                (picker, oldVal, newVal) -> setPrimaryCurrency(currencies[newVal]));
         primaryCurrencyText.setText(currencies[currencyPickerLeft.getValue()]);
 
         NumberPicker currencyPickerRight = fragmentView.findViewById(R.id.currency_picker_right);
@@ -54,12 +51,8 @@ public class ExchangeFragment extends Fragment {
         currencyPickerRight.setValue(1);
         currencyPickerRight.setWrapSelectorWheel(false);
         currencyPickerRight.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-        currencyPickerRight.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                setSecondaryCurrency(currencies[newVal]);
-            }
-        });
+        currencyPickerRight.setOnValueChangedListener(
+                (picker, oldVal, newVal) -> setSecondaryCurrency(currencies[newVal]));
         setSecondaryCurrency(currencies[currencyPickerRight.getValue()]);
 
         List<Conversion> conversionList = SampleData.getSampleConversions();

@@ -1,4 +1,4 @@
-package com.martinwalls.nea.exchange;
+package com.martinwalls.nea.models;
 
 public class Conversion {
     private int timestamp;
@@ -10,7 +10,8 @@ public class Conversion {
     public Conversion() {
     }
 
-    public Conversion(int timestamp, String primaryCurrency, String secondaryCurrency, String primaryValue, String secondaryValue) {
+    public Conversion(int timestamp, String primaryCurrency, String secondaryCurrency,
+                      String primaryValue, String secondaryValue) {
         this.timestamp = timestamp;
         this.primaryCurrency = primaryCurrency;
         this.secondaryCurrency = secondaryCurrency;

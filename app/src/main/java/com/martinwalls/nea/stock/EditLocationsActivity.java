@@ -40,7 +40,8 @@ public class EditLocationsActivity extends AppCompatActivity {
         }
 
         getSupportActionBar().setTitle(getString(R.string.locations_add_new_title,
-                locationType.equals(Location.LocationType.Storage.name()) ? LOCATION_TYPE_DEFAULT : locationType.toLowerCase()));
+                locationType.equals(Location.LocationType.Storage.name())
+                        ? LOCATION_TYPE_DEFAULT : locationType.toLowerCase()));
 
         dbHandler = new DBHandler(this);
 
@@ -172,7 +173,8 @@ public class EditLocationsActivity extends AppCompatActivity {
             inputLayoutCountry.setError(null);
         }
         // check for valid email address
-        if (!TextUtils.isEmpty(editTextEmail.getText()) && !Patterns.EMAIL_ADDRESS.matcher(editTextEmail.getText()).matches()) {
+        if (!TextUtils.isEmpty(editTextEmail.getText())
+                && !Patterns.EMAIL_ADDRESS.matcher(editTextEmail.getText()).matches()) {
             inputLayoutEmail.setError(getString(R.string.input_error_invalid_email));
             isValid = false;
         } else {

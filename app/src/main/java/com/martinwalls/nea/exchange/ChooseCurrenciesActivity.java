@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SampleData;
+import com.martinwalls.nea.models.Currency;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,8 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
         getSupportActionBar().setTitle(R.string.exchange_choose_currencies);
 
         for (String currencyString : SampleData.getSampleCurrencies()) {
-            allCurrencyList.add(new Currency(currencyString, currencyString.equals("GBP") || currencyString.equals("HKD")));
+            allCurrencyList.add(new Currency(currencyString, currencyString.equals("GBP")
+                    || currencyString.equals("HKD")));
         }
 
         for (Currency currency : allCurrencyList) {

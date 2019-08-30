@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
+import com.martinwalls.nea.models.Conversion;
 
 import java.util.List;
 
@@ -32,7 +33,8 @@ public class ExchangeHistoryAdapter extends RecyclerView.Adapter<ExchangeHistory
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_exchange_history, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_exchange_history, parent, false);
         return new ViewHolder(itemView);
     }
 

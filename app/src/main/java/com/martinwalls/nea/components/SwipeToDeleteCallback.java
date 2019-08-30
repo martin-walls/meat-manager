@@ -34,7 +34,8 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     }
 
     @Override
-    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                          RecyclerView.ViewHolder target) {
         return false;
     }
 
@@ -53,13 +54,15 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
             int iconRight = itemView.getLeft() + iconMargin + deleteIcon.getIntrinsicWidth();
             deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
 
-            background.setBounds(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + ((int) dX), itemView.getBottom());
+            background.setBounds(itemView.getLeft(), itemView.getTop(),
+                    itemView.getLeft() + ((int) dX), itemView.getBottom());
         } else if (dX < 0) { // swipe left
             int iconLeft = itemView.getRight() - iconMargin - deleteIcon.getIntrinsicWidth();
             int iconRight = itemView.getRight() - iconMargin;
             deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
 
-            background.setBounds(itemView.getRight() + ((int) dX), itemView.getTop(), itemView.getRight(), itemView.getBottom());
+            background.setBounds(itemView.getRight() + ((int) dX), itemView.getTop(),
+                    itemView.getRight(), itemView.getBottom());
         } else {
             background.setBounds(0, 0, 0, 0);
         }

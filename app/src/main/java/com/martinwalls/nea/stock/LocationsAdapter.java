@@ -41,7 +41,8 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_secondary_info, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_secondary_info, parent, false);
         return new ViewHolder(itemView);
     }
 
@@ -68,7 +69,10 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
             notifyItemRemoved(position);
             showUndoSnackbar();
         } else {
-            Toast.makeText(parentActivity, parentActivity.getString(R.string.db_error_delete_location, locationList.get(position).getLocationName()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(parentActivity,
+                    parentActivity.getString(R.string.db_error_delete_location,
+                            locationList.get(position).getLocationName()),
+                    Toast.LENGTH_SHORT).show();
             notifyItemChanged(position);
         }
     }

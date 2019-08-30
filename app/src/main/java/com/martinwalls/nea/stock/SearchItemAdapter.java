@@ -28,12 +28,8 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
             super(view);
             itemName = (TextView) view;
 
-            itemName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemSelected(itemListFiltered.get(getAdapterPosition()), searchItemType);
-                }
-            });
+            itemName.setOnClickListener(
+                    v -> listener.onItemSelected(itemListFiltered.get(getAdapterPosition()), searchItemType));
         }
     }
 
@@ -46,7 +42,8 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search_result, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_search_result, parent, false);
 
         return new ViewHolder(itemView);
     }

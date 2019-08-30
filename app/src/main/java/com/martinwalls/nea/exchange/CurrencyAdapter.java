@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
+import com.martinwalls.nea.models.Currency;
 
 import java.util.List;
 
