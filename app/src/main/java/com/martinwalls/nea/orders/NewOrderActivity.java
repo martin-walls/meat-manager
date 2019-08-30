@@ -74,6 +74,8 @@ public class NewOrderActivity extends AppCompatActivity
     private LocalDate selectedDate;
     private LocalDateTime selectedDateTime;
 
+    private List<ProductQuantity> productsAlreadyAddedList = new ArrayList<>();
+
     private final String DATE_FORMAT = "dd MMMM yyyy, HH:mm";
 
     private final int REQUEST_REFRESH_ON_DONE = 1;
@@ -165,6 +167,76 @@ public class NewOrderActivity extends AppCompatActivity
         }
     }
 
+    private void addProduct() {
+        ProductQuantity product = getProductFromInputsAndClear();
+        if (product != null) {
+            productsAlreadyAddedList.add(product);
+
+            LayoutInflater inflater = LayoutInflater.from(this);
+            ViewGroup productsAlreadyAdded = findViewById(R.id.products_already_added);
+
+            View productView = inflater.inflate(R.layout.item_product, productsAlreadyAdded, false);
+            TextView productName = productView.findViewById(R.id.product_name);
+            productName.setText(product.getProduct().getProductName());
+            TextView productMass = productView.findViewById(R.id.mass);
+            productMass.setText(String.valueOf(product.getQuantityMass()));
+            TextView productNumBoxes = productView.findViewById(R.id.num_boxes);
+            if (product.getQuantityBoxes() < 0) {
+                productNumBoxes.setVisibility(GONE);
+            } else {
+                productNumBoxes.setText(String.valueOf(product.getQuantityBoxes()));
+            }
+
+            productView.setPadding(Utils.convertDpToPixelSize(8, this),
+                    Utils.convertDpToPixelSize(16, this),
+                    Utils.convertDpToPixelSize(8, this),
+                    Utils.convertDpToPixelSize(16, this));
+
+            productsAlreadyAdded.addView(productView);
+        }
+    }
+
+    private ProductQuantity getProductFromInputsAndClear() {
+        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
+        TextInputLayout inputLayoutProduct = findViewById(R.id.input_layout_product);
+
+        TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
+        TextInputLayout inputLayoutMass = findViewById(R.id.input_layout_quantity_mass);
+
+        TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
+
+        boolean isValid = true;
+
+        if (TextUtils.isEmpty(editTextProduct.getText())) {
+            inputLayoutProduct.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            inputLayoutProduct.setError(null);
+        }
+        if (TextUtils.isEmpty(editTextMass.getText())) {
+            inputLayoutMass.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            inputLayoutMass.setError(null);
+        }
+
+        if (isValid) {
+            ProductQuantity productQuantity = new ProductQuantity(dbHandler.getProduct(selectedProductId),
+                    Double.parseDouble(editTextMass.getText().toString()),
+                    TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1 :
+                            Integer.parseInt(editTextNumBoxes.getText().toString()));
+            editTextProduct.setText("");
+            editTextProduct.clearFocus();
+            editTextMass.setText("");
+            editTextMass.clearFocus();
+            editTextNumBoxes.setText("");
+            editTextNumBoxes.clearFocus();
+            return productQuantity;
+        } else {
+            return null;
+        }
+    }
+
     private void setListeners(final String name, final TextInputLayout inputLayout, final TextInputEditText editText) {
         inputLayout.setEndIconVisible(false);
 
@@ -213,7 +285,8 @@ public class NewOrderActivity extends AppCompatActivity
                 }
                 break;
             case INPUT_DESTINATION:
-                for (Location location : Utils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Destination), Location.comparatorAlpha())) {
+                for (Location location : Utils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Destination),
+                        Location.comparatorAlpha())) {
                     searchItemList.add(new SearchItem(location.getLocationName(), location.getLocationId()));
                 }
                 break;
@@ -262,7 +335,8 @@ public class NewOrderActivity extends AppCompatActivity
                 break;
             case INPUT_DESTINATION:
                 Intent newDestIntent = new Intent(this, EditLocationsActivity.class);
-                newDestIntent.putExtra(EditLocationsActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Destination.name());
+                newDestIntent.putExtra(EditLocationsActivity.EXTRA_LOCATION_TYPE,
+                        Location.LocationType.Destination.name());
                 startActivityForResult(newDestIntent, REQUEST_REFRESH_ON_DONE);
                 break;
         }
@@ -300,17 +374,6 @@ public class NewOrderActivity extends AppCompatActivity
         cancelSearch();
     }
 
-    private void addProduct() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-
-        ViewGroup inputLayout = findViewById(R.id.product_input_layout);
-
-        View inflatedLayout = inflater.inflate(R.layout.input_product, inputLayout, false);
-        TextView addProductBtn = inputLayout.findViewById(R.id.add_product);
-        int index = inputLayout.indexOfChild(addProductBtn);
-        inputLayout.addView(inflatedLayout, index);
-    }
-
     @Override
     public void onAddNewProductDoneAction(Product newProduct) {
         boolean successful = dbHandler.addProduct(newProduct);
@@ -324,7 +387,8 @@ public class NewOrderActivity extends AppCompatActivity
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         selectedDate = LocalDate.of(year, month, day);
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, this, 12, 0, true);
+        TimePickerDialog timePickerDialog =
+                new TimePickerDialog(this, this, 12, 0, true);
         timePickerDialog.show();
     }
 
@@ -336,9 +400,11 @@ public class NewOrderActivity extends AppCompatActivity
                 && selectedDate.getDayOfMonth() == now.get(Calendar.DAY_OF_MONTH)
                 && (hourOfDay < now.get(Calendar.HOUR_OF_DAY)
                 || (hourOfDay == now.get(Calendar.HOUR_OF_DAY) && minute <= now.get(Calendar.MINUTE) + 10))) {
-            Toast.makeText(this, R.string.input_error_time_must_be_future, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.input_error_time_must_be_future, Toast.LENGTH_SHORT)
+                    .show();
 
-            TimePickerDialog timePickerDialog = new TimePickerDialog(this, this, 12, 0, true);
+            TimePickerDialog timePickerDialog =
+                    new TimePickerDialog(this, this, 12, 0, true);
             timePickerDialog.show();
         } else {
             selectedDateTime = LocalDateTime.of(selectedDate, LocalTime.of(hourOfDay, minute));
@@ -366,13 +432,13 @@ public class NewOrderActivity extends AppCompatActivity
         TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
         TextInputLayout inputLayoutDate = findViewById(R.id.input_layout_date);
 
-        if (TextUtils.isEmpty(editTextProduct.getText())) {
+        if (productsAlreadyAddedList.size() == 0 && TextUtils.isEmpty(editTextProduct.getText())) {
             inputLayoutProduct.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutProduct.setError(null);
         }
-        if (TextUtils.isEmpty(editTextMass.getText())) {
+        if (productsAlreadyAddedList.size() == 0 && TextUtils.isEmpty(editTextMass.getText())) {
             inputLayoutMass.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
@@ -384,15 +450,24 @@ public class NewOrderActivity extends AppCompatActivity
         } else {
             inputLayoutDest.setError(null);
         }
+        if (TextUtils.isEmpty(editTextDate.getText())) {
+            inputLayoutDate.setError(getString(R.string.input_error_blank_date));
+            isValid = false;
+        } else {
+            inputLayoutDate.setError(null);
+        }
 
         if (isValid) {
             List<ProductQuantity> productList = new ArrayList<>();
             productList.add(new ProductQuantity(dbHandler.getProduct(selectedProductId),
                     Double.parseDouble(editTextMass.getText().toString()),
-                    TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1 : Integer.parseInt(editTextNumBoxes.getText().toString())));
+                    TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1
+                            : Integer.parseInt(editTextNumBoxes.getText().toString())));
+            productList.addAll(productsAlreadyAddedList);
             newOrder.setProductList(productList);
             newOrder.setDest(dbHandler.getLocation(selectedDestId));
-            newOrder.setOrderDate(LocalDateTime.parse(editTextDate.getText().toString(), DateTimeFormatter.ofPattern(DATE_FORMAT)));
+            newOrder.setOrderDate(LocalDateTime.parse(editTextDate.getText().toString(),
+                    DateTimeFormatter.ofPattern(DATE_FORMAT)));
             newOrder.setCompleted(false);
 
             return dbHandler.addOrder(newOrder);

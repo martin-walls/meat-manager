@@ -519,6 +519,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 order.setOrderDate(Instant.ofEpochSecond(cursor.getInt(cursor.getColumnIndexOrThrow(OrdersTable.ORDER_DATE))).atZone(ZoneId.systemDefault()).toLocalDateTime());
                 order.setCompleted(cursor.getInt(cursor.getColumnIndexOrThrow(OrdersTable.COMPLETED)) == 1);
                 orderResultList.add(order);
+                lastOrderId = thisOrderId;
             }
 
             // get order object for current db row
@@ -605,6 +606,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 contract.setRepeatOn(cursor.getString(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_ON)));
                 contract.setReminder(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REMINDER)));
                 contractResultList.add(contract);
+                lastContractId = thisContractId;
             }
 
             // get contract object for current row

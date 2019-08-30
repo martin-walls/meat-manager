@@ -1,5 +1,6 @@
 package com.martinwalls.nea;
 
+import android.content.Context;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -20,6 +21,11 @@ public class Utils {
 
     public static double convertToKgs(double lbs) {
         return lbs * lbsToKgs;
+    }
+
+    public static int convertDpToPixelSize(float dpValue, Context context) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 
     /**
