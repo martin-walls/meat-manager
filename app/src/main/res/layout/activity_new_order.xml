@@ -103,12 +103,19 @@
                 android:text="@string/orders_add_product"
                 />
 
-            <LinearLayout
-                android:id="@+id/products_already_added"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/products_added_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:overScrollMode="never"
                 />
+
+            <!--<LinearLayout-->
+            <!--android:id="@+id/products_already_added"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical"-->
+            <!--/>-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_destination"

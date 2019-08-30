@@ -1,4 +1,4 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.models;
 
 public class SearchItem {
     private String name;

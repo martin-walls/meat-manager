@@ -11,15 +11,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
+import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.components.RecyclerViewDivider;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.Order;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-public class OrdersFragment extends Fragment {
+public class OrdersFragment extends Fragment
+        implements OrdersAdapter.OrdersAdapterListener {
 
     private DBHandler dbHandler;
 
@@ -38,7 +41,7 @@ public class OrdersFragment extends Fragment {
         TextView emptyView = fragmentView.findViewById(R.id.empty);
         recyclerView.setEmptyView(emptyView);
 
-        ordersAdapter = new OrdersAdapter(orderList);
+        ordersAdapter = new OrdersAdapter(orderList, this);
         recyclerView.setAdapter(ordersAdapter);
         loadOrders();
 
@@ -86,7 +89,18 @@ public class OrdersFragment extends Fragment {
 
     private void loadOrders() {
         orderList.clear();
-        orderList.addAll(dbHandler.getAllOrders());
+        // sort by date
+        orderList.addAll(Utils.mergeSort(dbHandler.getAllOrders(), new Comparator<Order>() {
+            @Override
+            public int compare(Order order1, Order order2) {
+                return order1.getOrderDate().compareTo(order2.getOrderDate());
+            }
+        }));
         ordersAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onOrderSelected(Order order) {
+        Toast.makeText(getContext(), order.getDestName(), Toast.LENGTH_SHORT).show();
     }
 }

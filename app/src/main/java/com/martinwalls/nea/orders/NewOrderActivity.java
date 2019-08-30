@@ -14,13 +14,14 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Transition;
 import androidx.transition.TransitionInflater;
 import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.SearchItem;
+import com.martinwalls.nea.models.SearchItem;
 import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
@@ -48,7 +49,8 @@ public class NewOrderActivity extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener,
         AddNewProductDialog.AddNewProductListener,
         DatePickerDialog.OnDateSetListener,
-        TimePickerDialog.OnTimeSetListener {
+        TimePickerDialog.OnTimeSetListener,
+        ProductsAddedAdapter.ProductsAddedAdapterListener {
 
     private DBHandler dbHandler;
 
@@ -74,7 +76,11 @@ public class NewOrderActivity extends AppCompatActivity
     private LocalDate selectedDate;
     private LocalDateTime selectedDateTime;
 
-    private List<ProductQuantity> productsAlreadyAddedList = new ArrayList<>();
+    private TextView addProductBtn;
+
+    private List<ProductQuantity> productsAddedList = new ArrayList<>();
+    private ProductsAddedAdapter productsAddedAdapter;
+    private RecyclerView productsAddedRecyclerView;
 
     private final String DATE_FORMAT = "dd MMMM yyyy, HH:mm";
 
@@ -89,7 +95,6 @@ public class NewOrderActivity extends AppCompatActivity
 
         inputViews.put(INPUT_PRODUCT, R.id.input_layout_product);
         inputViews.put(INPUT_QUANTITY, R.id.input_row_quantity);
-        inputViews.put(BTN_ADD_PRODUCT, R.id.add_product);
         inputViews.put(INPUT_DESTINATION, R.id.input_layout_destination);
         inputViews.put(INPUT_DATE, R.id.input_layout_date);
 
@@ -114,6 +119,11 @@ public class NewOrderActivity extends AppCompatActivity
                 findViewById(R.id.input_layout_destination),
                 findViewById(R.id.edit_text_destination));
 
+        productsAddedAdapter = new ProductsAddedAdapter(productsAddedList, this);
+        productsAddedRecyclerView = findViewById(R.id.products_added_recycler_view);
+        productsAddedRecyclerView.setAdapter(productsAddedAdapter);
+        productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
         editTextDate.setOnClickListener(v -> {
             final Calendar calendar = Calendar.getInstance();
@@ -126,12 +136,8 @@ public class NewOrderActivity extends AppCompatActivity
             datePickerDialog.show();
         });
 
-        TextView addProductBtn = findViewById(R.id.add_product);
-        addProductBtn.setOnClickListener(v -> {
-            Toast.makeText(this, "ADD PRODUCT", Toast.LENGTH_SHORT).show();
-            addProduct();
-            //todo
-        });
+        addProductBtn = findViewById(R.id.add_product);
+        addProductBtn.setOnClickListener(v -> addProduct());
     }
 
     @Override
@@ -170,33 +176,41 @@ public class NewOrderActivity extends AppCompatActivity
     private void addProduct() {
         ProductQuantity product = getProductFromInputsAndClear();
         if (product != null) {
-            productsAlreadyAddedList.add(product);
-
-            LayoutInflater inflater = LayoutInflater.from(this);
-            ViewGroup productsAlreadyAdded = findViewById(R.id.products_already_added);
-
-            View productView = inflater.inflate(R.layout.item_product, productsAlreadyAdded, false);
-            TextView productName = productView.findViewById(R.id.product_name);
-            productName.setText(product.getProduct().getProductName());
-            TextView productMass = productView.findViewById(R.id.mass);
-            productMass.setText(String.valueOf(product.getQuantityMass()));
-            TextView productNumBoxes = productView.findViewById(R.id.num_boxes);
-            if (product.getQuantityBoxes() < 0) {
-                productNumBoxes.setVisibility(GONE);
-            } else {
-                productNumBoxes.setText(String.valueOf(product.getQuantityBoxes()));
-            }
-
-            productView.setPadding(Utils.convertDpToPixelSize(8, this),
-                    Utils.convertDpToPixelSize(16, this),
-                    Utils.convertDpToPixelSize(8, this),
-                    Utils.convertDpToPixelSize(16, this));
-
-            productsAlreadyAdded.addView(productView);
+//            productsAddedList.add(product);
+//
+//            LayoutInflater inflater = LayoutInflater.from(this);
+//            ViewGroup productsAlreadyAdded = findViewById(R.id.products_already_added);
+//
+//            View productView = inflater.inflate(R.layout.item_product_added, productsAlreadyAdded, false);
+//            TextView productName = productView.findViewById(R.id.product_name);
+//            productName.setText(product.getProduct().getProductName());
+//            TextView productMass = productView.findViewById(R.id.mass);
+//            productMass.setText(String.valueOf(product.getQuantityMass()));
+//            TextView productNumBoxes = productView.findViewById(R.id.num_boxes);
+//            if (product.getQuantityBoxes() < 0) {
+//                productNumBoxes.setVisibility(GONE);
+//            } else {
+//                productNumBoxes.setText(String.valueOf(product.getQuantityBoxes()));
+//            }
+//
+//            ImageButton deleteBtn = findViewById(R.id.btn_delete);
+//            deleteBtn.setOnClickListener(v -> delete);
+//
+//            productsAlreadyAdded.addView(productView);
+            productsAddedList.add(product);
+            productsAddedAdapter.notifyItemInserted(productsAddedList.size());
         }
     }
 
+    @Override
+    public void deleteProductAdded(int position) {
+        productsAddedList.remove(position);
+        productsAddedAdapter.notifyItemRemoved(position);
+    }
+
     private ProductQuantity getProductFromInputsAndClear() {
+        hideKeyboard();
+
         TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
         TextInputLayout inputLayoutProduct = findViewById(R.id.input_layout_product);
 
@@ -212,6 +226,13 @@ public class NewOrderActivity extends AppCompatActivity
             isValid = false;
         } else {
             inputLayoutProduct.setError(null);
+        }
+        for (ProductQuantity productQuantity : productsAddedList) {
+            if (productQuantity.getProduct().getProductName().equals(editTextProduct.getText().toString())) {
+                inputLayoutProduct.setError(getString(R.string.input_error_duplicate));
+                isValid = false;
+                break;
+            }
         }
         if (TextUtils.isEmpty(editTextMass.getText())) {
             inputLayoutMass.setError(getString(R.string.input_error_blank));
@@ -276,6 +297,8 @@ public class NewOrderActivity extends AppCompatActivity
                 findViewById(view).setVisibility(GONE);
             }
         }
+        addProductBtn.setVisibility(GONE);
+        productsAddedRecyclerView.setVisibility(GONE);
 
         searchItemList.clear();
         switch (inputName) {
@@ -320,6 +343,8 @@ public class NewOrderActivity extends AppCompatActivity
             View viewToShow = findViewById(view);
             viewToShow.setVisibility(View.VISIBLE);
         }
+        addProductBtn.setVisibility(View.VISIBLE);
+        productsAddedRecyclerView.setVisibility(View.VISIBLE);
 
         searchResultsLayout.setVisibility(GONE);
 
@@ -386,7 +411,8 @@ public class NewOrderActivity extends AppCompatActivity
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        selectedDate = LocalDate.of(year, month, day);
+        // (month + 1) adjusts for DatePicker returning month in range 0-11, LocalDate uses 1-12
+        selectedDate = LocalDate.of(year, month + 1, day);
         TimePickerDialog timePickerDialog =
                 new TimePickerDialog(this, this, 12, 0, true);
         timePickerDialog.show();
@@ -432,13 +458,13 @@ public class NewOrderActivity extends AppCompatActivity
         TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
         TextInputLayout inputLayoutDate = findViewById(R.id.input_layout_date);
 
-        if (productsAlreadyAddedList.size() == 0 && TextUtils.isEmpty(editTextProduct.getText())) {
+        if (productsAddedList.size() == 0 && TextUtils.isEmpty(editTextProduct.getText())) {
             inputLayoutProduct.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutProduct.setError(null);
         }
-        if (productsAlreadyAddedList.size() == 0 && TextUtils.isEmpty(editTextMass.getText())) {
+        if (productsAddedList.size() == 0 && TextUtils.isEmpty(editTextMass.getText())) {
             inputLayoutMass.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
@@ -459,11 +485,13 @@ public class NewOrderActivity extends AppCompatActivity
 
         if (isValid) {
             List<ProductQuantity> productList = new ArrayList<>();
-            productList.add(new ProductQuantity(dbHandler.getProduct(selectedProductId),
-                    Double.parseDouble(editTextMass.getText().toString()),
-                    TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1
-                            : Integer.parseInt(editTextNumBoxes.getText().toString())));
-            productList.addAll(productsAlreadyAddedList);
+            if (!TextUtils.isEmpty(editTextProduct.getText())) {
+                productList.add(new ProductQuantity(dbHandler.getProduct(selectedProductId),
+                        Double.parseDouble(editTextMass.getText().toString()),
+                        TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1
+                                : Integer.parseInt(editTextNumBoxes.getText().toString())));
+            }
+            productList.addAll(productsAddedList);
             newOrder.setProductList(productList);
             newOrder.setDest(dbHandler.getLocation(selectedDestId));
             newOrder.setOrderDate(LocalDateTime.parse(editTextDate.getText().toString(),

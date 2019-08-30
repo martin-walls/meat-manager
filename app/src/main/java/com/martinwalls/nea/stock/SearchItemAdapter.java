@@ -8,7 +8,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.SearchItem;
+import com.martinwalls.nea.models.SearchItem;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -23,7 +23,7 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.SearchItem;
+import com.martinwalls.nea.models.SearchItem;
 import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
