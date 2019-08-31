@@ -13,7 +13,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         >
-        <activity android:name=".orders.NewOrderActivity"></activity>
+        <activity android:name=".orders.OrderDetailActivity"></activity>
+        <activity android:name=".orders.NewOrderActivity" />
         <activity android:name=".stock.EditLocationsActivity" />
         <activity android:name=".stock.EditProductsActivity" />
         <activity android:name=".stock.EditMeatTypesActivity" />

@@ -12,6 +12,7 @@
     <string name="action_yes">Yes</string>
     <string name="action_no">No</string>
     <string name="action_sort">Sort</string>
+    <string name="action_edit">Edit</string>
 
     <!-- Menus -->
     <string name="action_edit_locations">Edit locations</string>
@@ -119,6 +120,8 @@
     <string name="orders_add_product">Add another product</string>
     <string name="orders_input_destination">Destination:</string>
     <string name="orders_input_date">Date:</string>
+
+    <string name="order_details_title">Order details</string>
 
     <!-- Contracts page -->
     <string name="contracts_title">Contracts</string>

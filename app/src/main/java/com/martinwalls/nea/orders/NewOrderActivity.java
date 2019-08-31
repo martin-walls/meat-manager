@@ -181,7 +181,7 @@ public class NewOrderActivity extends AppCompatActivity
 //            LayoutInflater inflater = LayoutInflater.from(this);
 //            ViewGroup productsAlreadyAdded = findViewById(R.id.products_already_added);
 //
-//            View productView = inflater.inflate(R.layout.item_product_added, productsAlreadyAdded, false);
+//            View productView = inflater.inflate(R.layout.item_product_options, productsAlreadyAdded, false);
 //            TextView productName = productView.findViewById(R.id.product_name);
 //            productName.setText(product.getProduct().getProductName());
 //            TextView productMass = productView.findViewById(R.id.mass);

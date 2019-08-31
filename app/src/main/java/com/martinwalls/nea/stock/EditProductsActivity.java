@@ -93,5 +93,5 @@ public class EditProductsActivity extends AppCompatActivity
         loadProducts();
     }
 
-    //todo be able to edit products
+    //todo be able to edit products ?-- may not be needed, can just delete and re-add
 }

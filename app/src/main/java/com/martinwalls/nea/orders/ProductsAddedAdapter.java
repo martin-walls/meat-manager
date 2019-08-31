@@ -11,16 +11,17 @@ import com.martinwalls.nea.models.ProductQuantity;
 
 import java.util.List;
 
-import static android.view.View.GONE;
-
 public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdapter.ViewHolder> {
 
     private List<ProductQuantity> productList;
-    ProductsAddedAdapterListener listener;
+    private ProductsAddedAdapterListener listener;
+
+    private boolean showEditBtn = true;
+    private boolean showDeleteBtn = true;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name, mass, numBoxes;
-        private ImageButton deleteBtn;
+        private ImageButton deleteBtn, editBtn;
 
         ViewHolder(View view) {
             super(view);
@@ -28,9 +29,18 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
             mass = view.findViewById(R.id.mass);
             numBoxes = view.findViewById(R.id.num_boxes);
             deleteBtn = view.findViewById(R.id.btn_delete);
+            editBtn = view.findViewById(R.id.btn_edit);
 
             deleteBtn.setOnClickListener(v -> listener.deleteProductAdded(getAdapterPosition()));
+            editBtn.setOnClickListener(v -> listener.editProductAdded(getAdapterPosition()));
         }
+    }
+
+    // when both buttons are hidden, no listener required
+    ProductsAddedAdapter(List<ProductQuantity> productList) {
+        this.productList = productList;
+        showEditBtn = false;
+        showDeleteBtn = false;
     }
 
     ProductsAddedAdapter(List<ProductQuantity> productList, ProductsAddedAdapterListener listener) {
@@ -38,10 +48,18 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
         this.listener = listener;
     }
 
+    ProductsAddedAdapter(List<ProductQuantity> productList, ProductsAddedAdapterListener listener,
+                                boolean showEditBtn, boolean showDeleteBtn) {
+        this.productList = productList;
+        this.listener = listener;
+        this.showEditBtn = showEditBtn;
+        this.showDeleteBtn = showDeleteBtn;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_product_added, parent, false);
+                .inflate(R.layout.item_product_options, parent, false);
         return new ViewHolder(itemView);
     }
 
@@ -52,11 +70,17 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
         viewHolder.mass.setText(
                 viewHolder.mass.getContext().getString(R.string.amount_kg, productQuantity.getQuantityMass()));
         if (productQuantity.getQuantityBoxes() < 0) {
-            viewHolder.numBoxes.setVisibility(GONE);
+            viewHolder.numBoxes.setVisibility(View.GONE);
         } else {
             viewHolder.numBoxes.setText(viewHolder.numBoxes.getContext().getResources()
                     .getQuantityString(R.plurals.amount_boxes,
                             productQuantity.getQuantityBoxes(), productQuantity.getQuantityBoxes()));
+        }
+        if (!showDeleteBtn) {
+            viewHolder.deleteBtn.setVisibility(View.GONE);
+        }
+        if (!showEditBtn) {
+            viewHolder.editBtn.setVisibility(View.GONE);
         }
     }
 
@@ -66,6 +90,7 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
     }
 
     public interface ProductsAddedAdapterListener {
-        void deleteProductAdded(int position);
+        default void deleteProductAdded(int position) {}
+        default void editProductAdded(int position) {}
     }
 }
