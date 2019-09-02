@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             // open dashboard screen at start
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_holder, new DashboardFragment())
+                    .add(R.id.fragment_holder, Page.DASHBOARD.getFragment())
                     .commit();
             currentPage = Page.DASHBOARD;
             findViewById(R.id.nav_dashboard).setActivated(true);

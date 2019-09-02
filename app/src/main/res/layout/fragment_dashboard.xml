@@ -5,12 +5,10 @@
     android:orientation="vertical"
     >
 
-    <TextView
+    <com.github.mikephil.charting.charts.HorizontalBarChart
+        android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/dashboard_title"
         />
-
 
 </LinearLayout>
