@@ -1,6 +1,7 @@
 package com.martinwalls.nea;
 
 import android.content.Context;
+import android.util.TypedValue;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -23,9 +24,21 @@ public class Utils {
         return lbs * lbsToKgs;
     }
 
+    /**
+     * Converts a dp value to pixels, depending on the display density.
+     * @param dpValue A dp value (display independent pixels)
+     * @param context Context needed to get display density
+     */
     public static int convertDpToPixelSize(float dpValue, Context context) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
+//        final float density = context.getResources().getDisplayMetrics().density;
+//        return (int) (dpValue * density + 0.5f);
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dpValue, context.getResources().getDisplayMetrics());
+    }
+
+    public static int convertSpToPixelSize(float spValue, Context context) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+                spValue, context.getResources().getDisplayMetrics());
     }
 
     /**

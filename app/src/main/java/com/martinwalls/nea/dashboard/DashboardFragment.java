@@ -5,18 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
-import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.martinwalls.nea.R;
+import com.martinwalls.nea.components.BarChartView;
 import com.martinwalls.nea.db.DBHandler;
-import com.martinwalls.nea.models.StockItem;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DashboardFragment extends Fragment {
 
@@ -33,6 +24,11 @@ public class DashboardFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         dbHandler = new DBHandler(getContext());
 
+        BarChartView graphView = view.findViewById(R.id.graph);
+
+        graphView.setData(dbHandler.getAllStock());
+
+/*
         HorizontalBarChart chart = view.findViewById(R.id.chart);
 
         List<StockItem> stockList = dbHandler.getAllStock();
@@ -74,6 +70,6 @@ public class DashboardFragment extends Fragment {
         chart.getLegend().setEnabled(false);
         chart.setData(barData);
         chart.invalidate();
-
+*/
     }
 }

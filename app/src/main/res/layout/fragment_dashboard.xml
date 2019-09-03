@@ -5,10 +5,26 @@
     android:orientation="vertical"
     >
 
-    <com.github.mikephil.charting.charts.HorizontalBarChart
-        android:id="@+id/chart"
+    <!--<com.github.mikephil.charting.charts.HorizontalBarChart-->
+    <!--android:id="@+id/chart"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--/>-->
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="none"
+        >
+
+    <com.martinwalls.nea.components.BarChartView
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingTop="8dp"
         />
+    </ScrollView>
 
 </LinearLayout>

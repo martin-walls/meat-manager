@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Deep Purple 500 -->
     <color name="colorPrimary">#673ab7</color>
     <color name="colorPrimaryDark">#320b86</color>
     <color name="colorAccent">#ffc107</color>
@@ -20,4 +21,6 @@
     <color name="fab_ripple_light">#2fff</color>
 
     <color name="delete">#FF0000</color>
+
+    <color name="dashboard_graph_bar">#64b5f6</color>
 </resources>
