@@ -653,6 +653,57 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return contractResultList;
     }
+
+    public List<ProductQuantity> getAllProductsRequired() {
+        List<ProductQuantity> productQuantityResultList = new ArrayList<>();
+        String orderProductsQuery = "SELECT " + OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.PRODUCT_ID + ","
+                + OrderProductsTable.QUANTITY_MASS + "," + OrderProductsTable.QUANTITY_BOXES + ","
+                + ProductsTable.NAME + "," + ProductsTable.MEAT_TYPE
+                + " FROM " + OrderProductsTable.TABLE_NAME
+                + " INNER JOIN " + ProductsTable.TABLE_NAME + " ON "
+                + OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.PRODUCT_ID
+                + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID;
+        String contractProductsQuery = "SELECT " + ContractProductsTable.TABLE_NAME
+                + "." + ContractProductsTable.PRODUCT_ID + ","
+                + ContractProductsTable.QUANTITY_MASS + "," + ContractProductsTable.QUANTITY_BOXES + ","
+                + ProductsTable.NAME + "," + ProductsTable.MEAT_TYPE
+                + " FROM " + ContractProductsTable.TABLE_NAME
+                + " INNER JOIN " + ProductsTable.TABLE_NAME + " ON "
+                + ContractProductsTable.TABLE_NAME + "." + ContractProductsTable.PRODUCT_ID
+                + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(orderProductsQuery, null);
+        while (cursor.moveToNext()) {
+            ProductQuantity productQuantity = new ProductQuantity();
+            Product product = new Product();
+            product.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(OrderProductsTable.PRODUCT_ID)));
+            product.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.NAME)));
+            product.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.MEAT_TYPE)));
+            productQuantity.setProduct(product);
+            productQuantity.setQuantityMass(cursor.getDouble(
+                    cursor.getColumnIndexOrThrow(OrderProductsTable.QUANTITY_MASS)));
+            productQuantity.setQuantityBoxes(cursor.getInt(
+                    cursor.getColumnIndexOrThrow(OrderProductsTable.QUANTITY_BOXES)));
+            productQuantityResultList.add(productQuantity);
+        }
+        cursor = db.rawQuery(contractProductsQuery, null);
+        while (cursor.moveToNext()) {
+            ProductQuantity productQuantity = new ProductQuantity();
+            Product product = new Product();
+            product.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(ContractProductsTable.PRODUCT_ID)));
+            product.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.NAME)));
+            product.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.MEAT_TYPE)));
+            productQuantity.setProduct(product);
+            productQuantity.setQuantityMass(cursor.getDouble(
+                    cursor.getColumnIndexOrThrow(ContractProductsTable.QUANTITY_MASS)));
+            productQuantity.setQuantityBoxes(cursor.getInt(
+                    cursor.getColumnIndexOrThrow(ContractProductsTable.QUANTITY_BOXES)));
+            productQuantityResultList.add(productQuantity);
+        }
+        cursor.close();
+        db.close();
+        return productQuantityResultList;
+    }
     //endregion db getters
 
     //region db setters

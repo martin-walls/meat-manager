@@ -11,19 +11,19 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.Utils;
-import com.martinwalls.nea.models.StockItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BarChartView extends View {
 
-    private List<StockItem> dataSet = new ArrayList<>();
+    private List<BarChartEntry> dataSet = new ArrayList<>();
 
-    private float maxValue = 0;
+    private float xMax   = 0;
 
     private Paint barFillPaint;
     private Paint barLabelPaint;
+    private Paint reqBarFillPaint;
 
     private int barWidthDp = 48;
 
@@ -54,14 +54,18 @@ public class BarChartView extends View {
         barLabelPaint.setColor(textColour);
         barLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
         barLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, getContext()));
+
+        reqBarFillPaint = new Paint();
+        int reqBarColour = ContextCompat.getColor(getContext(), R.color.dashboard_graph_bar_req);
+        reqBarFillPaint.setColor(reqBarColour);
     }
 
-    public void setData(List<StockItem> newDataSet) {
-        maxValue = (float) newDataSet.get(0).getMass();
+    public void setData(List<BarChartEntry> newDataSet) {
+        xMax = newDataSet.get(0).getAmount();
 
-        for (StockItem stockItem : newDataSet) {
-            if (stockItem.getMass() > maxValue) {
-                maxValue = (float) stockItem.getMass();
+        for (BarChartEntry entry : newDataSet) {
+            if (entry.getAmount() > xMax) {
+                xMax = entry.getAmount();
             }
         }
 
@@ -89,16 +93,23 @@ public class BarChartView extends View {
         float textMarginOutside = Utils.convertDpToPixelSize(8, getContext());
 
         for (int i = 0; i < dataSet.size(); i++) {
-            StockItem currentItem = dataSet.get(i);
+            BarChartEntry entry = dataSet.get(i);
 
             float barLeft = 0;
             float barTop = getPaddingTop() + barWidth * i + (barSpacing / 2f);
-            float barLength = (float) currentItem.getMass() / maxValue * getWidth();
+            float barLength = entry.getAmount() / xMax * getWidth();
             float barBottom = getPaddingTop() + barWidth * (i + 1) - (barSpacing / 2f);
+
+            float reqBarLength = 0;
+            if (entry.getAmountRequired() > entry.getAmount()) {
+                reqBarLength = entry.getAmountRequired() / xMax * getWidth();
+                c.drawRoundRect(barLeft, barTop, reqBarLength, barBottom, cornerRadius, cornerRadius, reqBarFillPaint);
+            }
+
 
             c.drawRoundRect(barLeft, barTop, barLength, barBottom, cornerRadius, cornerRadius, barFillPaint);
 
-            String label = currentItem.getProduct().getProductName().toUpperCase();
+            String label = entry.getName().toUpperCase();
 
 //            if (label.length() > 12) {
 //                label = label.substring(0, 13) + "…";
@@ -110,8 +121,12 @@ public class BarChartView extends View {
 //            float rectX = cornerRadius * 2f;
             float rectX;
 
-            if (textBounds.width() > barLength + textMarginInside * 2f) {
-                rectX = barLeft + barLength + textMarginOutside;
+            if (textBounds.width() + textMarginInside * 2f > barLength) {
+                if (reqBarLength > barLength) {
+                    rectX = barLeft + reqBarLength + textMarginOutside;
+                } else {
+                    rectX = barLeft + barLength + textMarginOutside;
+                }
             } else {
                 rectX = barLeft + textMarginInside ;
             }

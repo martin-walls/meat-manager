@@ -23,4 +23,5 @@
     <color name="delete">#FF0000</color>
 
     <color name="dashboard_graph_bar">#64b5f6</color>
+    <color name="dashboard_graph_bar_req">#e57373</color>
 </resources>
