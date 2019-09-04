@@ -110,7 +110,7 @@ public class BarChartView extends View {
         reqTooltipFillPaint.setColor(reqTtColour);
 
         reqTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        reqTooltipTextPaint.setColor(Color.WHITE); //todo custom resource?
+        reqTooltipTextPaint.setColor(Color.WHITE);
         reqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         reqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
@@ -118,7 +118,7 @@ public class BarChartView extends View {
         prevReqTooltipFillPaint.setColor(reqTtColour);
 
         prevReqTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        prevReqTooltipTextPaint.setColor(Color.WHITE); //todo custom resource?
+        prevReqTooltipTextPaint.setColor(Color.WHITE);
         prevReqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         prevReqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
