@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.Nullable;
@@ -18,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BarChartView extends View {
+
+    private Context context;
 
     private List<BarChartEntry> dataSet = new ArrayList<>();
 
@@ -31,7 +32,14 @@ public class BarChartView extends View {
     private Paint prevTooltipFillPaint;
     private Paint prevTooltipTextPaint;
 
-    private int barWidthDp = 48;
+    private final int barWidthDp = 48;
+    private float barWidth;
+    private float barSpacing;
+    private float barCornerRadius;
+    private float textMarginInside;
+    private float textMarginOutside;
+    private float ttMargin;
+    private float ttPadding;
 
     private int selectedIndex = -1;
 
@@ -43,46 +51,49 @@ public class BarChartView extends View {
     private int prevSelectedIndex = -1;
     private int prevTtAlpha = 255;
 
-    Rect textBounds = new Rect();
+    Rect labelTextBounds = new Rect();
+    Rect ttTextBounds = new Rect();
 
     public BarChartView(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public BarChartView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public BarChartView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
-    private void init() {
+    private void init(Context context) {
+        this.context = context;
+
         barFillPaint = new Paint();
-        int barColour = ContextCompat.getColor(getContext(), R.color.dashboard_graph_bar);
+        int barColour = ContextCompat.getColor(context, R.color.dashboard_graph_bar);
         barFillPaint.setColor(barColour);
 
         barLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int textColour = ContextCompat.getColor(getContext(), R.color.text_dark);
+        int textColour = ContextCompat.getColor(context, R.color.text_dark);
         barLabelPaint.setColor(textColour);
         barLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        barLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, getContext()));
+        barLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
         reqBarFillPaint = new Paint();
-        int reqBarColour = ContextCompat.getColor(getContext(), R.color.dashboard_graph_bar_req);
+        int reqBarColour = ContextCompat.getColor(context, R.color.dashboard_graph_bar_req);
         reqBarFillPaint.setColor(reqBarColour);
 
         tooltipFillPaint = new Paint();
-        int ttColour = ContextCompat.getColor(getContext(), R.color.dashboard_tooltip);
+        int ttColour = ContextCompat.getColor(context, R.color.dashboard_tooltip);
         tooltipFillPaint.setColor(ttColour);
 
         tooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         tooltipTextPaint.setColor(textColour);
         tooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        tooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, getContext()));
+        tooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
         prevTooltipFillPaint = new Paint();
         prevTooltipFillPaint.setColor(ttColour);
@@ -90,7 +101,17 @@ public class BarChartView extends View {
         prevTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         prevTooltipTextPaint.setColor(textColour);
         prevTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        prevTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, getContext()));
+        prevTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+
+        barWidth = Utils.convertDpToPixelSize(barWidthDp, context);
+        barSpacing = barWidth * 0.1f;
+        barCornerRadius = Utils.convertDpToPixelSize(8, context);
+
+        textMarginInside = Utils.convertDpToPixelSize(12, context);
+        textMarginOutside = Utils.convertDpToPixelSize(8, context);
+
+        ttMargin = Utils.convertDpToPixelSize(8, context);
+        ttPadding = Utils.convertDpToPixelSize(8, context);
     }
 
     public void setData(List<BarChartEntry> newDataSet) {
@@ -99,6 +120,9 @@ public class BarChartView extends View {
         for (BarChartEntry entry : newDataSet) {
             if (entry.getAmount() > xMax) {
                 xMax = entry.getAmount();
+            }
+            if (entry.getAmountRequired() > xMax) {
+                xMax = entry.getAmountRequired();
             }
         }
 
@@ -110,7 +134,7 @@ public class BarChartView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
-        int height = Utils.convertDpToPixelSize(barWidthDp * dataSet.size() + getPaddingTop(), getContext());
+        int height = Utils.convertDpToPixelSize(barWidthDp * dataSet.size() + getPaddingTop(), context);
         setMeasuredDimension(width, height);
     }
 
@@ -118,16 +142,15 @@ public class BarChartView extends View {
     public void onDraw(Canvas c) {
         super.onDraw(c);
 
-        //todo move to init
-        float barWidth = Utils.convertDpToPixelSize(barWidthDp, getContext());
-        float barSpacing = barWidth * 0.1f;
-        float cornerRadius = Utils.convertDpToPixelSize(8, getContext());
-
-        float textMarginInside = Utils.convertDpToPixelSize(12, getContext());
-        float textMarginOutside = Utils.convertDpToPixelSize(8, getContext());
-
-        float ttMargin = Utils.convertDpToPixelSize(8, getContext());
-        float ttPadding = Utils.convertDpToPixelSize(8, getContext());
+//        float barWidth = Utils.convertDpToPixelSize(barWidthDp, getContext());
+//        float barSpacing = barWidth * 0.1f;
+//        float barCornerRadius = Utils.convertDpToPixelSize(8, getContext());
+//
+//        float textMarginInside = Utils.convertDpToPixelSize(12, getContext());
+//        float textMarginOutside = Utils.convertDpToPixelSize(8, getContext());
+//
+//        float ttMargin = Utils.convertDpToPixelSize(8, getContext());
+//        float ttPadding = Utils.convertDpToPixelSize(8, getContext());
 //        float ttCornerRadius = Utils.convertDpToPixelSize(16, getContext());
 
         for (int i = 0; i < dataSet.size(); i++) {
@@ -139,45 +162,58 @@ public class BarChartView extends View {
             float barBottom = getPaddingTop() + barWidth * (i + 1) - (barSpacing / 2f);
 
             float reqBarLength = 0;
+            boolean isReqBarShown = false;
             if (entry.getAmountRequired() > entry.getAmount()) {
                 reqBarLength = entry.getAmountRequired() / xMax * getWidth();
-                c.drawRoundRect(barLeft, barTop, reqBarLength, barBottom, cornerRadius, cornerRadius, reqBarFillPaint);
+                c.drawRoundRect(barLeft, barTop, reqBarLength, barBottom,
+                        barCornerRadius, barCornerRadius, reqBarFillPaint);
+                isReqBarShown = true;
             }
 
-
-            c.drawRoundRect(barLeft, barTop, barLength, barBottom, cornerRadius, cornerRadius, barFillPaint);
+            c.drawRoundRect(barLeft, barTop, barLength, barBottom, barCornerRadius, barCornerRadius, barFillPaint);
 
             String label = entry.getName().toUpperCase();
 
-//            if (label.length() > 12) {
-//                label = label.substring(0, 13) + "…";
-//            }
-
-            barLabelPaint.getTextBounds(label, 0, label.length(), textBounds);
+            barLabelPaint.getTextBounds(label, 0, label.length(), labelTextBounds);
 
             float labelX;
-            if (textBounds.width() + textMarginInside * 2f > barLength) {
+            boolean isTextInside;
+            if (labelTextBounds.width() + textMarginInside * 2f > barLength) {
                 if (reqBarLength > barLength) {
                     labelX = barLeft + reqBarLength + textMarginOutside;
                 } else {
                     labelX = barLeft + barLength + textMarginOutside;
                 }
+                isTextInside = false;
             } else {
-                labelX = barLeft + textMarginInside ;
+                labelX = barLeft + textMarginInside;
+                isTextInside = true;
             }
 
-            float labelY = (barTop + barBottom + textBounds.height()) / 2f;
+            float labelY = (barTop + barBottom + labelTextBounds.height()) / 2f;
 
             c.drawText(label, labelX, labelY, barLabelPaint);
 
+            // show tooltips
             if (i == selectedIndex || i == prevSelectedIndex) {
                 String ttText = String.valueOf(entry.getAmount());
-                tooltipTextPaint.getTextBounds(ttText, 0, ttText.length(), textBounds);
+                tooltipTextPaint.getTextBounds(ttText, 0, ttText.length(), ttTextBounds);
 
-                float ttLeft = barLength - textBounds.width() - ttMargin - ttPadding * 2f;
-                float ttTop = (barTop + barBottom - textBounds.height()) / 2f - ttPadding;
-                float ttRight = barLength - ttMargin;
-                float ttBottom = (barTop + barBottom + textBounds.height()) / 2f + ttPadding;
+                float ttLeft;
+                if ((isTextInside && ttTextBounds.width() + (ttPadding * 2f) + ttMargin
+                        < barLength - labelTextBounds.width() - textMarginInside * 2f)
+                        || (!isTextInside && ttTextBounds.width() + (ttPadding + ttMargin) * 2f < barLength)) {
+                    ttLeft = barLength - ttTextBounds.width() - ttMargin - ttPadding * 2f;
+                } else if (isTextInside) {
+                    ttLeft = (isReqBarShown ? reqBarLength : barLength) + ttMargin;
+                } else {
+                    ttLeft = (isReqBarShown ? reqBarLength : barLength) + labelTextBounds.width()
+                            + textMarginOutside * 2f + ttMargin;
+                }
+
+                float ttTop = (barTop + barBottom - ttTextBounds.height()) / 2f - ttPadding;
+                float ttRight = ttLeft + ttTextBounds.width() + ttPadding * 2f;
+                float ttBottom = (barTop + barBottom + ttTextBounds.height()) / 2f + ttPadding;
 
                 tooltipFillPaint.setAlpha(ttAlpha);
                 prevTooltipFillPaint.setAlpha(prevTtAlpha);
@@ -187,7 +223,7 @@ public class BarChartView extends View {
                 c.drawRoundRect(ttLeft, ttTop, ttRight, ttBottom, ttCornerRadius, ttCornerRadius,
                         i == selectedIndex ? tooltipFillPaint : prevTooltipFillPaint);
 
-                float ttTextX = barLength - textBounds.width() - ttMargin - ttPadding;
+                float ttTextX = ttLeft + ttPadding;
                 float ttTextY = labelY;
 
 //                AlphaAnimation fadeIn = new AlphaAnimation(0f, 1f);
@@ -217,29 +253,16 @@ public class BarChartView extends View {
         }
     }
 
-    GestureDetector.SimpleOnGestureListener listener = new GestureDetector.SimpleOnGestureListener() {
-        @Override
-        public boolean onDown(MotionEvent event) {
-            return true;
-        }
-    };
-
-    GestureDetector detector = new GestureDetector(getContext(), listener);
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        boolean result = detector.onTouchEvent(event);
-        if (!result) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                float y = event.getY();
-                prevSelectedIndex = selectedIndex;
-                selectedIndex = (int) y / Utils.convertDpToPixelSize(barWidthDp, getContext());
-                ttAlpha = 0;
-                prevTtAlpha = 255;
-                invalidate();
-                result = true;
-            }
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            float y = event.getY();
+            prevSelectedIndex = selectedIndex;
+            selectedIndex = (int) y / (int) barWidth;
+            ttAlpha = 0;
+            prevTtAlpha = 255;
+            invalidate();
         }
-        return result;
+        return true;
     }
 }
