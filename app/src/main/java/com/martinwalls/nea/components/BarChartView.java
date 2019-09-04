@@ -1,10 +1,7 @@
 package com.martinwalls.nea.components;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.Typeface;
+import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,6 +28,10 @@ public class BarChartView extends View {
     private Paint tooltipTextPaint;
     private Paint prevTooltipFillPaint;
     private Paint prevTooltipTextPaint;
+    private Paint reqTooltipFillPaint;
+    private Paint reqTooltipTextPaint;
+    private Paint prevReqTooltipFillPaint;
+    private Paint prevReqTooltipTextPaint;
 
     private final int barWidthDp = 48;
     private float barWidth;
@@ -53,6 +54,7 @@ public class BarChartView extends View {
 
     Rect labelTextBounds = new Rect();
     Rect ttTextBounds = new Rect();
+    Rect reqTtTextBounds = new Rect();
 
     public BarChartView(Context context) {
         super(context);
@@ -72,7 +74,7 @@ public class BarChartView extends View {
     private void init(Context context) {
         this.context = context;
 
-        barFillPaint = new Paint();
+        barFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         int barColour = ContextCompat.getColor(context, R.color.dashboard_graph_bar);
         barFillPaint.setColor(barColour);
 
@@ -82,11 +84,11 @@ public class BarChartView extends View {
         barLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
         barLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
-        reqBarFillPaint = new Paint();
+        reqBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         int reqBarColour = ContextCompat.getColor(context, R.color.dashboard_graph_bar_req);
         reqBarFillPaint.setColor(reqBarColour);
 
-        tooltipFillPaint = new Paint();
+        tooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         int ttColour = ContextCompat.getColor(context, R.color.dashboard_tooltip);
         tooltipFillPaint.setColor(ttColour);
 
@@ -95,13 +97,31 @@ public class BarChartView extends View {
         tooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         tooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
-        prevTooltipFillPaint = new Paint();
+        prevTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         prevTooltipFillPaint.setColor(ttColour);
 
         prevTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         prevTooltipTextPaint.setColor(textColour);
         prevTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         prevTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+
+        reqTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        int reqTtColour = ContextCompat.getColor(context, R.color.dashboard_tooltip_req);
+        reqTooltipFillPaint.setColor(reqTtColour);
+
+        reqTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        reqTooltipTextPaint.setColor(Color.WHITE); //todo custom resource?
+        reqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        reqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+
+        prevReqTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        prevReqTooltipFillPaint.setColor(reqTtColour);
+
+        prevReqTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        prevReqTooltipTextPaint.setColor(Color.WHITE); //todo custom resource?
+        prevReqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        prevReqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+
 
         barWidth = Utils.convertDpToPixelSize(barWidthDp, context);
         barSpacing = barWidth * 0.1f;
@@ -200,10 +220,12 @@ public class BarChartView extends View {
                 tooltipTextPaint.getTextBounds(ttText, 0, ttText.length(), ttTextBounds);
 
                 float ttLeft;
+                boolean isTooltipShownInside = false;
                 if ((isTextInside && ttTextBounds.width() + (ttPadding * 2f) + ttMargin
                         < barLength - labelTextBounds.width() - textMarginInside * 2f)
                         || (!isTextInside && ttTextBounds.width() + (ttPadding + ttMargin) * 2f < barLength)) {
                     ttLeft = barLength - ttTextBounds.width() - ttMargin - ttPadding * 2f;
+                    isTooltipShownInside = true;
                 } else if (isTextInside) {
                     ttLeft = (isReqBarShown ? reqBarLength : barLength) + ttMargin;
                 } else {
@@ -226,13 +248,46 @@ public class BarChartView extends View {
                 float ttTextX = ttLeft + ttPadding;
                 float ttTextY = labelY;
 
-//                AlphaAnimation fadeIn = new AlphaAnimation(0f, 1f);
-//                fadeIn.setDuration(500);
-
                 tooltipTextPaint.setAlpha(ttAlpha);
                 prevTooltipTextPaint.setAlpha(prevTtAlpha);
                 c.drawText(ttText, ttTextX, ttTextY, i == selectedIndex ? tooltipTextPaint : prevTooltipTextPaint);
 
+
+                // required amount tooltip
+                if (isReqBarShown) {
+                    String reqTtText = String.valueOf(entry.getAmountRequired());
+                    reqTooltipTextPaint.getTextBounds(reqTtText, 0, reqTtText.length(), reqTtTextBounds);
+
+                    float reqTtLeft;
+                    if (reqTtTextBounds.width() + (ttPadding + ttMargin) * 2f < reqBarLength - barLength) {
+                        reqTtLeft = reqBarLength - reqTtTextBounds.width() - ttMargin - ttPadding * 2f;
+                    } else if (isTooltipShownInside) {
+                        reqTtLeft = reqBarLength + ttMargin;
+                    } else {
+                        reqTtLeft = ttRight + ttMargin;
+                    }
+
+                    float reqTtRight = reqTtLeft + reqTtTextBounds.width() + ttPadding * 2f;
+
+                    reqTooltipFillPaint.setAlpha(ttAlpha);
+                    prevReqTooltipFillPaint.setAlpha(prevTtAlpha);
+
+                    c.drawRoundRect(reqTtLeft, ttTop, reqTtRight, ttBottom, ttCornerRadius, ttCornerRadius,
+                            i == selectedIndex ? reqTooltipFillPaint : prevReqTooltipFillPaint);
+
+                    float reqTtTextX = reqTtLeft + ttPadding;
+
+                    reqTooltipTextPaint.setAlpha(ttAlpha);
+                    prevReqTooltipTextPaint.setAlpha(prevTtAlpha);
+                    c.drawText(reqTtText, reqTtTextX, ttTextY, i == selectedIndex ? reqTooltipTextPaint : prevReqTooltipTextPaint);
+                }
+
+
+
+
+
+
+                // update alpha values for fade in/out
                 if (ttAlpha < 255 || prevTtAlpha > 0) {
                     postInvalidateDelayed(ttAlphaDelay);
                 }
