@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.models.ProductQuantity;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdapter.ViewHolder> {
@@ -41,7 +42,8 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
         ProductQuantity productQuantity = productList.get(position);
         viewHolder.productName.setText(productQuantity.getProduct().getProductName());
         viewHolder.mass.setText(
-                viewHolder.mass.getContext().getString(R.string.amount_kg, productQuantity.getQuantityMass()));
+                viewHolder.mass.getContext().getString(R.string.amount_kg,
+                        new DecimalFormat("#.0###").format(productQuantity.getQuantityMass())));
         if (productQuantity.getQuantityBoxes() >= 0) {
             viewHolder.numBoxes.setText(viewHolder.numBoxes.getContext().getResources()
                     .getQuantityString(R.plurals.amount_boxes,

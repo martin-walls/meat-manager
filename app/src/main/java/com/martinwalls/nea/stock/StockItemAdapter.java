@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.models.StockItem;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.ViewHolder> {
@@ -43,7 +44,8 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         StockItem item = itemList.get(position);
         holder.itemName.setText(item.getProduct().getProductName());
         //todo shared preferences for kg / lbs
-        holder.itemMass.setText(holder.itemMass.getContext().getString(R.string.amount_kg, item.getMass()));
+        holder.itemMass.setText(holder.itemMass.getContext().getString(R.string.amount_kg,
+                new DecimalFormat("#.0###").format(item.getMass())));
         // hide num boxes text if not specified
         if (item.getNumBoxes() >= 0) {
             holder.itemNumBoxes.setText(holder.itemNumBoxes.getContext().getResources()

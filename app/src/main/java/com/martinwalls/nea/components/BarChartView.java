@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.Utils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,9 +53,11 @@ public class BarChartView extends View {
     private int prevSelectedIndex = -1;
     private int prevTtAlpha = 255;
 
-    Rect labelTextBounds = new Rect();
-    Rect ttTextBounds = new Rect();
-    Rect reqTtTextBounds = new Rect();
+    private Rect labelTextBounds = new Rect();
+    private Rect ttTextBounds = new Rect();
+    private Rect reqTtTextBounds = new Rect();
+
+    private DecimalFormat decimalFormat;
 
     public BarChartView(Context context) {
         super(context);
@@ -132,6 +135,8 @@ public class BarChartView extends View {
 
         ttMargin = Utils.convertDpToPixelSize(8, context);
         ttPadding = Utils.convertDpToPixelSize(8, context);
+
+        decimalFormat = new DecimalFormat("#.###");
     }
 
     public void setData(List<BarChartEntry> newDataSet) {
@@ -161,17 +166,6 @@ public class BarChartView extends View {
     @Override
     public void onDraw(Canvas c) {
         super.onDraw(c);
-
-//        float barWidth = Utils.convertDpToPixelSize(barWidthDp, getContext());
-//        float barSpacing = barWidth * 0.1f;
-//        float barCornerRadius = Utils.convertDpToPixelSize(8, getContext());
-//
-//        float textMarginInside = Utils.convertDpToPixelSize(12, getContext());
-//        float textMarginOutside = Utils.convertDpToPixelSize(8, getContext());
-//
-//        float ttMargin = Utils.convertDpToPixelSize(8, getContext());
-//        float ttPadding = Utils.convertDpToPixelSize(8, getContext());
-//        float ttCornerRadius = Utils.convertDpToPixelSize(16, getContext());
 
         for (int i = 0; i < dataSet.size(); i++) {
             BarChartEntry entry = dataSet.get(i);
@@ -216,7 +210,7 @@ public class BarChartView extends View {
 
             // show tooltips
             if (i == selectedIndex || i == prevSelectedIndex) {
-                String ttText = String.valueOf(entry.getAmount());
+                String ttText = context.getString(R.string.amount_kg, decimalFormat.format(entry.getAmount()));
                 tooltipTextPaint.getTextBounds(ttText, 0, ttText.length(), ttTextBounds);
 
                 float ttLeft;
@@ -255,7 +249,8 @@ public class BarChartView extends View {
 
                 // required amount tooltip
                 if (isReqBarShown) {
-                    String reqTtText = String.valueOf(entry.getAmountRequired());
+                    String reqTtText = context.getString(R.string.amount_kg,
+                            decimalFormat.format(entry.getAmountRequired()));
                     reqTooltipTextPaint.getTextBounds(reqTtText, 0, reqTtText.length(), reqTtTextBounds);
 
                     float reqTtLeft;
@@ -279,12 +274,9 @@ public class BarChartView extends View {
 
                     reqTooltipTextPaint.setAlpha(ttAlpha);
                     prevReqTooltipTextPaint.setAlpha(prevTtAlpha);
-                    c.drawText(reqTtText, reqTtTextX, ttTextY, i == selectedIndex ? reqTooltipTextPaint : prevReqTooltipTextPaint);
+                    c.drawText(reqTtText, reqTtTextX, ttTextY,
+                            i == selectedIndex ? reqTooltipTextPaint : prevReqTooltipTextPaint);
                 }
-
-
-
-
 
 
                 // update alpha values for fade in/out
