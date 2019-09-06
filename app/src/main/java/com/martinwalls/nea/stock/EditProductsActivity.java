@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.martinwalls.nea.AddNewProductDialog;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.components.CustomRecyclerView;

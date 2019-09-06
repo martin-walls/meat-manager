@@ -1,4 +1,4 @@
-package com.martinwalls.nea.orders;
+package com.martinwalls.nea;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
-import com.martinwalls.nea.R;
 import com.martinwalls.nea.models.ProductQuantity;
 
 import java.text.DecimalFormat;

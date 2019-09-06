@@ -29,10 +29,10 @@ import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.*;
-import com.martinwalls.nea.orders.ProductsAddedAdapter;
-import com.martinwalls.nea.stock.AddNewProductDialog;
+import com.martinwalls.nea.ProductsAddedAdapter;
+import com.martinwalls.nea.AddNewProductDialog;
 import com.martinwalls.nea.stock.EditLocationsActivity;
-import com.martinwalls.nea.stock.SearchItemAdapter;
+import com.martinwalls.nea.SearchItemAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
