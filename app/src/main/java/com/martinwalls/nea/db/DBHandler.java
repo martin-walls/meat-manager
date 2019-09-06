@@ -584,9 +584,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 contractResult.setContractId(contractId);
                 contractResult.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.DEST_ID)));
                 contractResult.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
-                contractResult.setRepeatInterval(cursor.getString(
+                contractResult.setRepeatInterval(cursor.getInt(
                         cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_INTERVAL)));
-                contractResult.setRepeatOn(cursor.getString(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_ON)));
+                contractResult.setRepeatOn(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_ON)));
                 contractResult.setReminder(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REMINDER)));
                 gotContractData = true;
             }
@@ -631,8 +631,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 contract.setContractId(thisContractId);
                 contract.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.DEST_ID)));
                 contract.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
-                contract.setRepeatInterval(cursor.getString(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_INTERVAL)));
-                contract.setRepeatOn(cursor.getString(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_ON)));
+                contract.setRepeatInterval(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_INTERVAL)));
+                contract.setRepeatOn(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_ON)));
                 contract.setReminder(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REMINDER)));
                 contractResultList.add(contract);
                 lastContractId = thisContractId;

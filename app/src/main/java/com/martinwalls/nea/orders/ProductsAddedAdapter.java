@@ -38,13 +38,13 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
     }
 
     // when both buttons are hidden, no listener required
-    ProductsAddedAdapter(List<ProductQuantity> productList) {
+    public ProductsAddedAdapter(List<ProductQuantity> productList) {
         this.productList = productList;
         showEditBtn = false;
         showDeleteBtn = false;
     }
 
-    ProductsAddedAdapter(List<ProductQuantity> productList, ProductsAddedAdapterListener listener) {
+    public ProductsAddedAdapter(List<ProductQuantity> productList, ProductsAddedAdapterListener listener) {
         this.productList = productList;
         this.listener = listener;
     }

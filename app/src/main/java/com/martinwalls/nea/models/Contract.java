@@ -7,8 +7,8 @@ public class Contract {
     private int contractId;
     private int destId;
     private String destName;
-    private String repeatInterval; // TODO make date class to handle dates, see Order
-    private String repeatOn;
+    private int repeatInterval; // TODO make date class to handle dates, see Order
+    private int repeatOn;
     private int reminder;
 
     private List<ProductQuantity> productList = new ArrayList<>();
@@ -16,7 +16,7 @@ public class Contract {
     public Contract() {
     }
 
-    public Contract(int contractId, int destId, String repeatInterval, String repeatOn,
+    public Contract(int contractId, int destId, int repeatInterval, int repeatOn,
                     int reminder, List<ProductQuantity> productList) {
         this.contractId = contractId;
         this.destId = destId;
@@ -50,19 +50,19 @@ public class Contract {
         this.destName = destName;
     }
 
-    public String getRepeatInterval() {
+    public int getRepeatInterval() {
         return repeatInterval;
     }
 
-    public void setRepeatInterval(String repeatInterval) {
+    public void setRepeatInterval(int repeatInterval) {
         this.repeatInterval = repeatInterval;
     }
 
-    public String getRepeatOn() {
+    public int getRepeatOn() {
         return repeatOn;
     }
 
-    public void setRepeatOn(String repeatOn) {
+    public void setRepeatOn(int repeatOn) {
         this.repeatOn = repeatOn;
     }
 

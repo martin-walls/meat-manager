@@ -97,15 +97,15 @@
     <string name="locations_storage">Storage</string>
     <string name="locations_destination">Destination</string>
     <string name="locations_new">Add new locationId</string>
-    <string name="locations_input_name">Name:</string>
-    <string name="locations_input_type">Type:</string>
-    <string name="locations_input_email">Email:</string>
-    <string name="locations_input_phone">Phone:</string>
-    <string name="locations_input_addr_line_1">Address line 1:</string>
-    <string name="locations_input_addr_line_2">Address line 2:</string>
-    <string name="locations_input_city">City:</string>
-    <string name="locations_input_postcode">Postcode:</string>
-    <string name="locations_input_country">Country:</string>
+    <string name="locations_input_name">Name</string>
+    <string name="locations_input_type">Type</string>
+    <string name="locations_input_email">Email</string>
+    <string name="locations_input_phone">Phone</string>
+    <string name="locations_input_addr_line_1">Address line 1</string>
+    <string name="locations_input_addr_line_2">Address line 2</string>
+    <string name="locations_input_city">City</string>
+    <string name="locations_input_postcode">Postcode</string>
+    <string name="locations_input_country">Country</string>
     <string name="locations_add_new_title">Add new %s</string>
     <string name="locations_empty">No locations to show</string>
 
@@ -113,12 +113,12 @@
     <string name="orders_title">Orders</string>
     <string name="orders_empty">No orders to show</string>
     <string name="orders_new_title">Add new order</string>
-    <string name="orders_input_product">Product:</string>
+    <string name="orders_input_product">Product</string>
     <string name="orders_input_quantity_kg">Quantity (kg)</string>
     <string name="orders_input_quantity_lbs">Quantity (lbs)</string>
     <string name="orders_input_quantity_boxes">Number of boxes</string>
     <string name="orders_add_product">Add another product</string>
-    <string name="orders_input_destination">Destination:</string>
+    <string name="orders_input_destination">Destination</string>
     <string name="orders_input_date">Date:</string>
 
     <string name="order_details_title">Order details</string>
@@ -126,16 +126,19 @@
     <!-- Contracts page -->
     <string name="contracts_title">Contracts</string>
     <string name="contracts_empty">No contracts to show</string>
-    <string name="contracts_input_customer">Customer</string>
-    <string name="contracts_input_repeat_every">Repeat every…</string>
+    <string name="contracts_input_destination">Destination</string>
+    <string name="contracts_input_repeat_interval">Repeat every…</string>
     <string name="contracts_input_repeat_on">On…</string>
-    <plurals name="contracts_input_reminder_time">
+    <string name="contracts_input_reminder">Reminder</string>
+    <string name="contracts_input_product">Product</string>
+    <string name="contracts_input_quantity_kg">Quantity (kg)</string>
+    <string name="contracts_input_quantity_lbs">Quantity (lbs)</string>
+    <string name="contracts_input_quantity_boxes">Number of boxes</string>
+    <string name="contracts_add_product">Add another product</string>
+    <plurals name="contracts_reminder_time">
         <item quantity="one">Reminder: %d day before</item>
         <item quantity="other">Reminder: %d days before</item>
     </plurals>
-    <string name="contracts_input_product">Product</string>
-    <string name="contracts_input_quantity">Quantity:</string>
-    <string name="contracts_add_product">Add another product…</string>
 
     <!-- Exchange page -->
     <string name="exchange_title">Exchange</string>
