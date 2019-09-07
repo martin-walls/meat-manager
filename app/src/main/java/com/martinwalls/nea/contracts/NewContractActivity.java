@@ -23,16 +23,12 @@ import androidx.transition.TransitionInflater;
 import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.martinwalls.nea.R;
-import com.martinwalls.nea.Utils;
+import com.martinwalls.nea.*;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.*;
-import com.martinwalls.nea.ProductsAddedAdapter;
-import com.martinwalls.nea.AddNewProductDialog;
 import com.martinwalls.nea.stock.EditLocationsActivity;
-import com.martinwalls.nea.SearchItemAdapter;
 
 import java.time.Period;
 import java.util.ArrayList;
@@ -44,7 +40,7 @@ public class NewContractActivity extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener,
         ProductsAddedAdapter.ProductsAddedAdapterListener,
         AddNewProductDialog.AddNewProductListener,
-        RepeatIntervalDialog.RadioBtnListener {
+        RepeatIntervalDialog.RepeatIntervalDialogListener {
 
     private DBHandler dbHandler;
 
@@ -415,6 +411,13 @@ public class NewContractActivity extends AppCompatActivity
                 editTextRepeatInterval.setText(R.string.contracts_dialog_repeat_interval_month);
                 break;
         }
+    }
+
+    @Override
+    public void onCustomIntervalSelected(Period interval) {
+        selectedRepeatInterval = interval;
+        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
+        editTextRepeatInterval.setText(interval.getDays() + " days");
     }
 
     private boolean addContractToDb() {
