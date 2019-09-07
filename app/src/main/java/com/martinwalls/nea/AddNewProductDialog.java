@@ -1,6 +1,5 @@
 package com.martinwalls.nea;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,8 +13,6 @@ import androidx.fragment.app.DialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.martinwalls.nea.R;
-import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.Product;
 
@@ -36,7 +33,6 @@ public class AddNewProductDialog extends DialogFragment {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        @SuppressLint("InflateParams")
         View dialogView = inflater.inflate(R.layout.dialog_add_new_product, null);
         editTextProductName = dialogView.findViewById(R.id.edit_text_product_name);
         inputLayoutProductName = dialogView.findViewById(R.id.input_layout_product_name);

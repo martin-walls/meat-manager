@@ -11,12 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
+import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.StockItem;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.components.RecyclerViewDivider;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class StockFragment extends Fragment {
@@ -25,6 +27,8 @@ public class StockFragment extends Fragment {
     private List<StockItem> stockList = new ArrayList<>();
 
     private DBHandler dbHandler;
+
+    private final int REQUEST_REFRESH_ON_DONE = 1;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -52,10 +56,18 @@ public class StockFragment extends Fragment {
         FloatingActionButton fab = fragmentView.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             Intent newStockIntent = new Intent(getContext(), NewStockActivity.class);
-            startActivity(newStockIntent);
+            startActivityForResult(newStockIntent, REQUEST_REFRESH_ON_DONE);
         });
 
         return fragmentView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_REFRESH_ON_DONE) {
+            loadStock();
+        }
     }
 
     @Override
@@ -101,7 +113,12 @@ public class StockFragment extends Fragment {
 
     private void loadStock() {
         stockList.clear();
-        stockList.addAll(dbHandler.getAllStock());
+        stockList.addAll(Utils.mergeSort(dbHandler.getAllStock(), new Comparator<StockItem>() {
+            @Override
+            public int compare(StockItem stock1, StockItem stock2) {
+                return stock1.getProduct().getProductName().compareTo(stock2.getProduct().getProductName());
+            }
+        }));
         stockAdapter.notifyDataSetChanged();
     }
 }

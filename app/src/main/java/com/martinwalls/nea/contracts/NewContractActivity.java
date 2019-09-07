@@ -34,6 +34,7 @@ import com.martinwalls.nea.AddNewProductDialog;
 import com.martinwalls.nea.stock.EditLocationsActivity;
 import com.martinwalls.nea.SearchItemAdapter;
 
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +43,8 @@ import java.util.List;
 public class NewContractActivity extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener,
         ProductsAddedAdapter.ProductsAddedAdapterListener,
-        AddNewProductDialog.AddNewProductListener {
+        AddNewProductDialog.AddNewProductListener,
+        RepeatIntervalDialog.RadioBtnListener {
 
     private DBHandler dbHandler;
 
@@ -66,6 +68,7 @@ public class NewContractActivity extends AppCompatActivity
 
     private int selectedProductId;
     private int selectedDestId;
+    private Period selectedRepeatInterval;
 
     private TextView addProductBtn;
 
@@ -116,6 +119,34 @@ public class NewContractActivity extends AppCompatActivity
 
         addProductBtn = findViewById(R.id.add_product);
         addProductBtn.setOnClickListener(v -> addProduct());
+
+        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
+        editTextRepeatInterval.setOnClickListener(v -> {
+            DialogFragment dialog = new RepeatIntervalDialog();
+            Bundle args = new Bundle();
+            if (selectedRepeatInterval == null) {
+            } else if (selectedRepeatInterval.getDays() == 7) {
+                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_WEEK);
+            } else if (selectedRepeatInterval.getDays() == 14) {
+                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_TWO_WEEK);
+            } else if (selectedRepeatInterval.getMonths() == 1) {
+                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_MONTH);
+            } else {
+                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_CUSTOM);
+            }
+            dialog.setArguments(args);
+            dialog.show(getSupportFragmentManager(), "repeat_interval");
+        });
+
+        TextInputEditText editTextRepeatOn = findViewById(R.id.edit_text_repeat_on);
+        editTextRepeatOn.setOnClickListener(v -> {
+            //todo repeat on dialog
+        });
+
+        TextInputEditText editTextReminder = findViewById(R.id.edit_text_reminder);
+        editTextReminder.setOnClickListener(v -> {
+            //todo reminder dialog
+        });
     }
 
     @Override
@@ -366,6 +397,25 @@ public class NewContractActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onRadioBtnClicked(int id) {
+        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
+        switch (id) {
+            case RepeatIntervalDialog.OPTION_WEEK:
+                selectedRepeatInterval = Period.ofWeeks(1);
+                editTextRepeatInterval.setText(R.string.contracts_dialog_repeat_interval_week);
+                break;
+            case RepeatIntervalDialog.OPTION_TWO_WEEK:
+                selectedRepeatInterval = Period.ofWeeks(2);
+                editTextRepeatInterval.setText(R.string.contracts_dialog_repeat_interval_two_week);
+                break;
+            case RepeatIntervalDialog.OPTION_MONTH:
+                selectedRepeatInterval = Period.ofMonths(1);
+                editTextRepeatInterval.setText(R.string.contracts_dialog_repeat_interval_month);
+                break;
+        }
+    }
+
     private boolean addContractToDb() {
         boolean isValid = true;
         Contract newContract = new Contract();
@@ -391,5 +441,6 @@ public class NewContractActivity extends AppCompatActivity
         TextInputLayout inputLayoutReminder = findViewById(R.id.input_layout_reminder);
 
         //todo finish add contract to db
+        return false;
     }
 }

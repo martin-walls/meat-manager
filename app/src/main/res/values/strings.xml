@@ -127,7 +127,7 @@
     <string name="contracts_title">Contracts</string>
     <string name="contracts_empty">No contracts to show</string>
     <string name="contracts_input_destination">Destination</string>
-    <string name="contracts_input_repeat_interval">Repeat every…</string>
+    <string name="contracts_input_repeat_interval">Repeat</string>
     <string name="contracts_input_repeat_on">On…</string>
     <string name="contracts_input_reminder">Reminder</string>
     <string name="contracts_input_product">Product</string>
@@ -139,6 +139,13 @@
         <item quantity="one">Reminder: %d day before</item>
         <item quantity="other">Reminder: %d days before</item>
     </plurals>
+
+    <string name="contracts_dialog_repeat_interval_title">Repeat every…</string>
+    <!--<string name="contracts_dialog_repeat_interval_day">Every day</string>-->
+    <string name="contracts_dialog_repeat_interval_week">Every week</string>
+    <string name="contracts_dialog_repeat_interval_two_week">Every two weeks</string>
+    <string name="contracts_dialog_repeat_interval_month">Every month</string>
+    <string name="contracts_dialog_repeat_interval_custom">Custom</string>
 
     <!-- Exchange page -->
     <string name="exchange_title">Exchange</string>

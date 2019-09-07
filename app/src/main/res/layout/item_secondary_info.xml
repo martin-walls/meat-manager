@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/info_primary"
-        style="@style/ItemTextNormal.Dark"
+        style="@style/TextNormal.Dark"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/info_secondary"
-        style="@style/ItemTextNormal"
+        style="@style/TextNormal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="24dp"

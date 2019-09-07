@@ -47,16 +47,20 @@
         <item name="android:background">@drawable/nav_drawer_item_background</item>
     </style>
 
-    <style name="ItemTextNormal">
+    <style name="TextNormal">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">?textColorNormal</item>
     </style>
 
-    <style name="ItemTextNormal.Dark">
+    <style name="TextNormal.Dark">
         <item name="android:textColor">?textColorDark</item>
     </style>
 
-    <style name="TextEmphasisSmall">
+    <style name="TextNormal.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextEmphasisSmall" parent="TextNormal">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">italic</item>
     </style>
@@ -76,7 +80,7 @@
     </style>
 
     <!-- search -->
-    <style name="SearchResultsItemText" parent="ItemTextNormal">
+    <style name="SearchResultsItemText" parent="TextNormal">
     </style>
 
     <style name="SearchResultsItemText.Selectable">

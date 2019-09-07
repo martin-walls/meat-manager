@@ -1,5 +1,6 @@
 package com.martinwalls.nea.contracts;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.TextView;
@@ -39,7 +40,7 @@ public class ContractsFragment extends Fragment {
         TextView emptyView = fragmentView.findViewById(R.id.empty);
         recyclerView.setEmptyView(emptyView);
 
-        contractsAdapter = new ContractsAdapter(contractList, this);
+        contractsAdapter = new ContractsAdapter(contractList/*, this*/);
         recyclerView.setAdapter(contractsAdapter);
         loadContracts();
 
@@ -49,7 +50,8 @@ public class ContractsFragment extends Fragment {
 
         FloatingActionButton fab = fragmentView.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            //TODO new contract intent
+            Intent newContractIntent = new Intent(getContext(), NewContractActivity.class);
+            startActivity(newContractIntent);
         });
 
         return fragmentView;
