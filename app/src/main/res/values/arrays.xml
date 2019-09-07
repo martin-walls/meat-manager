@@ -22,4 +22,11 @@
         <item>month</item>
         <item>year</item>
     </string-array>
+
+    <string-array name="time_periods_plural">
+        <item>days</item>
+        <item>weeks</item>
+        <item>months</item>
+        <item>years</item>
+    </string-array>
 </resources>

@@ -3,9 +3,11 @@ package com.martinwalls.nea.contracts;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.RadioButton;
+import android.widget.*;
 import androidx.fragment.app.DialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.martinwalls.nea.R;
@@ -21,12 +23,20 @@ public class RepeatIntervalDialog extends DialogFragment {
 
     private RadioBtnListener listener;
 
+    private LinearLayout radioGroup;
+    private LinearLayout customInterval;
+
+    private boolean isOne = true;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View dialogView = inflater.inflate(R.layout.dialog_repeat_interval, null);
+
+        radioGroup = dialogView.findViewById(R.id.radio_group);
+        customInterval = dialogView.findViewById(R.id.custom_interval);
 
         RadioButton radioWeek = dialogView.findViewById(R.id.radio_week);
         radioWeek.setOnClickListener(v -> onRadioBtnClicked(OPTION_WEEK));
@@ -57,14 +67,57 @@ public class RepeatIntervalDialog extends DialogFragment {
                 break;
         }
 
+        Spinner timePeriodSpn = dialogView.findViewById(R.id.spn_time_period);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item);
+//                ArrayAdapter.createFromResource(getContext(),
+//                R.array.time_periods, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.addAll(getResources().getStringArray(R.array.time_periods));
+        adapter.notifyDataSetChanged();
+        timePeriodSpn.setAdapter(adapter);
+
+        EditText editTextNumber = dialogView.findViewById(R.id.edit_text_number);
+        editTextNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!isOne && s.toString().equals("1")) {
+                    adapter.clear();
+                    adapter.addAll(getResources().getStringArray(R.array.time_periods));
+                    adapter.notifyDataSetChanged();
+                    isOne = true;
+                } else if (isOne && !s.toString().equals("1")) {
+                    adapter.clear();
+                    adapter.addAll(getResources().getStringArray(R.array.time_periods_plural));
+                    adapter.notifyDataSetChanged();
+                    isOne = false;
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         builder.setView(dialogView);
 
         return builder.create();
     }
 
     private void onRadioBtnClicked(int id) {
-        listener.onRadioBtnClicked(id);
-        getDialog().dismiss();
+        if (id == OPTION_CUSTOM) {
+            radioGroup.setVisibility(View.GONE);
+            customInterval.setVisibility(View.VISIBLE);
+        } else {
+            listener.onRadioBtnClicked(id);
+            getDialog().dismiss();
+        }
     }
 
     @Override
