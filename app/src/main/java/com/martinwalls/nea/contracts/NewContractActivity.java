@@ -124,15 +124,16 @@ public class NewContractActivity extends AppCompatActivity
         editTextRepeatInterval.setOnClickListener(v -> {
             DialogFragment dialog = new RepeatIntervalDialog();
             Bundle args = new Bundle();
-            if (selectedRepeatInterval == null) {
-            } else if (selectedRepeatInterval.getDays() == 7) {
-                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_WEEK);
-            } else if (selectedRepeatInterval.getDays() == 14) {
-                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_TWO_WEEK);
-            } else if (selectedRepeatInterval.getMonths() == 1) {
-                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_MONTH);
-            } else {
-                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_CUSTOM);
+            if (selectedRepeatInterval != null) {
+                if (selectedRepeatInterval.getDays() == 7) {
+                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_WEEK);
+                } else if (selectedRepeatInterval.getDays() == 14) {
+                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_TWO_WEEK);
+                } else if (selectedRepeatInterval.getMonths() == 1) {
+                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_MONTH);
+                } else {
+                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_CUSTOM);
+                }
             }
             dialog.setArguments(args);
             dialog.show(getSupportFragmentManager(), "repeat_interval");
