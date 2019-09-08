@@ -75,6 +75,14 @@
             android:text="@string/contracts_dialog_repeat_interval_month"
             />
 
+        <RadioButton
+            android:id="@+id/radio_custom_selected"
+            style="@style/TextNormal.Dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:visibility="gone"
+            />
 
         <RadioButton
             android:id="@+id/radio_custom"
@@ -108,7 +116,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:orientation="horizontal"

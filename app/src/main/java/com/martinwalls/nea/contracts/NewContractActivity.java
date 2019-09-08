@@ -30,7 +30,6 @@ import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.*;
 import com.martinwalls.nea.stock.EditLocationsActivity;
 
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +63,7 @@ public class NewContractActivity extends AppCompatActivity
 
     private int selectedProductId;
     private int selectedDestId;
-    private Period selectedRepeatInterval;
+    private Interval selectedRepeatInterval;
 
     private TextView addProductBtn;
 
@@ -121,14 +120,16 @@ public class NewContractActivity extends AppCompatActivity
             DialogFragment dialog = new RepeatIntervalDialog();
             Bundle args = new Bundle();
             if (selectedRepeatInterval != null) {
-                if (selectedRepeatInterval.getDays() == 7) {
+                if (selectedRepeatInterval.isWeek()) {
                     args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_WEEK);
-                } else if (selectedRepeatInterval.getDays() == 14) {
+                } else if (selectedRepeatInterval.isTwoWeeks()) {
                     args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_TWO_WEEK);
-                } else if (selectedRepeatInterval.getMonths() == 1) {
+                } else if (selectedRepeatInterval.isMonth()) {
                     args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_MONTH);
                 } else {
                     args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_CUSTOM);
+                    args.putInt(RepeatIntervalDialog.EXTRA_TIME_VALUE, selectedRepeatInterval.getValue());
+                    args.putString(RepeatIntervalDialog.EXTRA_TIME_UNIT, selectedRepeatInterval.getUnit().name());
                 }
             }
             dialog.setArguments(args);
@@ -399,25 +400,28 @@ public class NewContractActivity extends AppCompatActivity
         TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
         switch (id) {
             case RepeatIntervalDialog.OPTION_WEEK:
-                selectedRepeatInterval = Period.ofWeeks(1);
+                selectedRepeatInterval = new Interval(1, Interval.TimeUnit.WEEK);
                 editTextRepeatInterval.setText(R.string.contracts_dialog_repeat_interval_week);
                 break;
             case RepeatIntervalDialog.OPTION_TWO_WEEK:
-                selectedRepeatInterval = Period.ofWeeks(2);
+                selectedRepeatInterval = new Interval(2, Interval.TimeUnit.WEEK);
                 editTextRepeatInterval.setText(R.string.contracts_dialog_repeat_interval_two_week);
                 break;
             case RepeatIntervalDialog.OPTION_MONTH:
-                selectedRepeatInterval = Period.ofMonths(1);
+                selectedRepeatInterval = new Interval(1, Interval.TimeUnit.MONTH);
                 editTextRepeatInterval.setText(R.string.contracts_dialog_repeat_interval_month);
                 break;
         }
     }
 
     @Override
-    public void onCustomIntervalSelected(Period interval) {
+    public void onCustomIntervalSelected(Interval interval) {
         selectedRepeatInterval = interval;
         TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
-        editTextRepeatInterval.setText(interval.getDays() + " days");
+        editTextRepeatInterval.setText(getResources().getQuantityString(
+                R.plurals.contracts_repeat_interval_display,
+                interval.getValue(),
+                interval.getValue(), interval.getUnit().name().toLowerCase()));
     }
 
     private boolean addContractToDb() {

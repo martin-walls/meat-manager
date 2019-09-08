@@ -7,7 +7,7 @@ public class Contract {
     private int contractId;
     private int destId;
     private String destName;
-    private int repeatInterval; // TODO make date class to handle dates, see Order
+    private Interval repeatInterval;
     private int repeatOn;
     private int reminder;
 
@@ -16,7 +16,7 @@ public class Contract {
     public Contract() {
     }
 
-    public Contract(int contractId, int destId, int repeatInterval, int repeatOn,
+    public Contract(int contractId, int destId, Interval repeatInterval, int repeatOn,
                     int reminder, List<ProductQuantity> productList) {
         this.contractId = contractId;
         this.destId = destId;
@@ -50,11 +50,11 @@ public class Contract {
         this.destName = destName;
     }
 
-    public int getRepeatInterval() {
+    public Interval getRepeatInterval() {
         return repeatInterval;
     }
 
-    public void setRepeatInterval(int repeatInterval) {
+    public void setRepeatInterval(Interval repeatInterval) {
         this.repeatInterval = repeatInterval;
     }
 

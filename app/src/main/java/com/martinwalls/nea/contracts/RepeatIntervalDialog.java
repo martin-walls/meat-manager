@@ -12,12 +12,13 @@ import android.widget.*;
 import androidx.fragment.app.DialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.martinwalls.nea.R;
-
-import java.time.Period;
+import com.martinwalls.nea.models.Interval;
 
 public class RepeatIntervalDialog extends DialogFragment {
 
     public static final String EXTRA_SELECTED = "selected";
+    public static final String EXTRA_TIME_VALUE = "timeValue";
+    public static final String EXTRA_TIME_UNIT = "timeUnit";
 
     public static final int OPTION_WEEK = 1;
     public static final int OPTION_TWO_WEEK = 2;
@@ -38,6 +39,17 @@ public class RepeatIntervalDialog extends DialogFragment {
 
         View dialogView = inflater.inflate(R.layout.dialog_repeat_interval, null);
 
+        Bundle args = getArguments();
+        int selectedOption = -1;
+        Interval selectedCustomInterval = new Interval();
+        if (args != null) {
+            selectedOption = args.getInt(EXTRA_SELECTED);
+            if (selectedOption == OPTION_CUSTOM) {
+                selectedCustomInterval.setValue(args.getInt(EXTRA_TIME_VALUE));
+                selectedCustomInterval.setUnit(Interval.TimeUnit.parseTimeUnit(args.getString(EXTRA_TIME_UNIT)));
+            }
+        }
+
         radioGroup = dialogView.findViewById(R.id.radio_group);
         customInterval = dialogView.findViewById(R.id.custom_interval);
 
@@ -50,11 +62,9 @@ public class RepeatIntervalDialog extends DialogFragment {
         RadioButton radioCustom = dialogView.findViewById(R.id.radio_custom);
         radioCustom.setOnClickListener(v -> onRadioBtnClicked(OPTION_CUSTOM));
 
-        Bundle args = getArguments();
-        int selectedOption = -1;
-        if (args != null) {
-            selectedOption = args.getInt(EXTRA_SELECTED);
-        }
+        RadioButton radioCustomSelected = dialogView.findViewById(R.id.radio_custom_selected);
+        radioCustomSelected.setOnClickListener(v -> getDialog().dismiss());
+
         switch (selectedOption) {
             case OPTION_WEEK:
                 radioWeek.setChecked(true);
@@ -66,7 +76,14 @@ public class RepeatIntervalDialog extends DialogFragment {
                 radioMonth.setChecked(true);
                 break;
             case OPTION_CUSTOM:
-                radioCustom.setChecked(true);
+                if (selectedCustomInterval.getUnit() != null) {
+                    radioCustomSelected.setVisibility(View.VISIBLE);
+                    radioCustomSelected.setChecked(true);
+                    radioCustomSelected.setText(getResources().getQuantityString(
+                            R.plurals.contracts_repeat_interval_display,
+                            selectedCustomInterval.getValue(),
+                            selectedCustomInterval.getValue(), selectedCustomInterval.getUnit().name().toLowerCase()));
+                }
                 break;
         }
 
@@ -115,22 +132,26 @@ public class RepeatIntervalDialog extends DialogFragment {
                 return;
             }
             int value = Integer.valueOf(editTextNumber.getText().toString());
-            Period interval;
+
+            Interval interval = new Interval();
+            interval.setValue(value);
+//            Period interval;
             switch (spinnerPos) {
                 case 0:
-                    interval = Period.ofDays(value);
+                    interval.setUnit(Interval.TimeUnit.DAY);
+//                    interval = Period.ofDays(value);
                     break;
                 case 1:
-                    interval = Period.ofWeeks(value);
+                    interval.setUnit(Interval.TimeUnit.WEEK);
+//                    interval = Period.ofWeeks(value);
                     break;
                 case 2:
-                    interval = Period.ofMonths(value);
+                    interval.setUnit(Interval.TimeUnit.MONTH);
+//                    interval = Period.ofMonths(value);
                     break;
                 case 3:
-                    interval = Period.ofYears(value);
-                    break;
-                default:
-                    interval = Period.ZERO; // to make sure it's not null
+                    interval.setUnit(Interval.TimeUnit.YEAR);
+//                    interval = Period.ofYears(value);
                     break;
             }
             listener.onCustomIntervalSelected(interval);
@@ -165,6 +186,6 @@ public class RepeatIntervalDialog extends DialogFragment {
 
     public interface RepeatIntervalDialogListener {
         void onRadioBtnClicked(int id);
-        void onCustomIntervalSelected(Period interval);
+        void onCustomIntervalSelected(Interval interval);
     }
 }

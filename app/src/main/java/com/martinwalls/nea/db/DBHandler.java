@@ -64,6 +64,7 @@ public class DBHandler extends SQLiteOpenHelper {
         static final String ID = "ContractId";
         static final String DEST_ID = "DestId";
         static final String REPEAT_INTERVAL = "RepeatInterval";
+        static final String REPEAT_INTERVAL_UNIT = "RepeatIntervalUnit";
         static final String REPEAT_ON = "RepeatOn";
         static final String REMINDER = "Reminder";
     }
@@ -183,7 +184,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 + ContractsTable.ID + " INTEGER PRIMARY KEY, "
                 + ContractsTable.DEST_ID + " INTEGER NOT NULL, "
                 + ContractsTable.REPEAT_INTERVAL + " INTEGER NOT NULL, "
-                + ContractsTable.REPEAT_ON + " INTEGER NOT NULL, "
+                + ContractsTable.REPEAT_INTERVAL_UNIT + " TEXT NOT NULL, "
+                + ContractsTable.REPEAT_ON + " INTEGER, "
                 + ContractsTable.REMINDER + " INTEGER NOT NULL, "
                 + "FOREIGN KEY (" + ContractsTable.DEST_ID + ") REFERENCES "
                     + LocationsTable.TABLE_NAME + "(" + LocationsTable.ID + ") "
@@ -584,8 +586,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 contractResult.setContractId(contractId);
                 contractResult.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.DEST_ID)));
                 contractResult.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
-                contractResult.setRepeatInterval(cursor.getInt(
-                        cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_INTERVAL)));
+                Interval repeatInterval = new Interval(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_INTERVAL)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_INTERVAL_UNIT))
+                );
+                contractResult.setRepeatInterval(repeatInterval);
                 contractResult.setRepeatOn(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_ON)));
                 contractResult.setReminder(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REMINDER)));
                 gotContractData = true;
@@ -631,7 +636,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 contract.setContractId(thisContractId);
                 contract.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.DEST_ID)));
                 contract.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
-                contract.setRepeatInterval(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_INTERVAL)));
+                Interval repeatInterval = new Interval(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_INTERVAL)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_INTERVAL_UNIT))
+                );
+                contract.setRepeatInterval(repeatInterval);
                 contract.setRepeatOn(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_ON)));
                 contract.setReminder(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REMINDER)));
                 contractResultList.add(contract);
@@ -789,7 +798,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public boolean addContract(Contract contract) {
         ContentValues values = new ContentValues();
         values.put(ContractsTable.DEST_ID, contract.getDestId());
-        values.put(ContractsTable.REPEAT_INTERVAL, contract.getRepeatInterval());
+        values.put(ContractsTable.REPEAT_INTERVAL, contract.getRepeatInterval().getValue());
+        values.put(ContractsTable.REPEAT_INTERVAL_UNIT, contract.getRepeatInterval().getUnit().name());
         values.put(ContractsTable.REPEAT_ON, contract.getRepeatOn());
         values.put(ContractsTable.REMINDER, contract.getReminder());
 
