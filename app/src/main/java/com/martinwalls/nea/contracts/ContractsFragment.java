@@ -20,7 +20,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class ContractsFragment extends Fragment {
+public class ContractsFragment extends Fragment
+        implements ContractsAdapter.ContractsAdapterListener {
 
     private DBHandler dbHandler;
 
@@ -40,7 +41,7 @@ public class ContractsFragment extends Fragment {
         TextView emptyView = fragmentView.findViewById(R.id.empty);
         recyclerView.setEmptyView(emptyView);
 
-        contractsAdapter = new ContractsAdapter(contractList/*, this*/);
+        contractsAdapter = new ContractsAdapter(contractList, this);
         recyclerView.setAdapter(contractsAdapter);
         loadContracts();
 
@@ -94,5 +95,12 @@ public class ContractsFragment extends Fragment {
             }
         }));
         contractsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onContractClicked(Contract contract) {
+        Intent detailIntent = new Intent(getContext(), ContractDetailActivity.class);
+        detailIntent.putExtra(ContractDetailActivity.EXTRA_CONTRACT_ID, contract.getContractId());
+        startActivity(detailIntent);
     }
 }

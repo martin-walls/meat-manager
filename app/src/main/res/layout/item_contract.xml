@@ -1,55 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contract_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:baselineAligned="false"
+    android:clickable="true"
     android:orientation="vertical"
+    android:paddingStart="24dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="16dp"
     >
 
-    <LinearLayout
-        android:id="@+id/contract_info"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?selectableItemBackground"
-        android:baselineAligned="false"
-        android:clickable="true"
-        android:orientation="vertical"
-        android:paddingStart="24dp"
-        android:paddingTop="16dp"
-        android:paddingEnd="24dp"
-        android:paddingBottom="16dp"
-        >
+        android:overScrollMode="never"
+        tools:itemCount="2"
+        tools:listitem="@layout/item_product"
+        />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:overScrollMode="never"
-            tools:itemCount="2"
-            tools:listitem="@layout/item_product"
-            />
+    <TextView
+        android:id="@+id/contract_repeat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|start"
+        android:textColor="?textColorNormal"
+        android:textSize="16sp"
+        tools:text="Repeats every Wednesday"
+        />
 
-        <TextView
-            android:id="@+id/contract_repeat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|start"
-            android:textColor="?textColorNormal"
-            android:textSize="16sp"
-            tools:text="Repeats every Wednesday"
-            />
-
-        <TextView
-            android:id="@+id/contract_dest"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center_vertical|start"
-            android:textColor="?textColorNormal"
-            android:textSize="16sp"
-            tools:text="Destination"
-            />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/contract_dest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical|start"
+        android:textColor="?textColorNormal"
+        android:textSize="16sp"
+        tools:text="Destination"
+        />
 
 </LinearLayout>

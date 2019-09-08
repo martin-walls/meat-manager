@@ -3,6 +3,7 @@ package com.martinwalls.nea.contracts;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,7 @@ import java.util.List;
 public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.ViewHolder> {
 
     private List<Contract> contractList;
+    private ContractsAdapterListener listener;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView contractDest, contractRepeat;
@@ -27,12 +29,14 @@ public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.View
             contractRepeat = view.findViewById(R.id.contract_repeat);
             recyclerView = view.findViewById(R.id.recycler_view);
 
-            //todo onclicklistener
+            LinearLayout contractLayout = view.findViewById(R.id.contract_layout);
+            contractLayout.setOnClickListener(v -> listener.onContractClicked(contractList.get(getAdapterPosition())));
         }
     }
 
-    ContractsAdapter(List<Contract> contractList) {
+    ContractsAdapter(List<Contract> contractList, ContractsAdapterListener listener) {
         this.contractList = contractList;
+        this.listener = listener;
     }
 
     @Override
@@ -54,7 +58,7 @@ public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.View
             repeatOnStr = viewHolder.contractRepeat.getContext().getResources()
                     .getStringArray(R.array.weekdays)[repeatOn];
         } else {
-            repeatOnStr = "day " + String.valueOf(repeatOn + 1);
+            repeatOnStr = "day " + (repeatOn + 1);
         }
         if (repeatInterval.getValue() == 1) {
             repeatStr = viewHolder.contractRepeat.getContext().getResources().getString(
@@ -76,5 +80,9 @@ public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.View
     @Override
     public int getItemCount() {
         return contractList.size();
+    }
+
+    public interface ContractsAdapterListener {
+        void onContractClicked(Contract contract);
     }
 }

@@ -157,6 +157,8 @@
     <string name="contracts_repeat_on_week">Repeat weekly on</string>
     <string name="contracts_repeat_on_month">Repeat monthly on</string>
 
+    <string name="contract_details_title">Contract details</string>
+
     <!-- Exchange page -->
     <string name="exchange_title">Exchange</string>
     <string name="exchange_choose_currencies">Choose currencies</string>
