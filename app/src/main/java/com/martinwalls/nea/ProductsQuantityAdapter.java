@@ -1,17 +1,16 @@
-package com.martinwalls.nea.orders;
+package com.martinwalls.nea;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
-import com.martinwalls.nea.R;
 import com.martinwalls.nea.models.ProductQuantity;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdapter.ViewHolder> {
+public class ProductsQuantityAdapter extends RecyclerView.Adapter<ProductsQuantityAdapter.ViewHolder> {
 
     private List<ProductQuantity> productList;
 
@@ -26,7 +25,7 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
         }
     }
 
-    OrderProductsAdapter(List<ProductQuantity> productList) {
+    public ProductsQuantityAdapter(List<ProductQuantity> productList) {
         this.productList = productList;
     }
 

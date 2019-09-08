@@ -50,6 +50,11 @@ public class Contract {
         this.destName = destName;
     }
 
+    public void setDest(Location dest) {
+        this.destId = dest.getLocationId();
+        this.destName = dest.getLocationName();
+    }
+
     public Interval getRepeatInterval() {
         return repeatInterval;
     }

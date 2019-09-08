@@ -3,19 +3,31 @@ package com.martinwalls.nea.contracts;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.martinwalls.nea.ProductsQuantityAdapter;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.models.Contract;
+import com.martinwalls.nea.models.Interval;
 
 import java.util.List;
 
 public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.ViewHolder> {
+
     private List<Contract> contractList;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView contractDest, contractRepeat;
+        private RecyclerView recyclerView;
 
         ViewHolder(View view) {
             super(view);
+            contractDest = view.findViewById(R.id.contract_dest);
+            contractRepeat = view.findViewById(R.id.contract_repeat);
+            recyclerView = view.findViewById(R.id.recycler_view);
+
+            //todo onclicklistener
         }
     }
 
@@ -32,7 +44,33 @@ public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        //TODO Add your logic for binding the view
+        Contract contract = contractList.get(position);
+        viewHolder.contractDest.setText(contract.getDestName());
+        String repeatStr;
+        Interval repeatInterval = contract.getRepeatInterval();
+        int repeatOn = contract.getRepeatOn();
+        String repeatOnStr;
+        if (repeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
+            repeatOnStr = viewHolder.contractRepeat.getContext().getResources()
+                    .getStringArray(R.array.weekdays)[repeatOn];
+        } else {
+            repeatOnStr = "day " + String.valueOf(repeatOn + 1);
+        }
+        if (repeatInterval.getValue() == 1) {
+            repeatStr = viewHolder.contractRepeat.getContext().getResources().getString(
+                    R.string.contracts_repeat_display_one,
+                    repeatInterval.getUnit().name().toLowerCase(), repeatOnStr);
+        } else {
+            repeatStr = viewHolder.contractRepeat.getContext().getResources().getString(
+                    R.string.contracts_repeat_display_multiple,
+                    repeatInterval.getValue(), repeatInterval.getUnit().name().toLowerCase(), repeatOnStr);
+        }
+        viewHolder.contractRepeat.setText(repeatStr);
+        ProductsQuantityAdapter adapter = new ProductsQuantityAdapter(contract.getProductList());
+        viewHolder.recyclerView.setAdapter(adapter);
+        viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(viewHolder.recyclerView.getContext()));
+        // allow click events to pass to parent layout
+        viewHolder.recyclerView.suppressLayout(true);
     }
 
     @Override

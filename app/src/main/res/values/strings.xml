@@ -129,12 +129,13 @@
     <string name="contracts_input_destination">Destination</string>
     <string name="contracts_input_repeat_interval">Repeat</string>
     <string name="contracts_input_repeat_on">On…</string>
-    <string name="contracts_input_reminder">Reminder</string>
     <string name="contracts_input_product">Product</string>
     <string name="contracts_input_quantity_kg">Quantity (kg)</string>
     <string name="contracts_input_quantity_lbs">Quantity (lbs)</string>
     <string name="contracts_input_quantity_boxes">Number of boxes</string>
     <string name="contracts_add_product">Add another product</string>
+    <string name="contracts_reminder">Reminder</string>
+    <string name="contracts_reminder_off">Reminder (off)</string>
     <string name="contracts_reminder_day_before_one">day before</string>
     <plurals name="contracts_reminder_days_before">
         <item quantity="one">@string/contracts_reminder_day_before_one</item>
@@ -142,7 +143,6 @@
     </plurals>
 
     <string name="contracts_dialog_repeat_interval_title">Repeat every…</string>
-    <!--<string name="contracts_dialog_repeat_interval_day">Every day</string>-->
     <string name="contracts_dialog_repeat_interval_week">Every week</string>
     <string name="contracts_dialog_repeat_interval_two_week">Every two weeks</string>
     <string name="contracts_dialog_repeat_interval_month">Every month</string>
@@ -150,6 +150,9 @@
 
     <string name="contracts_repeat_interval_display_one">Every %s</string>
     <string name="contracts_repeat_interval_display_multiple">Every %d %ss</string>
+
+    <string name="contracts_repeat_display_one">Repeats every %s on %s</string>
+    <string name="contracts_repeat_display_multiple">Repeats every %d %ss on %s</string>
 
     <string name="contracts_repeat_on_week">Repeat weekly on</string>
     <string name="contracts_repeat_on_month">Repeat monthly on</string>

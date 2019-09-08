@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.martinwalls.nea.ProductsQuantityAdapter;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.models.Order;
 
@@ -49,7 +50,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Order order = orderList.get(position);
         viewHolder.orderDest.setText(order.getDestName());
-        OrderProductsAdapter adapter = new OrderProductsAdapter(order.getProductList());
+        ProductsQuantityAdapter adapter = new ProductsQuantityAdapter(order.getProductList());
         viewHolder.recyclerView.setAdapter(adapter);
         viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(viewHolder.recyclerView.getContext()));
         // allow click events to be passed to parent layout

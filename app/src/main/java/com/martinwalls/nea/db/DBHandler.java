@@ -16,7 +16,7 @@ import java.util.List;
 @SuppressWarnings("FieldCanBeLocal")
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "stockDB.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     //region db constants
     private final class ProductsTable {
@@ -565,7 +565,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public Contract getContract(int contractId) {
         Contract contractResult = new Contract();
         String query = "SELECT " + ContractsTable.TABLE_NAME + ".*," + ProductsTable.TABLE_NAME + ".*,"
-                + ContractProductsTable.QUANTITY_MASS + "," + ContractProductsTable.QUANTITY_BOXES
+                + ContractProductsTable.QUANTITY_MASS + "," + ContractProductsTable.QUANTITY_BOXES + ","
+                + LocationsTable.NAME
                 + " FROM " + ContractsTable.TABLE_NAME
                 + " INNER JOIN " + ContractProductsTable.TABLE_NAME + " ON "
                 + ContractsTable.TABLE_NAME + "." + ContractsTable.ID
@@ -614,7 +615,8 @@ public class DBHandler extends SQLiteOpenHelper {
         List<Contract> contractResultList = new ArrayList<>();
         //todo refactor these queries into global variables, for getting a single order just append the WHERE clause - eliminate repetition
         String query = "SELECT " + ContractsTable.TABLE_NAME + ".*," + ProductsTable.TABLE_NAME + ".*,"
-                + ContractProductsTable.QUANTITY_MASS + "," + ContractProductsTable.QUANTITY_BOXES
+                + ContractProductsTable.QUANTITY_MASS + "," + ContractProductsTable.QUANTITY_BOXES + ","
+                + LocationsTable.NAME
                 + " FROM " + ContractsTable.TABLE_NAME
                 + " INNER JOIN " + ContractProductsTable.TABLE_NAME + " ON "
                 + ContractsTable.TABLE_NAME + "." + ContractsTable.ID

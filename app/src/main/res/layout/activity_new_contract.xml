@@ -153,23 +153,6 @@
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--<com.google.android.material.textfield.TextInputLayout-->
-            <!--android:id="@+id/input_layout_repeat_on"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="@dimen/input_spacing_vertical"-->
-            <!--android:hint="@string/contracts_input_repeat_on"-->
-            <!--android:visibility="gone"-->
-            <!--&gt;-->
-
-            <!--<com.google.android.material.textfield.TextInputEditText-->
-            <!--android:id="@+id/edit_text_repeat_on"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:focusableInTouchMode="false"-->
-            <!--/>-->
-            <!--</com.google.android.material.textfield.TextInputLayout>-->
-
             <LinearLayout
                 android:id="@+id/input_repeat_on"
                 android:layout_width="match_parent"
@@ -193,27 +176,11 @@
                     android:id="@+id/spn_repeat_on"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:spinnerMode="dropdown"
                     android:layout_marginStart="24dp"
+                    android:spinnerMode="dropdown"
                     />
 
             </LinearLayout>
-
-            <!--<com.google.android.material.textfield.TextInputLayout-->
-            <!--android:id="@+id/input_layout_reminder"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="@dimen/input_spacing_vertical"-->
-            <!--android:hint="@string/contracts_input_reminder"-->
-            <!--&gt;-->
-
-            <!--<com.google.android.material.textfield.TextInputEditText-->
-            <!--android:id="@+id/edit_text_reminder"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:focusableInTouchMode="false"-->
-            <!--/>-->
-            <!--</com.google.android.material.textfield.TextInputLayout>-->
 
             <LinearLayout
                 android:id="@+id/input_reminder"
@@ -226,12 +193,13 @@
                 >
 
                 <TextView
+                    android:id="@+id/text_reminder"
                     style="@style/TextNormal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="start|center_vertical"
-                    android:text="@string/contracts_input_reminder"
+                    android:text="@string/contracts_reminder"
                     />
 
                 <EditText
@@ -246,7 +214,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/reminder_txt_days_before"
+                    android:id="@+id/reminder_text_days_before"
                     style="@style/TextNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

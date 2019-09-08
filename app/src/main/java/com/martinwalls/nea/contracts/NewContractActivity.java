@@ -148,7 +148,8 @@ public class NewContractActivity extends AppCompatActivity
         repeatOnSpn.setAdapter(repeatOnSpnAdapter);
 
         EditText editTextReminder = findViewById(R.id.edit_text_reminder);
-        TextView txtReminderDaysBefore = findViewById(R.id.reminder_txt_days_before);
+        TextView txtReminderDaysBefore = findViewById(R.id.reminder_text_days_before);
+        TextView txtReminder = findViewById(R.id.text_reminder);
         editTextReminder.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -157,11 +158,15 @@ public class NewContractActivity extends AppCompatActivity
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (TextUtils.isEmpty(s)) {
-                    return;
+                if (TextUtils.isEmpty(s) || s.toString().equals("0")) {
+                    txtReminder.setText(R.string.contracts_reminder_off);
+                } else {
+                    txtReminder.setText(R.string.contracts_reminder);
                 }
-                txtReminderDaysBefore.setText(getResources().getQuantityString(
-                        R.plurals.contracts_reminder_days_before, Integer.parseInt(s.toString())));
+                if (!TextUtils.isEmpty(s)) {
+                    txtReminderDaysBefore.setText(getResources().getQuantityString(
+                            R.plurals.contracts_reminder_days_before, Integer.parseInt(s.toString())));
+                }
             }
 
             @Override
@@ -485,11 +490,55 @@ public class NewContractActivity extends AppCompatActivity
         TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
         TextInputLayout inputLayoutRepeatInterval = findViewById(R.id.input_layout_repeat_interval);
 
-//        TextInputLayout inputLayoutRepeatOn = findViewById(R.id.input_layout_repeat_on);
+        Spinner repeatOnSpn = findViewById(R.id.spn_repeat_on);
 
         EditText editTextReminder = findViewById(R.id.edit_text_reminder);
 
-        //todo finish add contract to db
+        if (productsAddedList.size() == 0 && TextUtils.isEmpty(editTextProduct.getText())) {
+            inputLayoutProduct.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            inputLayoutProduct.setError(null);
+        }
+        if (productsAddedList.size() == 0 && TextUtils.isEmpty(editTextMass.getText())) {
+            inputLayoutMass.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            inputLayoutMass.setError(null);
+        }
+        if (TextUtils.isEmpty(editTextDest.getText())) {
+            inputLayoutDest.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            inputLayoutDest.setError(null);
+        }
+        if (TextUtils.isEmpty(editTextRepeatInterval.getText())) {
+            inputLayoutRepeatInterval.setError(getString(R.string.input_error_blank_date));
+            isValid = false;
+        } else {
+            inputLayoutRepeatInterval.setError(null);
+        }
+
+        if (isValid) {
+            if (!TextUtils.isEmpty(editTextProduct.getText())) {
+                productsAddedList.add(new ProductQuantity(dbHandler.getProduct(selectedProductId),
+                        Double.parseDouble(editTextMass.getText().toString()),
+                        TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1
+                                : Integer.parseInt(editTextNumBoxes.getText().toString())));
+                newContract.setProductList(productsAddedList);
+                newContract.setDest(dbHandler.getLocation(selectedDestId));
+                newContract.setRepeatInterval(selectedRepeatInterval);
+                newContract.setRepeatOn(repeatOnSpn.getSelectedItemPosition());
+                if (TextUtils.isEmpty(editTextReminder.getText())
+                        || editTextReminder.getText().toString().equals("0")) {
+                    newContract.setReminder(-1);
+                } else {
+                    newContract.setReminder(Integer.parseInt(editTextReminder.getText().toString()));
+                }
+
+                return dbHandler.addContract(newContract);
+            }
+        }
         return false;
     }
 }

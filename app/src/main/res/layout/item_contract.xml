@@ -6,14 +6,6 @@
     android:orientation="vertical"
     >
 
-    <include
-        android:id="@+id/date_divider"
-        layout="@layout/item_date_divider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        />
-
     <LinearLayout
         android:id="@+id/contract_info"
         android:layout_width="match_parent"
