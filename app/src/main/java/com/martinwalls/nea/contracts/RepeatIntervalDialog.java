@@ -79,10 +79,14 @@ public class RepeatIntervalDialog extends DialogFragment {
                 if (selectedCustomInterval.getUnit() != null) {
                     radioCustomSelected.setVisibility(View.VISIBLE);
                     radioCustomSelected.setChecked(true);
-                    radioCustomSelected.setText(getResources().getQuantityString(
-                            R.plurals.contracts_repeat_interval_display,
-                            selectedCustomInterval.getValue(),
-                            selectedCustomInterval.getValue(), selectedCustomInterval.getUnit().name().toLowerCase()));
+                    if (selectedCustomInterval.getValue() == 1) {
+                        radioCustomSelected.setText(getString(R.string.contracts_repeat_interval_display_one,
+                                selectedCustomInterval.getUnit().name().toLowerCase()));
+                    } else {
+                        radioCustomSelected.setText(getString(R.string.contracts_repeat_interval_display_multiple,
+                                selectedCustomInterval.getValue(),
+                                selectedCustomInterval.getUnit().name().toLowerCase()));
+                    }
                 }
                 break;
         }
@@ -135,23 +139,12 @@ public class RepeatIntervalDialog extends DialogFragment {
 
             Interval interval = new Interval();
             interval.setValue(value);
-//            Period interval;
             switch (spinnerPos) {
                 case 0:
-                    interval.setUnit(Interval.TimeUnit.DAY);
-//                    interval = Period.ofDays(value);
+                    interval.setUnit(Interval.TimeUnit.WEEK);
                     break;
                 case 1:
-                    interval.setUnit(Interval.TimeUnit.WEEK);
-//                    interval = Period.ofWeeks(value);
-                    break;
-                case 2:
                     interval.setUnit(Interval.TimeUnit.MONTH);
-//                    interval = Period.ofMonths(value);
-                    break;
-                case 3:
-                    interval.setUnit(Interval.TimeUnit.YEAR);
-//                    interval = Period.ofYears(value);
                     break;
             }
             listener.onCustomIntervalSelected(interval);

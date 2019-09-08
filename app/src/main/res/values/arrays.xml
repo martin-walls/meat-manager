@@ -17,16 +17,22 @@
     <!--</string-array>-->
 
     <string-array name="time_periods">
-        <item>day</item>
         <item>week</item>
         <item>month</item>
-        <item>year</item>
     </string-array>
 
     <string-array name="time_periods_plural">
-        <item>days</item>
         <item>weeks</item>
         <item>months</item>
-        <item>years</item>
+    </string-array>
+
+    <string-array name="weekdays">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
     </string-array>
 </resources>

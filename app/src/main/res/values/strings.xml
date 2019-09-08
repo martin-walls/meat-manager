@@ -151,10 +151,8 @@
     <string name="contracts_repeat_interval_display_one">Every %s</string>
     <string name="contracts_repeat_interval_display_multiple">Every %d %ss</string>
 
-    <plurals name="contracts_repeat_interval_display">
-        <item quantity="one">Every %d %s</item>
-        <item quantity="other">Every %d %ss</item>
-    </plurals>
+    <string name="contracts_repeat_on_week">Repeat weekly on</string>
+    <string name="contracts_repeat_on_month">Repeat monthly on</string>
 
     <!-- Exchange page -->
     <string name="exchange_title">Exchange</string>

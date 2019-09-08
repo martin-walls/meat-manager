@@ -11,10 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -72,6 +69,9 @@ public class NewContractActivity extends AppCompatActivity
     private ProductsAddedAdapter productsAddedAdapter;
     private RecyclerView productsAddedRecyclerView;
 
+    private ArrayAdapter<CharSequence> repeatOnSpnAdapter;
+    private boolean isWeek = true;
+
     private final int REQUEST_REFRESH_ON_DONE = 1;
 
     @Override
@@ -84,8 +84,8 @@ public class NewContractActivity extends AppCompatActivity
         inputViews.put(INPUT_QUANTITY, R.id.input_row_quantity);
         inputViews.put(INPUT_DESTINATION, R.id.input_layout_destination);
         inputViews.put(INPUT_REPEAT_INTERVAL, R.id.input_layout_repeat_interval);
-        inputViews.put(INPUT_REPEAT_ON, R.id.input_layout_repeat_on);
-        inputViews.put(INPUT_REMINDER, R.id.input_row_reminder);
+        inputViews.put(INPUT_REPEAT_ON, R.id.input_repeat_on);
+        inputViews.put(INPUT_REMINDER, R.id.input_reminder);
 
         addNewView = findViewById(R.id.add_new);
         addNewView.setOnClickListener(v -> addNewItem());
@@ -121,11 +121,14 @@ public class NewContractActivity extends AppCompatActivity
             DialogFragment dialog = new RepeatIntervalDialog();
             Bundle args = new Bundle();
             if (selectedRepeatInterval != null) {
-                if (selectedRepeatInterval.isWeek()) {
+                if (selectedRepeatInterval.getValue() == 1
+                        && selectedRepeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
                     args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_WEEK);
-                } else if (selectedRepeatInterval.isTwoWeeks()) {
+                } else if (selectedRepeatInterval.getValue() == 2
+                        && selectedRepeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
                     args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_TWO_WEEK);
-                } else if (selectedRepeatInterval.isMonth()) {
+                } else if (selectedRepeatInterval.getValue() == 1
+                        && selectedRepeatInterval.getUnit() == Interval.TimeUnit.MONTH) {
                     args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_MONTH);
                 } else {
                     args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_CUSTOM);
@@ -137,10 +140,12 @@ public class NewContractActivity extends AppCompatActivity
             dialog.show(getSupportFragmentManager(), "repeat_interval");
         });
 
-        TextInputEditText editTextRepeatOn = findViewById(R.id.edit_text_repeat_on);
-        editTextRepeatOn.setOnClickListener(v -> {
-            //todo repeat on dialog
-        });
+        Spinner repeatOnSpn = findViewById(R.id.spn_repeat_on);
+        repeatOnSpnAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        repeatOnSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        repeatOnSpnAdapter.addAll(getResources().getStringArray(R.array.weekdays));
+        repeatOnSpnAdapter.notifyDataSetChanged();
+        repeatOnSpn.setAdapter(repeatOnSpnAdapter);
 
         EditText editTextReminder = findViewById(R.id.edit_text_reminder);
         TextView txtReminderDaysBefore = findViewById(R.id.reminder_txt_days_before);
@@ -209,11 +214,21 @@ public class NewContractActivity extends AppCompatActivity
             editTextRepeatInterval.setText(getString(R.string.contracts_repeat_interval_display_multiple,
                     interval.getValue(), interval.getUnit().name().toLowerCase()));
         }
-        TextInputLayout inputLayoutRepeatOn = findViewById(R.id.input_layout_repeat_on);
-        if (interval.getUnit() == Interval.TimeUnit.WEEK || interval.getUnit() == Interval.TimeUnit.MONTH) {
-            inputLayoutRepeatOn.setVisibility(View.VISIBLE);
-        } else {
-            inputLayoutRepeatOn.setVisibility(View.GONE);
+        TextView repeatOnTxt = findViewById(R.id.text_repeat_on);
+        if (!isWeek && interval.getUnit() == Interval.TimeUnit.WEEK) {
+            repeatOnSpnAdapter.clear();
+            repeatOnSpnAdapter.addAll(getResources().getStringArray(R.array.weekdays));
+            repeatOnSpnAdapter.notifyDataSetChanged();
+            repeatOnTxt.setText(R.string.contracts_repeat_on_week);
+            isWeek = true;
+        } else if (isWeek && interval.getUnit() == Interval.TimeUnit.MONTH) {
+            repeatOnSpnAdapter.clear();
+            for (int i = 1; i <= 31; i++) {
+                repeatOnSpnAdapter.add("Day " + i);
+            }
+            repeatOnSpnAdapter.notifyDataSetChanged();
+            repeatOnTxt.setText(R.string.contracts_repeat_on_month);
+            isWeek = false;
         }
     }
 
@@ -470,8 +485,7 @@ public class NewContractActivity extends AppCompatActivity
         TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
         TextInputLayout inputLayoutRepeatInterval = findViewById(R.id.input_layout_repeat_interval);
 
-        TextInputEditText editTextRepeatOn = findViewById(R.id.edit_text_repeat_on);
-        TextInputLayout inputLayoutRepeatOn = findViewById(R.id.input_layout_repeat_on);
+//        TextInputLayout inputLayoutRepeatOn = findViewById(R.id.input_layout_repeat_on);
 
         EditText editTextReminder = findViewById(R.id.edit_text_reminder);
 

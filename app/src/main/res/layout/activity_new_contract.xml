@@ -153,22 +153,51 @@
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_layout_repeat_on"
+            <!--<com.google.android.material.textfield.TextInputLayout-->
+            <!--android:id="@+id/input_layout_repeat_on"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="@dimen/input_spacing_vertical"-->
+            <!--android:hint="@string/contracts_input_repeat_on"-->
+            <!--android:visibility="gone"-->
+            <!--&gt;-->
+
+            <!--<com.google.android.material.textfield.TextInputEditText-->
+            <!--android:id="@+id/edit_text_repeat_on"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:focusableInTouchMode="false"-->
+            <!--/>-->
+            <!--</com.google.android.material.textfield.TextInputLayout>-->
+
+            <LinearLayout
+                android:id="@+id/input_repeat_on"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/input_spacing_vertical"
-                android:hint="@string/contracts_input_repeat_on"
-                android:visibility="gone"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="4dp"
+                android:orientation="horizontal"
                 >
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_repeat_on"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusableInTouchMode="false"
+                <TextView
+                    android:id="@+id/text_repeat_on"
+                    style="@style/TextNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="start|center_vertical"
+                    android:text="@string/contracts_repeat_on_week"
                     />
-            </com.google.android.material.textfield.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/spn_repeat_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:spinnerMode="dropdown"
+                    android:layout_marginStart="24dp"
+                    />
+
+            </LinearLayout>
 
             <!--<com.google.android.material.textfield.TextInputLayout-->
             <!--android:id="@+id/input_layout_reminder"-->
@@ -187,12 +216,12 @@
             <!--</com.google.android.material.textfield.TextInputLayout>-->
 
             <LinearLayout
-                android:id="@+id/input_row_reminder"
+                android:id="@+id/input_reminder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="4dp"
                 android:orientation="horizontal"
                 >
 

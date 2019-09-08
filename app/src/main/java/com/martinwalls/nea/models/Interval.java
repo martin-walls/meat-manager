@@ -3,10 +3,8 @@ package com.martinwalls.nea.models;
 public class Interval {
 
     public enum TimeUnit {
-        DAY,
         WEEK,
-        MONTH,
-        YEAR;
+        MONTH;
 
         public static TimeUnit parseTimeUnit(String unitStr) {
             for (TimeUnit timeUnit : values()) {
@@ -47,17 +45,5 @@ public class Interval {
 
     public void setUnit(TimeUnit unit) {
         this.unit = unit;
-    }
-
-    public boolean isWeek() {
-        return (value == 7 && unit == TimeUnit.DAY) || (value == 1 && unit == TimeUnit.WEEK);
-    }
-
-    public boolean isTwoWeeks() {
-        return (value == 14 && unit == TimeUnit.DAY) || (value == 2 && unit == TimeUnit.WEEK);
-    }
-
-    public boolean isMonth() {
-        return value == 1 && unit == TimeUnit.MONTH;
     }
 }
