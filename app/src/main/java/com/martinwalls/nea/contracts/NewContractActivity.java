@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,7 +85,7 @@ public class NewContractActivity extends AppCompatActivity
         inputViews.put(INPUT_DESTINATION, R.id.input_layout_destination);
         inputViews.put(INPUT_REPEAT_INTERVAL, R.id.input_layout_repeat_interval);
         inputViews.put(INPUT_REPEAT_ON, R.id.input_layout_repeat_on);
-        inputViews.put(INPUT_REMINDER, R.id.input_layout_reminder);
+        inputViews.put(INPUT_REMINDER, R.id.input_row_reminder);
 
         addNewView = findViewById(R.id.add_new);
         addNewView.setOnClickListener(v -> addNewItem());
@@ -141,9 +142,27 @@ public class NewContractActivity extends AppCompatActivity
             //todo repeat on dialog
         });
 
-        TextInputEditText editTextReminder = findViewById(R.id.edit_text_reminder);
-        editTextReminder.setOnClickListener(v -> {
-            //todo reminder dialog
+        EditText editTextReminder = findViewById(R.id.edit_text_reminder);
+        TextView txtReminderDaysBefore = findViewById(R.id.reminder_txt_days_before);
+        editTextReminder.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s)) {
+                    return;
+                }
+                txtReminderDaysBefore.setText(getResources().getQuantityString(
+                        R.plurals.contracts_reminder_days_before, Integer.parseInt(s.toString())));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
     }
 
@@ -454,8 +473,7 @@ public class NewContractActivity extends AppCompatActivity
         TextInputEditText editTextRepeatOn = findViewById(R.id.edit_text_repeat_on);
         TextInputLayout inputLayoutRepeatOn = findViewById(R.id.input_layout_repeat_on);
 
-        TextInputEditText editTextReminder = findViewById(R.id.edit_text_reminder);
-        TextInputLayout inputLayoutReminder = findViewById(R.id.input_layout_reminder);
+        EditText editTextReminder = findViewById(R.id.edit_text_reminder);
 
         //todo finish add contract to db
         return false;
