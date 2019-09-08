@@ -147,6 +147,9 @@
     <string name="contracts_dialog_repeat_interval_month">Every month</string>
     <string name="contracts_dialog_repeat_interval_custom">Custom</string>
 
+    <string name="contracts_repeat_interval_display_one">Every %s</string>
+    <string name="contracts_repeat_interval_display_multiple">Every %d %ss</string>
+
     <plurals name="contracts_repeat_interval_display">
         <item quantity="one">Every %d %s</item>
         <item quantity="other">Every %d %ss</item>

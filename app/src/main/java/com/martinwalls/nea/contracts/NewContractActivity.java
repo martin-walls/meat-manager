@@ -180,6 +180,24 @@ public class NewContractActivity extends AppCompatActivity
         }
     }
 
+    private void setSelectedRepeatInterval(Interval interval) {
+        selectedRepeatInterval = interval;
+        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
+        if (interval.getValue() == 1) {
+            editTextRepeatInterval.setText(getString(R.string.contracts_repeat_interval_display_one,
+                    interval.getUnit().name().toLowerCase()));
+        } else {
+            editTextRepeatInterval.setText(getString(R.string.contracts_repeat_interval_display_multiple,
+                    interval.getValue(), interval.getUnit().name().toLowerCase()));
+        }
+        TextInputLayout inputLayoutRepeatOn = findViewById(R.id.input_layout_repeat_on);
+        if (interval.getUnit() == Interval.TimeUnit.WEEK || interval.getUnit() == Interval.TimeUnit.MONTH) {
+            inputLayoutRepeatOn.setVisibility(View.VISIBLE);
+        } else {
+            inputLayoutRepeatOn.setVisibility(View.GONE);
+        }
+    }
+
     private void addProduct() {
         ProductQuantity product = getProductFromInputsAndClear();
         if (product != null) {
@@ -397,31 +415,22 @@ public class NewContractActivity extends AppCompatActivity
 
     @Override
     public void onRadioBtnClicked(int id) {
-        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
         switch (id) {
             case RepeatIntervalDialog.OPTION_WEEK:
-                selectedRepeatInterval = new Interval(1, Interval.TimeUnit.WEEK);
-                editTextRepeatInterval.setText(R.string.contracts_dialog_repeat_interval_week);
+                setSelectedRepeatInterval(new Interval(1, Interval.TimeUnit.WEEK));
                 break;
             case RepeatIntervalDialog.OPTION_TWO_WEEK:
-                selectedRepeatInterval = new Interval(2, Interval.TimeUnit.WEEK);
-                editTextRepeatInterval.setText(R.string.contracts_dialog_repeat_interval_two_week);
+                setSelectedRepeatInterval(new Interval(2, Interval.TimeUnit.WEEK));
                 break;
             case RepeatIntervalDialog.OPTION_MONTH:
-                selectedRepeatInterval = new Interval(1, Interval.TimeUnit.MONTH);
-                editTextRepeatInterval.setText(R.string.contracts_dialog_repeat_interval_month);
+                setSelectedRepeatInterval(new Interval(1, Interval.TimeUnit.MONTH));
                 break;
         }
     }
 
     @Override
     public void onCustomIntervalSelected(Interval interval) {
-        selectedRepeatInterval = interval;
-        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
-        editTextRepeatInterval.setText(getResources().getQuantityString(
-                R.plurals.contracts_repeat_interval_display,
-                interval.getValue(),
-                interval.getValue(), interval.getUnit().name().toLowerCase()));
+        setSelectedRepeatInterval(interval);
     }
 
     private boolean addContractToDb() {

@@ -159,6 +159,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/input_spacing_vertical"
                 android:hint="@string/contracts_input_repeat_on"
+                android:visibility="gone"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
