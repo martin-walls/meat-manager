@@ -1,5 +1,7 @@
 package com.martinwalls.nea;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -14,11 +16,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import com.martinwalls.nea.contracts.ContractsFragment;
 import com.martinwalls.nea.dashboard.DashboardFragment;
+import com.martinwalls.nea.exchange.ApiIntentService;
 import com.martinwalls.nea.exchange.ExchangeFragment;
 import com.martinwalls.nea.orders.OrdersFragment;
 import com.martinwalls.nea.stock.StockFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements ExchangeFragment.ExchangeApiInterface {
+
+    private static final int REQUEST_EXCHANGE_API_SERVICE = 1;
 
     private enum Page {
         DASHBOARD(new DashboardFragment(), R.id.nav_dashboard),
@@ -170,6 +176,25 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
+        }
+    }
+
+    @Override
+    public void startExchangeApiService() {
+        PendingIntent pendingResult = createPendingResult(REQUEST_EXCHANGE_API_SERVICE, new Intent(), 0);
+        Intent intent = new Intent(getApplicationContext(), ApiIntentService.class);
+        intent.putExtra(ApiIntentService.EXTRA_PENDING_RESULT, pendingResult);
+        startService(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_EXCHANGE_API_SERVICE) {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_holder);
+            if (fragment instanceof ExchangeFragment) {
+                ((ExchangeFragment) fragment).onRatesFetched(data);
+            }
         }
     }
 }

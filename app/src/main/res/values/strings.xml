@@ -173,6 +173,8 @@
     <string name="exchange_history_today">Today</string>
     <string name="exchange_choose_currencies_no_fav">No Currencies Starred</string>
 
+    <string name="exchange_rate">%.2f</string>
+
     <!-- Settings page -->
     <string name="settings_title">Settings</string>
     <string name="settings_default_reminder_time">Default reminder time</string>

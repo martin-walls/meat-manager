@@ -9,16 +9,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.martinwalls.nea.*;
+import com.martinwalls.nea.R;
+import com.martinwalls.nea.SampleData;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.models.Conversion;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ExchangeFragment extends Fragment {
 
     private TextView primaryCurrencyText;
     private TextView secondaryCurrencyText;
+    private TextView primaryCurrencyValue;
+    private TextView secondaryCurrencyValue;
+
+    private HashMap<String, Double> rates;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -29,6 +35,8 @@ public class ExchangeFragment extends Fragment {
 
         primaryCurrencyText = fragmentView.findViewById(R.id.currency_primary);
         secondaryCurrencyText = fragmentView.findViewById(R.id.currency_secondary);
+        primaryCurrencyValue = fragmentView.findViewById(R.id.currency_primary_value);
+        secondaryCurrencyValue = fragmentView.findViewById(R.id.currency_secondary_value);
 
         NumberPicker currencyPickerLeft = fragmentView.findViewById(R.id.currency_picker_left);
 
@@ -65,8 +73,28 @@ public class ExchangeFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         conversionHistoryView.setLayoutManager(layoutManager);
 
+
+        ((ExchangeApiInterface) getActivity()).startExchangeApiService();
+
         return fragmentView;
     }
+
+    public void onRatesFetched(Intent data) {
+        rates = (HashMap<String, Double>) data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
+        secondaryCurrencyValue.setText(getString(R.string.exchange_rate, rates.get("USD")));
+    }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == 1) {
+//            rates = (HashMap<String, Double>) data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
+//
+////            for (Map.Entry<String, Double> entry : rates.entrySet()) {
+////                Log.e("RATES", entry.getKey() + ": " + entry.getValue());
+////            }
+//        }
+//    }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -92,5 +120,9 @@ public class ExchangeFragment extends Fragment {
     private void setSecondaryCurrency(String currency) {
         secondaryCurrencyText.setText(currency);
         //todo update rate values
+    }
+
+    public interface ExchangeApiInterface {
+        void startExchangeApiService();
     }
 }
