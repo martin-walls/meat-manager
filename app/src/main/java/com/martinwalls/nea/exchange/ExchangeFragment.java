@@ -1,14 +1,17 @@
 package com.martinwalls.nea.exchange;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.martinwalls.nea.MainActivity;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SampleData;
 import com.martinwalls.nea.components.CustomRecyclerView;
@@ -74,14 +77,26 @@ public class ExchangeFragment extends Fragment {
         conversionHistoryView.setLayoutManager(layoutManager);
 
 
-        ((ExchangeApiInterface) getActivity()).startExchangeApiService();
+        startExchangeApiService();
 
         return fragmentView;
     }
 
+    private void startExchangeApiService() {
+        PendingIntent pendingResult = getActivity().createPendingResult(
+                MainActivity.REQUEST_EXCHANGE_API_SERVICE, new Intent(), 0);
+        Intent intent = new Intent(getContext().getApplicationContext(), ApiIntentService.class);
+        intent.putExtra(ApiIntentService.EXTRA_PENDING_RESULT, pendingResult);
+        getActivity().startService(intent);
+    }
+
     public void onRatesFetched(Intent data) {
+        //noinspection unchecked
         rates = (HashMap<String, Double>) data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
         secondaryCurrencyValue.setText(getString(R.string.exchange_rate, rates.get("USD")));
+
+        long timestamp = Long.parseLong(CacheHelper.retrieve(getContext(), "last_cache_timestamp"));
+        Toast.makeText(getContext(), timestamp + "", Toast.LENGTH_SHORT).show();
     }
 
 //    @Override
@@ -120,9 +135,5 @@ public class ExchangeFragment extends Fragment {
     private void setSecondaryCurrency(String currency) {
         secondaryCurrencyText.setText(currency);
         //todo update rate values
-    }
-
-    public interface ExchangeApiInterface {
-        void startExchangeApiService();
     }
 }

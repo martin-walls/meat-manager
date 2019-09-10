@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" addBOMForNewFiles="with NO BOM" />
+  <component name="Encoding" addBOMForNewFiles="with NO BOM">
+    <file url="file://F:/Documents/AndroidStudio/DeviceExplorer/oneplus-oneplus_a6003-b8441760/data/data/com.martinwalls.nea/cache/rates_cache.txt" charset="windows-1252" />
+  </component>
 </project>

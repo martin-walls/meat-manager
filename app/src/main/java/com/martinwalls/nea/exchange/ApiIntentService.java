@@ -11,6 +11,9 @@ public class ApiIntentService extends IntentService {
 
     private static final String TAG = ApiIntentService.class.getSimpleName();
 
+    private static final String CACHE_KEY_RATES = "rates_cache";
+    private static final String CACHE_KEY_TIMESTAMP = "last_cache_timestamp";
+
     public static final String EXTRA_PENDING_RESULT = "pending_result";
     public static final String EXTRA_RESULT = "result";
 
@@ -26,16 +29,32 @@ public class ApiIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         PendingIntent reply = intent.getParcelableExtra(EXTRA_PENDING_RESULT);
 
-        Uri baseUri = Uri.parse(REQUEST_URL);
-        Uri.Builder builder = baseUri.buildUpon();
+        long lastTimestamp = Long.parseLong(CacheHelper.retrieve(getApplicationContext(), CACHE_KEY_TIMESTAMP));
+        long timestampNow = System.currentTimeMillis() / 1000;
+        long timeDiff = (timestampNow - lastTimestamp);
 
-        builder.appendPath("latest");
-        builder.appendQueryParameter("access_key", "3d73aaa11d179de975bea3bb6b2545bc");
-        builder.appendQueryParameter("symbols", "USD,AUD,CAD,PLN,MXN");
+        String jsonResponse;
+        if (timeDiff < 60 * 60) {
+            jsonResponse = CacheHelper.retrieve(getApplicationContext(), CACHE_KEY_RATES);
+        } else {
+            Uri baseUri = Uri.parse(REQUEST_URL);
+            Uri.Builder builder = baseUri.buildUpon();
+
+            builder.appendPath("latest");
+            builder.appendQueryParameter("access_key", "3d73aaa11d179de975bea3bb6b2545bc");
+//        builder.appendQueryParameter("symbols", "USD,AUD,CAD,PLN,MXN");
+
+
+            jsonResponse = QueryUtils.fetchJsonResponse(builder.toString());
+        }
+        HashMap<String, Double> rates = QueryUtils.extractExchangeRates(jsonResponse);
+
+        CacheHelper.save(getApplicationContext(), CACHE_KEY_RATES, jsonResponse);
+
+        long timestamp = QueryUtils.extractTimestamp(jsonResponse);
+        CacheHelper.save(getApplicationContext(), CACHE_KEY_TIMESTAMP, String.valueOf(timestamp));
 
         Intent result = new Intent();
-        HashMap<String, Double> rates = QueryUtils.fetchExchangeData(builder.toString());
-
         result.putExtra(EXTRA_RESULT, rates);
 
         try {

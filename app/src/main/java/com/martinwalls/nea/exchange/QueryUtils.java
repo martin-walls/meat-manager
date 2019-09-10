@@ -21,7 +21,43 @@ public class QueryUtils {
 
     private QueryUtils() {}
 
-    private static HashMap<String, Double> extractExchangeRates(String json) {
+    /**
+     * Retrieve the current exchange data from the API at the specified URL.
+     */
+    static HashMap<String, Double> fetchExchangeData(String urlString) {
+        URL url = createUrl(urlString);
+
+        String jsonResponse = null;
+        try {
+            jsonResponse = makeHttpRequest(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return extractExchangeRates(jsonResponse);
+    }
+
+    /**
+     * Fetch the raw JSON response from the API at the specified URL.
+     */
+    static String fetchJsonResponse(String urlString) {
+        URL url = createUrl(urlString);
+
+        String jsonResponse = null;
+        try {
+            jsonResponse = makeHttpRequest(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return jsonResponse;
+    }
+
+    /**
+     * Parse the JSON response and extract the current exchange
+     * rates from it. Returns a HashMap of Currency : Rate pairs.
+     */
+    static HashMap<String, Double> extractExchangeRates(String json) {
         HashMap<String, Double> rates = new HashMap<>();
 
         try {
@@ -42,17 +78,15 @@ public class QueryUtils {
         return rates;
     }
 
-    static HashMap<String, Double> fetchExchangeData(String urlString) {
-        URL url = createUrl(urlString);
-
-        String jsonResponse = null;
+    static long extractTimestamp(String json) {
+        long timestamp = 0;
         try {
-            jsonResponse = makeHttpRequest(url);
-        } catch (IOException e) {
+            JSONObject jsonObject = new JSONObject(json);
+            timestamp = jsonObject.getLong("timestamp");
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        return extractExchangeRates(jsonResponse);
+        return timestamp;
     }
 
     private static URL createUrl(String urlString) {
