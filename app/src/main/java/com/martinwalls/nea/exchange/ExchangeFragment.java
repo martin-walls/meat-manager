@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.martinwalls.nea.MainActivity;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SampleData;
@@ -78,13 +79,21 @@ public class ExchangeFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         conversionHistoryView.setLayoutManager(layoutManager);
 
+        fetchRatesFromApi();
 
-        startExchangeApiService();
+        SwipeRefreshLayout swipeRefreshLayout = fragmentView.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         return fragmentView;
     }
 
-    private void startExchangeApiService() {
+    private void refresh() {
+        fetchRatesFromApi();
+        SwipeRefreshLayout swipeRefreshLayout = getView().findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void fetchRatesFromApi() {
         PendingIntent pendingResult = getActivity().createPendingResult(
                 MainActivity.REQUEST_EXCHANGE_API_SERVICE, new Intent(), 0);
         Intent intent = new Intent(getContext().getApplicationContext(), ApiIntentService.class);
@@ -99,7 +108,7 @@ public class ExchangeFragment extends Fragment {
 //        secondaryCurrencyValue.setText(getString(R.string.exchange_rate, rates.get("USD")));
 
 //        long timestamp = Long.parseLong(CacheHelper.retrieve(getContext(), "last_cache_timestamp"));
-//        Toast.makeText(getContext(), timestamp + "", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "fetched", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -135,9 +144,9 @@ public class ExchangeFragment extends Fragment {
     }
 
     private double getRate(String currency, String base) {
-        if (rates.keySet().contains(currency) && rates.keySet().contains(base)) {
+        if (rates != null && rates.keySet().contains(currency) && rates.keySet().contains(base)) {
             return rates.get(currency) / rates.get(base);
         }
-        return -1;
+        return 0;
     }
 }
