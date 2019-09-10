@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,7 +26,10 @@ public class ExchangeFragment extends Fragment {
     private TextView primaryCurrencyValue;
     private TextView secondaryCurrencyValue;
 
-    private HashMap<String, Double> rates;
+    private String primaryCurrency;
+    private String secondaryCurrency;
+
+    private HashMap<String, Double> rates = new HashMap<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -52,7 +54,7 @@ public class ExchangeFragment extends Fragment {
         currencyPickerLeft.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
         currencyPickerLeft.setOnValueChangedListener(
                 (picker, oldVal, newVal) -> setPrimaryCurrency(currencies[newVal]));
-        primaryCurrencyText.setText(currencies[currencyPickerLeft.getValue()]);
+        setPrimaryCurrency(currencies[currencyPickerLeft.getValue()]);
 
         NumberPicker currencyPickerRight = fragmentView.findViewById(R.id.currency_picker_right);
 
@@ -93,23 +95,12 @@ public class ExchangeFragment extends Fragment {
     public void onRatesFetched(Intent data) {
         //noinspection unchecked
         rates = (HashMap<String, Double>) data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
-        secondaryCurrencyValue.setText(getString(R.string.exchange_rate, rates.get("USD")));
+        updateRates();
+//        secondaryCurrencyValue.setText(getString(R.string.exchange_rate, rates.get("USD")));
 
-        long timestamp = Long.parseLong(CacheHelper.retrieve(getContext(), "last_cache_timestamp"));
-        Toast.makeText(getContext(), timestamp + "", Toast.LENGTH_SHORT).show();
+//        long timestamp = Long.parseLong(CacheHelper.retrieve(getContext(), "last_cache_timestamp"));
+//        Toast.makeText(getContext(), timestamp + "", Toast.LENGTH_SHORT).show();
     }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 1) {
-//            rates = (HashMap<String, Double>) data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
-//
-////            for (Map.Entry<String, Double> entry : rates.entrySet()) {
-////                Log.e("RATES", entry.getKey() + ": " + entry.getValue());
-////            }
-//        }
-//    }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -128,12 +119,25 @@ public class ExchangeFragment extends Fragment {
     }
 
     private void setPrimaryCurrency(String currency) {
+        primaryCurrency = currency;
         primaryCurrencyText.setText(currency);
-        //todo update rate values
+        updateRates();
     }
 
     private void setSecondaryCurrency(String currency) {
+        secondaryCurrency = currency;
         secondaryCurrencyText.setText(currency);
-        //todo update rate values
+        updateRates();
+    }
+
+    private void updateRates() {
+        secondaryCurrencyValue.setText(getString(R.string.exchange_rate, getRate(secondaryCurrency, primaryCurrency)));
+    }
+
+    private double getRate(String currency, String base) {
+        if (rates.keySet().contains(currency) && rates.keySet().contains(base)) {
+            return rates.get(currency) / rates.get(base);
+        }
+        return -1;
     }
 }

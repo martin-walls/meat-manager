@@ -29,9 +29,13 @@ public class ApiIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         PendingIntent reply = intent.getParcelableExtra(EXTRA_PENDING_RESULT);
 
-        long lastTimestamp = Long.parseLong(CacheHelper.retrieve(getApplicationContext(), CACHE_KEY_TIMESTAMP));
-        long timestampNow = System.currentTimeMillis() / 1000;
-        long timeDiff = (timestampNow - lastTimestamp);
+        // if cache doesn't exists, API request will be made
+        long timeDiff = 0;
+        if (CacheHelper.doesCacheExist(getApplicationContext(), CACHE_KEY_TIMESTAMP)) {
+            long lastTimestamp = Long.parseLong(CacheHelper.retrieve(getApplicationContext(), CACHE_KEY_TIMESTAMP));
+            long timestampNow = System.currentTimeMillis() / 1000;
+            timeDiff = (timestampNow - lastTimestamp);
+        }
 
         String jsonResponse;
         if (timeDiff < 60 * 60) {

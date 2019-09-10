@@ -55,4 +55,12 @@ public class CacheHelper {
         }
         return "";
     }
+
+    public static boolean doesCacheExist(Context context, String key) {
+        File cache = getCacheFile(context, key);
+        if (cache == null) {
+            return false;
+        }
+        return cache.exists();
+    }
 }
