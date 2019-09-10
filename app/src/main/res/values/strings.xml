@@ -13,6 +13,7 @@
     <string name="action_no">No</string>
     <string name="action_sort">Sort</string>
     <string name="action_edit">Edit</string>
+    <string name="action_refresh">Refresh</string>
 
     <!-- Menus -->
     <string name="action_edit_locations">Edit locations</string>

@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.martinwalls.nea.MainActivity;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SampleData;
@@ -81,16 +80,13 @@ public class ExchangeFragment extends Fragment {
 
         fetchRatesFromApi();
 
-        SwipeRefreshLayout swipeRefreshLayout = fragmentView.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
-
         return fragmentView;
     }
 
-    private void refresh() {
+    @Override
+    public void onResume() {
+        super.onResume();
         fetchRatesFromApi();
-        SwipeRefreshLayout swipeRefreshLayout = getView().findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void fetchRatesFromApi() {
@@ -105,7 +101,6 @@ public class ExchangeFragment extends Fragment {
         //noinspection unchecked
         rates = (HashMap<String, Double>) data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
         updateRates();
-//        secondaryCurrencyValue.setText(getString(R.string.exchange_rate, rates.get("USD")));
 
 //        long timestamp = Long.parseLong(CacheHelper.retrieve(getContext(), "last_cache_timestamp"));
 //        Toast.makeText(getContext(), "fetched", Toast.LENGTH_SHORT).show();
@@ -118,11 +113,14 @@ public class ExchangeFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_favourites) {
-            Intent favouritesIntent = new Intent(getContext(), ChooseCurrenciesActivity.class);
-            startActivity(favouritesIntent);
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_favourites:
+                Intent favouritesIntent = new Intent(getContext(), ChooseCurrenciesActivity.class);
+                startActivity(favouritesIntent);
+                return true;
+            case R.id.action_refresh:
+                fetchRatesFromApi();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
