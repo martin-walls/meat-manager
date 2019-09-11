@@ -112,11 +112,12 @@
     <!-- Exchange screen styles -->
     <style name="ExchangeRateText">
         <item name="android:textSize">48sp</item>
-        <item name="android:textColor">?attr/textColorDark</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="ExchangeRateText.Primary" />
+    <style name="ExchangeRateText.Primary" >
+        <item name="android:textColor">?attr/textColorDark</item>
+    </style>
 
     <style name="ExchangeRateText.Secondary">
         <item name="android:textColor">?attr/colorPrimary</item>

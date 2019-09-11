@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -26,6 +27,9 @@ public class ExchangeFragment extends Fragment {
     private TextView primaryCurrencyValue;
     private TextView secondaryCurrencyValue;
 
+    private NumberPicker currencyPickerLeft;
+    private NumberPicker currencyPickerRight;
+
     private String primaryCurrency;
     private String secondaryCurrency;
 
@@ -43,9 +47,9 @@ public class ExchangeFragment extends Fragment {
         primaryCurrencyValue = fragmentView.findViewById(R.id.currency_primary_value);
         secondaryCurrencyValue = fragmentView.findViewById(R.id.currency_secondary_value);
 
-        NumberPicker currencyPickerLeft = fragmentView.findViewById(R.id.currency_picker_left);
-
         final String[] currencies = SampleData.getSampleCurrencies();
+
+        currencyPickerLeft = fragmentView.findViewById(R.id.currency_picker_left);
 
         currencyPickerLeft.setMinValue(0);
         currencyPickerLeft.setMaxValue(currencies.length - 1);
@@ -56,7 +60,7 @@ public class ExchangeFragment extends Fragment {
                 (picker, oldVal, newVal) -> setPrimaryCurrency(currencies[newVal]));
         setPrimaryCurrency(currencies[currencyPickerLeft.getValue()]);
 
-        NumberPicker currencyPickerRight = fragmentView.findViewById(R.id.currency_picker_right);
+        currencyPickerRight = fragmentView.findViewById(R.id.currency_picker_right);
 
         currencyPickerRight.setMinValue(0);
         currencyPickerRight.setMaxValue(currencies.length - 1);
@@ -67,6 +71,9 @@ public class ExchangeFragment extends Fragment {
         currencyPickerRight.setOnValueChangedListener(
                 (picker, oldVal, newVal) -> setSecondaryCurrency(currencies[newVal]));
         setSecondaryCurrency(currencies[currencyPickerRight.getValue()]);
+
+        ImageButton swapBtn = fragmentView.findViewById(R.id.swap_currencies);
+        swapBtn.setOnClickListener(v -> swapCurrencies());
 
         List<Conversion> conversionList = SampleData.getSampleConversions();
         ExchangeHistoryAdapter exchangeHistoryAdapter = new ExchangeHistoryAdapter(conversionList);
@@ -139,6 +146,17 @@ public class ExchangeFragment extends Fragment {
 
     private void updateRates() {
         secondaryCurrencyValue.setText(getString(R.string.exchange_rate, getRate(secondaryCurrency, primaryCurrency)));
+    }
+
+    private void swapCurrencies() {
+        String primaryTemp = primaryCurrency;
+        setPrimaryCurrency(secondaryCurrency);
+        setSecondaryCurrency(primaryTemp);
+
+        int leftValue = currencyPickerLeft.getValue();
+        currencyPickerLeft.setValue(currencyPickerRight.getValue());
+        currencyPickerRight.setValue(leftValue);
+        //todo set number picker value
     }
 
     private double getRate(String currency, String base) {
