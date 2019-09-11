@@ -156,7 +156,6 @@ public class ExchangeFragment extends Fragment {
         int leftValue = currencyPickerLeft.getValue();
         currencyPickerLeft.setValue(currencyPickerRight.getValue());
         currencyPickerRight.setValue(leftValue);
-        //todo set number picker value
     }
 
     private double getRate(String currency, String base) {
