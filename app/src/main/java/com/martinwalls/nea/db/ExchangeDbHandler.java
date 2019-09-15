@@ -1,58 +1,131 @@
 package com.martinwalls.nea.db;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.martinwalls.nea.models.Conversion;
+import com.martinwalls.nea.models.Currency;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class ExchangeDbHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "exchangeDB.db";
     private static final int DATABASE_VERSION = 1;
 
-    private final Context context;
+    private final class ConversionsTable {
+        static final String TABLE_NAME = "Conversions";
+        static final String ID = "ConversionId";
+        static final String TIMESTAMP = "Timestamp";
+        static final String PRIMARY_CURRENCY = "PrimaryCurrency";
+        static final String PRIMARY_VALUE = "PrimaryValue";
+        static final String SECONDARY_CURRENCY = "SecondaryCurrency";
+        static final String SECONDARY_VALUE = "SecondaryValue";
+    }
 
-    //region database constants
-    // table names
-    private final String TABLE_CONVERSIONS = "Conversions";
-    private final String TABLE_FAVOURITES = "Favourites";
-
-    // cols for conversions table
-    private final String CONVERSIONS_ID = "ConversionId";
-    private final String CONVERSIONS_TIMESTAMP = "Timestamp";
-    private final String CONVERSION_PRIMARY_CURRENCY = "PrimaryCurrency";
-    private final String CONVERSION_PRIMARY_VALUE = "PrimaryValue";
-    private final String CONVERSION_SECONDARY_CURRENCY = "SecondaryCurrency";
-    private final String CONVERSION_SECONDARY_VALUE = "SecondaryValue";
-
-    // cols for favourites table
-    private final String FAVOURITES_CURRENCY = "CurrencyCode";
-    //endregion database constants
+    private final class CurrenciesTable {
+        static final String TABLE_NAME = "Currencies";
+        static final String CURRENCY_CODE = "CurrencyCode";
+        static final String CURRENCY_NAME = "CurrencyName";
+        static final String FAVOURITE = "IsFavourite";
+    }
 
     public ExchangeDbHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createConversionsTableQuery = "CREATE TABLE IF NOT EXISTS "
-                + TABLE_CONVERSIONS + " ("
-                + CONVERSIONS_ID + " INTEGER PRIMARY KEY, "
-                + CONVERSIONS_TIMESTAMP + " INTEGER NOT NULL, "
-                + CONVERSION_PRIMARY_CURRENCY + " TEXT NOT NULL, "
-                + CONVERSION_PRIMARY_VALUE + " REAL NOT NULL, "
-                + CONVERSION_SECONDARY_CURRENCY + " TEXT NOT NULL, "
-                + CONVERSION_SECONDARY_VALUE + " REAL NOT NULL )";
-        db.execSQL(createConversionsTableQuery);
+        String createCurrenciesTableQuery = "CREATE TABLE IF NOT EXISTS "
+                + CurrenciesTable.TABLE_NAME + " ("
+                + CurrenciesTable.CURRENCY_CODE + " TEXT PRIMARY KEY, "
+                + CurrenciesTable.FAVOURITE + " INTEGER )";
+        db.execSQL(createCurrenciesTableQuery);
 
-        String createFavouritesTableQuery = "CREATE TABLE IF NOT EXISTS "
-                + TABLE_FAVOURITES + " ("
-                + FAVOURITES_CURRENCY + " TEXT PRIMARY KEY )";
-        db.execSQL(createFavouritesTableQuery);
+        String createConversionsTableQuery = "CREATE TABLE IF NOT EXISTS "
+                + ConversionsTable.TABLE_NAME + " ("
+                + ConversionsTable.ID + " INTEGER PRIMARY KEY, "
+                + ConversionsTable.TIMESTAMP + " INTEGER NOT NULL, "
+                + ConversionsTable.PRIMARY_CURRENCY + " TEXT NOT NULL, "
+                + ConversionsTable.PRIMARY_VALUE + " REAL NOT NULL, "
+                + ConversionsTable.SECONDARY_CURRENCY + " TEXT NOT NULL, "
+                + ConversionsTable.SECONDARY_VALUE + " REAL NOT NULL, "
+                + "FOREIGN KEY (" + ConversionsTable.PRIMARY_CURRENCY + ") REFERENCES "
+                + CurrenciesTable.TABLE_NAME + "(" + CurrenciesTable.CURRENCY_CODE + "), "
+                + "FOREIGN KEY (" + ConversionsTable.SECONDARY_CURRENCY + ") REFERENCES "
+                + CurrenciesTable.TABLE_NAME + "(" + CurrenciesTable.CURRENCY_CODE + ") )";
+        db.execSQL(createConversionsTableQuery);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
 
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        db.setForeignKeyConstraintsEnabled(true);
+    }
+
+    public List<Conversion> getAllConversions() {
+        List<Conversion> conversionsResultList = new ArrayList<>();
+        String query = "SELECT * FROM " + ConversionsTable.TABLE_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        while (cursor.moveToNext()) {
+            Conversion conversion = new Conversion();
+            conversion.setConversionId(cursor.getInt(cursor.getColumnIndexOrThrow(ConversionsTable.ID)));
+            conversion.setTimestamp(cursor.getInt(cursor.getColumnIndexOrThrow(ConversionsTable.TIMESTAMP)));
+            conversion.setPrimaryCurrency(cursor.getString(
+                    cursor.getColumnIndexOrThrow(ConversionsTable.PRIMARY_CURRENCY)));
+            conversion.setPrimaryValue(cursor.getDouble(cursor.getColumnIndexOrThrow(ConversionsTable.PRIMARY_VALUE)));
+            conversion.setSecondaryCurrency(cursor.getString(
+                    cursor.getColumnIndexOrThrow(ConversionsTable.SECONDARY_CURRENCY)));
+            conversion.setSecondaryValue(cursor.getDouble(
+                    cursor.getColumnIndexOrThrow(ConversionsTable.SECONDARY_VALUE)));
+            conversionsResultList.add(conversion);
+        }
+        cursor.close();
+        db.close();
+        return conversionsResultList;
+    }
+
+    public List<Currency> getAllCurrencies() {
+        List<Currency> currencyResultList = new ArrayList<>();
+        String query = "SELECT * FROM " + CurrenciesTable.TABLE_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        while (cursor.moveToNext()) {
+            Currency currency = new Currency();
+            currency.setName(cursor.getString(cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_CODE)));
+            currency.setFavourite(cursor.getInt(cursor.getColumnIndexOrThrow(CurrenciesTable.FAVOURITE)) == 1);
+            currencyResultList.add(currency);
+        }
+        cursor.close();
+        db.close();
+        return currencyResultList;
+    }
+
+    public int getCurrencyCount() {
+        String query = "SELECT * FROM " + CurrenciesTable.TABLE_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        int count = cursor.getCount();
+        cursor.close();
+        db.close();
+        return count;
+    }
+
+    public void addAllCurrencies(List<Currency> currencyList) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        for (Currency currency : currencyList) {
+            ContentValues values = new ContentValues();
+            values.put(CurrenciesTable.CURRENCY_CODE, currency.getCode());
+            values.put(CurrenciesTable.CURRENCY_NAME, currency.getName());
+            db.insert(CurrenciesTable.TABLE_NAME, null, values);
+        }
+        db.close();
     }
 }

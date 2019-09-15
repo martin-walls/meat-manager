@@ -1,6 +1,7 @@
 package com.martinwalls.nea.exchange;
 
 import android.util.Log;
+import com.martinwalls.nea.models.Currency;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,8 +13,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public class QueryUtils {
 
@@ -76,6 +79,35 @@ public class QueryUtils {
         }
 
         return rates;
+    }
+
+    static List<Currency> fetchCurrencies(String urlString) {
+        URL url = createUrl(urlString);
+
+        String jsonResponse = null;
+        try {
+            jsonResponse = makeHttpRequest(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // extract data
+        List<Currency> currencies = new ArrayList<>();
+        try {
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            JSONObject symbolsObject = jsonObject.getJSONObject("symbols");
+            Iterator<String> keys = symbolsObject.keys();
+
+            while (keys.hasNext()) {
+                String currencyCode = keys.next();
+                String fullName = symbolsObject.getString(currencyCode);
+                currencies.add(new Currency(currencyCode, fullName));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return currencies;
     }
 
     static long extractTimestamp(String json) {

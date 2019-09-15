@@ -82,11 +82,11 @@ public class SampleData {
     };
 
     private static Conversion[] conversions = new Conversion[] {
-            new Conversion(1561313195, "GBP", "HKD", "30.00", "150.00"),
-            new Conversion(1561313249, "HKD", "PLN", "20.00", "30.00"),
-            new Conversion(1561313004, "HKD", "PLN", "50.00", "75.00"),
-            new Conversion(1561311857, "GBP", "USD", "10.00", "12.35"),
-            new Conversion(1561185385, "USD", "EUR", "8.00", "7.89"),
+            new Conversion(1561313195, "GBP", 30.00, "HKD", 150.00),
+            new Conversion(1561313249, "HKD", 20.00, "PLN", 30.00),
+            new Conversion(1561313004, "HKD", 50.00, "PLN", 75.00),
+            new Conversion(1561311857, "GBP", 10.00, "USD", 12.35),
+            new Conversion(1561185385, "USD", 18.00, "EUR", 7.89),
     };
 
 //    public static ArrayList<String> getSampleProducts() {

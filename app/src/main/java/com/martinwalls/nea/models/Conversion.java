@@ -1,21 +1,46 @@
 package com.martinwalls.nea.models;
 
 public class Conversion {
+    private int conversionId;
     private int timestamp;
     private String primaryCurrency;
+    private Double primaryValue;
     private String secondaryCurrency;
-    private String primaryValue;
-    private String secondaryValue;
+    private Double secondaryValue;
 
     public Conversion() {
     }
 
-    public Conversion(int timestamp, String primaryCurrency, String secondaryCurrency,
-                      String primaryValue, String secondaryValue) {
+    public Conversion(int timestamp, String primaryCurrency, Double primaryValue,
+                      String secondaryCurrency, Double secondaryValue) {
         this.timestamp = timestamp;
         this.primaryCurrency = primaryCurrency;
-        this.secondaryCurrency = secondaryCurrency;
         this.primaryValue = primaryValue;
+        this.secondaryCurrency = secondaryCurrency;
+        this.secondaryValue = secondaryValue;
+    }
+
+    public void setConversionId(int conversionId) {
+        this.conversionId = conversionId;
+    }
+
+    public void setTimestamp(int timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setPrimaryCurrency(String primaryCurrency) {
+        this.primaryCurrency = primaryCurrency;
+    }
+
+    public void setPrimaryValue(Double primaryValue) {
+        this.primaryValue = primaryValue;
+    }
+
+    public void setSecondaryCurrency(String secondaryCurrency) {
+        this.secondaryCurrency = secondaryCurrency;
+    }
+
+    public void setSecondaryValue(Double secondaryValue) {
         this.secondaryValue = secondaryValue;
     }
 
