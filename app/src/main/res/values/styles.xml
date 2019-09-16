@@ -131,7 +131,7 @@
     <style name="ExchangeHistoryTimeDivider">
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textColor">?colorPrimary</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -141,7 +141,11 @@
 
     <style name="ChooseCurrenciesItem">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?attr/textColorNormal</item>
+        <item name="android:textColor">?textColorNormal</item>
+    </style>
+
+    <style name="ChooseCurrenciesItem.Dark">
+        <item name="android:textColor">?textColorDark</item>
     </style>
 
     <style name="ChooseCurrenciesListTitle">

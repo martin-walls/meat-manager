@@ -14,7 +14,7 @@ import java.util.List;
 @SuppressWarnings("FieldCanBeLocal")
 public class ExchangeDbHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "exchangeDB.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private final class ConversionsTable {
         static final String TABLE_NAME = "Conversions";
@@ -42,6 +42,7 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
         String createCurrenciesTableQuery = "CREATE TABLE IF NOT EXISTS "
                 + CurrenciesTable.TABLE_NAME + " ("
                 + CurrenciesTable.CURRENCY_CODE + " TEXT PRIMARY KEY, "
+                + CurrenciesTable.CURRENCY_NAME + " TEXT NOT NULL, "
                 + CurrenciesTable.FAVOURITE + " INTEGER )";
         db.execSQL(createCurrenciesTableQuery);
 
@@ -92,14 +93,22 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
         return conversionsResultList;
     }
 
-    public List<Currency> getAllCurrencies() {
+    public List<Currency> getCurrencies() {
+        return getCurrencies(false);
+    }
+
+    public List<Currency> getCurrencies(boolean onlyFav) {
         List<Currency> currencyResultList = new ArrayList<>();
         String query = "SELECT * FROM " + CurrenciesTable.TABLE_NAME;
+        if (onlyFav) {
+            query += " WHERE " + CurrenciesTable.FAVOURITE + "=1";
+        }
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         while (cursor.moveToNext()) {
             Currency currency = new Currency();
-            currency.setName(cursor.getString(cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_CODE)));
+            currency.setCode(cursor.getString(cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_CODE)));
+            currency.setName(cursor.getString(cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_NAME)));
             currency.setFavourite(cursor.getInt(cursor.getColumnIndexOrThrow(CurrenciesTable.FAVOURITE)) == 1);
             currencyResultList.add(currency);
         }
