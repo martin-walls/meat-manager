@@ -3,9 +3,7 @@ package com.martinwalls.nea.stock;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,16 +20,13 @@ import androidx.transition.TransitionInflater;
 import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.martinwalls.nea.AddNewProductDialog;
-import com.martinwalls.nea.R;
-import com.martinwalls.nea.SearchItemAdapter;
-import com.martinwalls.nea.models.SearchItem;
-import com.martinwalls.nea.Utils;
+import com.martinwalls.nea.*;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.Location;
 import com.martinwalls.nea.models.Product;
+import com.martinwalls.nea.models.SearchItem;
 import com.martinwalls.nea.models.StockItem;
 
 import java.util.ArrayList;
@@ -181,17 +176,11 @@ public class NewStockActivity extends AppCompatActivity
                 cancelSearch();
         });
 
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
+        editText.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 itemAdapter.getFilter().filter(s);
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
         });
     }
 

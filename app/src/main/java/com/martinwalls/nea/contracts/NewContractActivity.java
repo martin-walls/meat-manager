@@ -150,12 +150,7 @@ public class NewContractActivity extends AppCompatActivity
         EditText editTextReminder = findViewById(R.id.edit_text_reminder);
         TextView txtReminderDaysBefore = findViewById(R.id.reminder_text_days_before);
         TextView txtReminder = findViewById(R.id.text_reminder);
-        editTextReminder.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
+        editTextReminder.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextUtils.isEmpty(s) || s.toString().equals("0")) {
@@ -167,11 +162,6 @@ public class NewContractActivity extends AppCompatActivity
                     txtReminderDaysBefore.setText(getResources().getQuantityString(
                             R.plurals.contracts_reminder_days_before, Integer.parseInt(s.toString())));
                 }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
             }
         });
     }

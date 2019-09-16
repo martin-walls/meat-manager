@@ -5,10 +5,11 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.*;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,14 +22,10 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.*;
-import com.martinwalls.nea.models.SearchItem;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.DBHandler;
-import com.martinwalls.nea.models.Location;
-import com.martinwalls.nea.models.Order;
-import com.martinwalls.nea.models.Product;
-import com.martinwalls.nea.models.ProductQuantity;
+import com.martinwalls.nea.models.*;
 import com.martinwalls.nea.stock.EditLocationsActivity;
 
 import java.time.LocalDate;
@@ -271,17 +268,11 @@ public class NewOrderActivity extends AppCompatActivity
             cancelSearch();
         });
 
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
+        editText.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 itemAdapter.getFilter().filter(s);
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
         });
     }
 
