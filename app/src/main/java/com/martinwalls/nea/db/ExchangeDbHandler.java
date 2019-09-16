@@ -110,6 +110,24 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
         return currencyResultList;
     }
 
+    public List<Currency> getFavCurrencies() {
+        List<Currency> currencyResultList = new ArrayList<>();
+        String query = "SELECT * FROM " + CurrenciesTable.TABLE_NAME
+                + " WHERE " + CurrenciesTable.FAVOURITE + "=1";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        while (cursor.moveToNext()) {
+            Currency currency = new Currency();
+            currency.setCode(cursor.getString(cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_CODE)));
+            currency.setName(cursor.getString(cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_NAME)));
+            currency.setFavourite(cursor.getInt(cursor.getColumnIndexOrThrow(CurrenciesTable.FAVOURITE)) == 1);
+            currencyResultList.add(currency);
+        }
+        cursor.close();
+        db.close();
+        return currencyResultList;
+    }
+
     public int getCurrencyCount() {
         String query = "SELECT * FROM " + CurrenciesTable.TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();

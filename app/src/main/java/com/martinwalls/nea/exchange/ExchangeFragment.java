@@ -3,7 +3,9 @@ package com.martinwalls.nea.exchange;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.*;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -11,26 +13,28 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.martinwalls.nea.MainActivity;
-import com.martinwalls.nea.R;
-import com.martinwalls.nea.SampleData;
+import com.martinwalls.nea.*;
 import com.martinwalls.nea.components.CustomRecyclerView;
+import com.martinwalls.nea.db.ExchangeDbHandler;
 import com.martinwalls.nea.models.Conversion;
+import com.martinwalls.nea.models.Currency;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class ExchangeFragment extends Fragment {
 
+    private ExchangeDbHandler dbHandler;
+
     private TextView primaryCurrencyText;
     private TextView secondaryCurrencyText;
-    private TextView primaryCurrencyValue;
     private TextView secondaryCurrencyValue;
 
     private NumberPicker currencyPickerLeft;
     private NumberPicker currencyPickerRight;
 
     private String primaryCurrency;
+    private double primaryCurrencyValue = 1;
     private String secondaryCurrency;
 
     private HashMap<String, Double> rates = new HashMap<>();
@@ -42,35 +46,17 @@ public class ExchangeFragment extends Fragment {
         getActivity().setTitle(R.string.exchange_title);
         View fragmentView = inflater.inflate(R.layout.fragment_exchange, container, false);
 
+        dbHandler = new ExchangeDbHandler(getContext());
+
         primaryCurrencyText = fragmentView.findViewById(R.id.currency_primary);
         secondaryCurrencyText = fragmentView.findViewById(R.id.currency_secondary);
-        primaryCurrencyValue = fragmentView.findViewById(R.id.currency_primary_value);
         secondaryCurrencyValue = fragmentView.findViewById(R.id.currency_secondary_value);
 
-        final String[] currencies = SampleData.getSampleCurrencies();
-
         currencyPickerLeft = fragmentView.findViewById(R.id.currency_picker_left);
-
-        currencyPickerLeft.setMinValue(0);
-        currencyPickerLeft.setMaxValue(currencies.length - 1);
-        currencyPickerLeft.setDisplayedValues(currencies);
-        currencyPickerLeft.setWrapSelectorWheel(false);
-        currencyPickerLeft.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-        currencyPickerLeft.setOnValueChangedListener(
-                (picker, oldVal, newVal) -> setPrimaryCurrency(currencies[newVal]));
-        setPrimaryCurrency(currencies[currencyPickerLeft.getValue()]);
-
         currencyPickerRight = fragmentView.findViewById(R.id.currency_picker_right);
 
-        currencyPickerRight.setMinValue(0);
-        currencyPickerRight.setMaxValue(currencies.length - 1);
-        currencyPickerRight.setDisplayedValues(currencies);
+        initCurrencyPickers();
         currencyPickerRight.setValue(1);
-        currencyPickerRight.setWrapSelectorWheel(false);
-        currencyPickerRight.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-        currencyPickerRight.setOnValueChangedListener(
-                (picker, oldVal, newVal) -> setSecondaryCurrency(currencies[newVal]));
-        setSecondaryCurrency(currencies[currencyPickerRight.getValue()]);
 
         ImageButton swapBtn = fragmentView.findViewById(R.id.swap_currencies);
         swapBtn.setOnClickListener(v -> swapCurrencies());
@@ -85,6 +71,17 @@ public class ExchangeFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         conversionHistoryView.setLayoutManager(layoutManager);
 
+        EditText primaryCurrencyValueInput = fragmentView.findViewById(R.id.currency_primary_value);
+        primaryCurrencyValueInput.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!TextUtils.isEmpty(s)) {
+                    primaryCurrencyValue = Double.parseDouble(s.toString());
+                    updateRates();
+                }
+            }
+        });
+
         fetchRatesFromApi();
 
         return fragmentView;
@@ -93,7 +90,40 @@ public class ExchangeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        initCurrencyPickers();
         fetchRatesFromApi();
+    }
+
+    private void initCurrencyPickers() {
+        String[] currencies = fetchCurrenciesToShow();
+        currencyPickerLeft.setMinValue(0);
+        currencyPickerLeft.setMaxValue(currencies.length - 1);
+        currencyPickerLeft.setDisplayedValues(currencies);
+        currencyPickerLeft.setWrapSelectorWheel(false);
+        currencyPickerLeft.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+        currencyPickerLeft.setOnValueChangedListener(
+                (picker, oldVal, newVal) -> setPrimaryCurrency(currencies[newVal]));
+        setPrimaryCurrency(currencies[currencyPickerLeft.getValue()]);
+
+        currencyPickerRight.setMinValue(0);
+        currencyPickerRight.setMaxValue(currencies.length - 1);
+        currencyPickerRight.setDisplayedValues(currencies);
+        currencyPickerRight.setWrapSelectorWheel(false);
+        currencyPickerRight.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+        currencyPickerRight.setOnValueChangedListener(
+                (picker, oldVal, newVal) -> setSecondaryCurrency(currencies[newVal]));
+        setSecondaryCurrency(currencies[currencyPickerRight.getValue()]);
+    }
+
+    private String[] fetchCurrenciesToShow() {
+        List<Currency> currencies = Utils.mergeSort(dbHandler.getFavCurrencies(),
+                (currency1, currency2) -> currency1.getCode().compareTo(currency2.getCode()));
+
+        String[] currencyCodes = new String[currencies.size()];
+        for (int i = 0; i < currencies.size(); i++) {
+            currencyCodes[i] = currencies.get(i).getCode();
+        }
+        return currencyCodes;
     }
 
     private void fetchRatesFromApi() {
@@ -160,7 +190,7 @@ public class ExchangeFragment extends Fragment {
 
     private double getRate(String currency, String base) {
         if (rates != null && rates.keySet().contains(currency) && rates.keySet().contains(base)) {
-            return rates.get(currency) / rates.get(base);
+            return (rates.get(currency) / rates.get(base)) * primaryCurrencyValue;
         }
         return 0;
     }

@@ -174,7 +174,10 @@
     <string name="exchange_history_today">Today</string>
     <string name="exchange_choose_currencies_no_fav">No Currencies Starred</string>
 
-    <string name="exchange_rate">%.2f</string>
+    <!-- 5 significant figures -->
+    <string name="exchange_rate">%.5G</string>
+    <!--<string name="exchange_rate">%.2f</string>-->
+    <string name="exchange_primary_start_value">1</string>
 
     <!-- Settings page -->
     <string name="settings_title">Settings</string>
