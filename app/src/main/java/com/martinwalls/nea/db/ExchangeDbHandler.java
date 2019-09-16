@@ -94,15 +94,8 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
     }
 
     public List<Currency> getCurrencies() {
-        return getCurrencies(false);
-    }
-
-    public List<Currency> getCurrencies(boolean onlyFav) {
         List<Currency> currencyResultList = new ArrayList<>();
         String query = "SELECT * FROM " + CurrenciesTable.TABLE_NAME;
-        if (onlyFav) {
-            query += " WHERE " + CurrenciesTable.FAVOURITE + "=1";
-        }
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         while (cursor.moveToNext()) {
@@ -135,6 +128,16 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
             values.put(CurrenciesTable.CURRENCY_NAME, currency.getName());
             db.insert(CurrenciesTable.TABLE_NAME, null, values);
         }
+        db.close();
+    }
+
+    public void setCurrencyFavourite(String currencyCode, boolean isFav) {
+        ContentValues values = new ContentValues();
+        values.put(CurrenciesTable.FAVOURITE, isFav ? 1 : 0);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.update(CurrenciesTable.TABLE_NAME, values,
+                CurrenciesTable.CURRENCY_CODE + "=?", new String[]{currencyCode});
         db.close();
     }
 }

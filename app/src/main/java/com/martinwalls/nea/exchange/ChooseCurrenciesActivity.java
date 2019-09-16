@@ -39,7 +39,7 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
         allCurrencyList = Utils.mergeSort(dbHandler.getCurrencies(),
                 (currency1, currency2) -> currency1.getCode().compareTo(currency2.getCode()));
 
-//        favCurrencyList = dbHandler.getCurrencies(true);
+        // fav currencies have to be found like this so there it is the same object for currencies in both lists
         for (Currency currency : allCurrencyList) {
             if (currency.isFavourite()) {
                 favCurrencyList.add(currency);
@@ -51,20 +51,6 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
         CustomRecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setAdapter(currencyAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-//        TextView favouritesEmptyView = findViewById(R.id.favourite_currencies_empty);
-//        CustomRecyclerView favouritesList = findViewById(R.id.favourite_currencies_list);
-//        favCurrencyAdapter = new CurrencyAdapter(favCurrencyList, this, true);
-//        favouritesList.setEmptyView(favouritesEmptyView);
-//        favouritesList.setAdapter(favCurrencyAdapter);
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-//        favouritesList.setLayoutManager(layoutManager);
-//
-//        CustomRecyclerView allCurrenciesList = findViewById(R.id.all_currencies_list);
-//        allCurrencyAdapter = new CurrencyAdapter(allCurrencyList, this, false);
-//        allCurrenciesList.setAdapter(allCurrencyAdapter);
-//        RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(this);
-//        allCurrenciesList.setLayoutManager(layoutManager1);
     }
 
     @Override
@@ -94,14 +80,17 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
     public void onCurrencyStarClicked(int position, boolean isFavList) {
         Toast.makeText(this, position + (isFavList ? "fav" : ""), Toast.LENGTH_SHORT).show();
         if (isFavList) {
+            dbHandler.setCurrencyFavourite(favCurrencyList.get(position).getCode(), false);
             favCurrencyList.get(position).toggleFavourite();
             favCurrencyList.remove(position);
         } else {
             Currency currency = allCurrencyList.get(position);
             if (currency.toggleFavourite()) {
                 favCurrencyList.add(currency);
+                dbHandler.setCurrencyFavourite(currency.getCode(), true);
             } else {
                 favCurrencyList.remove(currency);
+                dbHandler.setCurrencyFavourite(currency.getCode(), false);
             }
         }
         List<Currency> tempFavCurrencyList = new ArrayList<>();
