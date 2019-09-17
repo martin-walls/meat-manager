@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.*;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.NumberPicker;
-import android.widget.TextView;
+import android.view.inputmethod.EditorInfo;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,7 +26,8 @@ public class ExchangeFragment extends Fragment {
 
     private TextView primaryCurrencyText;
     private TextView secondaryCurrencyText;
-    private TextView secondaryCurrencyValue;
+    private TextView secondaryCurrencyValueText;
+    private EditText primaryCurrencyValueInput;
 
     private NumberPicker currencyPickerLeft;
     private NumberPicker currencyPickerRight;
@@ -36,6 +35,7 @@ public class ExchangeFragment extends Fragment {
     private String primaryCurrency;
     private double primaryCurrencyValue = 1;
     private String secondaryCurrency;
+    private double secondaryCurrencyValue = 0;
 
     private HashMap<String, Double> rates = new HashMap<>();
 
@@ -50,7 +50,7 @@ public class ExchangeFragment extends Fragment {
 
         primaryCurrencyText = fragmentView.findViewById(R.id.currency_primary);
         secondaryCurrencyText = fragmentView.findViewById(R.id.currency_secondary);
-        secondaryCurrencyValue = fragmentView.findViewById(R.id.currency_secondary_value);
+        secondaryCurrencyValueText = fragmentView.findViewById(R.id.currency_secondary_value);
 
         currencyPickerLeft = fragmentView.findViewById(R.id.currency_picker_left);
         currencyPickerRight = fragmentView.findViewById(R.id.currency_picker_right);
@@ -58,13 +58,13 @@ public class ExchangeFragment extends Fragment {
         initCurrencyPickers();
         currencyPickerRight.setValue(1);
 
-
         //todo store last currencies in shared prefs, select those when screen opened again
 
         ImageButton swapBtn = fragmentView.findViewById(R.id.swap_currencies);
         swapBtn.setOnClickListener(v -> swapCurrencies());
 
-        List<Conversion> conversionList = SampleData.getSampleConversions();
+        List<Conversion> conversionList = Utils.mergeSort(dbHandler.getAllConversions(),
+                (conv1, conv2) -> (int) (conv2.getTimestamp() - conv1.getTimestamp()));
         ExchangeHistoryAdapter exchangeHistoryAdapter = new ExchangeHistoryAdapter(conversionList);
 
         TextView emptyView = fragmentView.findViewById(R.id.no_exchange_history);
@@ -74,7 +74,7 @@ public class ExchangeFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         conversionHistoryView.setLayoutManager(layoutManager);
 
-        EditText primaryCurrencyValueInput = fragmentView.findViewById(R.id.currency_primary_value);
+        primaryCurrencyValueInput = fragmentView.findViewById(R.id.currency_primary_value);
         primaryCurrencyValueInput.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -83,6 +83,14 @@ public class ExchangeFragment extends Fragment {
                     updateRates();
                 }
             }
+        });
+        primaryCurrencyValueInput.setOnEditorActionListener((view, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addConversionToHistory();
+                // returning false means keyboard will be closed
+                return false;
+            }
+            return false;
         });
 
         fetchRatesFromApi();
@@ -178,7 +186,8 @@ public class ExchangeFragment extends Fragment {
     }
 
     private void updateRates() {
-        secondaryCurrencyValue.setText(getString(R.string.exchange_rate, getRate(secondaryCurrency, primaryCurrency)));
+        secondaryCurrencyValue = getRate(secondaryCurrency, primaryCurrency);
+        secondaryCurrencyValueText.setText(getString(R.string.exchange_rate, secondaryCurrencyValue));
     }
 
     private void swapCurrencies() {
@@ -196,5 +205,15 @@ public class ExchangeFragment extends Fragment {
             return (rates.get(currency) / rates.get(base)) * primaryCurrencyValue;
         }
         return 0;
+    }
+
+    private void addConversionToHistory() {
+        Conversion newConversion = new Conversion();
+        newConversion.setTimestamp(System.currentTimeMillis() / 1000);
+        newConversion.setPrimaryCurrency(dbHandler.getCurrency(primaryCurrency));
+        newConversion.setPrimaryValue(primaryCurrencyValue);
+        newConversion.setSecondaryCurrency(dbHandler.getCurrency(secondaryCurrency));
+        newConversion.setSecondaryValue(secondaryCurrencyValue);
+        dbHandler.addConversion(newConversion);
     }
 }

@@ -2,59 +2,75 @@ package com.martinwalls.nea.models;
 
 public class Conversion {
     private int conversionId;
-    private int timestamp;
-    private String primaryCurrency;
+    private long timestamp;
+    private Currency primaryCurrency;
     private Double primaryValue;
-    private String secondaryCurrency;
+    private Currency secondaryCurrency;
     private Double secondaryValue;
 
     public Conversion() {
     }
 
-    public Conversion(int timestamp, String primaryCurrency, Double primaryValue,
-                      String secondaryCurrency, Double secondaryValue) {
+    public Conversion(long timestamp, Currency primaryCurrency, Double primaryValue,
+                      Currency secondaryCurrency, Double secondaryValue) {
         this.timestamp = timestamp;
         this.primaryCurrency = primaryCurrency;
         this.primaryValue = primaryValue;
         this.secondaryCurrency = secondaryCurrency;
         this.secondaryValue = secondaryValue;
+    }
+
+    public int getConversionId() {
+        return conversionId;
     }
 
     public void setConversionId(int conversionId) {
         this.conversionId = conversionId;
     }
 
-    public void setTimestamp(int timestamp) {
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 
-    public void setPrimaryCurrency(String primaryCurrency) {
+    public Currency getPrimaryCurrency() {
+        return primaryCurrency;
+    }
+
+    public void setPrimaryCurrency(Currency primaryCurrency) {
         this.primaryCurrency = primaryCurrency;
+    }
+
+    public Double getPrimaryValue() {
+        return primaryValue;
     }
 
     public void setPrimaryValue(Double primaryValue) {
         this.primaryValue = primaryValue;
     }
 
-    public void setSecondaryCurrency(String secondaryCurrency) {
+    public Currency getSecondaryCurrency() {
+        return secondaryCurrency;
+    }
+
+    public void setSecondaryCurrency(Currency secondaryCurrency) {
         this.secondaryCurrency = secondaryCurrency;
+    }
+
+    public Double getSecondaryValue() {
+        return secondaryValue;
     }
 
     public void setSecondaryValue(Double secondaryValue) {
         this.secondaryValue = secondaryValue;
     }
 
-    public int getDaysAgo() {
-        int timeNow = (int) (System.currentTimeMillis() / 1000);
-        int timeDiff = timeNow - timestamp;
+    public long getDaysAgo() {
+        long timeNow = System.currentTimeMillis() / 1000;
+        long timeDiff = timeNow - timestamp;
         return timeDiff / (60 * 60 * 24);
-    }
-
-    public String getPrimaryString() {
-        return primaryValue + " " + primaryCurrency;
-    }
-
-    public String getSecondaryString() {
-        return secondaryValue + " " + secondaryCurrency;
     }
 }

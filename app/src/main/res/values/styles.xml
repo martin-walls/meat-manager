@@ -116,11 +116,11 @@
     </style>
 
     <style name="ExchangeRateText.Primary" >
-        <item name="android:textColor">?attr/textColorDark</item>
+        <item name="android:textColor">?textColorDark</item>
     </style>
 
     <style name="ExchangeRateText.Secondary">
-        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textColor">?colorPrimary</item>
     </style>
 
     <style name="ExchangeCurrentCurrency">

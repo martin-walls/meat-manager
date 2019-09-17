@@ -176,7 +176,7 @@
 
     <!-- 5 significant figures -->
     <string name="exchange_rate">%.5G</string>
-    <!--<string name="exchange_rate">%.2f</string>-->
+    <string name="exchange_rate_history">%.5G %s</string>
     <string name="exchange_primary_start_value">1</string>
 
     <!-- Settings page -->

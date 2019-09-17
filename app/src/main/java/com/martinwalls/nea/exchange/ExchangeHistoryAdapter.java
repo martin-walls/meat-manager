@@ -41,8 +41,15 @@ public class ExchangeHistoryAdapter extends RecyclerView.Adapter<ExchangeHistory
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Conversion conversion = conversionList.get(position);
-        viewHolder.primaryCurrencyText.setText(conversion.getPrimaryString());
-        viewHolder.secondaryCurrencyText.setText(conversion.getSecondaryString());
+        viewHolder.primaryCurrencyText.setText(viewHolder.primaryCurrencyText.getContext()
+                .getString(R.string.exchange_rate_history,
+                        conversion.getPrimaryValue(), conversion.getPrimaryCurrency().getCode()));
+        viewHolder.secondaryCurrencyText.setText(viewHolder.secondaryCurrencyText.getContext()
+                .getString(R.string.exchange_rate_history,
+                        conversion.getSecondaryValue(), conversion.getSecondaryCurrency().getCode()));
+
+        //todo show the real dates not sample data
+
         viewHolder.dayDividerText.setVisibility(position % 3 == 0 ? View.VISIBLE : View.GONE);
         viewHolder.dayDividerText.setText(position == 0
                 ? viewHolder.dayDividerText.getContext().getString(R.string.exchange_history_today)

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
+    android:orientation="vertical"
     >
 
     <!-- top row with primary and secondary currencies, swap btn -->
@@ -68,12 +69,9 @@
         android:id="@+id/rate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/current_currencies"
         android:orientation="horizontal"
         >
 
-
-        <!-- todo allow user input -->
         <EditText
             android:id="@+id/currency_primary_value"
             style="@style/ExchangeRateText.Primary"
@@ -114,7 +112,6 @@
         android:id="@+id/exchange_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rate"
         android:layout_marginTop="48dp"
         android:overScrollMode="never"
         />
@@ -124,10 +121,9 @@
         style="@style/ExchangeHistoryItemText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rate"
         android:gravity="center"
         android:text="@string/exchange_no_history"
         android:visibility="gone"
         />
 
-</RelativeLayout>
+</LinearLayout>

@@ -97,7 +97,7 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
         tempFavCurrencyList.addAll(favCurrencyList);
         favCurrencyList.clear();
         favCurrencyList.addAll(Utils.mergeSort(tempFavCurrencyList,
-                (currency1, currency2) -> currency1.getCode().compareTo(currency2.getName())));
+                (currency1, currency2) -> currency1.getCode().compareTo(currency2.getCode())));
         currencyAdapter.notifyDataSetChanged();
     }
 }

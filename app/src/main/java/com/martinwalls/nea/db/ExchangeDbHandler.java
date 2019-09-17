@@ -79,11 +79,11 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
             Conversion conversion = new Conversion();
             conversion.setConversionId(cursor.getInt(cursor.getColumnIndexOrThrow(ConversionsTable.ID)));
             conversion.setTimestamp(cursor.getInt(cursor.getColumnIndexOrThrow(ConversionsTable.TIMESTAMP)));
-            conversion.setPrimaryCurrency(cursor.getString(
-                    cursor.getColumnIndexOrThrow(ConversionsTable.PRIMARY_CURRENCY)));
+            conversion.setPrimaryCurrency(getCurrency(cursor.getString(
+                            cursor.getColumnIndexOrThrow(ConversionsTable.PRIMARY_CURRENCY))));
             conversion.setPrimaryValue(cursor.getDouble(cursor.getColumnIndexOrThrow(ConversionsTable.PRIMARY_VALUE)));
-            conversion.setSecondaryCurrency(cursor.getString(
-                    cursor.getColumnIndexOrThrow(ConversionsTable.SECONDARY_CURRENCY)));
+            conversion.setSecondaryCurrency(getCurrency(cursor.getString(
+                    cursor.getColumnIndexOrThrow(ConversionsTable.SECONDARY_CURRENCY))));
             conversion.setSecondaryValue(cursor.getDouble(
                     cursor.getColumnIndexOrThrow(ConversionsTable.SECONDARY_VALUE)));
             conversionsResultList.add(conversion);
@@ -91,6 +91,36 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return conversionsResultList;
+    }
+
+    public boolean addConversion(Conversion conversion) {
+        ContentValues values = new ContentValues();
+        values.put(ConversionsTable.PRIMARY_CURRENCY, conversion.getPrimaryCurrency().getCode());
+        values.put(ConversionsTable.PRIMARY_VALUE, conversion.getPrimaryValue());
+        values.put(ConversionsTable.SECONDARY_CURRENCY, conversion.getSecondaryCurrency().getCode());
+        values.put(ConversionsTable.SECONDARY_VALUE, conversion.getSecondaryValue());
+        values.put(ConversionsTable.TIMESTAMP, conversion.getTimestamp());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        boolean success = db.insert(ConversionsTable.TABLE_NAME, null, values) != -1;
+        db.close();
+        return success;
+    }
+
+    public Currency getCurrency(String currencyCode) {
+        Currency currencyResult = new Currency();
+        String query = "SELECT * FROM " + CurrenciesTable.TABLE_NAME
+                + " WHERE " + CurrenciesTable.CURRENCY_CODE + "=?";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, new String[]{currencyCode});
+        if (cursor.moveToFirst()) {
+            currencyResult.setCode(cursor.getString(cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_CODE)));
+            currencyResult.setName(cursor.getString(cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_NAME)));
+            currencyResult.setFavourite(cursor.getInt(cursor.getColumnIndexOrThrow(CurrenciesTable.FAVOURITE)) == 1);
+        }
+        cursor.close();
+        db.close();
+        return currencyResult;
     }
 
     public List<Currency> getCurrencies() {
