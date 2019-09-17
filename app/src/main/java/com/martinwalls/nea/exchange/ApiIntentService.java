@@ -7,10 +7,17 @@ import android.net.Uri;
 import com.martinwalls.nea.db.ExchangeDbHandler;
 import com.martinwalls.nea.models.Currency;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
 public class ApiIntentService extends IntentService {
+
+    static {
+        System.loadLibrary("native-lib");
+    }
+
+    private native String getApiAccessKey();
 
     private static final String TAG = ApiIntentService.class.getSimpleName();
 
@@ -48,7 +55,7 @@ public class ApiIntentService extends IntentService {
             Uri.Builder builder = baseUri.buildUpon();
 
             builder.appendPath("latest");
-            builder.appendQueryParameter("access_key", "3d73aaa11d179de975bea3bb6b2545bc"); //todo store access key securely
+            builder.appendQueryParameter("access_key", getDecodedAccessKey()); //todo store access key securely
 //        builder.appendQueryParameter("symbols", "USD,AUD,CAD,PLN,MXN");
 
 
@@ -69,7 +76,7 @@ public class ApiIntentService extends IntentService {
             Uri.Builder builder = baseUri.buildUpon();
 
             builder.appendPath("symbols");
-            builder.appendQueryParameter("access_key", "3d73aaa11d179de975bea3bb6b2545bc");
+            builder.appendQueryParameter("access_key", getDecodedAccessKey());
 
             List<Currency> currencyList = QueryUtils.fetchCurrencies(builder.toString());
 
@@ -85,5 +92,10 @@ public class ApiIntentService extends IntentService {
         } catch (PendingIntent.CanceledException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getDecodedAccessKey() {
+        String base64Key = getApiAccessKey();
+        return new String(Base64.getDecoder().decode(base64Key));
     }
 }

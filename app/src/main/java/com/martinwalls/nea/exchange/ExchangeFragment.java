@@ -58,6 +58,9 @@ public class ExchangeFragment extends Fragment {
         initCurrencyPickers();
         currencyPickerRight.setValue(1);
 
+
+        //todo store last currencies in shared prefs, select those when screen opened again
+
         ImageButton swapBtn = fragmentView.findViewById(R.id.swap_currencies);
         swapBtn.setOnClickListener(v -> swapCurrencies());
 

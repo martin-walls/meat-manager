@@ -28,6 +28,11 @@ android {
         sourceCompatibility JavaVersion.current()
         targetCompatibility JavaVersion.current()
     }
+    externalNativeBuild {
+        cmake {
+            path file('CMakeLists.txt')
+        }
+    }
 }
 
 dependencies {
