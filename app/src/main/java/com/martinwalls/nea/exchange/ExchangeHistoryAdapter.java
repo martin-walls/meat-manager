@@ -50,11 +50,27 @@ public class ExchangeHistoryAdapter extends RecyclerView.Adapter<ExchangeHistory
 
         //todo show the real dates not sample data
 
-        viewHolder.dayDividerText.setVisibility(position % 3 == 0 ? View.VISIBLE : View.GONE);
-        viewHolder.dayDividerText.setText(position == 0
-                ? viewHolder.dayDividerText.getContext().getString(R.string.exchange_history_today)
-                : viewHolder.dayDividerText.getContext().getResources().getQuantityString(
-                        R.plurals.exchange_history_days_ago, position, position));
+        if (position == 0) {
+            viewHolder.dayDividerText.setVisibility(View.VISIBLE);
+        } else {
+            Conversion lastConversion = conversionList.get(position - 1);
+            if (lastConversion.getDaysAgo() == conversion.getDaysAgo()) {
+                viewHolder.dayDividerText.setVisibility(View.GONE);
+            } else {
+                viewHolder.dayDividerText.setVisibility(View.VISIBLE);
+            }
+        }
+
+        if (viewHolder.dayDividerText.getVisibility() == View.VISIBLE) {
+            if (conversion.getDaysAgo() == 0) {
+                viewHolder.dayDividerText.setText(viewHolder.dayDividerText.getContext()
+                        .getString(R.string.exchange_history_today));
+            } else {
+                viewHolder.dayDividerText.setText(viewHolder.dayDividerText.getContext().getResources()
+                        .getQuantityString(R.plurals.exchange_history_days_ago,
+                                (int) conversion.getDaysAgo(), conversion.getDaysAgo()));
+            }
+        }
     }
 
     @Override

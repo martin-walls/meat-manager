@@ -1,5 +1,8 @@
 package com.martinwalls.nea.models;
 
+import java.time.*;
+import java.time.temporal.ChronoUnit;
+
 public class Conversion {
     private int conversionId;
     private long timestamp;
@@ -68,9 +71,11 @@ public class Conversion {
         this.secondaryValue = secondaryValue;
     }
 
-    public long getDaysAgo() {
-        long timeNow = System.currentTimeMillis() / 1000;
-        long timeDiff = timeNow - timestamp;
-        return timeDiff / (60 * 60 * 24);
+    public int getDaysAgo() {
+        LocalDate conversionDate = LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.systemDefault())
+                .toLocalDate();
+        LocalDate today = LocalDate.now();
+
+        return (int) ChronoUnit.DAYS.between(conversionDate, today);
     }
 }

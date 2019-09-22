@@ -43,7 +43,7 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
                 + CurrenciesTable.TABLE_NAME + " ("
                 + CurrenciesTable.CURRENCY_CODE + " TEXT PRIMARY KEY, "
                 + CurrenciesTable.CURRENCY_NAME + " TEXT NOT NULL, "
-                + CurrenciesTable.FAVOURITE + " INTEGER )";
+                + CurrenciesTable.FAVOURITE + " INTEGER DEFAULT 0 )";
         db.execSQL(createCurrenciesTableQuery);
 
         String createConversionsTableQuery = "CREATE TABLE IF NOT EXISTS "
