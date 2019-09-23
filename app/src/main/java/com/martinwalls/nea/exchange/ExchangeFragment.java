@@ -6,12 +6,18 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.NumberPicker;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.martinwalls.nea.*;
+import com.martinwalls.nea.MainActivity;
+import com.martinwalls.nea.R;
+import com.martinwalls.nea.SimpleTextWatcher;
+import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.ExchangeDbHandler;
 import com.martinwalls.nea.models.Conversion;
@@ -39,6 +45,10 @@ public class ExchangeFragment extends Fragment {
 
     private HashMap<String, Double> rates = new HashMap<>();
 
+    /*
+    private List<String> currenciesList = new ArrayList<>();
+    */
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,7 +68,17 @@ public class ExchangeFragment extends Fragment {
         initCurrencyPickers();
         currencyPickerRight.setValue(1);
 
-        //todo store last currencies in shared prefs, select those when screen opened again
+        /*
+        SharedPreferences sharedPref = getContext().getSharedPreferences(
+                getString(R.string.pref_exchange_file_key), Context.MODE_PRIVATE);
+        String lastCurrencyLeft = sharedPref.getString(getString(R.string.pref_exchange_currency_primary),
+                currencyPickerLeft.getDisplayedValues()[0]);
+        String lastCurrencyRight = sharedPref.getString(getString(R.string.pref_exchange_currency_secondary),
+                currencyPickerRight.getDisplayedValues()[1]);
+
+        currencyPickerLeft.setValue(currenciesList.indexOf(lastCurrencyLeft));
+        currencyPickerRight.setValue(currenciesList.indexOf(lastCurrencyRight));
+        */
 
         ImageButton swapBtn = fragmentView.findViewById(R.id.swap_currencies);
         swapBtn.setOnClickListener(v -> swapCurrencies());
@@ -107,6 +127,9 @@ public class ExchangeFragment extends Fragment {
 
     private void initCurrencyPickers() {
         String[] currencies = fetchCurrenciesToShow();
+        /*
+        currenciesList = Arrays.asList(currencies);
+        */
         currencyPickerLeft.setMinValue(0);
         currencyPickerLeft.setMaxValue(currencies.length - 1);
         currencyPickerLeft.setDisplayedValues(currencies);
@@ -176,12 +199,30 @@ public class ExchangeFragment extends Fragment {
     private void setPrimaryCurrency(String currency) {
         primaryCurrency = currency;
         primaryCurrencyText.setText(currency);
+        /*
+        SharedPreferences sharedPref = getContext().getSharedPreferences(
+                getString(R.string.pref_exchange_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.pref_exchange_currency_primary), currency);
+        /*todo maybe make EasyPreferences class:
+            https://medium.com/@alexstyl/android-tips-resourcify-your-preference-keys-65a1f6889207
+            https://github.com/alexstyl/Memento-Calendar/blob/master/android_mobile/src/main/java/com/alexstyl/specialdates/EasyPreferences.java
+
+        editor.apply();
+        */
         updateRates();
     }
 
     private void setSecondaryCurrency(String currency) {
         secondaryCurrency = currency;
         secondaryCurrencyText.setText(currency);
+        /*
+        SharedPreferences sharedPref = getContext().getSharedPreferences(
+                getString(R.string.pref_exchange_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.pref_exchange_currency_secondary), currency);
+        editor.apply();
+        */
         updateRates();
     }
 

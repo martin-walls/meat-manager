@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_exchange_file_key">com.martinwalls.nea.PREFS_EXCHANGE</string>
+    <string name="pref_exchange_currency_primary">currency_primary</string>
+    <string name="pref_exchange_currency_secondary">currency_secondary</string>
+</resources>
