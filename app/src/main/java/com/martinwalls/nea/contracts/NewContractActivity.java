@@ -364,8 +364,8 @@ public class NewContractActivity extends AppCompatActivity
 
         searchResultsLayout.animate()
                 .alpha(1f)
-                .setStartDelay(150)
-                .setDuration(200) //todo refactor to resource value
+                .setStartDelay(getResources().getInteger(R.integer.search_results_fade_delay))
+                .setDuration(getResources().getInteger(R.integer.search_results_fade_duration))
                 .setListener(null);
     }
 

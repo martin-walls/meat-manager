@@ -3,4 +3,6 @@
     <integer name="search_open_duration">100</integer>
     <integer name="search_close_duration">100</integer>
     <integer name="search_close_fade_delay">50</integer>
+    <integer name="search_results_fade_delay">150</integer>
+    <integer name="search_results_fade_duration">200</integer>
 </resources>

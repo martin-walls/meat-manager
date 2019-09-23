@@ -240,8 +240,8 @@ public class NewStockActivity extends AppCompatActivity
 
         searchResultsLayout.animate()
                 .alpha(1f)
-                .setStartDelay(150)
-                .setDuration(200)
+                .setStartDelay(getResources().getInteger(R.integer.search_results_fade_delay))
+                .setDuration(getResources().getInteger(R.integer.search_results_fade_duration))
                 .setListener(null);
     }
 
