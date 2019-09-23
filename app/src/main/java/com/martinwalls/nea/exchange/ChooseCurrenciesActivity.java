@@ -61,14 +61,8 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //todo implement these
         switch (item.getItemId()) {
             case R.id.action_done:
-                Toast.makeText(this, "DONE", Toast.LENGTH_SHORT).show();
-                finish();
-                return true;
-            case R.id.action_cancel:
-                Toast.makeText(this, "CANCEL", Toast.LENGTH_SHORT).show();
                 finish();
                 return true;
             default:

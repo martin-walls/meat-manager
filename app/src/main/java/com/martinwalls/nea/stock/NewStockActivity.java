@@ -54,11 +54,9 @@ public class NewStockActivity extends AppCompatActivity
     private final String INPUT_LOCATION = "location";
     private final String INPUT_DESTINATION = "destination";
     private final String INPUT_QUALITY = "quality";
-    //todo refactor to enum?
 
     private String currentSearchType = INPUT_PRODUCT; // default value so it's not null
 
-    //todo refactor to class
     private int selectedProductId;
     private int selectedSupplierId;
     private int selectedLocationId;
@@ -76,7 +74,6 @@ public class NewStockActivity extends AppCompatActivity
         dbHandler = new DBHandler(this);
 
         // store reference to each row to show/hide later
-        //todo make this an enum??
         inputViews.put(INPUT_PRODUCT, R.id.input_layout_product);
         inputViews.put(INPUT_SUPPLIER, R.id.input_layout_supplier);
         inputViews.put(INPUT_QUANTITY, R.id.input_row_quantity);

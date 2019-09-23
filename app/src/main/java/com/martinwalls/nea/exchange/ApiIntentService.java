@@ -55,8 +55,7 @@ public class ApiIntentService extends IntentService {
             Uri.Builder builder = baseUri.buildUpon();
 
             builder.appendPath("latest");
-            builder.appendQueryParameter("access_key", getDecodedAccessKey()); //todo store access key securely
-//        builder.appendQueryParameter("symbols", "USD,AUD,CAD,PLN,MXN");
+            builder.appendQueryParameter("access_key", getDecodedAccessKey());
 
 
             jsonResponse = QueryUtils.fetchJsonResponse(builder.toString());

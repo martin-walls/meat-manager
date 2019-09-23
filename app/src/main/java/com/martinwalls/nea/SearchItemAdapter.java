@@ -1,4 +1,4 @@
-package com.martinwalls.nea; // todo refactor to different package, not just used in stock
+package com.martinwalls.nea;
 
 import android.view.LayoutInflater;
 import android.view.View;

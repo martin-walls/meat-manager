@@ -48,8 +48,6 @@ public class ExchangeHistoryAdapter extends RecyclerView.Adapter<ExchangeHistory
                 .getString(R.string.exchange_rate_history,
                         conversion.getSecondaryValue(), conversion.getSecondaryCurrency().getCode()));
 
-        //todo show the real dates not sample data
-
         if (position == 0) {
             viewHolder.dayDividerText.setVisibility(View.VISIBLE);
         } else {
