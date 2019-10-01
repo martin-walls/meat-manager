@@ -54,12 +54,12 @@ public class AddNewProductDialog extends DialogFragment {
         });
 
         builder.setView(dialogView);
-        builder.setTitle(R.string.stock_product_new);
+        builder.setTitle(R.string.stock_product_new); //todo make this part of the layout file
 
-        Button buttonDone = dialogView.findViewById(R.id.btn_done);
-        Button buttonCancel = dialogView.findViewById(R.id.btn_cancel);
+        Button btnDone = dialogView.findViewById(R.id.btn_done);
+        Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
 
-        buttonDone.setOnClickListener(v -> {
+        btnDone.setOnClickListener(v -> {
             boolean isValid = true;
             String newProductName = editTextProductName.getText().toString();
             String newMeatType = editTextMeatType.getText().toString();
@@ -85,7 +85,7 @@ public class AddNewProductDialog extends DialogFragment {
             }
         });
 
-        buttonCancel.setOnClickListener(v -> getDialog().dismiss());
+        btnCancel.setOnClickListener(v -> getDialog().dismiss());
 
         return builder.create();
     }

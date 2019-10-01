@@ -6,8 +6,8 @@
     <dimen name="screen_margin_top">16dp</dimen>
     <dimen name="screen_margin_horizontal">16dp</dimen>
 
-    <dimen name="dialog_margin_vertical">16dp</dimen>
-    <dimen name="dialog_margin_horizontal">16dp</dimen>
+    <dimen name="dialog_margin_vertical">20dp</dimen>
+    <dimen name="dialog_margin_horizontal">20dp</dimen>
 
     <dimen name="input_spacing_vertical">16dp</dimen>
     <dimen name="input_spacing_horizontal">8dp</dimen>

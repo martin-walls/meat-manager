@@ -90,7 +90,7 @@
             style="?attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/stock_product_new_cancel"
+            android:text="@string/action_cancel"
             />
 
         <Space
@@ -104,7 +104,7 @@
             style="?attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/stock_product_new_done"
+            android:text="@string/action_done"
             />
     </LinearLayout>
 

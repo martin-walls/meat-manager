@@ -11,7 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,11 +26,22 @@ import androidx.transition.TransitionInflater;
 import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.martinwalls.nea.*;
+import com.martinwalls.nea.AddNewProductDialog;
+import com.martinwalls.nea.ConfirmCancelDialog;
+import com.martinwalls.nea.ProductsAddedAdapter;
+import com.martinwalls.nea.R;
+import com.martinwalls.nea.SearchItemAdapter;
+import com.martinwalls.nea.SimpleTextWatcher;
+import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.DBHandler;
-import com.martinwalls.nea.models.*;
+import com.martinwalls.nea.models.Contract;
+import com.martinwalls.nea.models.Interval;
+import com.martinwalls.nea.models.Location;
+import com.martinwalls.nea.models.Product;
+import com.martinwalls.nea.models.ProductQuantity;
+import com.martinwalls.nea.models.SearchItem;
 import com.martinwalls.nea.stock.EditLocationsActivity;
 
 import java.util.ArrayList;
@@ -37,18 +53,8 @@ public class NewContractActivity extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener,
         ProductsAddedAdapter.ProductsAddedAdapterListener,
         AddNewProductDialog.AddNewProductListener,
-        RepeatIntervalDialog.RepeatIntervalDialogListener {
-
-    private DBHandler dbHandler;
-
-    private HashMap<String, Integer> inputViews = new HashMap<>();
-
-    private SearchItemAdapter itemAdapter;
-    private List<SearchItem> searchItemList = new ArrayList<>();
-
-    private LinearLayout searchResultsLayout;
-    private AddNewTextView addNewView;
-    private ViewGroup rootView;
+        RepeatIntervalDialog.RepeatIntervalDialogListener,
+        ConfirmCancelDialog.ConfirmCancelListener {
 
     private final String INPUT_PRODUCT = "product";
     private final String INPUT_QUANTITY = "quantity";
@@ -56,23 +62,24 @@ public class NewContractActivity extends AppCompatActivity
     private final String INPUT_REPEAT_INTERVAL = "repeatInterval";
     private final String INPUT_REPEAT_ON = "repeatOn";
     private final String INPUT_REMINDER = "reminder";
-
+    private final int REQUEST_REFRESH_ON_DONE = 1;
+    private DBHandler dbHandler;
+    private HashMap<String, Integer> inputViews = new HashMap<>();
+    private SearchItemAdapter itemAdapter;
+    private List<SearchItem> searchItemList = new ArrayList<>();
+    private LinearLayout searchResultsLayout;
+    private AddNewTextView addNewView;
+    private ViewGroup rootView;
     private String currentSearchType = INPUT_PRODUCT; // default value
-
     private int selectedProductId;
     private int selectedDestId;
     private Interval selectedRepeatInterval;
-
     private TextView addProductBtn;
-
     private List<ProductQuantity> productsAddedList = new ArrayList<>();
     private ProductsAddedAdapter productsAddedAdapter;
     private RecyclerView productsAddedRecyclerView;
-
     private ArrayAdapter<CharSequence> repeatOnSpnAdapter;
     private boolean isWeek = true;
-
-    private final int REQUEST_REFRESH_ON_DONE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,15 +198,24 @@ public class NewContractActivity extends AppCompatActivity
                 }
                 return true;
             case R.id.action_cancel:
-                //todo confirm cancel
-                finish();
+                confirmCancel();
+//                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    private void confirmCancel() {
+        DialogFragment dialog = new ConfirmCancelDialog();
+        dialog.show(getSupportFragmentManager(), "confirm_cancel");
+    }
+
     private void setSelectedRepeatInterval(Interval interval) {
+        // repeat on input is hidden until repeat interval is set
+        LinearLayout inputRepeatOn = findViewById(R.id.input_repeat_on);
+        inputRepeatOn.setVisibility(View.VISIBLE);
+
         selectedRepeatInterval = interval;
         TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
         if (interval.getValue() == 1) {
@@ -310,7 +326,8 @@ public class NewContractActivity extends AppCompatActivity
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -318,7 +335,8 @@ public class NewContractActivity extends AppCompatActivity
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
     }
 
@@ -530,5 +548,15 @@ public class NewContractActivity extends AppCompatActivity
             }
         }
         return false;
+    }
+
+    @Override
+    public void onConfirmCancelYesAction() {
+        Toast.makeText(this, "YES", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onConfirmCancelNoAction() {
+        Toast.makeText(this, "NO", Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">NEA</string>
-    <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -14,6 +13,8 @@
     <string name="action_sort">Sort</string>
     <string name="action_edit">Edit</string>
     <string name="action_refresh">Refresh</string>
+
+    <string name="dialog_confirm_cancel_msg">Do you want to discard your changes?</string>
 
     <!-- Menus -->
     <string name="action_edit_locations">Edit locations</string>
@@ -73,8 +74,6 @@
     <string name="stock_product_meat_type_new">Add new meat type</string>
     <string name="stock_product_meat_type_new_confirm">Do you want to add it?</string>
     <string name="stock_product_meat_type_input">Meat type</string>
-    <string name="stock_product_new_done">Done</string>
-    <string name="stock_product_new_cancel">Cancel</string>
     <string name="stock_input_product">Product</string>
     <string name="stock_input_supplier">Supplier</string>
     <string name="stock_input_quantity_kg">Quantity (kg)</string>

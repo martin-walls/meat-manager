@@ -14,7 +14,7 @@ import java.util.List;
 @SuppressWarnings("FieldCanBeLocal")
 public class ExchangeDbHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "exchangeDB.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private final class ConversionsTable {
         static final String TABLE_NAME = "Conversions";
