@@ -54,7 +54,6 @@ public class AddNewProductDialog extends DialogFragment {
         });
 
         builder.setView(dialogView);
-        builder.setTitle(R.string.stock_product_new); //todo make this part of the layout file
 
         Button btnDone = dialogView.findViewById(R.id.btn_done);
         Button btnCancel = dialogView.findViewById(R.id.btn_cancel);

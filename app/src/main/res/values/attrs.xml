@@ -8,6 +8,7 @@
 
     <attr name="selectedItemBackgroundColor" format="reference|color" />
 
+    <attr name="dialogTitleStyle" format="reference" />
 
     <declare-styleable name="AddNewTextView">
         <attr name="searchItemType" format="string" />
