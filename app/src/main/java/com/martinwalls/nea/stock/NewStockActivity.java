@@ -35,7 +35,8 @@ import java.util.HashMap;
 
 public class NewStockActivity extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener,
-        AddNewProductDialog.AddNewProductListener {
+        AddNewProductDialog.AddNewProductListener,
+        ConfirmCancelDialog.ConfirmCancelListener {
 
     private DBHandler dbHandler;
 
@@ -148,12 +149,20 @@ public class NewStockActivity extends AppCompatActivity
                 }
                 return true;
             case R.id.action_cancel:
-                //todo confirm cancel
-                finish();
+                if (!areAllFieldsEmpty()) {
+                    showConfirmCancelDialog();
+                } else {
+                    finish();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showConfirmCancelDialog() {
+        DialogFragment dialog = new ConfirmCancelDialog();
+        dialog.show(getSupportFragmentManager(), "confirm_cancel");
     }
 
     private void setListeners(final String name, final TextInputLayout inputLayout, final TextInputEditText editText) {
@@ -334,6 +343,7 @@ public class NewStockActivity extends AppCompatActivity
     private boolean addStockToDb() {
         boolean isValid = true;
         StockItem newStockItem = new StockItem();
+
         TextInputEditText editProduct = findViewById(R.id.edit_text_product);
         TextInputLayout inputLayoutProduct = findViewById(R.id.input_layout_product);
 
@@ -411,5 +421,28 @@ public class NewStockActivity extends AppCompatActivity
         }
 
         return false;
+    }
+
+    private boolean areAllFieldsEmpty() {
+        TextInputEditText editProduct = findViewById(R.id.edit_text_product);
+        TextInputEditText editSupplier = findViewById(R.id.edit_text_supplier);
+        TextInputEditText editMass = findViewById(R.id.edit_text_quantity_mass);
+        TextInputEditText editNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
+        TextInputEditText editLocation = findViewById(R.id.edit_text_location);
+        TextInputEditText editDest = findViewById(R.id.edit_text_destination);
+        TextInputEditText editQuality = findViewById(R.id.edit_text_quality);
+
+        return TextUtils.isEmpty(editProduct.getText())
+                && TextUtils.isEmpty(editSupplier.getText())
+                &&TextUtils.isEmpty(editMass.getText())
+                &&TextUtils.isEmpty(editNumBoxes.getText())
+                &&TextUtils.isEmpty(editLocation.getText())
+                &&TextUtils.isEmpty(editDest.getText())
+                &&TextUtils.isEmpty(editQuality.getText());
+    }
+
+    @Override
+    public void onConfirmCancelYesAction() {
+        finish();
     }
 }

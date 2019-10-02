@@ -199,7 +199,7 @@ public class NewContractActivity extends AppCompatActivity
                 return true;
             case R.id.action_cancel:
                 if (!areAllFieldsEmpty()) {
-                    confirmCancel();
+                    showConfirmCancelDialog();
                 } else {
                     finish();
                 }
@@ -209,7 +209,7 @@ public class NewContractActivity extends AppCompatActivity
         }
     }
 
-    private void confirmCancel() {
+    private void showConfirmCancelDialog() {
         DialogFragment dialog = new ConfirmCancelDialog();
         dialog.show(getSupportFragmentManager(), "confirm_cancel");
     }

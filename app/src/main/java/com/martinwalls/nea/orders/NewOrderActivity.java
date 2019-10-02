@@ -44,7 +44,8 @@ public class NewOrderActivity extends AppCompatActivity
         AddNewProductDialog.AddNewProductListener,
         DatePickerDialog.OnDateSetListener,
         TimePickerDialog.OnTimeSetListener,
-        ProductsAddedAdapter.ProductsAddedAdapterListener {
+        ProductsAddedAdapter.ProductsAddedAdapterListener,
+        ConfirmCancelDialog.ConfirmCancelListener {
 
     private DBHandler dbHandler;
 
@@ -158,12 +159,20 @@ public class NewOrderActivity extends AppCompatActivity
                 }
                 return true;
             case R.id.action_cancel:
-                //todo confirm cancel
-                finish();
+                if (!areAllFieldsEmpty()) {
+                    showConfirmCancelDialog();
+                } else {
+                    finish();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showConfirmCancelDialog() {
+        DialogFragment dialog = new ConfirmCancelDialog();
+        dialog.show(getSupportFragmentManager(), "confirm_cancel");
     }
 
     private void addProduct() {
@@ -488,5 +497,24 @@ public class NewOrderActivity extends AppCompatActivity
             return dbHandler.addOrder(newOrder);
         }
         return false;
+    }
+
+    private boolean areAllFieldsEmpty() {
+        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
+        TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
+        TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
+        TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
+        TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
+
+        return TextUtils.isEmpty(editTextProduct.getText())
+                && TextUtils.isEmpty(editTextMass.getText())
+                && TextUtils.isEmpty(editTextNumBoxes.getText())
+                && TextUtils.isEmpty(editTextDest.getText())
+                && TextUtils.isEmpty(editTextDate.getText());
+    }
+
+    @Override
+    public void onConfirmCancelYesAction() {
+        finish();
     }
 }
