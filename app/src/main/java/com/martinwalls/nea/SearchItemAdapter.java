@@ -28,7 +28,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
             itemName = (TextView) view;
 
             itemName.setOnClickListener(
-                    v -> listener.onItemSelected(itemListFiltered.get(getAdapterPosition()), searchItemType));
+                    v -> listener.onSearchItemSelected(itemListFiltered.get(getAdapterPosition()), searchItemType));
         }
     }
 
@@ -93,6 +93,6 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
     }
 
     public interface SearchItemAdapterListener {
-        void onItemSelected(SearchItem item, String searchItemType);
+        void onSearchItemSelected(SearchItem item, String searchItemType);
     }
 }

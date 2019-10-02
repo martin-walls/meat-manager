@@ -47,16 +47,8 @@ public class NewOrderActivity extends AppCompatActivity
         ProductsAddedAdapter.ProductsAddedAdapterListener,
         ConfirmCancelDialog.ConfirmCancelListener {
 
-    private DBHandler dbHandler;
-
-    private HashMap<String, Integer> inputViews = new HashMap<>();
-
-    private SearchItemAdapter itemAdapter;
-    private List<SearchItem> searchItemList = new ArrayList<>();
-
-    private LinearLayout searchResultsLayout;
-    private AddNewTextView addNewView;
-    private ViewGroup rootView;
+    private final int REQUEST_REFRESH_ON_DONE = 1;
+    private final String DATE_FORMAT = "dd MMMM yyyy, HH:mm";
 
     private final String INPUT_PRODUCT = "product";
     private final String INPUT_QUANTITY = "quantity";
@@ -65,20 +57,27 @@ public class NewOrderActivity extends AppCompatActivity
 
     private String currentSearchType = INPUT_PRODUCT; // default initial value
 
+    private DBHandler dbHandler;
+
+    private HashMap<String, Integer> inputViews = new HashMap<>();
+
+    private SearchItemAdapter itemAdapter;
+    private List<SearchItem> searchItemList = new ArrayList<>();
+
+    private ProductsAddedAdapter productsAddedAdapter;
+    private List<ProductQuantity> productsAddedList = new ArrayList<>();
+    private RecyclerView productsAddedRecyclerView;
+
+    private LinearLayout searchResultsLayout;
+    private AddNewTextView addNewView;
+    private ViewGroup rootView;
+    private TextView addProductBtn;
+
+    // store ids/values of selected items
     private int selectedProductId;
     private int selectedDestId;
     private LocalDate selectedDate;
     private LocalDateTime selectedDateTime;
-
-    private TextView addProductBtn;
-
-    private List<ProductQuantity> productsAddedList = new ArrayList<>();
-    private ProductsAddedAdapter productsAddedAdapter;
-    private RecyclerView productsAddedRecyclerView;
-
-    private final String DATE_FORMAT = "dd MMMM yyyy, HH:mm";
-
-    private final int REQUEST_REFRESH_ON_DONE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,37 +169,39 @@ public class NewOrderActivity extends AppCompatActivity
         }
     }
 
-    private void showConfirmCancelDialog() {
-        DialogFragment dialog = new ConfirmCancelDialog();
-        dialog.show(getSupportFragmentManager(), "confirm_cancel");
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_REFRESH_ON_DONE) {
+            cancelSearch();
+            openSearch(currentSearchType);
+        }
     }
 
-    private void addProduct() {
-        ProductQuantity product = getProductFromInputsAndClear();
-        if (product != null) {
-//            productsAddedList.add(product);
-//
-//            LayoutInflater inflater = LayoutInflater.from(this);
-//            ViewGroup productsAlreadyAdded = findViewById(R.id.products_already_added);
-//
-//            View productView = inflater.inflate(R.layout.item_product_options, productsAlreadyAdded, false);
-//            TextView productName = productView.findViewById(R.id.product_name);
-//            productName.setText(product.getProduct().getProductName());
-//            TextView productMass = productView.findViewById(R.id.mass);
-//            productMass.setText(String.valueOf(product.getQuantityMass()));
-//            TextView productNumBoxes = productView.findViewById(R.id.num_boxes);
-//            if (product.getQuantityBoxes() < 0) {
-//                productNumBoxes.setVisibility(GONE);
-//            } else {
-//                productNumBoxes.setText(String.valueOf(product.getQuantityBoxes()));
-//            }
-//
-//            ImageButton deleteBtn = findViewById(R.id.btn_delete);
-//            deleteBtn.setOnClickListener(v -> delete);
-//
-//            productsAlreadyAdded.addView(productView);
-            productsAddedList.add(product);
-            productsAddedAdapter.notifyItemInserted(productsAddedList.size());
+    @Override
+    public void onSearchItemSelected(SearchItem item, String searchItemType) {
+        switch (searchItemType) {
+            case INPUT_PRODUCT:
+                selectedProductId = item.getId();
+                break;
+            case INPUT_DESTINATION:
+                selectedDestId = item.getId();
+                break;
+        }
+
+        TextInputEditText editText = (TextInputEditText) getCurrentFocus();
+        editText.setText(item.getName());
+        editText.clearFocus();
+        cancelSearch();
+    }
+
+    @Override
+    public void onAddNewProductDoneAction(Product newProduct) {
+        boolean successful = dbHandler.addProduct(newProduct);
+        if (successful) {
+            // refresh list
+            cancelSearch();
+            openSearch(currentSearchType);
         }
     }
 
@@ -208,6 +209,56 @@ public class NewOrderActivity extends AppCompatActivity
     public void deleteProductAdded(int position) {
         productsAddedList.remove(position);
         productsAddedAdapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int day) {
+        // (month + 1) adjusts for DatePicker returning month in range 0-11, LocalDate uses 1-12
+        selectedDate = LocalDate.of(year, month + 1, day);
+        TimePickerDialog timePickerDialog =
+                new TimePickerDialog(this, this, 12, 0, true);
+        timePickerDialog.show();
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Calendar now = Calendar.getInstance();
+        //noinspection MagicConstant
+        if (selectedDate.getYear() == now.get(Calendar.YEAR) && selectedDate.getMonthValue() == now.get(Calendar.MONTH)
+                && selectedDate.getDayOfMonth() == now.get(Calendar.DAY_OF_MONTH)
+                && (hourOfDay < now.get(Calendar.HOUR_OF_DAY)
+                || (hourOfDay == now.get(Calendar.HOUR_OF_DAY) && minute <= now.get(Calendar.MINUTE) + 10))) {
+            Toast.makeText(this, R.string.input_error_time_must_be_future, Toast.LENGTH_SHORT)
+                    .show();
+
+            TimePickerDialog timePickerDialog =
+                    new TimePickerDialog(this, this, 12, 0, true);
+            timePickerDialog.show();
+        } else {
+            selectedDateTime = LocalDateTime.of(selectedDate, LocalTime.of(hourOfDay, minute));
+            String formatDate = selectedDateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+            TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
+            editTextDate.setText(formatDate);
+        }
+    }
+
+    @Override
+    public void onConfirmCancelYesAction() {
+        finish();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = findViewById(R.id.root_layout);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private void addProduct() {
+        ProductQuantity product = getProductFromInputsAndClear();
+        if (product != null) {
+            productsAddedList.add(product);
+            productsAddedAdapter.notifyItemInserted(productsAddedList.size());
+        }
     }
 
     private ProductQuantity getProductFromInputsAndClear() {
@@ -363,79 +414,6 @@ public class NewOrderActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_REFRESH_ON_DONE) {
-            cancelSearch();
-            openSearch(currentSearchType);
-        }
-    }
-
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        View view = findViewById(R.id.root_layout);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    @Override
-    public void onItemSelected(SearchItem item, String searchItemType) {
-        switch (searchItemType) {
-            case INPUT_PRODUCT:
-                selectedProductId = item.getId();
-                break;
-            case INPUT_DESTINATION:
-                selectedDestId = item.getId();
-                break;
-        }
-
-        TextInputEditText editText = (TextInputEditText) getCurrentFocus();
-        editText.setText(item.getName());
-        editText.clearFocus();
-        cancelSearch();
-    }
-
-    @Override
-    public void onAddNewProductDoneAction(Product newProduct) {
-        boolean successful = dbHandler.addProduct(newProduct);
-        if (successful) {
-            // refresh list
-            cancelSearch();
-            openSearch(currentSearchType);
-        }
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int day) {
-        // (month + 1) adjusts for DatePicker returning month in range 0-11, LocalDate uses 1-12
-        selectedDate = LocalDate.of(year, month + 1, day);
-        TimePickerDialog timePickerDialog =
-                new TimePickerDialog(this, this, 12, 0, true);
-        timePickerDialog.show();
-    }
-
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Calendar now = Calendar.getInstance();
-        //noinspection MagicConstant
-        if (selectedDate.getYear() == now.get(Calendar.YEAR) && selectedDate.getMonthValue() == now.get(Calendar.MONTH)
-                && selectedDate.getDayOfMonth() == now.get(Calendar.DAY_OF_MONTH)
-                && (hourOfDay < now.get(Calendar.HOUR_OF_DAY)
-                || (hourOfDay == now.get(Calendar.HOUR_OF_DAY) && minute <= now.get(Calendar.MINUTE) + 10))) {
-            Toast.makeText(this, R.string.input_error_time_must_be_future, Toast.LENGTH_SHORT)
-                    .show();
-
-            TimePickerDialog timePickerDialog =
-                    new TimePickerDialog(this, this, 12, 0, true);
-            timePickerDialog.show();
-        } else {
-            selectedDateTime = LocalDateTime.of(selectedDate, LocalTime.of(hourOfDay, minute));
-            String formatDate = selectedDateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-            TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
-            editTextDate.setText(formatDate);
-        }
-    }
-
     private boolean addOrderToDb() {
         boolean isValid = true;
         Order newOrder = new Order();
@@ -513,8 +491,8 @@ public class NewOrderActivity extends AppCompatActivity
                 && TextUtils.isEmpty(editTextDate.getText());
     }
 
-    @Override
-    public void onConfirmCancelYesAction() {
-        finish();
+    private void showConfirmCancelDialog() {
+        DialogFragment dialog = new ConfirmCancelDialog();
+        dialog.show(getSupportFragmentManager(), "confirm_cancel");
     }
 }

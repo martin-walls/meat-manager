@@ -437,7 +437,7 @@ public class NewContractActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemSelected(SearchItem item, String searchItemType) {
+    public void onSearchItemSelected(SearchItem item, String searchItemType) {
         switch (searchItemType) {
             case INPUT_PRODUCT:
                 selectedProductId = item.getId();
