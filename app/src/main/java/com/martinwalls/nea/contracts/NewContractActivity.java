@@ -198,8 +198,11 @@ public class NewContractActivity extends AppCompatActivity
                 }
                 return true;
             case R.id.action_cancel:
-                confirmCancel();
-//                finish();
+                if (!areAllFieldsEmpty()) {
+                    confirmCancel();
+                } else {
+                    finish();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -550,13 +553,22 @@ public class NewContractActivity extends AppCompatActivity
         return false;
     }
 
-    @Override
-    public void onConfirmCancelYesAction() {
-        Toast.makeText(this, "YES", Toast.LENGTH_SHORT).show();
+    private boolean areAllFieldsEmpty() {
+        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
+        TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
+        TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
+        TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
+        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
+
+        return TextUtils.isEmpty(editTextProduct.getText())
+                && TextUtils.isEmpty(editTextMass.getText())
+                && TextUtils.isEmpty(editTextNumBoxes.getText())
+                && TextUtils.isEmpty(editTextDest.getText())
+                && TextUtils.isEmpty(editTextRepeatInterval.getText());
     }
 
     @Override
-    public void onConfirmCancelNoAction() {
-        Toast.makeText(this, "NO", Toast.LENGTH_SHORT).show();
+    public void onConfirmCancelYesAction() {
+        finish();
     }
 }

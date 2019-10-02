@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -41,7 +40,7 @@ public class ConfirmCancelDialog extends DialogFragment {
     }
 
     @Override
-    public void onAttach(@NonNull Context context) {
+    public void onAttach(Context context) {
         super.onAttach(context);
         try {
             listener = (ConfirmCancelListener) context;
@@ -53,6 +52,7 @@ public class ConfirmCancelDialog extends DialogFragment {
 
     public interface ConfirmCancelListener {
         void onConfirmCancelYesAction();
-        void onConfirmCancelNoAction();
+        // doesn't need to be implemented if NO btn should just cancel dialog
+        default void onConfirmCancelNoAction() {}
     }
 }
