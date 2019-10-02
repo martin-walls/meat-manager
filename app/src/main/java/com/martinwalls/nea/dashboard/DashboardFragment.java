@@ -23,14 +23,11 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getActivity().setTitle(R.string.dashboard_title);
-        return inflater.inflate(R.layout.fragment_dashboard, container, false);
-    }
+        View fragmentView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
         dbHandler = new DBHandler(getContext());
 
-        BarChartView graphView = view.findViewById(R.id.graph);
+        BarChartView graphView = fragmentView.findViewById(R.id.graph);
 
         List<BarChartEntry> entries = new ArrayList<>();
 
@@ -51,5 +48,7 @@ public class DashboardFragment extends Fragment {
         }
 
         graphView.setData(entries);
+
+        return fragmentView;
     }
 }

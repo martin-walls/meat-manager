@@ -59,11 +59,6 @@ public class ContractsFragment extends Fragment
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        //todo move initialisation logic here from onCreateView
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         if (dbHandler == null) {
