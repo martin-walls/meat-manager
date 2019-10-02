@@ -14,10 +14,10 @@ import com.martinwalls.nea.R;
 
 public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
 
-    private BaseAdapter adapter;
-
-    private Drawable deleteIcon;
     private final ColorDrawable background;
+
+    private BaseAdapter adapter;
+    private Drawable deleteIcon;
 
     public SwipeToDeleteCallback(BaseAdapter adapter, Context context) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);

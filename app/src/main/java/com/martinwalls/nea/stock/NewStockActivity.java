@@ -38,6 +38,17 @@ public class NewStockActivity extends AppCompatActivity
         AddNewProductDialog.AddNewProductListener,
         ConfirmCancelDialog.ConfirmCancelListener {
 
+    private final int REQUEST_REFRESH_ON_DONE = 1;
+
+    private final String INPUT_PRODUCT = "product";
+    private final String INPUT_SUPPLIER = "supplier";
+    private final String INPUT_QUANTITY = "quantity";
+    private final String INPUT_LOCATION = "location";
+    private final String INPUT_DESTINATION = "destination";
+    private final String INPUT_QUALITY = "quality";
+
+    private String currentSearchType = INPUT_PRODUCT; // default value so it's not null
+
     private DBHandler dbHandler;
 
     private HashMap<String, Integer> inputViews = new HashMap<>();
@@ -49,21 +60,11 @@ public class NewStockActivity extends AppCompatActivity
     private AddNewTextView addNewView;
     private ViewGroup rootView;
 
-    private final String INPUT_PRODUCT = "product";
-    private final String INPUT_SUPPLIER = "supplier";
-    private final String INPUT_QUANTITY = "quantity";
-    private final String INPUT_LOCATION = "location";
-    private final String INPUT_DESTINATION = "destination";
-    private final String INPUT_QUALITY = "quality";
-
-    private String currentSearchType = INPUT_PRODUCT; // default value so it's not null
-
+    // store ids of selected items
     private int selectedProductId;
     private int selectedSupplierId;
     private int selectedLocationId;
     private int selectedDestId;
-
-    private final int REQUEST_REFRESH_ON_DONE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,12 +118,6 @@ public class NewStockActivity extends AppCompatActivity
                 findViewById(R.id.input_layout_quality),
                 findViewById(R.id.edit_text_quality));
     }
-//
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        dbHandler.close();
-//    }
 
     @Override
     public void onResume() {
@@ -158,6 +153,59 @@ public class NewStockActivity extends AppCompatActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_REFRESH_ON_DONE) {
+            cancelSearch();
+            openSearch(currentSearchType);
+        }
+    }
+
+    @Override
+    public void onSearchItemSelected(SearchItem item, String searchItemType) {
+        switch (searchItemType) {
+            case INPUT_PRODUCT:
+                selectedProductId = item.getId();
+                break;
+            case INPUT_SUPPLIER:
+                selectedSupplierId = item.getId();
+                break;
+            case INPUT_LOCATION:
+                selectedLocationId = item.getId();
+                break;
+            case INPUT_DESTINATION:
+                selectedDestId = item.getId();
+                break;
+        }
+
+        TextInputEditText editText = (TextInputEditText) getCurrentFocus();
+        editText.setText(item.getName());
+        editText.clearFocus();
+        cancelSearch();
+    }
+
+    @Override
+    public void onAddNewProductDoneAction(Product newProduct) {
+        boolean successful = dbHandler.addProduct(newProduct);
+        if (successful) {
+            // refresh list
+            cancelSearch();
+            openSearch(currentSearchType);
+        }
+    }
+
+    @Override
+    public void onConfirmCancelYesAction() {
+        finish();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = findViewById(R.id.root_layout);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void showConfirmCancelDialog() {
@@ -292,54 +340,6 @@ public class NewStockActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_REFRESH_ON_DONE) {
-            cancelSearch();
-            openSearch(currentSearchType);
-        }
-    }
-
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        View view = findViewById(R.id.root_layout);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    @Override
-    public void onSearchItemSelected(SearchItem item, String searchItemType) {
-        switch (searchItemType) {
-            case INPUT_PRODUCT:
-                selectedProductId = item.getId();
-                break;
-            case INPUT_SUPPLIER:
-                selectedSupplierId = item.getId();
-                break;
-            case INPUT_LOCATION:
-                selectedLocationId = item.getId();
-                break;
-            case INPUT_DESTINATION:
-                selectedDestId = item.getId();
-                break;
-        }
-
-        TextInputEditText editText = (TextInputEditText) getCurrentFocus();
-        editText.setText(item.getName());
-        editText.clearFocus();
-        cancelSearch();
-    }
-
-    @Override
-    public void onAddNewProductDoneAction(Product newProduct) {
-        boolean successful = dbHandler.addProduct(newProduct);
-        if (successful) {
-            // refresh list
-            cancelSearch();
-            openSearch(currentSearchType);
-        }
-    }
-
     private boolean addStockToDb() {
         boolean isValid = true;
         StockItem newStockItem = new StockItem();
@@ -439,10 +439,5 @@ public class NewStockActivity extends AppCompatActivity
                 &&TextUtils.isEmpty(editLocation.getText())
                 &&TextUtils.isEmpty(editDest.getText())
                 &&TextUtils.isEmpty(editQuality.getText());
-    }
-
-    @Override
-    public void onConfirmCancelYesAction() {
-        finish();
     }
 }

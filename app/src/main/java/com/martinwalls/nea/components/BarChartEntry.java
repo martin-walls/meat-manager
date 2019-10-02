@@ -1,6 +1,7 @@
 package com.martinwalls.nea.components;
 
 public class BarChartEntry {
+
     private String name;
     private float amount;
     private float amountRequired;

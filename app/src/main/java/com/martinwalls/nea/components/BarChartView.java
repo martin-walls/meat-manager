@@ -139,23 +139,6 @@ public class BarChartView extends View {
         decimalFormat = new DecimalFormat("#.###");
     }
 
-    public void setData(List<BarChartEntry> newDataSet) {
-        xMax = newDataSet.get(0).getAmount();
-
-        for (BarChartEntry entry : newDataSet) {
-            if (entry.getAmount() > xMax) {
-                xMax = entry.getAmount();
-            }
-            if (entry.getAmountRequired() > xMax) {
-                xMax = entry.getAmountRequired();
-            }
-        }
-
-        dataSet.clear();
-        dataSet.addAll(newDataSet);
-        invalidate();
-    }
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
@@ -311,5 +294,22 @@ public class BarChartView extends View {
             invalidate();
         }
         return true;
+    }
+
+    public void setData(List<BarChartEntry> newDataSet) {
+        xMax = newDataSet.get(0).getAmount();
+
+        for (BarChartEntry entry : newDataSet) {
+            if (entry.getAmount() > xMax) {
+                xMax = entry.getAmount();
+            }
+            if (entry.getAmountRequired() > xMax) {
+                xMax = entry.getAmountRequired();
+            }
+        }
+
+        dataSet.clear();
+        dataSet.addAll(newDataSet);
+        invalidate();
     }
 }

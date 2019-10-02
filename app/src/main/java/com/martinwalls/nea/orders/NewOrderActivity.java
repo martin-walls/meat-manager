@@ -253,6 +253,11 @@ public class NewOrderActivity extends AppCompatActivity
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    private void showConfirmCancelDialog() {
+        DialogFragment dialog = new ConfirmCancelDialog();
+        dialog.show(getSupportFragmentManager(), "confirm_cancel");
+    }
+
     private void addProduct() {
         ProductQuantity product = getProductFromInputsAndClear();
         if (product != null) {
@@ -489,10 +494,5 @@ public class NewOrderActivity extends AppCompatActivity
                 && TextUtils.isEmpty(editTextNumBoxes.getText())
                 && TextUtils.isEmpty(editTextDest.getText())
                 && TextUtils.isEmpty(editTextDate.getText());
-    }
-
-    private void showConfirmCancelDialog() {
-        DialogFragment dialog = new ConfirmCancelDialog();
-        dialog.show(getSupportFragmentManager(), "confirm_cancel");
     }
 }

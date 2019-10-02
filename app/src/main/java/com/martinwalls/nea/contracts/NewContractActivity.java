@@ -56,29 +56,40 @@ public class NewContractActivity extends AppCompatActivity
         RepeatIntervalDialog.RepeatIntervalDialogListener,
         ConfirmCancelDialog.ConfirmCancelListener {
 
+    private final int REQUEST_REFRESH_ON_DONE = 1;
+
     private final String INPUT_PRODUCT = "product";
     private final String INPUT_QUANTITY = "quantity";
     private final String INPUT_DESTINATION = "destination";
     private final String INPUT_REPEAT_INTERVAL = "repeatInterval";
     private final String INPUT_REPEAT_ON = "repeatOn";
     private final String INPUT_REMINDER = "reminder";
-    private final int REQUEST_REFRESH_ON_DONE = 1;
+
+    private String currentSearchType = INPUT_PRODUCT; // default value
+
     private DBHandler dbHandler;
+
     private HashMap<String, Integer> inputViews = new HashMap<>();
+
     private SearchItemAdapter itemAdapter;
     private List<SearchItem> searchItemList = new ArrayList<>();
+
+    private ProductsAddedAdapter productsAddedAdapter;
+    private List<ProductQuantity> productsAddedList = new ArrayList<>();
+    private RecyclerView productsAddedRecyclerView;
+
     private LinearLayout searchResultsLayout;
     private AddNewTextView addNewView;
     private ViewGroup rootView;
-    private String currentSearchType = INPUT_PRODUCT; // default value
+    private TextView addProductBtn;
+
+    // store ids/values of selected items
     private int selectedProductId;
     private int selectedDestId;
     private Interval selectedRepeatInterval;
-    private TextView addProductBtn;
-    private List<ProductQuantity> productsAddedList = new ArrayList<>();
-    private ProductsAddedAdapter productsAddedAdapter;
-    private RecyclerView productsAddedRecyclerView;
+
     private ArrayAdapter<CharSequence> repeatOnSpnAdapter;
+
     private boolean isWeek = true;
 
     @Override
@@ -209,41 +220,82 @@ public class NewContractActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_REFRESH_ON_DONE) {
+            cancelSearch();
+            openSearch(currentSearchType);
+        }
+    }
+
+    @Override
+    public void onSearchItemSelected(SearchItem item, String searchItemType) {
+        switch (searchItemType) {
+            case INPUT_PRODUCT:
+                selectedProductId = item.getId();
+                break;
+            case INPUT_DESTINATION:
+                selectedDestId = item.getId();
+                break;
+        }
+
+        TextInputEditText editText = (TextInputEditText) getCurrentFocus();
+        editText.setText(item.getName());
+        editText.clearFocus();
+        cancelSearch();
+    }
+
+    @Override
+    public void onAddNewProductDoneAction(Product newProduct) {
+        boolean successful = dbHandler.addProduct(newProduct);
+        if (successful) {
+            // refresh list
+            cancelSearch();
+            openSearch(currentSearchType);
+        }
+    }
+
+    @Override
+    public void deleteProductAdded(int position) {
+        productsAddedList.remove(position);
+        productsAddedAdapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void onRadioBtnClicked(int id) {
+        switch (id) {
+            case RepeatIntervalDialog.OPTION_WEEK:
+                setSelectedRepeatInterval(new Interval(1, Interval.TimeUnit.WEEK));
+                break;
+            case RepeatIntervalDialog.OPTION_TWO_WEEK:
+                setSelectedRepeatInterval(new Interval(2, Interval.TimeUnit.WEEK));
+                break;
+            case RepeatIntervalDialog.OPTION_MONTH:
+                setSelectedRepeatInterval(new Interval(1, Interval.TimeUnit.MONTH));
+                break;
+        }
+    }
+
+    @Override
+    public void onCustomIntervalSelected(Interval interval) {
+        setSelectedRepeatInterval(interval);
+    }
+
+    @Override
+    public void onConfirmCancelYesAction() {
+        finish();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = findViewById(R.id.root_layout);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
     private void showConfirmCancelDialog() {
         DialogFragment dialog = new ConfirmCancelDialog();
         dialog.show(getSupportFragmentManager(), "confirm_cancel");
-    }
-
-    private void setSelectedRepeatInterval(Interval interval) {
-        // repeat on input is hidden until repeat interval is set
-        LinearLayout inputRepeatOn = findViewById(R.id.input_repeat_on);
-        inputRepeatOn.setVisibility(View.VISIBLE);
-
-        selectedRepeatInterval = interval;
-        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
-        if (interval.getValue() == 1) {
-            editTextRepeatInterval.setText(getString(R.string.contracts_repeat_interval_display_one,
-                    interval.getUnit().name().toLowerCase()));
-        } else {
-            editTextRepeatInterval.setText(getString(R.string.contracts_repeat_interval_display_multiple,
-                    interval.getValue(), interval.getUnit().name().toLowerCase()));
-        }
-        TextView repeatOnTxt = findViewById(R.id.text_repeat_on);
-        if (!isWeek && interval.getUnit() == Interval.TimeUnit.WEEK) {
-            repeatOnSpnAdapter.clear();
-            repeatOnSpnAdapter.addAll(getResources().getStringArray(R.array.weekdays));
-            repeatOnSpnAdapter.notifyDataSetChanged();
-            repeatOnTxt.setText(R.string.contracts_repeat_on_week);
-            isWeek = true;
-        } else if (isWeek && interval.getUnit() == Interval.TimeUnit.MONTH) {
-            repeatOnSpnAdapter.clear();
-            for (int i = 1; i <= 31; i++) {
-                repeatOnSpnAdapter.add("Day " + i);
-            }
-            repeatOnSpnAdapter.notifyDataSetChanged();
-            repeatOnTxt.setText(R.string.contracts_repeat_on_month);
-            isWeek = false;
-        }
     }
 
     private void addProduct() {
@@ -252,12 +304,6 @@ public class NewContractActivity extends AppCompatActivity
             productsAddedList.add(product);
             productsAddedAdapter.notifyItemInserted(productsAddedList.size());
         }
-    }
-
-    @Override
-    public void deleteProductAdded(int position) {
-        productsAddedList.remove(position);
-        productsAddedAdapter.notifyItemRemoved(position);
     }
 
     private ProductQuantity getProductFromInputsAndClear() {
@@ -307,6 +353,38 @@ public class NewContractActivity extends AppCompatActivity
             return productQuantity;
         } else {
             return null;
+        }
+    }
+
+    private void setSelectedRepeatInterval(Interval interval) {
+        // repeat on input is hidden until repeat interval is set
+        LinearLayout inputRepeatOn = findViewById(R.id.input_repeat_on);
+        inputRepeatOn.setVisibility(View.VISIBLE);
+
+        selectedRepeatInterval = interval;
+        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
+        if (interval.getValue() == 1) {
+            editTextRepeatInterval.setText(getString(R.string.contracts_repeat_interval_display_one,
+                    interval.getUnit().name().toLowerCase()));
+        } else {
+            editTextRepeatInterval.setText(getString(R.string.contracts_repeat_interval_display_multiple,
+                    interval.getValue(), interval.getUnit().name().toLowerCase()));
+        }
+        TextView repeatOnTxt = findViewById(R.id.text_repeat_on);
+        if (!isWeek && interval.getUnit() == Interval.TimeUnit.WEEK) {
+            repeatOnSpnAdapter.clear();
+            repeatOnSpnAdapter.addAll(getResources().getStringArray(R.array.weekdays));
+            repeatOnSpnAdapter.notifyDataSetChanged();
+            repeatOnTxt.setText(R.string.contracts_repeat_on_week);
+            isWeek = true;
+        } else if (isWeek && interval.getUnit() == Interval.TimeUnit.MONTH) {
+            repeatOnSpnAdapter.clear();
+            for (int i = 1; i <= 31; i++) {
+                repeatOnSpnAdapter.add("Day " + i);
+            }
+            repeatOnSpnAdapter.notifyDataSetChanged();
+            repeatOnTxt.setText(R.string.contracts_repeat_on_month);
+            isWeek = false;
         }
     }
 
@@ -421,68 +499,6 @@ public class NewContractActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_REFRESH_ON_DONE) {
-            cancelSearch();
-            openSearch(currentSearchType);
-        }
-    }
-
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        View view = findViewById(R.id.root_layout);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    @Override
-    public void onSearchItemSelected(SearchItem item, String searchItemType) {
-        switch (searchItemType) {
-            case INPUT_PRODUCT:
-                selectedProductId = item.getId();
-                break;
-            case INPUT_DESTINATION:
-                selectedDestId = item.getId();
-                break;
-        }
-
-        TextInputEditText editText = (TextInputEditText) getCurrentFocus();
-        editText.setText(item.getName());
-        editText.clearFocus();
-        cancelSearch();
-    }
-
-    @Override
-    public void onAddNewProductDoneAction(Product newProduct) {
-        boolean successful = dbHandler.addProduct(newProduct);
-        if (successful) {
-            // refresh list
-            cancelSearch();
-            openSearch(currentSearchType);
-        }
-    }
-
-    @Override
-    public void onRadioBtnClicked(int id) {
-        switch (id) {
-            case RepeatIntervalDialog.OPTION_WEEK:
-                setSelectedRepeatInterval(new Interval(1, Interval.TimeUnit.WEEK));
-                break;
-            case RepeatIntervalDialog.OPTION_TWO_WEEK:
-                setSelectedRepeatInterval(new Interval(2, Interval.TimeUnit.WEEK));
-                break;
-            case RepeatIntervalDialog.OPTION_MONTH:
-                setSelectedRepeatInterval(new Interval(1, Interval.TimeUnit.MONTH));
-                break;
-        }
-    }
-
-    @Override
-    public void onCustomIntervalSelected(Interval interval) {
-        setSelectedRepeatInterval(interval);
-    }
-
     private boolean addContractToDb() {
         boolean isValid = true;
         Contract newContract = new Contract();
@@ -565,10 +581,5 @@ public class NewContractActivity extends AppCompatActivity
                 && TextUtils.isEmpty(editTextNumBoxes.getText())
                 && TextUtils.isEmpty(editTextDest.getText())
                 && TextUtils.isEmpty(editTextRepeatInterval.getText());
-    }
-
-    @Override
-    public void onConfirmCancelYesAction() {
-        finish();
     }
 }

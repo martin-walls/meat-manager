@@ -29,14 +29,6 @@ public class CustomRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
-    public void setEmptyView(View emptyView) {
-        this.emptyView = emptyView;
-        // if adapter already set, make sure the empty view is visible/hidden as required
-        if (getAdapter() != null) {
-            updateEmptyView();
-        }
-    }
-
     @Override
     public void setAdapter(RecyclerView.Adapter adapter) {
         if (getAdapter() != null) {
@@ -47,6 +39,14 @@ public class CustomRecyclerView extends RecyclerView {
         }
         super.setAdapter(adapter);
         updateEmptyView();
+    }
+
+    public void setEmptyView(View emptyView) {
+        this.emptyView = emptyView;
+        // if adapter already set, make sure the empty view is visible/hidden as required
+        if (getAdapter() != null) {
+            updateEmptyView();
+        }
     }
 
     private void updateEmptyView() {
