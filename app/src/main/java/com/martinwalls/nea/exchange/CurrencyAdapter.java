@@ -15,6 +15,7 @@ import java.util.List;
 
 public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHolder> {
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final int STANDARD_VIEW = 0;
     private final int SECTION_VIEW = 1;
     private final int SECTION_VIEW_NO_FAV = 2;
@@ -52,7 +53,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
         }
     }
 
-    public CurrencyAdapter(List<Currency> currencyList, List<Currency> favCurrencyList,
+    CurrencyAdapter(List<Currency> currencyList, List<Currency> favCurrencyList,
                            CurrencyAdapterListener listener) {
         this.currencyList = currencyList;
         this.favCurrencyList = favCurrencyList;
@@ -73,17 +74,6 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
                     .inflate(R.layout.item_currencies, parent, false);
         }
         return new ViewHolder(itemView, viewType);
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (position == 0 && favCurrencyList.size() == 0) {
-            return SECTION_VIEW_NO_FAV;
-        } else if (position == 0 || position == favCurrencyList.size()) {
-            return SECTION_VIEW;
-        } else {
-            return STANDARD_VIEW;
-        }
     }
 
     @Override
@@ -109,6 +99,17 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
         holder.favouritesStar.setImageDrawable(currency.isFavourite()
                 ? holder.favouritesStar.getContext().getDrawable(R.drawable.ic_star_filled)
                 : holder.favouritesStar.getContext().getDrawable(R.drawable.ic_star_outline));
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0 && favCurrencyList.size() == 0) {
+            return SECTION_VIEW_NO_FAV;
+        } else if (position == 0 || position == favCurrencyList.size()) {
+            return SECTION_VIEW;
+        } else {
+            return STANDARD_VIEW;
+        }
     }
 
     @Override

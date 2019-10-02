@@ -9,20 +9,6 @@ public class CacheHelper {
 
     private CacheHelper() {}
 
-    private static String getCacheDir(Context context) {
-        return context.getCacheDir().getPath();
-    }
-
-    private static File getCacheFile(Context context, String key) {
-        try {
-            key = URLEncoder.encode(key, "UTF-8");
-            return new File(getCacheDir(context) + "/" + key);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public static void save(Context context, String key, String value) {
         try {
             File cache = getCacheFile(context, key);
@@ -62,5 +48,19 @@ public class CacheHelper {
             return false;
         }
         return cache.exists();
+    }
+
+    private static String getCacheDir(Context context) {
+        return context.getCacheDir().getPath();
+    }
+
+    private static File getCacheFile(Context context, String key) {
+        try {
+            key = URLEncoder.encode(key, "UTF-8");
+            return new File(getCacheDir(context) + "/" + key);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

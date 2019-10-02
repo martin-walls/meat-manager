@@ -80,18 +80,18 @@ public class EditProductsActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onAddNewProductDoneAction(Product newProduct) {
+        dbHandler.addProduct(newProduct);
+        loadProducts();
+    }
+
     private void loadProducts() {
         String sortBy = "meatType"; //todo shared preferences
         productList.clear();
         productList.addAll(Utils.mergeSort(dbHandler.getAllProducts(),
                 sortBy == "name" ? Product.comparatorAlpha() : Product.comparatorMeatType()));
         productsAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onAddNewProductDoneAction(Product newProduct) {
-        dbHandler.addProduct(newProduct);
-        loadProducts();
     }
 
     //todo be able to edit products ?-- may not be needed, can just delete and re-add

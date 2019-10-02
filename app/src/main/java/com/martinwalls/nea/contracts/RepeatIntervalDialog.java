@@ -16,14 +16,14 @@ import com.martinwalls.nea.models.Interval;
 
 public class RepeatIntervalDialog extends DialogFragment {
 
-    public static final String EXTRA_SELECTED = "selected";
-    public static final String EXTRA_TIME_VALUE = "timeValue";
-    public static final String EXTRA_TIME_UNIT = "timeUnit";
+    static final String EXTRA_SELECTED = "selected";
+    static final String EXTRA_TIME_VALUE = "timeValue";
+    static final String EXTRA_TIME_UNIT = "timeUnit";
 
-    public static final int OPTION_WEEK = 1;
-    public static final int OPTION_TWO_WEEK = 2;
-    public static final int OPTION_MONTH = 3;
-    public static final int OPTION_CUSTOM = 4;
+    static final int OPTION_WEEK = 1;
+    static final int OPTION_TWO_WEEK = 2;
+    static final int OPTION_MONTH = 3;
+    static final int OPTION_CUSTOM = 4;
 
     private RepeatIntervalDialogListener listener;
 
@@ -156,16 +156,6 @@ public class RepeatIntervalDialog extends DialogFragment {
         return builder.create();
     }
 
-    private void onRadioBtnClicked(int id) {
-        if (id == OPTION_CUSTOM) {
-            radioGroup.setVisibility(View.GONE);
-            customInterval.setVisibility(View.VISIBLE);
-        } else {
-            listener.onRadioBtnClicked(id);
-            getDialog().dismiss();
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -174,6 +164,16 @@ public class RepeatIntervalDialog extends DialogFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement " + RepeatIntervalDialogListener.class.getSimpleName());
+        }
+    }
+
+    private void onRadioBtnClicked(int id) {
+        if (id == OPTION_CUSTOM) {
+            radioGroup.setVisibility(View.GONE);
+            customInterval.setVisibility(View.VISIBLE);
+        } else {
+            listener.onRadioBtnClicked(id);
+            getDialog().dismiss();
         }
     }
 

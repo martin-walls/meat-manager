@@ -22,10 +22,10 @@ import java.util.List;
 
 public class LocationsActivity extends AppCompatActivity {
 
+    private DBHandler dbHandler;
+
     private LocationsAdapter locationsAdapter;
     private List<Location> locationList = new ArrayList<>();
-
-    private DBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -25,8 +25,8 @@ public class ContractsFragment extends Fragment
 
     private DBHandler dbHandler;
 
-    private List<Contract> contractList = new ArrayList<>();
     private ContractsAdapter contractsAdapter;
+    private List<Contract> contractList = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -59,6 +59,11 @@ public class ContractsFragment extends Fragment
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        //todo move initialisation logic here from onCreateView
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (dbHandler == null) {
@@ -86,6 +91,13 @@ public class ContractsFragment extends Fragment
         }
     }
 
+    @Override
+    public void onContractClicked(Contract contract) {
+        Intent detailIntent = new Intent(getContext(), ContractDetailActivity.class);
+        detailIntent.putExtra(ContractDetailActivity.EXTRA_CONTRACT_ID, contract.getContractId());
+        startActivity(detailIntent);
+    }
+
     private void loadContracts() {
         contractList.clear();
         contractList.addAll(Utils.mergeSort(dbHandler.getAllContracts(), new Comparator<Contract>() {
@@ -95,12 +107,5 @@ public class ContractsFragment extends Fragment
             }
         }));
         contractsAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onContractClicked(Contract contract) {
-        Intent detailIntent = new Intent(getContext(), ContractDetailActivity.class);
-        detailIntent.putExtra(ContractDetailActivity.EXTRA_CONTRACT_ID, contract.getContractId());
-        startActivity(detailIntent);
     }
 }

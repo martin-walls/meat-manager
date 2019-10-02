@@ -23,10 +23,10 @@ import java.util.stream.Collectors;
 
 public class EditLocationsActivity extends AppCompatActivity {
 
-    private DBHandler dbHandler;
-
     public static final String EXTRA_LOCATION_TYPE = "location_type";
-    private final String LOCATION_TYPE_DEFAULT = "location";
+    private final String LOCATION_TYPE_DEFAULT = Location.LocationType.Storage.name();
+
+    private DBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

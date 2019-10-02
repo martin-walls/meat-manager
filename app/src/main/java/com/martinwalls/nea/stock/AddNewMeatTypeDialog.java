@@ -71,13 +71,13 @@ public class AddNewMeatTypeDialog extends DialogFragment {
         }
     }
 
-    public interface AddNewMeatTypeListener {
-        void onAddNewMeatTypeDoneAction(String meatType);
-    }
-
     private boolean isNewMeatTypeAlreadyAdded(String meatType) {
         DBHandler dbHandler = new DBHandler(getContext());
         List<String> meatTypes = dbHandler.getAllMeatTypes();
         return meatTypes.contains(meatType);
+    }
+
+    public interface AddNewMeatTypeListener {
+        void onAddNewMeatTypeDoneAction(String meatType);
     }
 }

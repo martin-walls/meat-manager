@@ -20,12 +20,9 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
 
     private ExchangeDbHandler dbHandler;
 
-    private CurrencyAdapter favCurrencyAdapter;
-    private CurrencyAdapter allCurrencyAdapter;
+    private CurrencyAdapter currencyAdapter;
     private List<Currency> allCurrencyList;
     private List<Currency> favCurrencyList = new ArrayList<>();
-
-    private CurrencyAdapter currencyAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

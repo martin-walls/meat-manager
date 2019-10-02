@@ -31,8 +31,8 @@ public class OrdersFragment extends Fragment
 
     private DBHandler dbHandler;
 
-    private List<Order> orderList = new ArrayList<>();
     private OrdersAdapter ordersAdapter;
+    private List<Order> orderList = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,6 +92,13 @@ public class OrdersFragment extends Fragment
         }
     }
 
+    @Override
+    public void onOrderSelected(Order order) {
+        Intent detailIntent = new Intent(getContext(), OrderDetailActivity.class);
+        detailIntent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, order.getOrderId());
+        startActivity(detailIntent);
+    }
+
     private void loadOrders() {
         orderList.clear();
         // sort by date
@@ -102,12 +109,5 @@ public class OrdersFragment extends Fragment
             }
         }));
         ordersAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onOrderSelected(Order order) {
-        Intent detailIntent = new Intent(getContext(), OrderDetailActivity.class);
-        detailIntent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, order.getOrderId());
-        startActivity(detailIntent);
     }
 }

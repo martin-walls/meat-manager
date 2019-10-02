@@ -137,26 +137,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_EXCHANGE_API_SERVICE) {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_holder);
+            if (fragment instanceof ExchangeFragment) {
+                ((ExchangeFragment) fragment).onRatesFetched(data);
+            }
+        }
+    }
+
     private void replaceFragment(Page newPage) {
         Fragment newFragment = newPage.getFragment();
-
-//        switch (newPage) {
-//            case DASHBOARD:
-//                newFragment = new DashboardFragment();
-//                break;
-//            case STOCK:
-//                newFragment = new StockFragment();
-//                break;
-//            case CONTRACTS:
-//                newFragment = new ContractsFragment();
-//                break;
-//            case EXCHANGE:
-//                newFragment = new ExchangeFragment();
-//                break;
-//            default:
-//                newFragment = new Fragment();
-//                break;
-//        }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -173,17 +166,6 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_EXCHANGE_API_SERVICE) {
-            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_holder);
-            if (fragment instanceof ExchangeFragment) {
-                ((ExchangeFragment) fragment).onRatesFetched(data);
-            }
         }
     }
 }

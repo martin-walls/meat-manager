@@ -51,49 +51,5 @@ public class DashboardFragment extends Fragment {
         }
 
         graphView.setData(entries);
-
-/*
-        HorizontalBarChart chart = view.findViewById(R.id.chart);
-
-        List<StockItem> stockList = dbHandler.getAllStock();
-
-        List<BarEntry> entries = new ArrayList<>();
-
-        List<String> axisLabels = new ArrayList<>();
-
-        float i = 0;
-        for (StockItem stockItem : stockList) {
-            entries.add(new BarEntry(i, (float) stockItem.getMass()));
-            axisLabels.add(stockItem.getProduct().getProductName());
-            i++;
-        }
-
-        IAxisValueFormatter formatter = (value, axis) -> axisLabels.get((int) value);
-
-        BarDataSet dataSet = new BarDataSet(entries, "Stock");
-        dataSet.setDrawValues(false);
-
-        BarData barData = new BarData(dataSet);
-        barData.setBarWidth(0.8f);
-        chart.setTouchEnabled(false);
-        chart.getDescription().setText("");
-        chart.getAxisLeft().setDrawLabels(false);
-        chart.getAxisRight().setDrawLabels(false);
-//        chart.getXAxis().setDrawLabels(false);
-        chart.getAxisLeft().setDrawGridLines(false);
-        chart.getAxisLeft().setDrawAxisLine(false);
-        chart.getAxisRight().setDrawGridLines(false);
-        chart.getAxisRight().setDrawAxisLine(false);
-        chart.getXAxis().setDrawGridLines(false);
-        chart.getXAxis().setDrawAxisLine(false);
-
-        chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        chart.getXAxis().setLabelRotationAngle(-90);
-        chart.getXAxis().setValueFormatter(formatter);
-
-        chart.getLegend().setEnabled(false);
-        chart.setData(barData);
-        chart.invalidate();
-*/
     }
 }

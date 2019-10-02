@@ -23,12 +23,12 @@ import java.util.List;
 
 public class StockFragment extends Fragment {
 
-    private StockItemAdapter stockAdapter;
-    private List<StockItem> stockList = new ArrayList<>();
+    private final int REQUEST_REFRESH_ON_DONE = 1;
 
     private DBHandler dbHandler;
 
-    private final int REQUEST_REFRESH_ON_DONE = 1;
+    private StockItemAdapter stockAdapter;
+    private List<StockItem> stockList = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,

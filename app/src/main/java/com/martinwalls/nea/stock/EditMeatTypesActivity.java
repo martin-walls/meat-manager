@@ -79,15 +79,15 @@ public class EditMeatTypesActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadMeatTypes() {
-        meatTypesList.clear();
-        meatTypesList.addAll(Utils.mergeSort(dbHandler.getAllMeatTypes()));
-        meatTypesAdapter.notifyDataSetChanged();
-    }
-
     @Override
     public void onAddNewMeatTypeDoneAction(String meatType) {
         dbHandler.addMeatType(meatType);
         loadMeatTypes();
+    }
+
+    private void loadMeatTypes() {
+        meatTypesList.clear();
+        meatTypesList.addAll(Utils.mergeSort(dbHandler.getAllMeatTypes()));
+        meatTypesAdapter.notifyDataSetChanged();
     }
 }

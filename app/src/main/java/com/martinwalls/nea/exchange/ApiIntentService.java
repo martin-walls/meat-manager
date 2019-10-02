@@ -13,27 +13,27 @@ import java.util.List;
 
 public class ApiIntentService extends IntentService {
 
-    static {
-        System.loadLibrary("native-lib");
-    }
-
-    private native String getApiAccessKey();
+    public static final String EXTRA_PENDING_RESULT = "pending_result";
+    public static final String EXTRA_RESULT = "result";
+    public static final int RESULT_CODE = 0;
 
     private static final String TAG = ApiIntentService.class.getSimpleName();
 
     private static final String CACHE_KEY_RATES = "rates_cache";
     private static final String CACHE_KEY_TIMESTAMP = "last_cache_timestamp";
 
-    public static final String EXTRA_PENDING_RESULT = "pending_result";
-    public static final String EXTRA_RESULT = "result";
+    static {
+        System.loadLibrary("native-lib");
+    }
 
-    public static final int RESULT_CODE = 0;
-
+    @SuppressWarnings("FieldCanBeLocal")
     private final String REQUEST_URL = "http://data.fixer.io/api/";
 
     public ApiIntentService() {
         super(TAG);
     }
+
+    private native String getApiAccessKey();
 
     @Override
     protected void onHandleIntent(Intent intent) {

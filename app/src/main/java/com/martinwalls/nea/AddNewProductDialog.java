@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -19,6 +18,7 @@ import com.martinwalls.nea.models.Product;
 import java.util.List;
 
 public class AddNewProductDialog extends DialogFragment {
+
     private DBHandler dbHandler;
 
     private AddNewProductListener listener;
@@ -27,7 +27,6 @@ public class AddNewProductDialog extends DialogFragment {
     private TextInputLayout inputLayoutMeatType;
     private AutoCompleteTextView editTextMeatType;
 
-    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
@@ -90,7 +89,7 @@ public class AddNewProductDialog extends DialogFragment {
     }
 
     @Override
-    public void onAttach(@NonNull Context context) {
+    public void onAttach(Context context) {
         super.onAttach(context);
         try {
             listener = (AddNewProductListener) context;
@@ -100,12 +99,12 @@ public class AddNewProductDialog extends DialogFragment {
         }
     }
 
-    public interface AddNewProductListener {
-        void onAddNewProductDoneAction(Product newProduct);
-    }
-
     private boolean isMeatTypeValid(String meatType) {
         List<String> meatTypes = dbHandler.getAllMeatTypes();
         return meatTypes.contains(meatType);
+    }
+
+    public interface AddNewProductListener {
+        void onAddNewProductDoneAction(Product newProduct);
     }
 }

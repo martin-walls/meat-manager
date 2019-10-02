@@ -125,28 +125,23 @@ public class ExchangeFragment extends Fragment {
         fetchRatesFromApi();
     }
 
-    private void initCurrencyPickers() {
-        String[] currencies = fetchCurrenciesToShow();
-        /*
-        currenciesList = Arrays.asList(currencies);
-        */
-        currencyPickerLeft.setMinValue(0);
-        currencyPickerLeft.setMaxValue(currencies.length - 1);
-        currencyPickerLeft.setDisplayedValues(currencies);
-        currencyPickerLeft.setWrapSelectorWheel(false);
-        currencyPickerLeft.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-        currencyPickerLeft.setOnValueChangedListener(
-                (picker, oldVal, newVal) -> setPrimaryCurrency(currencies[newVal]));
-        setPrimaryCurrency(currencies[currencyPickerLeft.getValue()]);
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.fragment_exchange, menu);
+    }
 
-        currencyPickerRight.setMinValue(0);
-        currencyPickerRight.setMaxValue(currencies.length - 1);
-        currencyPickerRight.setDisplayedValues(currencies);
-        currencyPickerRight.setWrapSelectorWheel(false);
-        currencyPickerRight.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-        currencyPickerRight.setOnValueChangedListener(
-                (picker, oldVal, newVal) -> setSecondaryCurrency(currencies[newVal]));
-        setSecondaryCurrency(currencies[currencyPickerRight.getValue()]);
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_favourites:
+                Intent favouritesIntent = new Intent(getContext(), ChooseCurrenciesActivity.class);
+                startActivity(favouritesIntent);
+                return true;
+            case R.id.action_refresh:
+                fetchRatesFromApi();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private String[] fetchCurrenciesToShow() {
@@ -177,23 +172,28 @@ public class ExchangeFragment extends Fragment {
 //        Toast.makeText(getContext(), "fetched", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_exchange, menu);
-    }
+    private void initCurrencyPickers() {
+        String[] currencies = fetchCurrenciesToShow();
+        /*
+        currenciesList = Arrays.asList(currencies);
+        */
+        currencyPickerLeft.setMinValue(0);
+        currencyPickerLeft.setMaxValue(currencies.length - 1);
+        currencyPickerLeft.setDisplayedValues(currencies);
+        currencyPickerLeft.setWrapSelectorWheel(false);
+        currencyPickerLeft.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+        currencyPickerLeft.setOnValueChangedListener(
+                (picker, oldVal, newVal) -> setPrimaryCurrency(currencies[newVal]));
+        setPrimaryCurrency(currencies[currencyPickerLeft.getValue()]);
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_favourites:
-                Intent favouritesIntent = new Intent(getContext(), ChooseCurrenciesActivity.class);
-                startActivity(favouritesIntent);
-                return true;
-            case R.id.action_refresh:
-                fetchRatesFromApi();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        currencyPickerRight.setMinValue(0);
+        currencyPickerRight.setMaxValue(currencies.length - 1);
+        currencyPickerRight.setDisplayedValues(currencies);
+        currencyPickerRight.setWrapSelectorWheel(false);
+        currencyPickerRight.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+        currencyPickerRight.setOnValueChangedListener(
+                (picker, oldVal, newVal) -> setSecondaryCurrency(currencies[newVal]));
+        setSecondaryCurrency(currencies[currencyPickerRight.getValue()]);
     }
 
     private void setPrimaryCurrency(String currency) {
@@ -226,6 +226,13 @@ public class ExchangeFragment extends Fragment {
         updateRates();
     }
 
+    private double getRate(String currency, String base) {
+        if (rates != null && rates.keySet().contains(currency) && rates.keySet().contains(base)) {
+            return (rates.get(currency) / rates.get(base)) * primaryCurrencyValue;
+        }
+        return 0;
+    }
+
     private void updateRates() {
         secondaryCurrencyValue = getRate(secondaryCurrency, primaryCurrency);
         secondaryCurrencyValueText.setText(getString(R.string.exchange_rate, secondaryCurrencyValue));
@@ -239,13 +246,6 @@ public class ExchangeFragment extends Fragment {
         int leftValue = currencyPickerLeft.getValue();
         currencyPickerLeft.setValue(currencyPickerRight.getValue());
         currencyPickerRight.setValue(leftValue);
-    }
-
-    private double getRate(String currency, String base) {
-        if (rates != null && rates.keySet().contains(currency) && rates.keySet().contains(base)) {
-            return (rates.get(currency) / rates.get(base)) * primaryCurrencyValue;
-        }
-        return 0;
     }
 
     private void addConversionToHistory() {
