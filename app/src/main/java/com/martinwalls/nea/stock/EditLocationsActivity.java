@@ -11,8 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.martinwalls.nea.ConfirmCancelDialog;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.Location;
@@ -21,7 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EditLocationsActivity extends AppCompatActivity {
+public class EditLocationsActivity extends AppCompatActivity
+        implements ConfirmCancelDialog.ConfirmCancelListener {
 
     public static final String EXTRA_LOCATION_TYPE = "location_type";
     private final String LOCATION_TYPE_DEFAULT = Location.LocationType.Storage.name();
@@ -92,12 +95,20 @@ public class EditLocationsActivity extends AppCompatActivity {
                 }
                 return true;
             case R.id.action_cancel:
-                //todo confirm cancel
-                finish();
+                if (!areAllFieldsEmpty()) {
+                    showConfirmCancelDialog();
+                } else {
+                    finish();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onConfirmCancelYesAction() {
+        finish();
     }
 
     private void hideKeyboard() {
@@ -106,31 +117,36 @@ public class EditLocationsActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    private void showConfirmCancelDialog() {
+        DialogFragment dialog = new ConfirmCancelDialog();
+        dialog.show(getSupportFragmentManager(), "confirm_cancel");
+    }
+
     private boolean addLocationToDb() {
         boolean isValid = true;
         Location newLocation = new Location();
 
-        TextInputLayout inputLayoutName = findViewById(R.id.input_layout_location_name);
         TextInputEditText editTextName = findViewById(R.id.edit_text_location_name);
+        TextInputLayout inputLayoutName = findViewById(R.id.input_layout_location_name);
 
-        TextInputLayout inputLayoutType = findViewById(R.id.input_layout_location_type);
         AutoCompleteTextView editTextType= findViewById(R.id.edit_text_location_type);
+        TextInputLayout inputLayoutType = findViewById(R.id.input_layout_location_type);
 
-        TextInputLayout inputLayoutAddr1 = findViewById(R.id.input_layout_addr_1);
         TextInputEditText editTextAddr1= findViewById(R.id.edit_text_addr_1);
+        TextInputLayout inputLayoutAddr1 = findViewById(R.id.input_layout_addr_1);
 
         TextInputEditText editTextAddr2= findViewById(R.id.edit_text_addr_2);
 
         TextInputEditText editTextCity= findViewById(R.id.edit_text_city);
 
-        TextInputLayout inputLayoutPostcode = findViewById(R.id.input_layout_postcode);
         TextInputEditText editTextPostcode= findViewById(R.id.edit_text_postcode);
+        TextInputLayout inputLayoutPostcode = findViewById(R.id.input_layout_postcode);
 
-        TextInputLayout inputLayoutCountry = findViewById(R.id.input_layout_country);
         TextInputEditText editTextCountry= findViewById(R.id.edit_text_country);
+        TextInputLayout inputLayoutCountry = findViewById(R.id.input_layout_country);
 
-        TextInputLayout inputLayoutEmail = findViewById(R.id.input_layout_email);
         TextInputEditText editTextEmail= findViewById(R.id.edit_text_email);
+        TextInputLayout inputLayoutEmail = findViewById(R.id.input_layout_email);
 
         TextInputEditText editTextPhone= findViewById(R.id.edit_text_phone);
 
@@ -195,5 +211,27 @@ public class EditLocationsActivity extends AppCompatActivity {
             return dbHandler.addLocation(newLocation);
         }
         return false;
+    }
+
+    private boolean areAllFieldsEmpty() {
+        TextInputEditText editTextName = findViewById(R.id.edit_text_location_name);
+        AutoCompleteTextView editTextType= findViewById(R.id.edit_text_location_type);
+        TextInputEditText editTextAddr1= findViewById(R.id.edit_text_addr_1);
+        TextInputEditText editTextAddr2= findViewById(R.id.edit_text_addr_2);
+        TextInputEditText editTextCity= findViewById(R.id.edit_text_city);
+        TextInputEditText editTextPostcode= findViewById(R.id.edit_text_postcode);
+        TextInputEditText editTextCountry= findViewById(R.id.edit_text_country);
+        TextInputEditText editTextEmail= findViewById(R.id.edit_text_email);
+        TextInputEditText editTextPhone= findViewById(R.id.edit_text_phone);
+
+        return TextUtils.isEmpty(editTextName.getText())
+                && TextUtils.isEmpty(editTextType.getText())
+                && TextUtils.isEmpty(editTextAddr1.getText())
+                && TextUtils.isEmpty(editTextAddr2.getText())
+                && TextUtils.isEmpty(editTextCity.getText())
+                && TextUtils.isEmpty(editTextPostcode.getText())
+                && TextUtils.isEmpty(editTextCountry.getText())
+                && TextUtils.isEmpty(editTextEmail.getText())
+                && TextUtils.isEmpty(editTextPhone.getText());
     }
 }
