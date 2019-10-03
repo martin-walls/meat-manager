@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- todo just use default shared prefs? -->
     <string name="pref_exchange_file_key">ExchangePrefs</string>
     <string name="pref_exchange_currency_primary">currency_primary</string>
     <string name="pref_exchange_currency_secondary">currency_secondary</string>
