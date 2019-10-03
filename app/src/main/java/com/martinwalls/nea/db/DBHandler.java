@@ -220,7 +220,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.setForeignKeyConstraintsEnabled(true);
     }
 
-    //region db getters
+    //region product
     public Product getProduct(int productId) {
         Product productResult = new Product();
         String query = "SELECT * FROM " + ProductsTable.TABLE_NAME
@@ -254,6 +254,101 @@ public class DBHandler extends SQLiteOpenHelper {
         return productResultList;
     }
 
+    public List<ProductQuantity> getAllProductsRequired() {
+        List<ProductQuantity> productQuantityResultList = new ArrayList<>();
+        String orderProductsQuery = "SELECT " + OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.PRODUCT_ID + ","
+                + OrderProductsTable.QUANTITY_MASS + "," + OrderProductsTable.QUANTITY_BOXES + ","
+                + ProductsTable.NAME + "," + ProductsTable.MEAT_TYPE
+                + " FROM " + OrderProductsTable.TABLE_NAME
+                + " INNER JOIN " + ProductsTable.TABLE_NAME + " ON "
+                + OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.PRODUCT_ID
+                + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID;
+        String contractProductsQuery = "SELECT " + ContractProductsTable.TABLE_NAME
+                + "." + ContractProductsTable.PRODUCT_ID + ","
+                + ContractProductsTable.QUANTITY_MASS + "," + ContractProductsTable.QUANTITY_BOXES + ","
+                + ProductsTable.NAME + "," + ProductsTable.MEAT_TYPE
+                + " FROM " + ContractProductsTable.TABLE_NAME
+                + " INNER JOIN " + ProductsTable.TABLE_NAME + " ON "
+                + ContractProductsTable.TABLE_NAME + "." + ContractProductsTable.PRODUCT_ID
+                + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(orderProductsQuery, null);
+        while (cursor.moveToNext()) {
+            ProductQuantity productQuantity = new ProductQuantity();
+            Product product = new Product();
+            product.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(OrderProductsTable.PRODUCT_ID)));
+            product.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.NAME)));
+            product.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.MEAT_TYPE)));
+            productQuantity.setProduct(product);
+            productQuantity.setQuantityMass(cursor.getDouble(
+                    cursor.getColumnIndexOrThrow(OrderProductsTable.QUANTITY_MASS)));
+            productQuantity.setQuantityBoxes(cursor.getInt(
+                    cursor.getColumnIndexOrThrow(OrderProductsTable.QUANTITY_BOXES)));
+            productQuantityResultList.add(productQuantity);
+        }
+        cursor = db.rawQuery(contractProductsQuery, null);
+        while (cursor.moveToNext()) {
+            ProductQuantity productQuantity = new ProductQuantity();
+            Product product = new Product();
+            product.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(ContractProductsTable.PRODUCT_ID)));
+            product.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.NAME)));
+            product.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.MEAT_TYPE)));
+            productQuantity.setProduct(product);
+            productQuantity.setQuantityMass(cursor.getDouble(
+                    cursor.getColumnIndexOrThrow(ContractProductsTable.QUANTITY_MASS)));
+            productQuantity.setQuantityBoxes(cursor.getInt(
+                    cursor.getColumnIndexOrThrow(ContractProductsTable.QUANTITY_BOXES)));
+            productQuantityResultList.add(productQuantity);
+        }
+        cursor.close();
+        db.close();
+        return productQuantityResultList;
+    }
+
+    public boolean addProduct(Product product) {
+        ContentValues values = new ContentValues();
+        values.put(ProductsTable.NAME, product.getProductName());
+        values.put(ProductsTable.MEAT_TYPE, product.getMeatType());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long newRowId = db.insert(ProductsTable.TABLE_NAME, null, values);
+        db.close();
+        return newRowId != -1;
+    }
+
+    public boolean isProductSafeToDelete(int productId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String stockQuery = "SELECT * FROM " + StockTable.TABLE_NAME
+                + " WHERE " + StockTable.PRODUCT_ID + "=?";
+        String contractsQuery = "SELECT * FROM " + ContractProductsTable.TABLE_NAME
+                + " WHERE " + ContractProductsTable.PRODUCT_ID + "=?";
+        String ordersQuery = "SELECT * FROM " + OrderProductsTable.TABLE_NAME
+                + " WHERE " + OrderProductsTable.PRODUCT_ID + "=?";
+        String[] selectionArgs = new String[] {productId + ""};
+        boolean safeToDelete = true;
+        for (String query : new String[]{stockQuery, contractsQuery, ordersQuery}) {
+            if (!safeToDelete) {
+                break;
+            }
+            Cursor cursor = db.rawQuery(query, selectionArgs);
+            int numRows = cursor.getCount();
+            safeToDelete = numRows == 0;
+            cursor.close();
+        }
+        db.close();
+        return safeToDelete;
+    }
+
+    public boolean deleteProduct(int productId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int deletedRows = db.delete(ProductsTable.TABLE_NAME,
+                ProductsTable.ID + "=?", new String[]{productId + ""});
+        db.close();
+        return deletedRows == 1;
+    }
+    //endregion product
+
+    //region meat types
     public List<String> getAllMeatTypes() {
         List<String> meatTypeResultList = new ArrayList<>();
         String query = "SELECT * FROM " + MeatTypesTable.TABLE_NAME;
@@ -267,6 +362,31 @@ public class DBHandler extends SQLiteOpenHelper {
         return meatTypeResultList;
     }
 
+    public boolean addMeatType(String meatType) {
+        ContentValues values = new ContentValues();
+        values.put(MeatTypesTable.MEAT_TYPE, meatType);
+        SQLiteDatabase db = this.getWritableDatabase();
+        // id of inserted row, -1 if error
+        long newRowId = db.insert(MeatTypesTable.TABLE_NAME, null, values);
+        db.close();
+        return newRowId != -1;
+    }
+
+    public boolean deleteMeatType(String meatType) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        boolean success;
+        try {
+            success = db.delete(MeatTypesTable.TABLE_NAME,
+                    MeatTypesTable.MEAT_TYPE + "=?", new String[]{meatType}) == 1;
+        } catch (SQLiteConstraintException e) {
+            success = false;
+        }
+        db.close();
+        return success;
+    }
+    //endregion meat types
+
+    //region stock
     public StockItem getStockItem(int stockId) {
         // TODO check for null values
         StockItem stockResult = new StockItem();
@@ -285,7 +405,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + ALIAS_DEST + "." + LocationsTable.ID + " AS " + ALIAS_DEST_ID + ","
                 + ALIAS_DEST + "." + LocationsTable.NAME + " AS " + ALIAS_DEST_NAME + ","
                 + StockTable.MASS + "," + StockTable.NUM_BOXES + "," + StockTable.QUALITY + ","
-                + ProductsTable.TABLE_NAME + "." + ProductsTable.NAME + "," 
+                + ProductsTable.TABLE_NAME + "." + ProductsTable.NAME + ","
                 + ProductsTable.TABLE_NAME + "." + ProductsTable.MEAT_TYPE
                 + " FROM " + StockTable.TABLE_NAME
                 + " LEFT JOIN " + ProductsTable.TABLE_NAME + " ON "
@@ -347,7 +467,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + ALIAS_DEST + "." + LocationsTable.ID + " AS " + ALIAS_DEST_ID + ","
                 + ALIAS_DEST + "." + LocationsTable.NAME + " AS " + ALIAS_DEST_NAME + ","
                 + StockTable.MASS + "," + StockTable.NUM_BOXES + "," + StockTable.QUALITY + ","
-                + ProductsTable.TABLE_NAME + "." + ProductsTable.NAME + "," 
+                + ProductsTable.TABLE_NAME + "." + ProductsTable.NAME + ","
                 + ProductsTable.TABLE_NAME + "." + ProductsTable.MEAT_TYPE
                 + " FROM " + StockTable.TABLE_NAME
                 + " INNER JOIN " + ProductsTable.TABLE_NAME + " ON "
@@ -393,6 +513,26 @@ public class DBHandler extends SQLiteOpenHelper {
         return stockResultList;
     }
 
+    public boolean addStockItem(StockItem stockItem) throws SQLiteConstraintException {
+        ContentValues values = new ContentValues();
+        values.put(StockTable.PRODUCT_ID, stockItem.getProduct().getProductId());
+        values.put(StockTable.LOCATION_ID, stockItem.getLocationId());
+        values.put(StockTable.SUPPLIER_ID, stockItem.getSupplierId());
+        if (stockItem.getDestId() != -1) {
+            values.put(StockTable.DEST_ID, stockItem.getDestId());
+        }
+        values.put(StockTable.MASS, stockItem.getMass());
+        values.put(StockTable.NUM_BOXES, stockItem.getNumBoxes());
+        values.put(StockTable.QUALITY, stockItem.getQuality().name());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long newRowId = db.insert(StockTable.TABLE_NAME, null, values);
+        db.close();
+        return newRowId != -1;
+    }
+    //endregion stock
+
+    //region location
     public Location getLocation(int locationId) {
         Location locationResult = new Location();
         String query = "SELECT * FROM " + LocationsTable.TABLE_NAME
@@ -474,6 +614,60 @@ public class DBHandler extends SQLiteOpenHelper {
         return locationResultList;
     }
 
+    public boolean addLocation(Location location) {
+        ContentValues values = new ContentValues();
+        values.put(LocationsTable.NAME, location.getLocationName());
+        values.put(LocationsTable.TYPE, location.getLocationType().name());
+        values.put(LocationsTable.ADDR_1, location.getAddrLine1());
+        values.put(LocationsTable.ADDR_2, location.getAddrLine2());
+        values.put(LocationsTable.CITY, location.getCity());
+        values.put(LocationsTable.POSTCODE, location.getPostcode());
+        values.put(LocationsTable.COUNTRY, location.getCountry());
+        values.put(LocationsTable.PHONE, location.getPhone());
+        values.put(LocationsTable.EMAIL, location.getEmail());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long newRowId = db.insert(LocationsTable.TABLE_NAME, null, values);
+        db.close();
+        return newRowId != -1;
+    }
+
+    public boolean isLocationSafeToDelete(int locationId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String stockQuery = "SELECT * FROM " + StockTable.TABLE_NAME
+                + " WHERE " + StockTable.LOCATION_ID + "=?"
+                + " OR " + StockTable.SUPPLIER_ID + "=?"
+                + " OR " + StockTable.DEST_ID + "=?";
+        String ordersQuery = "SELECT * FROM " + OrdersTable.TABLE_NAME
+                + " WHERE " + OrdersTable.DEST_ID + "=?";
+        String contractsQuery = "SELECT * FROM " + ContractsTable.TABLE_NAME
+                + " WHERE " + ContractsTable.DEST_ID + "=?";
+        String[] stockSelectionArgs = new String[] {locationId + "", locationId + "", locationId + ""};
+        String[] selectionArgs = new String[] {locationId + ""};
+        boolean safeToDelete = true;
+        for (String query : new String[]{stockQuery, ordersQuery, contractsQuery}) {
+            if (!safeToDelete) {
+                break;
+            }
+            Cursor cursor = db.rawQuery(query, query.equals(stockQuery) ? stockSelectionArgs : selectionArgs);
+            int numRows = cursor.getCount();
+            safeToDelete = numRows == 0;
+            cursor.close();
+        }
+        db.close();
+        return safeToDelete;
+    }
+
+    public boolean deleteLocation(int locationId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int deletedRows = db.delete(LocationsTable.TABLE_NAME,
+                LocationsTable.ID + "=?", new String[]{locationId + ""});
+        db.close();
+        return deletedRows == 1;
+    }
+    //endregion location
+
+    //region order
     public Order getOrder(int orderId) {
         Order orderResult = new Order();
         String query = "SELECT " + OrdersTable.TABLE_NAME + ".*," + ProductsTable.TABLE_NAME + ".*,"
@@ -570,6 +764,30 @@ public class DBHandler extends SQLiteOpenHelper {
         return orderResultList;
     }
 
+    public boolean addOrder(Order order) {
+        ContentValues values = new ContentValues();
+        values.put(OrdersTable.DEST_ID, order.getDestId());
+        values.put(OrdersTable.ORDER_DATE, order.getOrderDate().atZone(ZoneId.systemDefault()).toEpochSecond());
+        values.put(OrdersTable.COMPLETED, order.isCompleted() ? 1 : 0);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long newRowId = db.insert(OrdersTable.TABLE_NAME, null, values);
+
+        // insert each product linked to the order into OrderProducts table
+        for (ProductQuantity productQuantity : order.getProductList()) {
+            ContentValues productValues = new ContentValues();
+            productValues.put(OrderProductsTable.PRODUCT_ID, productQuantity.getProduct().getProductId());
+            productValues.put(OrderProductsTable.ORDER_ID, newRowId);
+            productValues.put(OrderProductsTable.QUANTITY_MASS, productQuantity.getQuantityMass());
+            productValues.put(OrderProductsTable.QUANTITY_BOXES, productQuantity.getQuantityBoxes());
+            db.insert(OrderProductsTable.TABLE_NAME, null, productValues);
+        }
+        db.close();
+        return newRowId != 1;
+    }
+    //endregion order
+
+    //region contract
     public Contract getContract(int contractId) {
         Contract contractResult = new Contract();
         String query = "SELECT " + ContractsTable.TABLE_NAME + ".*," + ProductsTable.TABLE_NAME + ".*,"
@@ -673,138 +891,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return contractResultList;
     }
 
-    public List<ProductQuantity> getAllProductsRequired() {
-        List<ProductQuantity> productQuantityResultList = new ArrayList<>();
-        String orderProductsQuery = "SELECT " + OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.PRODUCT_ID + ","
-                + OrderProductsTable.QUANTITY_MASS + "," + OrderProductsTable.QUANTITY_BOXES + ","
-                + ProductsTable.NAME + "," + ProductsTable.MEAT_TYPE
-                + " FROM " + OrderProductsTable.TABLE_NAME
-                + " INNER JOIN " + ProductsTable.TABLE_NAME + " ON "
-                + OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.PRODUCT_ID
-                + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID;
-        String contractProductsQuery = "SELECT " + ContractProductsTable.TABLE_NAME
-                + "." + ContractProductsTable.PRODUCT_ID + ","
-                + ContractProductsTable.QUANTITY_MASS + "," + ContractProductsTable.QUANTITY_BOXES + ","
-                + ProductsTable.NAME + "," + ProductsTable.MEAT_TYPE
-                + " FROM " + ContractProductsTable.TABLE_NAME
-                + " INNER JOIN " + ProductsTable.TABLE_NAME + " ON "
-                + ContractProductsTable.TABLE_NAME + "." + ContractProductsTable.PRODUCT_ID
-                + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(orderProductsQuery, null);
-        while (cursor.moveToNext()) {
-            ProductQuantity productQuantity = new ProductQuantity();
-            Product product = new Product();
-            product.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(OrderProductsTable.PRODUCT_ID)));
-            product.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.NAME)));
-            product.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.MEAT_TYPE)));
-            productQuantity.setProduct(product);
-            productQuantity.setQuantityMass(cursor.getDouble(
-                    cursor.getColumnIndexOrThrow(OrderProductsTable.QUANTITY_MASS)));
-            productQuantity.setQuantityBoxes(cursor.getInt(
-                    cursor.getColumnIndexOrThrow(OrderProductsTable.QUANTITY_BOXES)));
-            productQuantityResultList.add(productQuantity);
-        }
-        cursor = db.rawQuery(contractProductsQuery, null);
-        while (cursor.moveToNext()) {
-            ProductQuantity productQuantity = new ProductQuantity();
-            Product product = new Product();
-            product.setProductId(cursor.getInt(cursor.getColumnIndexOrThrow(ContractProductsTable.PRODUCT_ID)));
-            product.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.NAME)));
-            product.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.MEAT_TYPE)));
-            productQuantity.setProduct(product);
-            productQuantity.setQuantityMass(cursor.getDouble(
-                    cursor.getColumnIndexOrThrow(ContractProductsTable.QUANTITY_MASS)));
-            productQuantity.setQuantityBoxes(cursor.getInt(
-                    cursor.getColumnIndexOrThrow(ContractProductsTable.QUANTITY_BOXES)));
-            productQuantityResultList.add(productQuantity);
-        }
-        cursor.close();
-        db.close();
-        return productQuantityResultList;
-    }
-    //endregion db getters
-
-    //region db setters
-    public boolean addProduct(Product product) {
-        ContentValues values = new ContentValues();
-        values.put(ProductsTable.NAME, product.getProductName());
-        values.put(ProductsTable.MEAT_TYPE, product.getMeatType());
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        long newRowId = db.insert(ProductsTable.TABLE_NAME, null, values);
-        db.close();
-        return newRowId != -1;
-    }
-
-    public boolean addMeatType(String meatType) {
-        ContentValues values = new ContentValues();
-        values.put(MeatTypesTable.MEAT_TYPE, meatType);
-        SQLiteDatabase db = this.getWritableDatabase();
-        // id of inserted row, -1 if error
-        long newRowId = db.insert(MeatTypesTable.TABLE_NAME, null, values);
-        db.close();
-        return newRowId != -1;
-    }
-
-    public boolean addStockItem(StockItem stockItem) throws SQLiteConstraintException {
-        ContentValues values = new ContentValues();
-        values.put(StockTable.PRODUCT_ID, stockItem.getProduct().getProductId());
-        values.put(StockTable.LOCATION_ID, stockItem.getLocationId());
-        values.put(StockTable.SUPPLIER_ID, stockItem.getSupplierId());
-        if (stockItem.getDestId() != -1) {
-            values.put(StockTable.DEST_ID, stockItem.getDestId());
-        }
-        values.put(StockTable.MASS, stockItem.getMass());
-        values.put(StockTable.NUM_BOXES, stockItem.getNumBoxes());
-        values.put(StockTable.QUALITY, stockItem.getQuality().name());
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        long newRowId = db.insert(StockTable.TABLE_NAME, null, values);
-        db.close();
-        return newRowId != -1;
-    }
-
-    public boolean addLocation(Location location) {
-        ContentValues values = new ContentValues();
-        values.put(LocationsTable.NAME, location.getLocationName());
-        values.put(LocationsTable.TYPE, location.getLocationType().name());
-        values.put(LocationsTable.ADDR_1, location.getAddrLine1());
-        values.put(LocationsTable.ADDR_2, location.getAddrLine2());
-        values.put(LocationsTable.CITY, location.getCity());
-        values.put(LocationsTable.POSTCODE, location.getPostcode());
-        values.put(LocationsTable.COUNTRY, location.getCountry());
-        values.put(LocationsTable.PHONE, location.getPhone());
-        values.put(LocationsTable.EMAIL, location.getEmail());
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        long newRowId = db.insert(LocationsTable.TABLE_NAME, null, values);
-        db.close();
-        return newRowId != -1;
-    }
-
-    public boolean addOrder(Order order) {
-        ContentValues values = new ContentValues();
-        values.put(OrdersTable.DEST_ID, order.getDestId());
-        values.put(OrdersTable.ORDER_DATE, order.getOrderDate().atZone(ZoneId.systemDefault()).toEpochSecond());
-        values.put(OrdersTable.COMPLETED, order.isCompleted() ? 1 : 0);
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        long newRowId = db.insert(OrdersTable.TABLE_NAME, null, values);
-
-        // insert each product linked to the order into OrderProducts table
-        for (ProductQuantity productQuantity : order.getProductList()) {
-            ContentValues productValues = new ContentValues();
-            productValues.put(OrderProductsTable.PRODUCT_ID, productQuantity.getProduct().getProductId());
-            productValues.put(OrderProductsTable.ORDER_ID, newRowId);
-            productValues.put(OrderProductsTable.QUANTITY_MASS, productQuantity.getQuantityMass());
-            productValues.put(OrderProductsTable.QUANTITY_BOXES, productQuantity.getQuantityBoxes());
-            db.insert(OrderProductsTable.TABLE_NAME, null, productValues);
-        }
-        db.close();
-        return newRowId != 1;
-    }
-
     public boolean addContract(Contract contract) {
         ContentValues values = new ContentValues();
         values.put(ContractsTable.DEST_ID, contract.getDestId());
@@ -827,87 +913,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return newRowId != -1;
     }
-    //endregion db setters
-
-    //region db delete
-    public boolean deleteMeatType(String meatType) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        boolean success;
-        try {
-            success = db.delete(MeatTypesTable.TABLE_NAME,
-                    MeatTypesTable.MEAT_TYPE + "=?", new String[]{meatType}) == 1;
-        } catch (SQLiteConstraintException e) {
-            success = false;
-        }
-        db.close();
-        return success;
-    }
-
-    public boolean deleteProduct(int productId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int deletedRows = db.delete(ProductsTable.TABLE_NAME,
-                ProductsTable.ID + "=?", new String[]{productId + ""});
-        db.close();
-        return deletedRows == 1;
-    }
-
-    public boolean deleteLocation(int locationId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int deletedRows = db.delete(LocationsTable.TABLE_NAME,
-                LocationsTable.ID + "=?", new String[]{locationId + ""});
-        db.close();
-        return deletedRows == 1;
-    }
-    //endregion db delete
-
-    public boolean isProductSafeToDelete(int productId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String stockQuery = "SELECT * FROM " + StockTable.TABLE_NAME
-                + " WHERE " + StockTable.PRODUCT_ID + "=?";
-        String contractsQuery = "SELECT * FROM " + ContractProductsTable.TABLE_NAME
-                + " WHERE " + ContractProductsTable.PRODUCT_ID + "=?";
-        String ordersQuery = "SELECT * FROM " + OrderProductsTable.TABLE_NAME
-                + " WHERE " + OrderProductsTable.PRODUCT_ID + "=?";
-        String[] selectionArgs = new String[] {productId + ""};
-        boolean safeToDelete = true;
-        for (String query : new String[]{stockQuery, contractsQuery, ordersQuery}) {
-            if (!safeToDelete) {
-                break;
-            }
-            Cursor cursor = db.rawQuery(query, selectionArgs);
-            int numRows = cursor.getCount();
-            safeToDelete = numRows == 0;
-            cursor.close();
-        }
-        db.close();
-        return safeToDelete;
-    }
-
-    public boolean isLocationSafeToDelete(int locationId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String stockQuery = "SELECT * FROM " + StockTable.TABLE_NAME
-                + " WHERE " + StockTable.LOCATION_ID + "=?"
-                + " OR " + StockTable.SUPPLIER_ID + "=?"
-                + " OR " + StockTable.DEST_ID + "=?";
-        String ordersQuery = "SELECT * FROM " + OrdersTable.TABLE_NAME
-                + " WHERE " + OrdersTable.DEST_ID + "=?";
-        String contractsQuery = "SELECT * FROM " + ContractsTable.TABLE_NAME
-                + " WHERE " + ContractsTable.DEST_ID + "=?";
-        String[] stockSelectionArgs = new String[] {locationId + "", locationId + "", locationId + ""};
-        String[] selectionArgs = new String[] {locationId + ""};
-        boolean safeToDelete = true;
-        for (String query : new String[]{stockQuery, ordersQuery, contractsQuery}) {
-            if (!safeToDelete) {
-                break;
-            }
-            Cursor cursor = db.rawQuery(query, query.equals(stockQuery) ? stockSelectionArgs : selectionArgs);
-            int numRows = cursor.getCount();
-            safeToDelete = numRows == 0;
-            cursor.close();
-        }
-        db.close();
-        return safeToDelete;
-    }
+    //endregion contract
 
     //todo backup db
 }
