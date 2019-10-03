@@ -6,8 +6,21 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.martinwalls.nea.models.*;
+import android.os.Environment;
+import com.martinwalls.nea.BuildConfig;
+import com.martinwalls.nea.models.Contract;
+import com.martinwalls.nea.models.Interval;
+import com.martinwalls.nea.models.Location;
+import com.martinwalls.nea.models.Order;
+import com.martinwalls.nea.models.Product;
+import com.martinwalls.nea.models.ProductQuantity;
+import com.martinwalls.nea.models.StockItem;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -17,6 +30,8 @@ import java.util.List;
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "stockDB.db";
     private static final int DATABASE_VERSION = 5;
+
+    private final String BACKUP_DIR = "/nea/db_backup";
 
     //region db constants
     private final class ProductsTable {
@@ -915,5 +930,61 @@ public class DBHandler extends SQLiteOpenHelper {
     }
     //endregion contract
 
-    //todo backup db
+    public boolean exportDbToFile(String outputPath) {
+        File sdDir = Environment.getExternalStorageDirectory();
+        File dataDir = Environment.getDataDirectory();
+        FileChannel source;
+        FileChannel destination;
+
+        String currentDbPath = "/data/" + BuildConfig.APPLICATION_ID + "/databases/" + DATABASE_NAME;
+
+        File currentDb = new File(dataDir, currentDbPath);
+        File backupDb = new File(sdDir, outputPath);
+
+        try {
+            source = new FileInputStream(currentDb).getChannel();
+            destination = new FileOutputStream(backupDb).getChannel();
+
+            destination.transferFrom(source, 0, source.size());
+
+            source.close();
+            destination.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean exportDbToFile() {
+        return exportDbToFile(BACKUP_DIR + DATABASE_NAME);
+    }
+
+    public boolean importDbFromFile() {
+        File sdDir = Environment.getExternalStorageDirectory();
+        File dataDir = Environment.getDataDirectory();
+        FileChannel source;
+        FileChannel destination;
+
+        String currentDbPath = "/data/" + BuildConfig.APPLICATION_ID + "/databases/" + DATABASE_NAME;
+        String backupDbPath = BACKUP_DIR + DATABASE_NAME;
+
+        File currentDb = new File(dataDir, currentDbPath);
+        File backupDb = new File(sdDir, backupDbPath);
+
+        try {
+            source = new FileInputStream(backupDb).getChannel();
+
+            if (currentDb.delete()) {
+                destination = new FileOutputStream(currentDb).getChannel();
+                destination.transferFrom(source, 0, source.size());
+                source.close();
+                destination.close();
+                return true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
