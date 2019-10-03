@@ -180,13 +180,11 @@
 
     <!-- Settings page -->
     <string name="settings_title">Settings</string>
-    <string name="settings_default_reminder_time">Default reminder time</string>
+    <string name="settings_cat_general">General</string>
     <string name="settings_mass_unit">Unit of mass to use</string>
-    <string name="settings_mass_unit_kg">kg</string>
-    <plurals name="settings_mass_unit_lbs">
-        <item quantity="one">lb</item>
-        <item quantity="other">lbs</item>
-    </plurals>
-    <string name="settings_backup_database">Backup database</string>
+    <string name="settings_default_reminder_time">Default reminder time</string>
+    <string name="settings_cat_backup">Backup &amp; restore</string>
+    <string name="settings_backup_db">Backup database</string>
+    <string name="settings_restore_db">Restore database from backup</string>
     <string name="settings_dark_theme">Enable dark theme</string>
 </resources>

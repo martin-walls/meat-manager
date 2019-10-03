@@ -1,0 +1,43 @@
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <PreferenceCategory app:title="@string/settings_cat_general">
+
+        <ListPreference
+            app:defaultValue="kg"
+            app:entries="@array/mass_units"
+            app:entryValues="@array/mass_units"
+            app:key="mass_unit"
+            app:title="@string/settings_mass_unit"
+            app:useSimpleSummaryProvider="true"
+            />
+
+        <EditTextPreference
+            app:key="default_reminder_time"
+            app:title="@string/settings_default_reminder_time"
+            android:layout="@layout/pref_edit_text_inline"
+            />
+
+        <SwitchPreferenceCompat
+            app:key="dark_theme"
+            app:title="@string/settings_dark_theme"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/settings_cat_backup">
+
+        <Preference
+            app:key="backup_db"
+            app:title="@string/settings_backup_db"
+            />
+
+        <Preference
+            app:key="restore_db"
+            app:title="@string/settings_restore_db"
+            />
+
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

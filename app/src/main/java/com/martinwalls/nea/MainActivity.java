@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -120,8 +119,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         TextView navSettings = navDrawerContent.findViewById(R.id.nav_settings);
-        navSettings.setOnClickListener(
-                v -> Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show());
+        navSettings.setOnClickListener(v -> {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+        });
     }
 
     @Override

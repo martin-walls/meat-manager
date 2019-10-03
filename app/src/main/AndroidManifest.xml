@@ -5,6 +5,7 @@
     >
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,7 +16,17 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         >
-        <activity android:name=".contracts.ContractDetailActivity"/>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/settings_title"
+            android:parentActivityName=".MainActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.martinwalls.nea.MainActivity"
+                />
+        </activity>
+        <activity android:name=".contracts.ContractDetailActivity" />
         <activity android:name=".contracts.NewContractActivity" />
         <activity android:name=".orders.OrderDetailActivity" />
         <activity android:name=".orders.NewOrderActivity" />
@@ -36,9 +47,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".stock.NewStockActivity" />
+
         <service
             android:name=".exchange.ApiIntentService"
             android:exported="false"
             />
     </application>
+
 </manifest>

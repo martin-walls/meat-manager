@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--<string-array name="locations_types">-->
-        <!--<item>@string/locations_supplier</item>-->
-        <!--<item>@string/locations_storage</item>-->
-        <!--<item>@string/locations_destination</item>-->
+    <!--<item>@string/locations_supplier</item>-->
+    <!--<item>@string/locations_storage</item>-->
+    <!--<item>@string/locations_destination</item>-->
     <!--</string-array>-->
 
     <!--<string-array name="qualities">-->
-        <!--<item>@string/quality_good</item>-->
-        <!--<item>@string/quality_pet_food</item>-->
-        <!--<item>@string/quality_waste</item>-->
+    <!--<item>@string/quality_good</item>-->
+    <!--<item>@string/quality_pet_food</item>-->
+    <!--<item>@string/quality_waste</item>-->
     <!--</string-array>-->
     <!--<string-array name="mass_units">-->
-        <!--<item>@string/settings_mass_unit_kg</item>-->
-        <!--<item>@plurals/settings_mass_unit_lbs</item>-->
+    <!--<item>@string/settings_mass_unit_kg</item>-->
+    <!--<item>@plurals/settings_mass_unit_lbs</item>-->
     <!--</string-array>-->
 
     <string-array name="time_periods">
@@ -34,5 +34,10 @@
         <item>Friday</item>
         <item>Saturday</item>
         <item>Sunday</item>
+    </string-array>
+
+    <string-array name="mass_units">
+        <item>kg</item>
+        <item>lbs</item>
     </string-array>
 </resources>
