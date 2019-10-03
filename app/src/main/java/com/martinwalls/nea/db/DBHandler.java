@@ -16,7 +16,7 @@ import java.util.List;
 @SuppressWarnings("FieldCanBeLocal")
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "stockDB.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     //region db constants
     private final class ProductsTable {
@@ -314,7 +314,11 @@ public class DBHandler extends SQLiteOpenHelper {
             stockResult.setLocationName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
             stockResult.setSupplierId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_SUPPLIER_ID)));
             stockResult.setSupplierName(cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_SUPPLIER_NAME)));
-            stockResult.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_DEST_ID)));
+            if (!cursor.isNull(cursor.getColumnIndexOrThrow(ALIAS_DEST_ID))) {
+                stockResult.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_DEST_ID)));
+            } else {
+                stockResult.setDestId(-1);
+            }
             stockResult.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_DEST_NAME)));
             stockResult.setMass(cursor.getDouble(cursor.getColumnIndexOrThrow(StockTable.MASS)));
             stockResult.setNumBoxes(cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.NUM_BOXES)));
@@ -372,7 +376,11 @@ public class DBHandler extends SQLiteOpenHelper {
             stockItem.setLocationName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
             stockItem.setSupplierId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_SUPPLIER_ID)));
             stockItem.setSupplierName(cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_SUPPLIER_NAME)));
-            stockItem.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_DEST_ID)));
+            if (!cursor.isNull(cursor.getColumnIndexOrThrow(ALIAS_DEST_ID))) {
+                stockItem.setDestId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_DEST_ID)));
+            } else {
+                stockItem.setDestId(-1);
+            }
             stockItem.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_DEST_NAME)));
             stockItem.setMass(cursor.getDouble(cursor.getColumnIndexOrThrow(StockTable.MASS)));
             stockItem.setNumBoxes(cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.NUM_BOXES)));
@@ -844,7 +852,6 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public boolean deleteLocation(int locationId) {
-        //todo delete location
         SQLiteDatabase db = this.getWritableDatabase();
         int deletedRows = db.delete(LocationsTable.TABLE_NAME,
                 LocationsTable.ID + "=?", new String[]{locationId + ""});
