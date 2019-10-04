@@ -43,6 +43,12 @@
     <string name="db_error_delete_product">Cannot delete %s while stock, contracts or orders still exist</string>
     <string name="db_error_delete_location">Cannot delete %s while stock, contracts or orders still exist</string>
 
+    <string name="db_backup_success">Database saved to\n%s</string>
+    <string name="db_backup_error">Error exporting database</string>
+
+    <!-- permissions -->
+    <string name="perm_error_storage_denied">Please allow external storage permissions for this feature.</string>
+
     <!-- Search -->
     <string name="search_add_new">Add new %s…</string>
     <string name="search_no_matches">No matching results found</string>
@@ -182,7 +188,9 @@
     <string name="settings_title">Settings</string>
     <string name="settings_cat_general">General</string>
     <string name="settings_mass_unit">Unit of mass to use</string>
-    <string name="settings_default_reminder_time">Default reminder time</string>
+    <string name="unit_kg">kg</string>
+    <string name="unit_lbs">lbs</string>
+    <string name="settings_default_reminder_time">Default reminder time (days)</string>
     <string name="settings_cat_backup">Backup &amp; restore</string>
     <string name="settings_backup_db">Backup database</string>
     <string name="settings_restore_db">Restore database from backup</string>

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.util.Log;
 import com.martinwalls.nea.BuildConfig;
 import com.martinwalls.nea.models.Contract;
 import com.martinwalls.nea.models.Interval;
@@ -31,7 +32,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "stockDB.db";
     private static final int DATABASE_VERSION = 5;
 
-    private final String BACKUP_DIR = "/nea/db_backup";
+    private static final String BACKUP_DIR = "/nea/db_backup/";
 
     //region db constants
     private final class ProductsTable {
@@ -931,7 +932,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
     //endregion contract
 
-    public boolean exportDbToFile(String outputPath) {
+    public static String exportDbToFile(String outputPath) {
         File sdDir = Environment.getExternalStorageDirectory();
         File dataDir = Environment.getDataDirectory();
         FileChannel source;
@@ -940,28 +941,43 @@ public class DBHandler extends SQLiteOpenHelper {
         String currentDbPath = "/data/" + BuildConfig.APPLICATION_ID + "/databases/" + DATABASE_NAME;
 
         File currentDb = new File(dataDir, currentDbPath);
-        File backupDb = new File(sdDir, outputPath);
+        File outputFolder = new File(sdDir + outputPath);
 
-        try {
-            source = new FileInputStream(currentDb).getChannel();
-            destination = new FileOutputStream(backupDb).getChannel();
+        Log.e(DBHandler.class.getSimpleName(), outputFolder.getAbsolutePath());
 
-            destination.transferFrom(source, 0, source.size());
+//        boolean mkdirSuccess = true;
+//        if (!outputFolder.exists()) {
+//            mkdirSuccess = outputFolder.mkdirs();
+//        }
 
-            source.close();
-            destination.close();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
+        outputFolder.mkdirs();
+
+//        if (mkdirSuccess) {
+            File outputDb = new File(outputFolder, DATABASE_NAME);
+            try {
+                source = new FileInputStream(currentDb).getChannel();
+                destination = new FileOutputStream(outputDb).getChannel();
+
+                destination.transferFrom(source, 0, source.size());
+
+                source.close();
+                destination.close();
+                return outputFolder.getPath();
+            } catch (IOException e) {
+                Log.e(DBHandler.class.getSimpleName(), e.getMessage());
+                e.printStackTrace();
+            }
+//        } else {
+//            Log.e(DBHandler.class.getSimpleName(), "MKDIR FAILED");
+//        }
+        return "";
     }
 
-    public boolean exportDbToFile() {
-        return exportDbToFile(BACKUP_DIR + DATABASE_NAME);
+    public static String exportDbToFile() {
+        return exportDbToFile(BACKUP_DIR);
     }
 
-    public boolean importDbFromFile() {
+    public static boolean importDbFromFile() {
         File sdDir = Environment.getExternalStorageDirectory();
         File dataDir = Environment.getDataDirectory();
         FileChannel source;
