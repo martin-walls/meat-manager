@@ -943,16 +943,9 @@ public class DBHandler extends SQLiteOpenHelper {
         File currentDb = new File(dataDir, currentDbPath);
         File outputFolder = new File(sdDir + outputPath);
 
-        Log.e(DBHandler.class.getSimpleName(), outputFolder.getAbsolutePath());
+        boolean mkdirSuccess = outputFolder.mkdirs();
 
-//        boolean mkdirSuccess = true;
-//        if (!outputFolder.exists()) {
-//            mkdirSuccess = outputFolder.mkdirs();
-//        }
-
-        outputFolder.mkdirs();
-
-//        if (mkdirSuccess) {
+        if (mkdirSuccess) {
             File outputDb = new File(outputFolder, DATABASE_NAME);
             try {
                 source = new FileInputStream(currentDb).getChannel();
@@ -964,12 +957,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 destination.close();
                 return outputFolder.getPath();
             } catch (IOException e) {
-                Log.e(DBHandler.class.getSimpleName(), e.getMessage());
                 e.printStackTrace();
             }
-//        } else {
-//            Log.e(DBHandler.class.getSimpleName(), "MKDIR FAILED");
-//        }
+        }
         return "";
     }
 
