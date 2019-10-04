@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
-import android.util.Log;
 import com.martinwalls.nea.BuildConfig;
 import com.martinwalls.nea.models.Contract;
 import com.martinwalls.nea.models.Interval;
@@ -994,4 +993,6 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         return false;
     }
+
+    //todo backup to google drive https://developers.google.com/drive/api/v3/about-sdk
 }

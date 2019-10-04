@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item
+        android:id="@+id/action_sort_by"
+        android:title="@string/action_sort_by"
+        android:icon="@drawable/ic_sort"
+        app:showAsAction="ifRoom"
+        >
+        <menu>
+            <group android:id="@+id/group_sort_by"
+                android:checkableBehavior="single">
+                <item android:id="@+id/action_sort_by_name"
+                    android:title="@string/action_sort_by_name"
+                    />
+                <item android:id="@+id/action_sort_by_meat_type"
+                    android:title="@string/action_sort_by_meat_type"
+                    />
+            </group>
+        </menu>
+    </item>
+
+</menu>

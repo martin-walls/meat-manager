@@ -1,6 +1,7 @@
 package com.martinwalls.nea.stock;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.AddNewProductDialog;
+import com.martinwalls.nea.EasyPreferences;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.components.CustomRecyclerView;
@@ -24,7 +26,11 @@ import java.util.List;
 public class EditProductsActivity extends AppCompatActivity
         implements AddNewProductDialog.AddNewProductListener {
 
+    private final int SORT_BY_NAME = 0;
+    private final int SORT_BY_MEAT_TYPE = 1;
+
     private DBHandler dbHandler;
+    private EasyPreferences preferences;
 
     private ProductsAdapter productsAdapter;
     private List<Product> productList = new ArrayList<>();
@@ -38,6 +44,7 @@ public class EditProductsActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHandler = new DBHandler(this);
+        preferences = EasyPreferences.createForDefaultPreferences(this);
 
         CustomRecyclerView recyclerView = findViewById(R.id.recycler_view);
         TextView emptyView = findViewById(R.id.empty);
@@ -72,12 +79,44 @@ public class EditProductsActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            super.onBackPressed();
-            return true;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_edit_products, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        switch (preferences.getInt(R.string.pref_products_sort_by, SORT_BY_MEAT_TYPE)) {
+            case SORT_BY_MEAT_TYPE:
+                menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_meat_type).setChecked(true);
+                break;
+            case SORT_BY_NAME:
+                menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_name).setChecked(true);
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_sort_by_name:
+                preferences.setInt(R.string.pref_products_sort_by, SORT_BY_NAME);
+                invalidateOptionsMenu();
+                loadProducts();
+                return true;
+            case R.id.action_sort_by_meat_type:
+                preferences.setInt(R.string.pref_products_sort_by, SORT_BY_MEAT_TYPE);
+                invalidateOptionsMenu();
+                loadProducts();
+                return true;
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -87,10 +126,10 @@ public class EditProductsActivity extends AppCompatActivity
     }
 
     private void loadProducts() {
-        String sortBy = "meatType"; //todo shared preferences
+        int sortBy = preferences.getInt(R.string.pref_products_sort_by, SORT_BY_MEAT_TYPE);
         productList.clear();
         productList.addAll(Utils.mergeSort(dbHandler.getAllProducts(),
-                sortBy == "name" ? Product.comparatorAlpha() : Product.comparatorMeatType()));
+                sortBy == SORT_BY_NAME ? Product.comparatorAlpha() : Product.comparatorMeatType()));
         productsAdapter.notifyDataSetChanged();
     }
 
