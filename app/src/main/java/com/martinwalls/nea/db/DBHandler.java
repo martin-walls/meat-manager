@@ -271,6 +271,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public List<ProductQuantity> getAllProductsRequired() {
         List<ProductQuantity> productQuantityResultList = new ArrayList<>();
+        //todo where order not completed
         String orderProductsQuery = "SELECT " + OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.PRODUCT_ID + ","
                 + OrderProductsTable.QUANTITY_MASS + "," + OrderProductsTable.QUANTITY_BOXES + ","
                 + ProductsTable.NAME + "," + ProductsTable.MEAT_TYPE

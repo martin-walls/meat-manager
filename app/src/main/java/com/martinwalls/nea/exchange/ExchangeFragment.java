@@ -4,7 +4,12 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -14,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.martinwalls.nea.EasyPreferences;
 import com.martinwalls.nea.MainActivity;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SimpleTextWatcher;
@@ -29,6 +35,7 @@ import java.util.List;
 public class ExchangeFragment extends Fragment {
 
     private ExchangeDbHandler dbHandler;
+    private EasyPreferences preferences;
 
     private TextView primaryCurrencyText;
     private TextView secondaryCurrencyText;
@@ -45,6 +52,7 @@ public class ExchangeFragment extends Fragment {
 
     private HashMap<String, Double> rates = new HashMap<>();
 
+
     /*
     private List<String> currenciesList = new ArrayList<>();
     */
@@ -57,6 +65,7 @@ public class ExchangeFragment extends Fragment {
         View fragmentView = inflater.inflate(R.layout.fragment_exchange, container, false);
 
         dbHandler = new ExchangeDbHandler(getContext());
+        preferences = EasyPreferences.createForDefaultPreferences(getContext());
 
         primaryCurrencyText = fragmentView.findViewById(R.id.currency_primary);
         secondaryCurrencyText = fragmentView.findViewById(R.id.currency_secondary);
@@ -199,30 +208,14 @@ public class ExchangeFragment extends Fragment {
     private void setPrimaryCurrency(String currency) {
         primaryCurrency = currency;
         primaryCurrencyText.setText(currency);
-        /*
-        SharedPreferences sharedPref = getContext().getSharedPreferences(
-                getString(R.string.pref_exchange_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.pref_exchange_currency_primary), currency);
-        /*todo maybe make EasyPreferences class:
-            https://medium.com/@alexstyl/android-tips-resourcify-your-preference-keys-65a1f6889207
-            https://github.com/alexstyl/Memento-Calendar/blob/master/android_mobile/src/main/java/com/alexstyl/specialdates/EasyPreferences.java
-
-        editor.apply();
-        */
+        preferences.setString(R.string.pref_exchange_currency_primary, currency);
         updateRates();
     }
 
     private void setSecondaryCurrency(String currency) {
         secondaryCurrency = currency;
         secondaryCurrencyText.setText(currency);
-        /*
-        SharedPreferences sharedPref = getContext().getSharedPreferences(
-                getString(R.string.pref_exchange_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.pref_exchange_currency_secondary), currency);
-        editor.apply();
-        */
+        preferences.setString(R.string.pref_exchange_currency_secondary, currency);
         updateRates();
     }
 
