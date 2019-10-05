@@ -84,6 +84,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
 
+        // allow use of resource id in parameter rather than string value
         <T extends Preference> T findPreference(@StringRes int keyId) {
             return findPreference(getString(keyId));
         }

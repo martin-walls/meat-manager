@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="textColorNormal" format="reference|color" />
-    <attr name="textColorDark" format="reference|color" />
-    <attr name="textColorError" format="reference|color" />
+    <attr name="textColorNormal" format="reference" />
+    <attr name="textColorEmphasis" format="reference" />
+    <attr name="textColorError" format="reference" />
 
-    <attr name="dividerColor" format="reference|color" />
+    <attr name="dividerColor" format="reference" />
 
-    <attr name="selectedItemBackgroundColor" format="reference|color" />
+    <attr name="selectedItemBackgroundColor" format="reference" />
 
     <attr name="dialogTitleStyle" format="reference" />
+
+    <attr name="navDrawerStyle" format="reference" />
+    <attr name="navDrawerItemStyle" format="reference" />
+    <attr name="navDrawerBackgroundColor" format="reference" />
+
+    <attr name="popupOverlay" format="reference" />
+
+    <attr name="dashboardGraphBarColor" format="reference" />
+    <attr name="dashboardGraphReqBarColor" format="reference" />
+    <attr name="dashboardGraphBarInnerTextColor" format="reference" />
+    <attr name="dashboardGraphBarOuterTextColor" format="reference" />
+    <attr name="dashboardTooltipColor" format="reference" />
+    <attr name="dashboardTooltipTextColor" format="reference" />
+    <attr name="dashboardReqTooltipColor" format="reference" />
+    <attr name="dashboardReqTooltipTextColor" format="reference" />
 
     <declare-styleable name="AddNewTextView">
         <attr name="searchItemType" format="string" />

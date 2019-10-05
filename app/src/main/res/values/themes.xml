@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+
+        <item name="floatingActionButtonStyle">@style/Fab</item>
+        <item name="textInputStyle">@style/AppTextInputLayout</item>
+        <item name="navDrawerItemStyle">@style/NavDrawerItem</item>
+
+
+        <item name="textColorError">@color/error_red</item>
+
+        <item name="dialogTitleStyle">@style/DialogTitle</item>
+
+        <item name="dashboardGraphBarColor">@color/dashboard_graph_bar</item>
+        <item name="dashboardGraphReqBarColor">@color/dashboard_graph_bar_req</item>
+        <item name="dashboardTooltipColor">@color/dashboard_tooltip</item>
+        <item name="dashboardReqTooltipColor">@color/dashboard_tooltip_req</item>
+
+    </style>
+
+    <style name="AppTheme.Light">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="navDrawerBackgroundColor">@color/white</item>
+        <item name="popupOverlay">@style/Theme.MaterialComponents.Light.NoActionBar</item>
+
+
+        <!-- text -->
+        <item name="textColorNormal">@color/medium_dark_grey</item>
+        <item name="textColorEmphasis">@color/dark_grey</item>
+
+        <item name="dividerColor">@color/medium_dark_grey</item>
+        <item name="selectedItemBackgroundColor">@color/light_selected_item</item>
+
+
+
+        <item name="android:textColorPrimary">?textColorEmphasis</item>
+
+
+
+        <item name="dashboardGraphBarInnerTextColor">?textColorEmphasis</item>
+        <item name="dashboardGraphBarOuterTextColor">?textColorEmphasis</item>
+        <item name="dashboardTooltipTextColor">?textColorEmphasis</item>
+        <item name="dashboardReqTooltipTextColor">@color/white</item>
+
+    </style>
+
+    <style name="AppTheme.Dark">
+        <item name="android:windowBackground">@color/dark_background</item>
+        <item name="navDrawerBackgroundColor">@color/dark_background</item>
+        <item name="popupOverlay">@style/Theme.MaterialComponents.NoActionBar</item>
+        <item name="actionBarPopupTheme">@style/Theme.MaterialComponents.NoActionBar</item>
+
+        <!-- text -->
+        <item name="textColorNormal">@color/text_light</item>
+        <item name="textColorEmphasis">@color/text_lighter</item>
+
+        <item name="android:textColorPrimary">?textColorEmphasis</item>
+
+        <item name="dividerColor">@color/medium_dark_grey</item>
+        <item name="selectedItemBackgroundColor">@color/dark_selected_item</item>
+
+        <item name="colorControlNormal">@color/medium_light_grey</item>
+
+
+        <item name="dashboardGraphBarInnerTextColor">@color/dark_grey</item>
+        <item name="dashboardGraphBarOuterTextColor">?textColorEmphasis</item>
+        <item name="dashboardTooltipTextColor">@color/dark_grey</item>
+        <item name="dashboardReqTooltipTextColor">@color/white</item>
+
+
+    </style>
+
+    <style name="AppTheme.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.Dark.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+</resources>

@@ -1004,7 +1004,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public static boolean importDbFromFile() {
-        importDbFromFile(BACKUP_DIR + DATABASE_NAME);
+        return importDbFromFile(BACKUP_DIR + DATABASE_NAME);
     }
 
     //todo backup to google drive https://developers.google.com/drive/api/v3/about-sdk

@@ -13,8 +13,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_vertical|start"
-        android:textColor="?textColorDark"
-        android:textSize="20sp"
+        style="@style/ItemInfoPrimary"
         tools:text="Product"
         />
 
@@ -30,8 +29,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical|end"
-            android:textColor="?textColorDark"
-            android:textSize="16sp"
+            style="@style/ItemAmountPrimary"
             tools:text="1900.00 kg"
             />
 
@@ -41,8 +39,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical|end"
-            android:textColor="?textColorNormal"
-            android:textSize="16sp"
+            style="@style/ItemAmountSecondary"
             tools:text="100 boxes"
             />
     </LinearLayout>

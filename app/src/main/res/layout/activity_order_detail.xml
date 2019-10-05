@@ -22,7 +22,7 @@
     <!-- Destination -->
     <TextView
         android:id="@+id/destination"
-        style="@style/TextNormal"
+        style="@style/DetailsText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_destination"
@@ -37,7 +37,7 @@
     <!-- Date -->
     <TextView
         android:id="@+id/date"
-        style="@style/TextNormal"
+        style="@style/DetailsText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_date"

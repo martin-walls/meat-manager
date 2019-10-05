@@ -20,6 +20,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:gravity="bottom"
+        android:textColor="?textColorNormal"
         />
 
 

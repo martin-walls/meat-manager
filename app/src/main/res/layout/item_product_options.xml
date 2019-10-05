@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_vertical|start"
-        android:textColor="?textColorDark"
+        android:textColor="?attr/textColorEmphasis"
         android:textSize="20sp"
         tools:text="Product"
         />
@@ -35,7 +35,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical|end"
-            android:textColor="?textColorDark"
+            android:textColor="?attr/textColorEmphasis"
             android:textSize="16sp"
             tools:text="1900.00 kg"
             />

@@ -50,7 +50,7 @@
 
         <RadioButton
             android:id="@+id/radio_week"
-            style="@style/TextNormal.Dark"
+            style="@style/TextDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
@@ -59,7 +59,7 @@
 
         <RadioButton
             android:id="@+id/radio_two_week"
-            style="@style/TextNormal.Dark"
+            style="@style/TextDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
@@ -68,7 +68,7 @@
 
         <RadioButton
             android:id="@+id/radio_month"
-            style="@style/TextNormal.Dark"
+            style="@style/TextDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
@@ -77,7 +77,7 @@
 
         <RadioButton
             android:id="@+id/radio_custom_selected"
-            style="@style/TextNormal.Dark"
+            style="@style/TextDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
@@ -86,7 +86,7 @@
 
         <RadioButton
             android:id="@+id/radio_custom"
-            style="@style/TextNormal.Dark"
+            style="@style/TextDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
@@ -107,7 +107,7 @@
         >
 
         <TextView
-            style="@style/TextNormal.Dark"
+            style="@style/TextDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/contracts_dialog_repeat_interval_title"

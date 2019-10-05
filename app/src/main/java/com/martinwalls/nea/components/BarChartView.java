@@ -1,12 +1,16 @@
 package com.martinwalls.nea.components;
 
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import androidx.annotation.AttrRes;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.Utils;
 
@@ -24,6 +28,7 @@ public class BarChartView extends View {
 
     private Paint barFillPaint;
     private Paint barLabelPaint;
+    private Paint barInnerLabelPaint;
     private Paint reqBarFillPaint;
     private Paint tooltipFillPaint;
     private Paint tooltipTextPaint;
@@ -78,50 +83,58 @@ public class BarChartView extends View {
         this.context = context;
 
         barFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int barColour = ContextCompat.getColor(context, R.color.dashboard_graph_bar);
-        barFillPaint.setColor(barColour);
+        int barColor = getColorFromTheme(context, R.attr.dashboardGraphBarColor);
+        barFillPaint.setColor(barColor);
 
         barLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int textColour = ContextCompat.getColor(context, R.color.text_dark);
-        barLabelPaint.setColor(textColour);
+        int outerTextColor = getColorFromTheme(context, R.attr.dashboardGraphBarOuterTextColor);
+        barLabelPaint.setColor(outerTextColor);
         barLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
         barLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
+        barInnerLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        int innerTextColor = getColorFromTheme(context, R.attr.dashboardGraphBarInnerTextColor);
+        barInnerLabelPaint.setColor(innerTextColor);
+        barInnerLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        barInnerLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+
         reqBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int reqBarColour = ContextCompat.getColor(context, R.color.dashboard_graph_bar_req);
-        reqBarFillPaint.setColor(reqBarColour);
+        int reqBarColor = getColorFromTheme(context, R.attr.dashboardGraphReqBarColor);
+        reqBarFillPaint.setColor(reqBarColor);
 
         tooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int ttColour = ContextCompat.getColor(context, R.color.dashboard_tooltip);
-        tooltipFillPaint.setColor(ttColour);
+        int ttColor = getColorFromTheme(context, R.attr.dashboardTooltipColor);
+        tooltipFillPaint.setColor(ttColor);
 
         tooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        tooltipTextPaint.setColor(textColour);
+        int ttTextColor = getColorFromTheme(context, R.attr.dashboardTooltipTextColor);
+        tooltipTextPaint.setColor(ttTextColor);
         tooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         tooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
         prevTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        prevTooltipFillPaint.setColor(ttColour);
+        prevTooltipFillPaint.setColor(ttColor);
 
         prevTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        prevTooltipTextPaint.setColor(textColour);
+        prevTooltipTextPaint.setColor(ttTextColor);
         prevTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         prevTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
         reqTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int reqTtColour = ContextCompat.getColor(context, R.color.dashboard_tooltip_req);
-        reqTooltipFillPaint.setColor(reqTtColour);
+        int reqTtColor = getColorFromTheme(context, R.attr.dashboardReqTooltipColor);
+        reqTooltipFillPaint.setColor(reqTtColor);
 
         reqTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        reqTooltipTextPaint.setColor(Color.WHITE);
+        int reqTtTextColor = getColorFromTheme(context, R.attr.dashboardReqTooltipTextColor);
+        reqTooltipTextPaint.setColor(reqTtTextColor);
         reqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         reqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
         prevReqTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        prevReqTooltipFillPaint.setColor(reqTtColour);
+        prevReqTooltipFillPaint.setColor(reqTtColor);
 
         prevReqTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        prevReqTooltipTextPaint.setColor(Color.WHITE);
+        prevReqTooltipTextPaint.setColor(reqTtTextColor);
         prevReqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         prevReqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
@@ -189,7 +202,7 @@ public class BarChartView extends View {
 
             float labelY = (barTop + barBottom + labelTextBounds.height()) / 2f;
 
-            c.drawText(label, labelX, labelY, barLabelPaint);
+            c.drawText(label, labelX, labelY, isTextInside ? barInnerLabelPaint : barLabelPaint);
 
             // show tooltips
             if (i == selectedIndex || i == prevSelectedIndex) {
@@ -311,5 +324,11 @@ public class BarChartView extends View {
         dataSet.clear();
         dataSet.addAll(newDataSet);
         invalidate();
+    }
+
+    private int getColorFromTheme(Context context, @AttrRes int resId) {
+        TypedValue outValue = new TypedValue();
+        context.getTheme().resolveAttribute(resId, outValue, true);
+        return outValue.data;
     }
 }

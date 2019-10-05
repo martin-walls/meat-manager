@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/section_title_fav"
-        style="@style/ChooseCurrenciesListTitle"
+        style="@style/ListSectionDividerText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="24dp"
@@ -20,7 +20,7 @@
         />
 
     <TextView
-        style="@style/ChooseCurrenciesItem"
+        style="@style/ListItemTextSecondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="24dp"
@@ -39,7 +39,7 @@
 
     <TextView
         android:id="@+id/section_title_all"
-        style="@style/ChooseCurrenciesListTitle"
+        style="@style/ListSectionDividerText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="24dp"
@@ -57,7 +57,7 @@
 
         <TextView
             android:id="@+id/currency_code"
-            style="@style/ChooseCurrenciesItem.Dark"
+            style="@style/ListItemTextPrimary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -71,7 +71,7 @@
 
         <TextView
             android:id="@+id/currency_name"
-            style="@style/ChooseCurrenciesItem"
+            style="@style/ListItemTextSecondary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"

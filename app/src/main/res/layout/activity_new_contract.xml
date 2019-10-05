@@ -87,7 +87,7 @@
 
             <TextView
                 android:id="@+id/add_product"
-                style="@style/TextEmphasisSmall"
+                style="@style/AddAnotherProductText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -166,7 +166,7 @@
 
                 <TextView
                     android:id="@+id/text_repeat_on"
-                    style="@style/TextNormal"
+                    style="@style/InputFormText"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="start|center_vertical"
@@ -195,7 +195,7 @@
 
                 <TextView
                     android:id="@+id/text_reminder"
-                    style="@style/TextNormal"
+                    style="@style/InputFormText"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -216,7 +216,7 @@
 
                 <TextView
                     android:id="@+id/reminder_text_days_before"
-                    style="@style/TextNormal"
+                    style="@style/InputFormText"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -241,7 +241,7 @@
 
         <com.martinwalls.nea.components.AddNewTextView
             android:id="@+id/add_new"
-            style="@style/SearchResultsItemText.Selectable.AddNew"
+            style="@style/SearchResultsItem.Selectable.AddNew"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="24dp"
@@ -259,7 +259,7 @@
 
         <TextView
             android:id="@+id/no_results"
-            style="@style/SearchResultsItemText"
+            style="@style/SearchResultsItem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="24dp"

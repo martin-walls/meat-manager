@@ -15,6 +15,7 @@
         android:id="@+id/recycler_view_products"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:overScrollMode="never"
         tools:itemCount="2"
         tools:listitem="@layout/item_product_options"
         />
@@ -22,7 +23,7 @@
     <!-- Destination -->
     <TextView
         android:id="@+id/destination"
-        style="@style/TextNormal"
+        style="@style/DetailsText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_destination"
@@ -37,7 +38,7 @@
     <!-- Date -->
     <TextView
         android:id="@+id/repeat"
-        style="@style/TextNormal"
+        style="@style/DetailsText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_repeat"

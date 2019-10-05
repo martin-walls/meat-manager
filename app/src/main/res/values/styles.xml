@@ -1,34 +1,4 @@
 <resources>
-
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="floatingActionButtonStyle">@style/Fab</item>
-        <item name="textInputStyle">@style/AppTextInputLayout</item>
-
-        <!-- text -->
-        <item name="textColorNormal">@color/text_medium</item>
-        <item name="textColorDark">@color/text_dark</item>
-        <item name="textColorError">@color/error_red</item>
-
-        <item name="dividerColor">@color/divider</item>
-        <item name="selectedItemBackgroundColor">@color/light_grey</item>
-
-        <item name="dialogTitleStyle">@style/TextNormal.Dark.Bold</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
-
     <style name="Fab" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="android:backgroundTint">?attr/colorAccent</item>
         <item name="rippleColor">@color/fab_ripple_light</item>
@@ -41,63 +11,125 @@
         <item name="android:paddingStart">24dp</item>
         <item name="android:drawablePadding">16dp</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">?attr/textColorDark</item>
+        <item name="android:textColor">?textColorEmphasis</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:drawableTint">?attr/textColorDark</item>
+        <item name="android:drawableTint">?textColorEmphasis</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:background">@drawable/nav_drawer_item_background</item>
-    </style>
-
-    <style name="TextNormal">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?textColorNormal</item>
-    </style>
-
-    <style name="TextNormal.Dark">
-        <item name="android:textColor">?textColorDark</item>
-    </style>
-
-    <style name="TextNormal.Bold">
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="TextNormal.Dark.Bold">
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="TextEmphasisSmall" parent="TextNormal">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">italic</item>
     </style>
 
     <style name="EmptyView">
         <item name="android:textSize">20sp</item>
     </style>
 
+
+    <!-- Generic text styles -->
+    <style name="TextNormal">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?textColorNormal</item>
+    </style>
+
+    <style name="TextDark">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?textColorEmphasis</item>
+    </style>
+
+
+    <!-- Dialog text styles -->
+    <style name="DialogTitle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?textColorEmphasis</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DialogMessageText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?textColorNormal</item>
+    </style>
+
+
+    <!-- List item text styles -->
+    <style name="ItemInfoPrimary">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">?textColorEmphasis</item>
+    </style>
+
+    <style name="ItemInfoSecondary">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?textColorNormal</item>
+    </style>
+
+    <style name="ItemAmountPrimary">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?textColorEmphasis</item>
+    </style>
+
+    <style name="ItemAmountSecondary">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?textColorNormal</item>
+    </style>
+
+    <style name="ListItemTextPrimary">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?textColorEmphasis</item>
+    </style>
+
+    <style name="ListItemTextSecondary">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?textColorNormal</item>
+    </style>
+
+    <!-- For text date dividers in lists -->
+    <style name="ListSectionDividerText">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">?colorPrimary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <!-- Input styles -->
     <style name="AppTextInputLayout" parent="Widget.Design.TextInputLayout">
-        <item name="errorTextColor">?attr/textColorError</item>
+        <item name="errorTextColor">?textColorError</item>
+        <item name="android:textColorHint">?textColorNormal</item>
     </style>
 
     <!-- shows clear icon at end -->
     <style name="AppTextInputLayout.Searchable">
         <item name="endIconMode">custom</item>
         <item name="endIconDrawable">@drawable/ic_cancel</item>
+        <item name="endIconTint">?colorControlNormal</item>
     </style>
 
-    <!-- search -->
-    <style name="SearchResultsItemText" parent="TextNormal">
+    <!-- For text on input forms such as reminder field for contracts -->
+    <style name="InputFormText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?textColorNormal</item>
     </style>
 
-    <style name="SearchResultsItemText.Selectable">
-        <item name="android:background">?attr/selectableItemBackground</item>
+    <!-- For add another product button for orders/contracts -->
+    <style name="AddAnotherProductText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">?textColorNormal</item>
+    </style>
+
+    <!-- For search in input forms -->
+    <style name="SearchResultsItem">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?textColorNormal</item>
+    </style>
+
+    <style name="SearchResultsItem.Selectable">
+        <item name="android:background">?selectableItemBackground</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
     </style>
 
-    <style name="SearchResultsItemText.Selectable.AddNew">
+    <style name="SearchResultsItem.Selectable.AddNew">
         <item name="android:textStyle">italic</item>
-        <item name="android:textColor">?attr/textColorDark</item>
+        <item name="android:textColor">?attr/textColorEmphasis</item>
         <item name="android:drawableStart">@drawable/ic_add</item>
         <item name="android:drawablePadding">16dp</item>
         <item name="android:text">@string/search_add_new</item>
@@ -108,12 +140,13 @@
         <item name="android:showDividers">middle</item>
     </style>
 
-    <style name="DateDividerText">
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">?colorPrimary</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
+
+    <!-- For details such as destination in details pages -->
+    <style name="DetailsText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?textColorNormal</item>
     </style>
+
 
     <!-- Exchange screen styles -->
     <style name="ExchangeRateText">
@@ -122,7 +155,7 @@
     </style>
 
     <style name="ExchangeRateText.Primary" >
-        <item name="android:textColor">?textColorDark</item>
+        <item name="android:textColor">?textColorEmphasis</item>
     </style>
 
     <style name="ExchangeRateText.Secondary">
@@ -132,44 +165,13 @@
     <style name="ExchangeCurrentCurrency">
         <item name="android:textSize">20sp</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">?textColorDark</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="ExchangeHistoryTimeDivider">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">?colorPrimary</item>
+        <item name="android:textColor">?attr/textColorEmphasis</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="ExchangeHistoryItemText">
         <item name="android:textSize">18sp</item>
-    </style>
-
-    <style name="ChooseCurrenciesItem">
-        <item name="android:textSize">18sp</item>
         <item name="android:textColor">?textColorNormal</item>
     </style>
-
-    <style name="ChooseCurrenciesItem.Dark">
-        <item name="android:textColor">?textColorDark</item>
-    </style>
-
-    <style name="ChooseCurrenciesListTitle">
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">?colorPrimary</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-
-    <!--<style name="ChooseCurrenciesItem.NoFav">-->
-        <!--<item name="android:drawableEnd">@drawable/ic_star_outline</item>-->
-    <!--</style>-->
-
-    <!--<style name="ChooseCurrenciesItem.Fav">-->
-        <!--<item name="android:drawableEnd">@drawable/ic_star_filled</item>-->
-    <!--</style>-->
 
 </resources>

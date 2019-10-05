@@ -164,7 +164,7 @@
 
         <com.martinwalls.nea.components.AddNewTextView
             android:id="@+id/add_new"
-            style="@style/SearchResultsItemText.Selectable.AddNew"
+            style="@style/SearchResultsItem.Selectable.AddNew"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="24dp"
@@ -182,7 +182,7 @@
 
         <TextView
             android:id="@+id/no_results"
-            style="@style/SearchResultsItemText"
+            style="@style/SearchResultsItem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="24dp"
