@@ -972,17 +972,16 @@ public class DBHandler extends SQLiteOpenHelper {
         return exportDbToFile(BACKUP_DIR);
     }
 
-    public static boolean importDbFromFile() {
+    public static boolean importDbFromFile(String dbPath) {
         File sdDir = Environment.getExternalStorageDirectory();
         File dataDir = Environment.getDataDirectory();
         FileChannel source;
         FileChannel destination;
 
         String currentDbPath = "/data/" + BuildConfig.APPLICATION_ID + "/databases/" + DATABASE_NAME;
-        String backupDbPath = BACKUP_DIR + DATABASE_NAME;
 
         File currentDb = new File(dataDir, currentDbPath);
-        File backupDb = new File(sdDir, backupDbPath);
+        File backupDb = new File(sdDir, dbPath);
 
         if (!backupDb.exists()) {
             return false;
@@ -1002,6 +1001,10 @@ public class DBHandler extends SQLiteOpenHelper {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static boolean importDbFromFile() {
+        importDbFromFile(BACKUP_DIR + DATABASE_NAME);
     }
 
     //todo backup to google drive https://developers.google.com/drive/api/v3/about-sdk

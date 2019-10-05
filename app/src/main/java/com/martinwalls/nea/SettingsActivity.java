@@ -51,7 +51,7 @@ public class SettingsActivity extends AppCompatActivity {
                 if (!isExternalStoragePermissionGranted()) {
                     requestExternalStoragePermission(PERMISSIONS_REQUEST_STORAGE_FOR_BACKUP);
                 } else {
-                    exportDb();
+                    exportDb(); //todo custom location
                 }
                 return true; // click handled
             });
@@ -60,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
                 if (!isExternalStoragePermissionGranted()) {
                     requestExternalStoragePermission(PERMISSIONS_REQUEST_STORAGE_FOR_RESTORE);
                 } else {
-                    importDB();
+                    importDB(); //todo custom location
                 }
                 return true;
             });
