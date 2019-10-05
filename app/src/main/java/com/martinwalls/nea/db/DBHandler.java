@@ -984,6 +984,10 @@ public class DBHandler extends SQLiteOpenHelper {
         File currentDb = new File(dataDir, currentDbPath);
         File backupDb = new File(sdDir, backupDbPath);
 
+        if (!backupDb.exists()) {
+            return false;
+        }
+
         try {
             source = new FileInputStream(backupDb).getChannel();
 

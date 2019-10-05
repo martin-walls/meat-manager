@@ -47,6 +47,8 @@
 
     <string name="db_backup_success">Database saved to\n%s</string>
     <string name="db_backup_error">Error exporting database</string>
+    <string name="db_import_success">Database imported successfully</string>
+    <string name="db_import_error">Error importing database</string>
 
     <!-- permissions -->
     <string name="perm_error_storage_denied">Please allow external storage permissions for this feature.</string>
@@ -197,4 +199,6 @@
     <string name="settings_backup_db">Backup database</string>
     <string name="settings_restore_db">Restore database from backup</string>
     <string name="settings_dark_theme">Enable dark theme</string>
+
+    <string name="settings_perm_req_storage">Storage permission required</string>
 </resources>

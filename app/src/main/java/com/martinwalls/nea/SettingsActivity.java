@@ -14,8 +14,6 @@ import com.martinwalls.nea.db.DBHandler;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private final int PERMISSIONS_REQUEST_STORAGE = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,45 +28,92 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == PERMISSIONS_REQUEST_STORAGE) {
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, R.string.perm_error_storage_denied, Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    public void checkExternalStoragePermissions() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    PERMISSIONS_REQUEST_STORAGE);
-        }
-    }
-
     public static class SettingsFragment extends PreferenceFragmentCompat {
+        private final int PERMISSIONS_REQUEST_STORAGE_FOR_BACKUP = 1;
+        private final int PERMISSIONS_REQUEST_STORAGE_FOR_RESTORE = 2;
+
+        private Preference backupDbPref;
+        private Preference restoreDbPref;
+
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.settings, rootKey);
 
-            Preference backupDbPref = findPreference(R.string.pref_backup_db);
+            backupDbPref = findPreference(R.string.pref_backup_db);
+            restoreDbPref = findPreference(R.string.pref_restore_db);
+
+            if (!isExternalStoragePermissionGranted()) {
+                backupDbPref.setSummary(R.string.settings_perm_req_storage);
+                restoreDbPref.setSummary(R.string.settings_perm_req_storage);
+            }
 
             backupDbPref.setOnPreferenceClickListener(preference -> {
-                ((SettingsActivity) getActivity()).checkExternalStoragePermissions();
-                String outputPath = DBHandler.exportDbToFile();
-                if (outputPath.equals("")) {
-                    Toast.makeText(getContext(), R.string.db_backup_error, Toast.LENGTH_SHORT).show();
+                if (!isExternalStoragePermissionGranted()) {
+                    requestExternalStoragePermission(PERMISSIONS_REQUEST_STORAGE_FOR_BACKUP);
                 } else {
-                    Toast.makeText(getContext(), getString(R.string.db_backup_success, outputPath), Toast.LENGTH_SHORT)
-                            .show();
+                    exportDb();
                 }
-                return outputPath.equals("");
+                return true; // click handled
             });
+
+            restoreDbPref.setOnPreferenceClickListener(preference -> {
+                if (!isExternalStoragePermissionGranted()) {
+                    requestExternalStoragePermission(PERMISSIONS_REQUEST_STORAGE_FOR_RESTORE);
+                } else {
+                    importDB();
+                }
+                return true;
+            });
+        }
+
+        @Override
+        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+            if (requestCode == PERMISSIONS_REQUEST_STORAGE_FOR_BACKUP
+                    || requestCode == PERMISSIONS_REQUEST_STORAGE_FOR_RESTORE) {
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    backupDbPref.setSummary("");
+                    restoreDbPref.setSummary("");
+                    if (requestCode == PERMISSIONS_REQUEST_STORAGE_FOR_BACKUP) {
+                        exportDb();
+                    } else {
+                        importDB();
+                    }
+                } else {
+                    Toast.makeText(getContext(), R.string.perm_error_storage_denied, Toast.LENGTH_SHORT).show();
+                }
+            }
         }
 
         <T extends Preference> T findPreference(@StringRes int keyId) {
             return findPreference(getString(keyId));
+        }
+
+        private boolean isExternalStoragePermissionGranted() {
+            return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED;
+        }
+
+        private void requestExternalStoragePermission(int requestCode) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestCode);
+        }
+
+        private void exportDb() {
+            String outputPath = DBHandler.exportDbToFile();
+            if (outputPath.equals("")) {
+                Toast.makeText(getContext(), R.string.db_backup_error, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), getString(R.string.db_backup_success, outputPath), Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+
+        private void importDB() {
+            boolean success = DBHandler.importDbFromFile();
+            if (success) {
+                Toast.makeText(getContext(), R.string.db_import_success, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), R.string.db_import_error, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
