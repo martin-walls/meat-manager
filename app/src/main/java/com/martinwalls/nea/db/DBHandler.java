@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.util.Log;
 import com.martinwalls.nea.BuildConfig;
 import com.martinwalls.nea.models.Contract;
 import com.martinwalls.nea.models.Interval;
@@ -942,9 +943,12 @@ public class DBHandler extends SQLiteOpenHelper {
         File currentDb = new File(dataDir, currentDbPath);
         File outputFolder = new File(sdDir + outputPath);
 
-        boolean mkdirSuccess = outputFolder.mkdirs();
+        boolean dirExists = outputFolder.exists();
+        if (!dirExists) {
+            dirExists = outputFolder.mkdirs();
+        }
 
-        if (mkdirSuccess) {
+        if (dirExists) {
             File outputDb = new File(outputFolder, DATABASE_NAME);
             try {
                 source = new FileInputStream(currentDb).getChannel();
@@ -958,6 +962,8 @@ public class DBHandler extends SQLiteOpenHelper {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            Log.e(DBHandler.class.getSimpleName(), "Error creating dir \"" + outputFolder.getPath() + "\"");
         }
         return "";
     }
