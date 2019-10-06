@@ -6,13 +6,12 @@ import android.os.Bundle;
 import android.widget.Toast;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import com.martinwalls.nea.db.DBHandler;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +37,13 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.settings, rootKey);
+
+            Preference darkThemePref = findPreference(R.string.pref_dark_theme);
+
+            darkThemePref.setOnPreferenceChangeListener((preference, newValue) -> {
+                getActivity().recreate();
+                return true;
+            });
 
             backupDbPref = findPreference(R.string.pref_backup_db);
             restoreDbPref = findPreference(R.string.pref_restore_db);

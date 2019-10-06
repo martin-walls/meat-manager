@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.martinwalls.nea.BaseActivity;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.components.CustomRecyclerView;
@@ -20,7 +20,7 @@ import com.martinwalls.nea.models.Location;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocationsActivity extends AppCompatActivity {
+public class LocationsActivity extends BaseActivity {
 
     private DBHandler dbHandler;
 
@@ -62,7 +62,7 @@ public class LocationsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         if (dbHandler == null) {
             dbHandler = new DBHandler(this);

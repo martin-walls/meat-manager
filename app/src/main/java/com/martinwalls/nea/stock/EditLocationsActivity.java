@@ -10,10 +10,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.martinwalls.nea.BaseActivity;
 import com.martinwalls.nea.ConfirmCancelDialog;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EditLocationsActivity extends AppCompatActivity
+public class EditLocationsActivity extends BaseActivity
         implements ConfirmCancelDialog.ConfirmCancelListener {
 
     public static final String EXTRA_LOCATION_TYPE = "location_type";

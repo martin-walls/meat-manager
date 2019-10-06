@@ -5,9 +5,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.martinwalls.nea.BaseActivity;
 import com.martinwalls.nea.ProductsAddedAdapter;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
@@ -15,7 +15,7 @@ import com.martinwalls.nea.models.Order;
 
 import java.time.format.DateTimeFormatter;
 
-public class OrderDetailActivity extends AppCompatActivity {
+public class OrderDetailActivity extends BaseActivity {
 
     public static final String EXTRA_ORDER_ID = "order_id";
 

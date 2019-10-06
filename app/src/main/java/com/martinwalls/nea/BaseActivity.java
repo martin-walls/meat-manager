@@ -2,27 +2,34 @@ package com.martinwalls.nea;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 public class BaseActivity extends AppCompatActivity {
-
-    //todo make all other activities inherit from this
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EasyPreferences preferences = EasyPreferences.createForDefaultPreferences(this);
-        boolean darkTheme = preferences.getBoolean(R.string.pref_dark_theme, false);
-
+        boolean isDarkThemeEnabled = preferences.getBoolean(R.string.pref_dark_theme, false);
+        setDarkThemeEnabled(isDarkThemeEnabled);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        boolean darkTheme = preferences.getBoolean(R.string.pref_dark_theme, false);
+//        if (isDarkThemeEnabled != darkTheme) {
+//            recreate();
+//        }
+//    }
 
-    private void setDarkThemeEnabled(boolean isEnabled) {
+    protected void setDarkThemeEnabled(boolean isEnabled) {
         if (isEnabled) {
-            //todo set dark theme
+//            setTheme(R.style.AppTheme_Dark);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+//            setTheme(R.style.AppTheme_Light);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 }

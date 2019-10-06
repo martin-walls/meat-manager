@@ -11,9 +11,9 @@
         <item name="android:paddingStart">24dp</item>
         <item name="android:drawablePadding">16dp</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">?textColorEmphasis</item>
+        <item name="android:textColor">?textColorPrimary</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:drawableTint">?textColorEmphasis</item>
+        <item name="android:drawableTint">?textColorPrimary</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:background">@drawable/nav_drawer_item_background</item>
@@ -24,60 +24,62 @@
     </style>
 
 
+
+
     <!-- Generic text styles -->
     <style name="TextNormal">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?textColorNormal</item>
+        <item name="android:textColor">?textColorSecondary</item>
     </style>
 
     <style name="TextDark">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?textColorEmphasis</item>
+        <item name="android:textColor">?textColorPrimary</item>
     </style>
 
 
-    <!-- Dialog text styles -->
+    <!-- Dialog styles -->
     <style name="DialogTitle">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?textColorEmphasis</item>
+        <item name="android:textColor">?textColorPrimary</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="DialogMessageText">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?textColorNormal</item>
+        <item name="android:textColor">?textColorSecondary</item>
     </style>
 
 
     <!-- List item text styles -->
     <style name="ItemInfoPrimary">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">?textColorEmphasis</item>
+        <item name="android:textColor">?textColorPrimary</item>
     </style>
 
     <style name="ItemInfoSecondary">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">?textColorNormal</item>
+        <item name="android:textColor">?textColorSecondary</item>
     </style>
 
     <style name="ItemAmountPrimary">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">?textColorEmphasis</item>
+        <item name="android:textColor">?textColorPrimary</item>
     </style>
 
     <style name="ItemAmountSecondary">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">?textColorNormal</item>
+        <item name="android:textColor">?textColorSecondary</item>
     </style>
 
     <style name="ListItemTextPrimary">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?textColorEmphasis</item>
+        <item name="android:textColor">?textColorPrimary</item>
     </style>
 
     <style name="ListItemTextSecondary">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?textColorNormal</item>
+        <item name="android:textColor">?textColorSecondary</item>
     </style>
 
     <!-- For text date dividers in lists -->
@@ -91,8 +93,9 @@
 
     <!-- Input styles -->
     <style name="AppTextInputLayout" parent="Widget.Design.TextInputLayout">
-        <item name="errorTextColor">?textColorError</item>
-        <item name="android:textColorHint">?textColorNormal</item>
+        <!-- Not needed, uses ?colorError by default -->
+        <!--<item name="errorTextColor">?textColorError</item>-->
+        <item name="android:textColorHint">?textColorSecondary</item>
     </style>
 
     <!-- shows clear icon at end -->
@@ -105,20 +108,20 @@
     <!-- For text on input forms such as reminder field for contracts -->
     <style name="InputFormText">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?textColorNormal</item>
+        <item name="android:textColor">?textColorSecondary</item>
     </style>
 
     <!-- For add another product button for orders/contracts -->
     <style name="AddAnotherProductText">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">italic</item>
-        <item name="android:textColor">?textColorNormal</item>
+        <item name="android:textColor">?textColorSecondary</item>
     </style>
 
     <!-- For search in input forms -->
     <style name="SearchResultsItem">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?textColorNormal</item>
+        <item name="android:textColor">?textColorSecondary</item>
     </style>
 
     <style name="SearchResultsItem.Selectable">
@@ -129,7 +132,7 @@
 
     <style name="SearchResultsItem.Selectable.AddNew">
         <item name="android:textStyle">italic</item>
-        <item name="android:textColor">?attr/textColorEmphasis</item>
+        <item name="android:textColor">?textColorPrimary</item>
         <item name="android:drawableStart">@drawable/ic_add</item>
         <item name="android:drawablePadding">16dp</item>
         <item name="android:text">@string/search_add_new</item>
@@ -144,7 +147,7 @@
     <!-- For details such as destination in details pages -->
     <style name="DetailsText">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?textColorNormal</item>
+        <item name="android:textColor">?textColorSecondary</item>
     </style>
 
 
@@ -155,7 +158,7 @@
     </style>
 
     <style name="ExchangeRateText.Primary" >
-        <item name="android:textColor">?textColorEmphasis</item>
+        <item name="android:textColor">?textColorNormal</item>
     </style>
 
     <style name="ExchangeRateText.Secondary">
@@ -165,13 +168,13 @@
     <style name="ExchangeCurrentCurrency">
         <item name="android:textSize">20sp</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">?attr/textColorEmphasis</item>
+        <item name="android:textColor">?textColorPrimary</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="ExchangeHistoryItemText">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?textColorNormal</item>
+        <item name="android:textColor">?textColorSecondary</item>
     </style>
 
 </resources>

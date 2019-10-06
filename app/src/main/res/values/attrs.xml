@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="textColorPrimary" format="reference" />
+    <attr name="textColorSecondary" format="reference" />
+
+
     <attr name="textColorNormal" format="reference" />
     <attr name="textColorEmphasis" format="reference" />
     <attr name="textColorError" format="reference" />
@@ -14,7 +18,7 @@
     <attr name="navDrawerItemStyle" format="reference" />
     <attr name="navDrawerBackgroundColor" format="reference" />
 
-    <attr name="popupOverlay" format="reference" />
+    <attr name="menuPopupOverlay" format="reference" />
 
     <attr name="dashboardGraphBarColor" format="reference" />
     <attr name="dashboardGraphReqBarColor" format="reference" />

@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.AddNewProductDialog;
+import com.martinwalls.nea.BaseActivity;
 import com.martinwalls.nea.EasyPreferences;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.Utils;
@@ -23,7 +23,7 @@ import com.martinwalls.nea.models.Product;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditProductsActivity extends AppCompatActivity
+public class EditProductsActivity extends BaseActivity
         implements AddNewProductDialog.AddNewProductListener {
 
     private final int SORT_BY_NAME = 0;
@@ -70,7 +70,7 @@ public class EditProductsActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         if (dbHandler == null) {
             dbHandler = new DBHandler(this);

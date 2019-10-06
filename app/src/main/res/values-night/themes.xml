@@ -7,8 +7,8 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <!-- Text -->
-        <item name="textColorPrimary">@color/dark_grey</item>
-        <item name="textColorSecondary">@color/medium_dark_grey</item>
+        <item name="textColorPrimary">@color/text_lighter</item>
+        <item name="textColorSecondary">@color/text_light</item>
         <item name="android:textColorPrimary">?textColorPrimary</item>
         <item name="android:textColorSecondary">?textColorSecondary</item>
 
@@ -16,10 +16,17 @@
         <item name="colorError">@color/error_red</item>
 
         <!-- Background of activities/fragments -->
-        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowBackground">@color/dark_background</item>
 
-        <!-- Theme for actionbar overflow menus -->
-        <item name="menuPopupOverlay">@style/Theme.MaterialComponents.Light.NoActionBar</item>
+        <!-- Dialog background color -->
+        <item name="colorBackgroundFloating">@color/dark_background</item>
+
+        <!-- Action bar -->
+        <item name="actionBarStyle">@style/Widget.MaterialComponents.ActionBar.Primary</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <!-- Actionbar overflow menus -->
+        <item name="menuPopupOverlay">@style/Theme.MaterialComponents.NoActionBar</item>
+        <item name="actionBarPopupTheme">?menuPopupOverlay</item>
 
         <!-- Views throughout app -->
         <item name="floatingActionButtonStyle">@style/Fab</item>
@@ -27,14 +34,14 @@
         <item name="textInputStyle">@style/AppTextInputLayout</item>
 
         <!-- Nav drawer -->
-        <item name="navDrawerBackgroundColor">@color/white</item>
+        <item name="navDrawerBackgroundColor">@color/dark_background</item>
         <item name="navDrawerItemStyle">@style/NavDrawerItem</item>
 
         <!-- Text style for dialog titles -->
         <item name="dialogTitleStyle">@style/DialogTitle</item>
 
         <!-- Generic background color for selected items eg current tab in nav drawer -->
-        <item name="selectedItemBackgroundColor">@color/light_selected_item</item>
+        <item name="selectedItemBackgroundColor">@color/dark_selected_item</item>
 
         <!-- List divider color -->
         <item name="dividerColor">@color/medium_dark_grey</item>
@@ -42,22 +49,13 @@
         <!-- Dashboard graph -->
         <item name="dashboardGraphBarColor">@color/dashboard_graph_bar</item>
         <item name="dashboardTooltipColor">@color/dashboard_tooltip</item>
-        <item name="dashboardTooltipTextColor">?textColorPrimary</item>
-        <item name="dashboardGraphBarInnerTextColor">?textColorPrimary</item>
+        <item name="dashboardTooltipTextColor">@color/dark_grey</item>
+        <item name="dashboardGraphBarInnerTextColor">@color/dark_grey</item>
         <item name="dashboardGraphBarOuterTextColor">?textColorPrimary</item>
 
         <item name="dashboardGraphReqBarColor">@color/dashboard_graph_bar_req</item>
         <item name="dashboardReqTooltipColor">@color/dashboard_tooltip_req</item>
         <item name="dashboardReqTooltipTextColor">@color/white</item>
-
     </style>
 
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 </resources>

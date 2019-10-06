@@ -17,6 +17,7 @@
         android:scrollbars="none"
         >
 
+        <!-- todo move color attrs to here?? (from BarChartView init()) -->
     <com.martinwalls.nea.components.BarChartView
         android:id="@+id/graph"
         android:layout_width="match_parent"

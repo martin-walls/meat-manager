@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -18,7 +17,7 @@ import com.martinwalls.nea.exchange.ExchangeFragment;
 import com.martinwalls.nea.orders.OrdersFragment;
 import com.martinwalls.nea.stock.StockFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     public static final int REQUEST_EXCHANGE_API_SERVICE = 1;
 
@@ -124,6 +123,15 @@ public class MainActivity extends AppCompatActivity {
             startActivity(settingsIntent);
         });
     }
+
+//    @Override
+//    protected void setDarkThemeEnabled(boolean isEnabled) {
+//        if (isEnabled) {
+//            setTheme(R.style.AppTheme_Dark_NoActionBar);
+//        } else {
+//            setTheme(R.style.AppTheme_Light_NoActionBar);
+//        }
+//    }
 
     @Override
     public void onBackPressed() {

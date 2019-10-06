@@ -11,8 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.DatePicker;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,11 +24,22 @@ import androidx.transition.TransitionInflater;
 import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.martinwalls.nea.*;
+import com.martinwalls.nea.AddNewProductDialog;
+import com.martinwalls.nea.BaseActivity;
+import com.martinwalls.nea.ConfirmCancelDialog;
+import com.martinwalls.nea.ProductsAddedAdapter;
+import com.martinwalls.nea.R;
+import com.martinwalls.nea.SearchItemAdapter;
+import com.martinwalls.nea.SimpleTextWatcher;
+import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.DBHandler;
-import com.martinwalls.nea.models.*;
+import com.martinwalls.nea.models.Location;
+import com.martinwalls.nea.models.Order;
+import com.martinwalls.nea.models.Product;
+import com.martinwalls.nea.models.ProductQuantity;
+import com.martinwalls.nea.models.SearchItem;
 import com.martinwalls.nea.stock.EditLocationsActivity;
 
 import java.time.LocalDate;
@@ -39,7 +53,7 @@ import java.util.List;
 
 import static android.view.View.GONE;
 
-public class NewOrderActivity extends AppCompatActivity
+public class NewOrderActivity extends BaseActivity
         implements SearchItemAdapter.SearchItemAdapterListener,
         AddNewProductDialog.AddNewProductListener,
         DatePickerDialog.OnDateSetListener,
