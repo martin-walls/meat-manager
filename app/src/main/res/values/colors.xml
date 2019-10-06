@@ -6,37 +6,24 @@
 
     <color name="fab_ripple_light">#2fff</color>
 
-
-
-
-
     <color name="white">#FFFFFF</color>
     <color name="light_grey">#eeeeee</color>
     <color name="medium_light_grey">#bcbcbc</color>
     <color name="medium_dark_grey">#8D8D8D</color>
     <color name="dark_grey">#424242</color>
 
+    <color name="dark_window_background">#212121</color>
 
+    <color name="light_text_primary">#424242</color>
+    <color name="light_text_secondary">#8D8D8D</color>
 
-
-    <color name="text_normal">#8D8D8D</color>
-    <color name="text_emphasis">#424242</color>
+    <color name="dark_text_primary">#eeeeee</color>
+    <color name="dark_text_secondary">#bcbcbc</color>
 
     <color name="light_selected_item">#eeeeee</color>
     <color name="dark_selected_item">#424242</color>
 
-
-
-
-
-
-
-
-    <color name="text_light">#bcbcbc</color>
-    <color name="text_lighter">#eeeeee</color>
-
     <color name="error_red">#f44336</color>
-
 
     <color name="delete">#FF0000</color>
 
@@ -49,6 +36,4 @@
     <color name="dark_dashboard_graph_bar_req">#D35454</color>
     <color name="dark_dashboard_tooltip">#bbdefb</color>
     <color name="dark_dashboard_tooltip_req">#D32F2F</color>
-
-    <color name="dark_background">#212121</color>
 </resources>

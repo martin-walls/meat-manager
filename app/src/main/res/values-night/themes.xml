@@ -7,8 +7,8 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <!-- Text -->
-        <item name="textColorPrimary">@color/text_lighter</item>
-        <item name="textColorSecondary">@color/text_light</item>
+        <item name="textColorPrimary">@color/dark_text_primary</item>
+        <item name="textColorSecondary">@color/dark_text_secondary</item>
         <item name="android:textColorPrimary">?textColorPrimary</item>
         <item name="android:textColorSecondary">?textColorSecondary</item>
 
@@ -16,10 +16,10 @@
         <item name="colorError">@color/error_red</item>
 
         <!-- Background of activities/fragments -->
-        <item name="android:windowBackground">@color/dark_background</item>
+        <item name="android:windowBackground">@color/dark_window_background</item>
 
         <!-- Dialog background color -->
-        <item name="colorBackgroundFloating">@color/dark_background</item>
+        <item name="colorBackgroundFloating">@color/dark_window_background</item>
 
         <!-- Action bar -->
         <item name="actionBarStyle">@style/Widget.MaterialComponents.ActionBar.Primary</item>
@@ -34,7 +34,7 @@
         <item name="textInputStyle">@style/AppTextInputLayout</item>
 
         <!-- Nav drawer -->
-        <item name="navDrawerBackgroundColor">@color/dark_background</item>
+        <item name="navDrawerBackgroundColor">@color/dark_window_background</item>
         <item name="navDrawerItemStyle">@style/NavDrawerItem</item>
 
         <!-- Text style for dialog titles -->
