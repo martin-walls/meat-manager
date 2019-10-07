@@ -2,8 +2,9 @@
 <resources>
     <color name="colorPrimary">#673ab7</color> <!-- Deep Purple 500 -->
     <color name="colorPrimaryDark">#320b86</color>
-    <color name="colorAccent">#ffc107</color>
+    <color name="colorAccent">#ffc107</color> <!-- Amber 500 -->
 
+    <color name="fab_background">@color/colorAccent</color>
     <color name="fab_ripple_light">#2fff</color>
 
     <color name="white">#FFFFFF</color>
@@ -23,7 +24,7 @@
     <color name="light_selected_item">#eeeeee</color>
     <color name="dark_selected_item">#424242</color>
 
-    <color name="error_red">#f44336</color>
+    <color name="error_red">#f44336</color> <!-- Red 500 -->
 
     <color name="delete">#FF0000</color>
 

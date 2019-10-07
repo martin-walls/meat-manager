@@ -5,7 +5,7 @@
     </style>
 
     <style name="Fab" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="android:backgroundTint">?attr/colorAccent</item>
+        <item name="backgroundTint">@color/fab_background</item>
         <item name="rippleColor">@color/fab_ripple_light</item>
         <item name="tint">@android:color/black</item>
     </style>
@@ -27,8 +27,6 @@
     <style name="EmptyView">
         <item name="android:textSize">20sp</item>
     </style>
-
-
 
 
     <!-- Generic text styles -->
