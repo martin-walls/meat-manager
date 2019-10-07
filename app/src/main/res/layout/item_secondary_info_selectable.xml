@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="1px"
-    android:background="?android:windowBackground"
+    android:background="@drawable/selectable_item_background_solid"
+    android:clickable="true"
     >
 
     <include

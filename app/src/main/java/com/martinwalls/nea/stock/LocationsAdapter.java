@@ -42,7 +42,7 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_secondary_info, parent, false);
+                .inflate(R.layout.item_secondary_info_selectable, parent, false);
         return new ViewHolder(itemView);
     }
 
