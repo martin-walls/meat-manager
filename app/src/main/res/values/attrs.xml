@@ -2,11 +2,7 @@
 <resources>
     <attr name="textColorPrimary" format="reference" />
     <attr name="textColorSecondary" format="reference" />
-
-
-    <attr name="textColorNormal" format="reference" />
     <attr name="textColorEmphasis" format="reference" />
-    <attr name="textColorError" format="reference" />
 
     <attr name="dividerColor" format="reference" />
 

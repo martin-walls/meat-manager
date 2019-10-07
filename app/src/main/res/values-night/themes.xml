@@ -7,10 +7,11 @@
         <item name="colorAccent">@color/color_accent</item>
 
         <!-- Text -->
-        <item name="textColorPrimary">@color/dark_text_primary</item>
-        <item name="textColorSecondary">@color/dark_text_secondary</item>
+        <item name="textColorPrimary">@color/light_grey</item>
+        <item name="textColorSecondary">@color/medium_light_grey</item>
         <item name="android:textColorPrimary">?textColorPrimary</item>
         <item name="android:textColorSecondary">?textColorSecondary</item>
+        <item name="textColorEmphasis">@color/color_primary_light</item>
 
         <!-- Error color eg for error text on inputs -->
         <item name="colorError">@color/error_red</item>
@@ -41,7 +42,7 @@
         <item name="dialogTitleStyle">@style/DialogTitle</item>
 
         <!-- Generic background color for selected items eg current tab in nav drawer -->
-        <item name="selectedItemBackgroundColor">@color/dark_selected_item</item>
+        <item name="selectedItemBackgroundColor">@color/dark_grey</item>
 
         <!-- List divider color -->
         <item name="dividerColor">@color/medium_dark_grey</item>
