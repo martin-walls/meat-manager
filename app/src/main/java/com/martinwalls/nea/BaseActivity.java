@@ -2,7 +2,6 @@ package com.martinwalls.nea;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -24,12 +23,12 @@ public class BaseActivity extends AppCompatActivity {
 //    }
 
     protected void setDarkThemeEnabled(boolean isEnabled) {
-        if (isEnabled) {
-//            setTheme(R.style.AppTheme_Dark);
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-//            setTheme(R.style.AppTheme_Light);
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
+//        if (isEnabled) {
+////            setTheme(R.style.AppTheme_Dark);
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//        } else {
+////            setTheme(R.style.AppTheme_Light);
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//        }
     }
 }

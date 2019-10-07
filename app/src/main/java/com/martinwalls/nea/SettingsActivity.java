@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -24,6 +25,17 @@ public class SettingsActivity extends BaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        setDarkTheme();
+    }
+
+    private void setDarkTheme() {
+        EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
+        if (prefs.getBoolean(R.string.pref_dark_theme, false)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 
@@ -94,6 +106,8 @@ public class SettingsActivity extends BaseActivity {
         <T extends Preference> T findPreference(@StringRes int keyId) {
             return findPreference(getString(keyId));
         }
+
+
 
         private boolean isExternalStoragePermissionGranted() {
             return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)

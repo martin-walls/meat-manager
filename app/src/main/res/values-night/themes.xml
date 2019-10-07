@@ -56,6 +56,10 @@
         <item name="dashboardGraphReqBarColor">@color/dashboard_graph_bar_req</item>
         <item name="dashboardReqTooltipColor">@color/dashboard_tooltip_req</item>
         <item name="dashboardReqTooltipTextColor">@color/white</item>
+
+
+
+        <!--<item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>-->
     </style>
 
 </resources>
