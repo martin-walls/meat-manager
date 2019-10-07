@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4527a0</color> <!-- Deep purple 800  -->
-    <color name="colorPrimaryDark">#000070</color>
-    <color name="colorAccent">#ffc107</color> <!-- Amber 500 -->
+    <color name="color_primary">#4527a0</color> <!-- Deep purple 800  -->
+    <color name="color_primary_dark">#000070</color>
+    <color name="color_accent">#ffc107</color> <!-- Amber 500 -->
 
     <color name="fab_background">#ffa000</color> <!-- Amber 700 -->
 </resources>
