@@ -103,9 +103,10 @@
 
     <!-- Edit locations page -->
     <string name="locations_title">Locations</string>
-    <string name="locations_supplier">Supplier</string>
-    <string name="locations_storage">Storage</string>
-    <string name="locations_destination">Destination</string>
+    <string name="locations_type_supplier">Supplier</string>
+    <string name="locations_type_storage">Storage</string>
+    <string name="locations_type_destination">Destination</string>
+    <string name="locations_type_generic">Location</string>
     <string name="locations_new">Add new locationId</string>
     <string name="locations_input_name">Name</string>
     <string name="locations_input_type">Type</string>

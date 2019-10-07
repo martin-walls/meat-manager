@@ -93,7 +93,7 @@ public class OrdersFragment extends Fragment
     }
 
     @Override
-    public void onOrderSelected(Order order) {
+    public void onOrderClicked(Order order) {
         Intent detailIntent = new Intent(getContext(), OrderDetailActivity.class);
         detailIntent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, order.getOrderId());
         startActivity(detailIntent);

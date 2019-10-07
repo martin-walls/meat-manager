@@ -27,7 +27,6 @@ public class EditLocationsActivity extends BaseActivity
         implements ConfirmCancelDialog.ConfirmCancelListener {
 
     public static final String EXTRA_LOCATION_TYPE = "location_type";
-    private final String LOCATION_TYPE_DEFAULT = Location.LocationType.Storage.name();
 
     private DBHandler dbHandler;
 
@@ -36,15 +35,15 @@ public class EditLocationsActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_locations);
 
-        String locationType = LOCATION_TYPE_DEFAULT;
+        final String locationTypeDefault = getString(R.string.locations_type_generic);
+
+        String locationType = locationTypeDefault;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            locationType = extras.getString(EXTRA_LOCATION_TYPE, LOCATION_TYPE_DEFAULT);
+            locationType = extras.getString(EXTRA_LOCATION_TYPE, locationType);
         }
 
-        getSupportActionBar().setTitle(getString(R.string.locations_add_new_title,
-                locationType.equals(Location.LocationType.Storage.name())
-                        ? LOCATION_TYPE_DEFAULT : locationType.toLowerCase()));
+        getSupportActionBar().setTitle(getString(R.string.locations_add_new_title, locationType.toLowerCase()));
 
         dbHandler = new DBHandler(this);
 
@@ -65,7 +64,7 @@ public class EditLocationsActivity extends BaseActivity
             }
         });
 
-        if (locationType != LOCATION_TYPE_DEFAULT) {
+        if (!locationType.equals(locationTypeDefault)) {
             editTextLocationType.setText(locationType);
         }
     }

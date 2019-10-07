@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +24,7 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
     private int recentlyDeletedItemPosition;
 
     private Activity parentActivity;
+    private LocationsAdapterListener listener;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView locationName, locationType;
@@ -31,11 +33,15 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
             super(view);
             locationName = view.findViewById(R.id.info_primary);
             locationType = view.findViewById(R.id.info_secondary);
+
+            RelativeLayout itemRootLayout = view.findViewById(R.id.item_root_layout);
+            itemRootLayout.setOnClickListener(v -> listener.onLocationClicked(locationList.get(getAdapterPosition())));
         }
     }
 
-    LocationsAdapter(List<Location> locationList, Activity parentActivity) {
+    LocationsAdapter(List<Location> locationList, LocationsAdapterListener listener, Activity parentActivity) {
         this.locationList = locationList;
+        this.listener = listener;
         this.parentActivity = parentActivity;
     }
 
@@ -97,5 +103,9 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
     private void undoDelete() {
         locationList.add(recentlyDeletedItemPosition, recentlyDeletedItem);
         notifyItemInserted(recentlyDeletedItemPosition);
+    }
+
+    public interface LocationsAdapterListener {
+        void onLocationClicked(Location location);
     }
 }

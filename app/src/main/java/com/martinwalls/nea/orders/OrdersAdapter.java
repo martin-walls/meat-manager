@@ -30,7 +30,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             recyclerView = view.findViewById(R.id.recycler_view);
 
             LinearLayout orderInfo = view.findViewById(R.id.order_info);
-            orderInfo.setOnClickListener(v -> listener.onOrderSelected(orderList.get(getAdapterPosition())));
+            orderInfo.setOnClickListener(v -> listener.onOrderClicked(orderList.get(getAdapterPosition())));
         }
     }
 
@@ -69,6 +69,6 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     }
 
     public interface OrdersAdapterListener {
-        void onOrderSelected(Order order);
+        void onOrderClicked(Order order);
     }
 }

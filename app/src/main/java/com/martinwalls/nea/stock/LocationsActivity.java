@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +21,8 @@ import com.martinwalls.nea.models.Location;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocationsActivity extends BaseActivity {
+public class LocationsActivity extends BaseActivity
+        implements LocationsAdapter.LocationsAdapterListener {
 
     private DBHandler dbHandler;
 
@@ -42,7 +44,7 @@ public class LocationsActivity extends BaseActivity {
         TextView emptyView = findViewById(R.id.empty);
         recyclerView.setEmptyView(emptyView);
 
-        locationsAdapter = new LocationsAdapter(locationList, this);
+        locationsAdapter = new LocationsAdapter(locationList, this, this);
         recyclerView.setAdapter(locationsAdapter);
         loadLocations();
 
@@ -77,6 +79,11 @@ public class LocationsActivity extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onLocationClicked(Location location) {
+        Toast.makeText(this, location.getPostcode(), Toast.LENGTH_SHORT).show();
     }
 
     private void loadLocations() {
