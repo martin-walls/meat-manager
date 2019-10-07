@@ -158,7 +158,7 @@
     </style>
 
     <style name="ExchangeRateText.Primary" >
-        <item name="android:textColor">?textColorNormal</item>
+        <item name="android:textColor">?textColorSecondary</item>
     </style>
 
     <style name="ExchangeRateText.Secondary">
