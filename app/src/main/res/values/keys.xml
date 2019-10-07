@@ -3,6 +3,8 @@
     tools:ignore="MissingTranslation"
     >
 
+    <string name="pref_last_opened_page">last_opened_page</string>
+
     <string name="pref_mass_unit">mass_unit</string>
     <string name="pref_dark_theme">dark_theme</string>
     <string name="pref_backup_db">backup_db</string>

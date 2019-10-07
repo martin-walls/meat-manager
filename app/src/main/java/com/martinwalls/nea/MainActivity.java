@@ -43,7 +43,18 @@ public class MainActivity extends BaseActivity {
         public int getNavItem() {
             return navItem;
         }
+
+        public static Page getPageFromName(String name) {
+            for (Page page : values()) {
+                if (page.name().equals(name)) {
+                    return page;
+                }
+            }
+            return null;
+        }
     }
+
+    private EasyPreferences preferences;
 
     private Page currentPage = Page.DASHBOARD;
 
@@ -52,15 +63,28 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        preferences = EasyPreferences.createForDefaultPreferences(this);
+
+
         if (savedInstanceState == null) {
-            // open dashboard screen at start
+            currentPage = Page.getPageFromName(
+                    preferences.getString(R.string.pref_last_opened_page, Page.DASHBOARD.name()));
+
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_holder, Page.DASHBOARD.getFragment())
+                    .add(R.id.fragment_holder, currentPage.getFragment())
                     .commit();
-            currentPage = Page.DASHBOARD;
-            findViewById(R.id.nav_dashboard).setActivated(true);
         }
+
+//        if (savedInstanceState == null) {
+//            // open dashboard screen at start
+//            getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .add(R.id.fragment_holder, Page.DASHBOARD.getFragment())
+//                    .commit();
+//            currentPage = Page.DASHBOARD;
+//            findViewById(R.id.nav_dashboard).setActivated(true);
+//        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -124,15 +148,6 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-//    @Override
-//    protected void setDarkThemeEnabled(boolean isEnabled) {
-//        if (isEnabled) {
-//            setTheme(R.style.AppTheme_Dark_NoActionBar);
-//        } else {
-//            setTheme(R.style.AppTheme_Light_NoActionBar);
-//        }
-//    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -170,6 +185,8 @@ public class MainActivity extends BaseActivity {
                 .commit();
 
         currentPage = newPage;
+
+        preferences.setString(R.string.pref_last_opened_page, currentPage.name());
 
         // close nav drawer if open
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);

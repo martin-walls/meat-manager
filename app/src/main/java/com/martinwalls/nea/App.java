@@ -16,5 +16,8 @@ public class App extends Application {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+
+        // start on default page so clear saved position
+        preferences.setString(R.string.pref_last_opened_page, null);
     }
 }
