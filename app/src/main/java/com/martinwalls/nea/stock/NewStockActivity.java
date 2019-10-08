@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.transition.Transition;
@@ -20,7 +21,6 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.AddNewProductDialog;
-import com.martinwalls.nea.BaseActivity;
 import com.martinwalls.nea.ConfirmCancelDialog;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SearchItemAdapter;
@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class NewStockActivity extends BaseActivity
+public class NewStockActivity extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener,
         AddNewProductDialog.AddNewProductListener,
         ConfirmCancelDialog.ConfirmCancelListener {

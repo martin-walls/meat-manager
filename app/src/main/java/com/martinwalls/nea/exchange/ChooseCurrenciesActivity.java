@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import com.martinwalls.nea.BaseActivity;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.components.CustomRecyclerView;
@@ -15,7 +15,7 @@ import com.martinwalls.nea.models.Currency;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChooseCurrenciesActivity extends BaseActivity
+public class ChooseCurrenciesActivity extends AppCompatActivity
         implements CurrencyAdapter.CurrencyAdapterListener {
 
     private ExchangeDbHandler dbHandler;

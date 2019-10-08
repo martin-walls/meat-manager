@@ -6,12 +6,13 @@ import android.os.Bundle;
 import android.widget.Toast;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import com.martinwalls.nea.db.DBHandler;
 
-public class SettingsActivity extends BaseActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
