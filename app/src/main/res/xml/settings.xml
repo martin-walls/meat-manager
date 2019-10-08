@@ -4,6 +4,7 @@
 
     <PreferenceCategory app:title="@string/settings_cat_general">
 
+        <!-- todo show values in kg/lbs throughout app -->
         <ListPreference
             app:defaultValue="@string/unit_kg"
             app:entries="@array/mass_units"

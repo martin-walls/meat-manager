@@ -81,6 +81,7 @@ public class OrdersFragment extends Fragment
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            // todo implement undo/redo
             case R.id.action_undo:
                 Toast.makeText(getContext(), "UNDO", Toast.LENGTH_SHORT).show();
                 return true;
