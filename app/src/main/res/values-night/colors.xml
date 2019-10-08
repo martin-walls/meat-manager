@@ -7,6 +7,9 @@
 
     <color name="fab_background">#ffa000</color> <!-- Amber 700 -->
 
+
+    <color name="window_background">#212121</color>
+
     <!--<color name="selected_item">#424242</color>-->
 
     <color name="dashboard_graph_bar">#5EA4E2</color>

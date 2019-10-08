@@ -17,7 +17,7 @@
         <item name="colorError">@color/error_red</item>
 
         <!-- Background of activities/fragments -->
-        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowBackground">@color/window_background</item>
 
         <!-- Theme for actionbar overflow menus -->
         <item name="menuPopupOverlay">@style/Theme.MaterialComponents.Light.NoActionBar</item>

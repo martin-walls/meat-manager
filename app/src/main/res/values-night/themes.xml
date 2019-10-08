@@ -17,10 +17,10 @@
         <item name="colorError">@color/error_red</item>
 
         <!-- Background of activities/fragments -->
-        <item name="android:windowBackground">@color/dark_window_background</item>
+        <item name="android:windowBackground">@color/window_background</item>
 
         <!-- Dialog background color -->
-        <item name="colorBackgroundFloating">@color/dark_window_background</item>
+        <item name="colorBackgroundFloating">?android:windowBackground</item>
 
         <!-- Action bar -->
         <item name="actionBarStyle">@style/Widget.MaterialComponents.ActionBar.Primary</item>

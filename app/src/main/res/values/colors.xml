@@ -15,7 +15,7 @@
     <color name="medium_dark_grey">#8D8D8D</color>
     <color name="dark_grey">#424242</color>
 
-    <color name="dark_window_background">#212121</color>
+    <color name="window_background">#ffffff</color>
 
     <!--<color name="selected_item">#eeeeee</color>-->
 
@@ -27,9 +27,4 @@
     <color name="dashboard_graph_bar_req">#e57373</color>
     <color name="dashboard_tooltip">#bbdefb</color>
     <color name="dashboard_tooltip_req">#D32F2F</color>
-
-    <color name="dark_dashboard_graph_bar">#5EA4E2</color>
-    <color name="dark_dashboard_graph_bar_req">#D35454</color>
-    <color name="dark_dashboard_tooltip">#bbdefb</color>
-    <color name="dark_dashboard_tooltip_req">#D32F2F</color>
 </resources>
