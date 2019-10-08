@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="BaseTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- App colors -->
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
-
-        <!-- Text -->
-        <item name="textColorPrimary">@color/dark_grey</item>
-        <item name="textColorSecondary">@color/medium_dark_grey</item>
-        <item name="android:textColorPrimary">?textColorPrimary</item>
-        <item name="android:textColorSecondary">?textColorSecondary</item>
-        <item name="textColorEmphasis">?colorPrimary</item>
 
         <!-- Error color eg for error text on inputs -->
         <item name="colorError">@color/error_red</item>
@@ -22,20 +15,30 @@
         <!-- Dialog background color -->
         <item name="colorBackgroundFloating">@color/window_background</item>
 
-        <!-- Theme for actionbar overflow menus -->
-        <item name="menuPopupOverlay">@style/Theme.MaterialComponents.Light.NoActionBar</item>
-
         <!-- Views throughout app -->
         <item name="floatingActionButtonStyle">@style/Fab</item>
+
         <!-- For text input layouts throughout app -->
         <item name="textInputStyle">@style/AppTextInputLayout</item>
 
         <!-- Nav drawer -->
-        <item name="navDrawerBackgroundColor">@color/white</item>
+        <item name="navDrawerBackgroundColor">?android:windowBackground</item>
         <item name="navDrawerItemStyle">@style/NavDrawerItem</item>
 
         <!-- Text style for dialog titles -->
         <item name="dialogTitleStyle">@style/DialogTitle</item>
+    </style>
+
+    <style name="AppTheme" parent="BaseTheme">
+        <!-- Text -->
+        <item name="textColorPrimary">@color/dark_grey</item>
+        <item name="textColorSecondary">@color/medium_dark_grey</item>
+        <item name="android:textColorPrimary">?textColorPrimary</item>
+        <item name="android:textColorSecondary">?textColorSecondary</item>
+        <item name="textColorEmphasis">?colorPrimary</item>
+
+        <!-- Theme for actionbar overflow menus -->
+        <item name="menuPopupOverlay">@style/Theme.MaterialComponents.Light.NoActionBar</item>
 
         <!-- Generic background color for selected items eg current tab in nav drawer -->
         <item name="selectedItemBackgroundColor">@color/light_grey</item>
@@ -54,7 +57,6 @@
         <item name="dashboardReqTooltipColor">@color/dashboard_tooltip_req</item>
         <item name="dashboardReqTooltipTextColor">@color/white</item>
     </style>
-
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

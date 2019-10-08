@@ -87,6 +87,9 @@ public class OrdersFragment extends Fragment
             case R.id.action_redo:
                 Toast.makeText(getContext(), "REDO", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.action_order_history:
+                //todo order history
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
