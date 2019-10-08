@@ -13,10 +13,19 @@
             app:useSimpleSummaryProvider="true"
             />
 
-        <SwitchPreferenceCompat
+        <ListPreference
+            app:defaultValue="0"
+            app:entries="@array/pref_dark_theme_entries"
+            app:entryValues="@array/pref_dark_theme_values"
             app:key="@string/pref_dark_theme"
             app:title="@string/settings_dark_theme"
+            app:useSimpleSummaryProvider="true"
             />
+
+        <!--<SwitchPreferenceCompat-->
+            <!--app:key="@string/pref_dark_theme"-->
+            <!--app:title="@string/settings_dark_theme"-->
+            <!--/>-->
 
     </PreferenceCategory>
 

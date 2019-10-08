@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.widget.Toast;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -32,11 +31,7 @@ public class SettingsActivity extends BaseActivity {
 
     private void setDarkTheme() {
         EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
-        if (prefs.getBoolean(R.string.pref_dark_theme, false)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
+        DarkTheme.setDarkTheme(prefs.getIntFromString(R.string.pref_dark_theme, DarkTheme.MODE_NIGHT_AUTO));
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {

@@ -1,7 +1,6 @@
 package com.martinwalls.nea;
 
 import android.app.Application;
-import androidx.appcompat.app.AppCompatDelegate;
 
 public class App extends Application {
 
@@ -10,14 +9,10 @@ public class App extends Application {
         super.onCreate();
 
         // load theme on startup
-        EasyPreferences preferences = EasyPreferences.createForDefaultPreferences(this);
-        if (preferences.getBoolean(R.string.pref_dark_theme, false)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
+        EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
+        DarkTheme.setDarkTheme(prefs.getIntFromString(R.string.pref_dark_theme, DarkTheme.MODE_NIGHT_AUTO));
 
         // start on default page so clear saved position
-        preferences.setString(R.string.pref_last_opened_page, null);
+        prefs.setString(R.string.pref_last_opened_page, null);
     }
 }

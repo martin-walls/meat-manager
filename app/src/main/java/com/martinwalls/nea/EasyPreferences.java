@@ -50,6 +50,14 @@ public class EasyPreferences {
         prefs.edit().putInt(key(keyId), value).apply();
     }
 
+    public int getIntFromString(@StringRes int keyId, int defaultValue) {
+        return Integer.parseInt(prefs.getString(key(keyId), String.valueOf(defaultValue)));
+    }
+
+    public void setIntToString(@StringRes int keyId, int value) {
+        prefs.edit().putString(key(keyId), String.valueOf(value)).apply();
+    }
+
     public long getLong(@StringRes int keyId, long defaultValue) {
         return prefs.getLong(key(keyId), defaultValue);
     }

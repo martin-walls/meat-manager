@@ -8,9 +8,9 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EasyPreferences preferences = EasyPreferences.createForDefaultPreferences(this);
-        boolean isDarkThemeEnabled = preferences.getBoolean(R.string.pref_dark_theme, false);
-        setDarkThemeEnabled(isDarkThemeEnabled);
+//        EasyPreferences preferences = EasyPreferences.createForDefaultPreferences(this);
+//        boolean isDarkThemeEnabled = preferences.getBoolean(R.string.pref_dark_theme, false);
+//        setDarkThemeEnabled(isDarkThemeEnabled);
     }
 
 //    @Override

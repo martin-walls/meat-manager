@@ -7,6 +7,17 @@
 
     <string name="pref_mass_unit">mass_unit</string>
     <string name="pref_dark_theme">dark_theme</string>
+    <string-array name="pref_dark_theme_entries">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Set by Battery Saver</item>
+    </string-array>
+    <string-array name="pref_dark_theme_values">
+        <item>1</item>
+        <item>2</item>
+        <item>0</item>
+    </string-array>
+
     <string name="pref_backup_db">backup_db</string>
     <string name="pref_restore_db">restore_db</string>
 

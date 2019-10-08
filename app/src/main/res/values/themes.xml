@@ -19,6 +19,9 @@
         <!-- Background of activities/fragments -->
         <item name="android:windowBackground">@color/window_background</item>
 
+        <!-- Dialog background color -->
+        <item name="colorBackgroundFloating">@color/window_background</item>
+
         <!-- Theme for actionbar overflow menus -->
         <item name="menuPopupOverlay">@style/Theme.MaterialComponents.Light.NoActionBar</item>
 
