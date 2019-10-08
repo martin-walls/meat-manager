@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".stock.LocationDetailActivity"
+    >
+
+    <TextView
+        android:id="@+id/name"
+        style="@style/DetailsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_name"
+        android:drawablePadding="16dp"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
+        tools:text="Location name"
+        />
+
+    <TextView
+        android:id="@+id/location_type"
+        style="@style/DetailsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_type"
+        android:drawablePadding="16dp"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
+        tools:text="Storage"
+        />
+
+    <TextView
+        android:id="@+id/address"
+        style="@style/DetailsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_location"
+        android:drawablePadding="16dp"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
+        tools:text="12 High Street,\nLancaster,\nLA1 2PF,\nUK"
+        />
+
+    <TextView
+        android:id="@+id/email"
+        style="@style/DetailsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="16dp"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
+        tools:text="abc@example.com"
+        />
+
+    <TextView
+        android:id="@+id/phone"
+        style="@style/DetailsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_phone"
+        android:drawablePadding="16dp"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
+        tools:text="01524 842567"
+        />
+
+</LinearLayout>

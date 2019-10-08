@@ -19,6 +19,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         >
+        <activity android:name=".stock.LocationDetailActivity"></activity>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings_title"

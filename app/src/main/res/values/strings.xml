@@ -120,6 +120,8 @@
     <string name="locations_add_new_title">Add new %s</string>
     <string name="locations_empty">No locations to show</string>
 
+    <string name="location_details_title">Location details</string>
+
     <!-- Orders page -->
     <string name="orders_title">Orders</string>
     <string name="orders_empty">No orders to show</string>

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -83,7 +82,9 @@ public class LocationsActivity extends BaseActivity
 
     @Override
     public void onLocationClicked(Location location) {
-        Toast.makeText(this, location.getPostcode(), Toast.LENGTH_SHORT).show();
+        Intent detailsIntent = new Intent(this, LocationDetailActivity.class);
+        detailsIntent.putExtra(LocationDetailActivity.EXTRA_LOCATION_ID, location.getLocationId());
+        startActivity(detailsIntent);
     }
 
     private void loadLocations() {

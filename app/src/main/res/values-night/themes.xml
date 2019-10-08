@@ -35,7 +35,7 @@
         <item name="textInputStyle">@style/AppTextInputLayout</item>
 
         <!-- Nav drawer -->
-        <item name="navDrawerBackgroundColor">@color/dark_window_background</item>
+        <item name="navDrawerBackgroundColor">?android:windowBackground</item>
         <item name="navDrawerItemStyle">@style/NavDrawerItem</item>
 
         <!-- Text style for dialog titles -->

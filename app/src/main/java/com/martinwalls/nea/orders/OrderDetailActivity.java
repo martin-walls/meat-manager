@@ -67,11 +67,11 @@ public class OrderDetailActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                super.onBackPressed();
-                return true;
             case R.id.action_edit:
                 Toast.makeText(this, "EDIT", Toast.LENGTH_SHORT).show();
+                return true;
+            case android.R.id.home:
+                super.onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
