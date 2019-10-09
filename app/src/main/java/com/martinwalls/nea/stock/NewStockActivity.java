@@ -25,7 +25,6 @@ import com.martinwalls.nea.ConfirmCancelDialog;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SearchItemAdapter;
 import com.martinwalls.nea.SimpleTextWatcher;
-import com.martinwalls.nea.Utils;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.DBHandler;
@@ -33,6 +32,7 @@ import com.martinwalls.nea.models.Location;
 import com.martinwalls.nea.models.Product;
 import com.martinwalls.nea.models.SearchItem;
 import com.martinwalls.nea.models.StockItem;
+import com.martinwalls.nea.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -404,6 +404,7 @@ public class NewStockActivity extends AppCompatActivity
             inputLayoutLocation.setError(getString(R.string.input_error_stock_already_in_location));
             isValid = false;
         }
+
 
         if (isValid) {
             newStockItem.setProduct(dbHandler.getProduct(selectedProductId));

@@ -11,6 +11,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import com.martinwalls.nea.db.DBHandler;
+import com.martinwalls.nea.util.DarkTheme;
+import com.martinwalls.nea.util.EasyPreferences;
 
 public class SettingsActivity extends AppCompatActivity {
 

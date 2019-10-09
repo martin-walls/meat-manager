@@ -1,4 +1,4 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

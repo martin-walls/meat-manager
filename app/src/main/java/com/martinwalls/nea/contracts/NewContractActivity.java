@@ -32,7 +32,7 @@ import com.martinwalls.nea.ProductsAddedAdapter;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SearchItemAdapter;
 import com.martinwalls.nea.SimpleTextWatcher;
-import com.martinwalls.nea.Utils;
+import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.DBHandler;

@@ -1,6 +1,8 @@
 package com.martinwalls.nea;
 
 import android.app.Application;
+import com.martinwalls.nea.util.DarkTheme;
+import com.martinwalls.nea.util.EasyPreferences;
 
 public class App extends Application {
 

@@ -17,6 +17,7 @@ import com.martinwalls.nea.dashboard.DashboardFragment;
 import com.martinwalls.nea.exchange.ExchangeFragment;
 import com.martinwalls.nea.orders.OrdersFragment;
 import com.martinwalls.nea.stock.StockFragment;
+import com.martinwalls.nea.util.EasyPreferences;
 
 public class MainActivity extends AppCompatActivity {
 

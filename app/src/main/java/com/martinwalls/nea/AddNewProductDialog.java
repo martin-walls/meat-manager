@@ -14,6 +14,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.Product;
+import com.martinwalls.nea.util.Utils;
 
 import java.util.List;
 

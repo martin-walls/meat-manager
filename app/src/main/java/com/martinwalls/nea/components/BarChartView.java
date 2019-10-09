@@ -12,7 +12,7 @@ import android.view.View;
 import androidx.annotation.AttrRes;
 import androidx.annotation.Nullable;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.Utils;
+import com.martinwalls.nea.util.Utils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
