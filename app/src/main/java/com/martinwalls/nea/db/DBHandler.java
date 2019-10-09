@@ -530,7 +530,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return stockResultList;
     }
 
-    public boolean addStockItem(StockItem stockItem) throws SQLiteConstraintException {
+    public int addStockItem(StockItem stockItem) {
         ContentValues values = new ContentValues();
         values.put(StockTable.PRODUCT_ID, stockItem.getProduct().getProductId());
         values.put(StockTable.LOCATION_ID, stockItem.getLocationId());
@@ -545,7 +545,15 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         long newRowId = db.insert(StockTable.TABLE_NAME, null, values);
         db.close();
-        return newRowId != -1;
+        return (int) newRowId;
+    }
+
+    public boolean deleteStockItem(int stockId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int deletedRows = db.delete(StockTable.TABLE_NAME,
+                StockTable.ID + "=?", new String[]{stockId + ""});
+        db.close();
+        return deletedRows == 1;
     }
     //endregion stock
 

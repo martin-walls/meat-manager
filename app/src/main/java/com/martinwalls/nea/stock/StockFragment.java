@@ -21,6 +21,7 @@ import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.components.RecyclerViewDivider;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.StockItem;
+import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -94,9 +95,13 @@ public class StockFragment extends Fragment {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_undo:
+                UndoStack.getInstance().undo(getContext());
+                loadStock();
                 Toast.makeText(getContext(), "UNDO", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_redo:
+                UndoStack.getInstance().redo(getContext());
+                loadStock();
                 Toast.makeText(getContext(), "REDO", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_edit_products:

@@ -33,6 +33,8 @@ import com.martinwalls.nea.models.Product;
 import com.martinwalls.nea.models.SearchItem;
 import com.martinwalls.nea.models.StockItem;
 import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.util.undo.AddStockAction;
+import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -423,7 +425,13 @@ public class NewStockActivity extends AppCompatActivity
             }
             newStockItem.setQuality(StockItem.Quality.parseQuality(editQuality.getText().toString()));
 
-            return dbHandler.addStockItem(newStockItem);
+
+            int newRowId = dbHandler.addStockItem(newStockItem);
+
+            newStockItem.setStockId(newRowId);
+            UndoStack.getInstance().push(new AddStockAction(newStockItem));
+
+            return newRowId != -1;
         }
 
         return false;

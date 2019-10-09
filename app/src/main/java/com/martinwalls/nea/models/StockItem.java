@@ -29,6 +29,7 @@ public class StockItem {
         }
     }
 
+    private int stockId;
     private Product product;
     // names are also stored for locations so they can be displayed,
     // the other data is only loaded as needed
@@ -70,6 +71,14 @@ public class StockItem {
         this.supplierName = supplierName;
         this.mass = mass;
         this.quality = quality;
+    }
+
+    public int getStockId() {
+        return stockId;
+    }
+
+    public void setStockId(int stockId) {
+        this.stockId = stockId;
     }
 
     public Product getProduct() {
