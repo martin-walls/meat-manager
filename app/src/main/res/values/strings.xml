@@ -25,7 +25,9 @@
     <string name="action_order_history">Order history</string>
     <string name="action_favourites">Favourites</string>
 
-    <!-- Common data -->
+    <!-- Common -->
+    <string name="unit_kg">kg</string>
+    <string name="unit_lbs">lbs</string>
     <string name="amount_kg">%s kg</string>
     <plurals name="amount_lbs">
         <item quantity="one">%s lb</item>
@@ -35,9 +37,6 @@
         <item quantity="one">%d box</item>
         <item quantity="other">%d boxes</item>
     </plurals>
-    <string name="quality_good">Good</string>
-    <string name="quality_pet_food">Pet food</string>
-    <string name="quality_waste">Waste</string>
 
     <!-- db errors -->
     <string name="db_error_insert">Error adding %s</string>
@@ -195,8 +194,6 @@
     <string name="settings_title">Settings</string>
     <string name="settings_cat_general">General</string>
     <string name="settings_mass_unit">Unit of mass to use</string>
-    <string name="unit_kg">kg</string>
-    <string name="unit_lbs">lbs</string>
     <string name="settings_default_reminder_time">Default reminder time (days)</string>
     <string name="settings_cat_backup">Backup &amp; restore</string>
     <string name="settings_backup_db">Backup database</string>
