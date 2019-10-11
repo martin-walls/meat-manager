@@ -11,8 +11,8 @@ public class UndoStack {
 
     private final int MAX_SIZE = 100;
 
-    private List<Action> undoStack = new ArrayList<>();
-    private List<Action> redoStack = new ArrayList<>();
+    private List<UndoableAction> undoStack = new ArrayList<>();
+    private List<UndoableAction> redoStack = new ArrayList<>();
 
     private UndoStack() {}
 
@@ -20,8 +20,8 @@ public class UndoStack {
         return instance;
     }
 
-    public void push(Action action) {
-        undoStack.add(action);
+    public void push(UndoableAction undoableAction) {
+        undoStack.add(undoableAction);
         while (undoStack.size() > MAX_SIZE) {
             undoStack.remove(0);
         }
@@ -36,22 +36,22 @@ public class UndoStack {
         return redoStack.size() > 0;
     }
 
-    public Action undo(Context context) {
+    public UndoableAction undo(Context context) {
         if (!canUndo()) {
             return null;
         }
-        Action lastAction = undoStack.get(undoStack.size() - 1);
+        UndoableAction lastAction = undoStack.get(undoStack.size() - 1);
         undoStack.remove(undoStack.size() - 1);
         redoStack.add(lastAction);
         lastAction.undoAction(context);
         return lastAction;
     }
 
-    public Action redo(Context context) {
+    public UndoableAction redo(Context context) {
         if (!canRedo()) {
             return null;
         }
-        Action lastAction = redoStack.get(redoStack.size() - 1);
+        UndoableAction lastAction = redoStack.get(redoStack.size() - 1);
         redoStack.remove(redoStack.size() - 1);
         undoStack.add(lastAction);
         lastAction.redoAction(context);

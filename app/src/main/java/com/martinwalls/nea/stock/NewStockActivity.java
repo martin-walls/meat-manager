@@ -448,10 +448,10 @@ public class NewStockActivity extends AppCompatActivity
 
         return TextUtils.isEmpty(editProduct.getText())
                 && TextUtils.isEmpty(editSupplier.getText())
-                &&TextUtils.isEmpty(editMass.getText())
-                &&TextUtils.isEmpty(editNumBoxes.getText())
-                &&TextUtils.isEmpty(editLocation.getText())
-                &&TextUtils.isEmpty(editDest.getText())
-                &&TextUtils.isEmpty(editQuality.getText());
+                && TextUtils.isEmpty(editMass.getText())
+                && TextUtils.isEmpty(editNumBoxes.getText())
+                && TextUtils.isEmpty(editLocation.getText())
+                && TextUtils.isEmpty(editDest.getText())
+                && TextUtils.isEmpty(editQuality.getText());
     }
 }

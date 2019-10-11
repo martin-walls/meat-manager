@@ -9,18 +9,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.components.RecyclerViewDivider;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.StockItem;
+import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.util.ArrayList;
@@ -97,12 +96,12 @@ public class StockFragment extends Fragment {
             case R.id.action_undo:
                 UndoStack.getInstance().undo(getContext());
                 loadStock();
-                Toast.makeText(getContext(), "UNDO", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "UNDO", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_redo:
                 UndoStack.getInstance().redo(getContext());
                 loadStock();
-                Toast.makeText(getContext(), "REDO", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "REDO", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_edit_products:
                 Intent productsIntent = new Intent(getContext(), EditProductsActivity.class);

@@ -204,4 +204,8 @@
     <string name="settings_dark_theme">Enable dark theme</string>
 
     <string name="settings_perm_req_storage">Storage permission required</string>
+
+    <!-- Undo messages -->
+    <string name="undo_add_stock_success">Undo add \"%s\"</string>
+    <string name="redo_add_stock_success">Redo add \"%s\"</string>
 </resources>
