@@ -30,7 +30,7 @@ public class EditProductsActivity extends AppCompatActivity
     private final int SORT_BY_MEAT_TYPE = 1;
 
     private DBHandler dbHandler;
-    private EasyPreferences preferences;
+    private EasyPreferences prefs;
 
     private ProductsAdapter productsAdapter;
     private List<Product> productList = new ArrayList<>();
@@ -44,7 +44,7 @@ public class EditProductsActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHandler = new DBHandler(this);
-        preferences = EasyPreferences.createForDefaultPreferences(this);
+        prefs = EasyPreferences.createForDefaultPreferences(this);
 
         CustomRecyclerView recyclerView = findViewById(R.id.recycler_view);
         TextView emptyView = findViewById(R.id.empty);
@@ -87,7 +87,7 @@ public class EditProductsActivity extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        switch (preferences.getInt(R.string.pref_products_sort_by, SORT_BY_MEAT_TYPE)) {
+        switch (prefs.getInt(R.string.pref_products_sort_by, SORT_BY_MEAT_TYPE)) {
             case SORT_BY_MEAT_TYPE:
                 menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_meat_type).setChecked(true);
                 break;
@@ -102,12 +102,12 @@ public class EditProductsActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_sort_by_name:
-                preferences.setInt(R.string.pref_products_sort_by, SORT_BY_NAME);
+                prefs.setInt(R.string.pref_products_sort_by, SORT_BY_NAME);
                 invalidateOptionsMenu();
                 loadProducts();
                 return true;
             case R.id.action_sort_by_meat_type:
-                preferences.setInt(R.string.pref_products_sort_by, SORT_BY_MEAT_TYPE);
+                prefs.setInt(R.string.pref_products_sort_by, SORT_BY_MEAT_TYPE);
                 invalidateOptionsMenu();
                 loadProducts();
                 return true;
@@ -126,7 +126,7 @@ public class EditProductsActivity extends AppCompatActivity
     }
 
     private void loadProducts() {
-        int sortBy = preferences.getInt(R.string.pref_products_sort_by, SORT_BY_MEAT_TYPE);
+        int sortBy = prefs.getInt(R.string.pref_products_sort_by, SORT_BY_MEAT_TYPE);
         productList.clear();
         productList.addAll(Utils.mergeSort(dbHandler.getAllProducts(),
                 sortBy == SORT_BY_NAME ? Product.comparatorAlpha() : Product.comparatorMeatType()));

@@ -1,6 +1,7 @@
 package com.martinwalls.nea.models;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -174,5 +175,31 @@ public class StockItem {
 
     public void setQuality(Quality quality) {
         this.quality = quality;
+    }
+
+    public static Comparator<StockItem> comparatorAlpha() {
+        return (stock1, stock2) -> stock1.getProduct().getProductName().compareTo(stock2.getProduct().getProductName());
+    }
+
+    public static Comparator<StockItem> comparatorMeatType() {
+        return (stock1, stock2) -> {
+            if (stock1.getProduct().getMeatType().equals(stock2.getProduct().getMeatType())) {
+                return stock1.getProduct().getProductName().compareTo(stock2.getProduct().getProductName());
+            } else {
+                return stock1.getProduct().getMeatType().compareTo(stock2.getProduct().getMeatType());
+            }
+        };
+    }
+
+    public static Comparator<StockItem> comparatorAmount(boolean asc) {
+        return (stock1, stock2) -> {
+            if (stock1.getMass() - stock2.getMass() > 0) {
+                return asc ? 1 : -1;
+            } else if (stock1.getMass() - stock2.getMass() < 0) {
+                return asc ? -1 : 1;
+            } else {
+                return 0;
+            }
+        };
     }
 }

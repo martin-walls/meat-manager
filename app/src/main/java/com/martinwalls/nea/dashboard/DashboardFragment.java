@@ -14,13 +14,24 @@ import com.martinwalls.nea.components.BarChartView;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.ProductQuantity;
 import com.martinwalls.nea.models.StockItem;
+import com.martinwalls.nea.util.EasyPreferences;
+import com.martinwalls.nea.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardFragment extends Fragment {
 
+    private final int SORT_BY_NAME = 0;
+    private final int SORT_BY_AMOUNT_ASC = 1;
+    private final int SORT_BY_AMOUNT_DESC = 2;
+
+    private final int SORT_BY_DEFAULT = SORT_BY_AMOUNT_DESC;
+
     private DBHandler dbHandler;
+    private EasyPreferences prefs;
+
+    private BarChartView graphView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,12 +41,75 @@ public class DashboardFragment extends Fragment {
         View fragmentView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         dbHandler = new DBHandler(getContext());
+        prefs = EasyPreferences.createForDefaultPreferences(getContext());
 
-        BarChartView graphView = fragmentView.findViewById(R.id.graph);
+        graphView = fragmentView.findViewById(R.id.graph);
+        loadData();
 
+        return fragmentView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.fragment_dashboard, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        switch (prefs.getInt(R.string.pref_dashboard_sort_by, SORT_BY_DEFAULT)) {
+            case SORT_BY_NAME:
+                menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_name).setChecked(true);
+                break;
+            case SORT_BY_AMOUNT_DESC:
+                menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_amount_desc).setChecked(true);
+                break;
+            case SORT_BY_AMOUNT_ASC:
+                menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_amount_asc).setChecked(true);
+                break;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_sort_by_name:
+                prefs.setInt(R.string.pref_dashboard_sort_by, SORT_BY_NAME);
+                getActivity().invalidateOptionsMenu();
+                loadData();
+                return true;
+            case R.id.action_sort_by_amount_desc:
+                prefs.setInt(R.string.pref_dashboard_sort_by, SORT_BY_AMOUNT_DESC);
+                getActivity().invalidateOptionsMenu();
+                loadData();
+                return true;
+            case R.id.action_sort_by_amount_asc:
+                prefs.setInt(R.string.pref_dashboard_sort_by, SORT_BY_AMOUNT_ASC);
+                getActivity().invalidateOptionsMenu();
+                loadData();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void loadData() {
         List<BarChartEntry> entries = new ArrayList<>();
 
         List<StockItem> stockList = dbHandler.getAllStock();
+
+        switch (prefs.getInt(R.string.pref_dashboard_sort_by, SORT_BY_DEFAULT)) {
+            case SORT_BY_NAME:
+                stockList = Utils.mergeSort(stockList, StockItem.comparatorAlpha());
+                break;
+            case SORT_BY_AMOUNT_ASC:
+                stockList = Utils.mergeSort(stockList, StockItem.comparatorAmount(true));
+                break;
+            case SORT_BY_AMOUNT_DESC:
+                stockList = Utils.mergeSort(stockList, StockItem.comparatorAmount(false));
+                break;
+        }
+
         List<ProductQuantity> productsRequiredList = dbHandler.getAllProductsRequired();
 
         for (StockItem stockItem : stockList) {
@@ -52,20 +126,5 @@ public class DashboardFragment extends Fragment {
         }
 
         graphView.setData(entries);
-
-        return fragmentView;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_dashboard, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-            //todo
-//        }
-        return super.onOptionsItemSelected(item);
     }
 }
