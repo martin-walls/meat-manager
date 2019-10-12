@@ -1,6 +1,8 @@
 package com.martinwalls.nea.util.undo;
 
 import android.content.Context;
+import android.widget.Toast;
+import com.martinwalls.nea.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,7 @@ public class UndoStack {
 
     public UndoableAction undo(Context context) {
         if (!canUndo()) {
+            Toast.makeText(context, R.string.undo_empty, Toast.LENGTH_SHORT).show();
             return null;
         }
         UndoableAction lastAction = undoStack.get(undoStack.size() - 1);
@@ -49,6 +52,7 @@ public class UndoStack {
 
     public UndoableAction redo(Context context) {
         if (!canRedo()) {
+            Toast.makeText(context, R.string.redo_empty, Toast.LENGTH_SHORT).show();
             return null;
         }
         UndoableAction lastAction = redoStack.get(redoStack.size() - 1);

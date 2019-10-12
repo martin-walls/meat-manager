@@ -24,7 +24,7 @@ public class BarChartView extends View {
 
     private List<BarChartEntry> dataSet = new ArrayList<>();
 
-    private float xMax   = 0;
+    private float xMax = 0;
 
     private Paint barFillPaint;
     private Paint barLabelPaint;
@@ -82,32 +82,36 @@ public class BarChartView extends View {
     private void init(Context context) {
         this.context = context;
 
-        barFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         int barColor = getColorFromTheme(context, R.attr.dashboardGraphBarColor);
+        int outerTextColor = getColorFromTheme(context, R.attr.dashboardGraphBarOuterTextColor);
+        int innerTextColor = getColorFromTheme(context, R.attr.dashboardGraphBarInnerTextColor);
+        int reqBarColor = getColorFromTheme(context, R.attr.dashboardGraphReqBarColor);
+        int ttColor = getColorFromTheme(context, R.attr.dashboardTooltipColor);
+        int ttTextColor = getColorFromTheme(context, R.attr.dashboardTooltipTextColor);
+        int reqTtColor = getColorFromTheme(context, R.attr.dashboardReqTooltipColor);
+        int reqTtTextColor = getColorFromTheme(context, R.attr.dashboardReqTooltipTextColor);
+
+
+        barFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         barFillPaint.setColor(barColor);
 
         barLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int outerTextColor = getColorFromTheme(context, R.attr.dashboardGraphBarOuterTextColor);
         barLabelPaint.setColor(outerTextColor);
         barLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
         barLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
         barInnerLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int innerTextColor = getColorFromTheme(context, R.attr.dashboardGraphBarInnerTextColor);
         barInnerLabelPaint.setColor(innerTextColor);
         barInnerLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
         barInnerLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
         reqBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int reqBarColor = getColorFromTheme(context, R.attr.dashboardGraphReqBarColor);
         reqBarFillPaint.setColor(reqBarColor);
 
         tooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int ttColor = getColorFromTheme(context, R.attr.dashboardTooltipColor);
         tooltipFillPaint.setColor(ttColor);
 
         tooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int ttTextColor = getColorFromTheme(context, R.attr.dashboardTooltipTextColor);
         tooltipTextPaint.setColor(ttTextColor);
         tooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         tooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
@@ -121,11 +125,9 @@ public class BarChartView extends View {
         prevTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
         reqTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int reqTtColor = getColorFromTheme(context, R.attr.dashboardReqTooltipColor);
         reqTooltipFillPaint.setColor(reqTtColor);
 
         reqTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        int reqTtTextColor = getColorFromTheme(context, R.attr.dashboardReqTooltipTextColor);
         reqTooltipTextPaint.setColor(reqTtTextColor);
         reqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         reqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
@@ -188,9 +190,15 @@ public class BarChartView extends View {
 
             float labelX;
             boolean isTextInside;
+            // if label text doesn't fit inside bar
             if (labelTextBounds.width() + textMarginInside * 2f > barLength) {
+                // if required bar shown
                 if (reqBarLength > barLength) {
-                    labelX = barLeft + reqBarLength + textMarginOutside;
+                    if (labelTextBounds.width() + textMarginOutside * 2f > getWidth() - reqBarLength) {
+                        labelX = barLeft + barLength + textMarginOutside;
+                    } else {
+                        labelX = barLeft + reqBarLength + textMarginOutside;
+                    }
                 } else {
                     labelX = barLeft + barLength + textMarginOutside;
                 }
@@ -209,13 +217,25 @@ public class BarChartView extends View {
                 String ttText = context.getString(R.string.amount_kg, decimalFormat.format(entry.getAmount()));
                 tooltipTextPaint.getTextBounds(ttText, 0, ttText.length(), ttTextBounds);
 
+                String reqTtText = "";
+                if (isReqBarShown) {
+                    reqTtText = context.getString(R.string.amount_kg,
+                            decimalFormat.format(entry.getAmountRequired()));
+                    reqTooltipTextPaint.getTextBounds(reqTtText, 0, reqTtText.length(), reqTtTextBounds);
+                }
+
                 float ttLeft;
                 boolean isTooltipShownInside = false;
+                // if space inside bar
                 if ((isTextInside && ttTextBounds.width() + (ttPadding * 2f) + ttMargin
                         < barLength - labelTextBounds.width() - textMarginInside * 2f)
                         || (!isTextInside && ttTextBounds.width() + (ttPadding + ttMargin) * 2f < barLength)) {
                     ttLeft = barLength - ttTextBounds.width() - ttMargin - ttPadding * 2f;
                     isTooltipShownInside = true;
+                } else if (isReqBarShown &&
+                        ttTextBounds.width() + ttPadding * 2f + ttMargin > getWidth() - reqBarLength) {
+                    ttLeft = reqBarLength - (reqTtTextBounds.width() + ttPadding * 2f + ttMargin)
+                            - (ttTextBounds.width() + ttPadding * 2f + ttMargin);
                 } else if (isTextInside) {
                     ttLeft = (isReqBarShown ? reqBarLength : barLength) + ttMargin;
                 } else {
@@ -245,10 +265,6 @@ public class BarChartView extends View {
 
                 // required amount tooltip
                 if (isReqBarShown) {
-                    String reqTtText = context.getString(R.string.amount_kg,
-                            decimalFormat.format(entry.getAmountRequired()));
-                    reqTooltipTextPaint.getTextBounds(reqTtText, 0, reqTtText.length(), reqTtTextBounds);
-
                     float reqTtLeft;
                     if (reqTtTextBounds.width() + (ttPadding + ttMargin) * 2f < reqBarLength - barLength) {
                         reqTtLeft = reqBarLength - reqTtTextBounds.width() - ttMargin - ttPadding * 2f;
