@@ -22,6 +22,7 @@
     <string name="action_sort_by">Sort by</string>
     <string name="action_sort_by_name">Sort by name</string>
     <string name="action_sort_by_meat_type">Sort by meat type</string>
+    <string name="action_sort_by_amount">Sort by amount</string>
     <string name="action_order_history">Order history</string>
     <string name="action_favourites">Favourites</string>
 
