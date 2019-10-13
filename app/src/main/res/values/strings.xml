@@ -25,6 +25,7 @@
     <string name="action_sort_by_meat_type">Sort by meat type</string>
     <string name="action_sort_by_amount_asc">Sort by amount (low-high)</string>
     <string name="action_sort_by_amount_desc">Sort by amount (high-low)</string>
+    <string name="action_sort_by_location">Sort by location</string>
     <string name="action_order_history">Order history</string>
     <string name="action_favourites">Favourites</string>
 
@@ -95,6 +96,8 @@
     <string name="stock_input_location">Location</string>
     <string name="stock_input_destination">Destination</string>
     <string name="stock_input_quality">Quality</string>
+
+    <string name="stock_location_tag">&#8226; %s</string>
 
     <!-- Edit meat types page -->
     <string name="meat_types_empty">No meat types to show</string>

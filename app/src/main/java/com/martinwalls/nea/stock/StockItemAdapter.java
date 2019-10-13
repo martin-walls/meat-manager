@@ -45,8 +45,9 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         StockItem item = itemList.get(position);
         holder.itemName.setText(item.getProduct().getProductName());
-//        DBHandler dbHandler = new DBHandler(holder.itemLocation.getContext());
-        holder.itemLocation.setText(item.getLocationName());
+//        holder.itemLocation.setText(item.getLocationName());
+        holder.itemLocation.setText(holder.itemLocation.getContext()
+                .getString(R.string.stock_location_tag, item.getLocationName()));
         //todo shared preferences for kg / lbs
         holder.itemMass.setText(holder.itemMass.getContext().getString(R.string.amount_kg,
                 new DecimalFormat("#.0###").format(item.getMass())));
