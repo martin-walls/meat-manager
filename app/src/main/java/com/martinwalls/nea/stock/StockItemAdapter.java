@@ -17,12 +17,14 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView itemName;
+        private TextView itemLocation;
         private TextView itemMass;
         private TextView itemNumBoxes;
 
         ViewHolder(View view) {
             super(view);
             itemName = view.findViewById(R.id.name);
+            itemLocation = view.findViewById(R.id.location);
             itemMass = view.findViewById(R.id.mass);
             itemNumBoxes = view.findViewById(R.id.num_boxes);
         }
@@ -43,6 +45,8 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         StockItem item = itemList.get(position);
         holder.itemName.setText(item.getProduct().getProductName());
+//        DBHandler dbHandler = new DBHandler(holder.itemLocation.getContext());
+        holder.itemLocation.setText(item.getLocationName());
         //todo shared preferences for kg / lbs
         holder.itemMass.setText(holder.itemMass.getContext().getString(R.string.amount_kg,
                 new DecimalFormat("#.0###").format(item.getMass())));

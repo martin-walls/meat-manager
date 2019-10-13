@@ -120,11 +120,11 @@ public class StockItem {
     }
 
     public String getSupplierName() {
-        return locationName;
+        return supplierName;
     }
 
-    public void setSupplierName(String locationName) {
-        this.locationName = locationName;
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 
     public void setSupplier(Location supplier) {
@@ -141,11 +141,11 @@ public class StockItem {
     }
 
     public String getDestName() {
-        return locationName;
+        return destName;
     }
 
-    public void setDestName(String locationName) {
-        this.locationName = locationName;
+    public void setDestName(String destName) {
+        this.destName = destName;
     }
 
     public void setDest(Location dest) {

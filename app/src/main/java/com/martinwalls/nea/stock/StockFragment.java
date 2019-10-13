@@ -23,7 +23,6 @@ import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class StockFragment extends Fragment {
@@ -121,12 +120,7 @@ public class StockFragment extends Fragment {
 
     private void loadStock() {
         stockList.clear();
-        stockList.addAll(Utils.mergeSort(dbHandler.getAllStock(), new Comparator<StockItem>() {
-            @Override
-            public int compare(StockItem stock1, StockItem stock2) {
-                return stock1.getProduct().getProductName().compareTo(stock2.getProduct().getProductName());
-            }
-        }));
+        stockList.addAll(Utils.mergeSort(dbHandler.getAllStock(), StockItem.comparatorAlpha()));
         stockAdapter.notifyDataSetChanged();
     }
 }

@@ -10,15 +10,34 @@
     android:paddingBottom="16dp"
     >
 
-    <TextView
-        android:id="@+id/name"
+    <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center_vertical|start"
-        style="@style/ItemInfoPrimary"
-        tools:text="Product name"
-        />
+        >
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            style="@style/ItemInfoPrimary"
+            tools:text="Product name"
+            />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:layout_toEndOf="@id/name"
+            android:layout_alignBaseline="@id/name"
+            style="@style/ItemInfoSecondary"
+            tools:text="UK1535"
+            />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/amount"
