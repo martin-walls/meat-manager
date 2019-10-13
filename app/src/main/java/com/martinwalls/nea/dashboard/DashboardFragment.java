@@ -74,23 +74,23 @@ public class DashboardFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_sort_by_name:
-                prefs.setInt(R.string.pref_dashboard_sort_by, SORT_BY_NAME);
-                getActivity().invalidateOptionsMenu();
-                loadData();
+                setSortMode(SORT_BY_NAME);
                 return true;
             case R.id.action_sort_by_amount_desc:
-                prefs.setInt(R.string.pref_dashboard_sort_by, SORT_BY_AMOUNT_DESC);
-                getActivity().invalidateOptionsMenu();
-                loadData();
+                setSortMode(SORT_BY_AMOUNT_DESC);
                 return true;
             case R.id.action_sort_by_amount_asc:
-                prefs.setInt(R.string.pref_dashboard_sort_by, SORT_BY_AMOUNT_ASC);
-                getActivity().invalidateOptionsMenu();
-                loadData();
+                setSortMode(SORT_BY_AMOUNT_ASC);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setSortMode(int sortMode) {
+        prefs.setInt(R.string.pref_dashboard_sort_by, sortMode);
+        getActivity().invalidateOptionsMenu();
+        loadData();
     }
 
     private void loadData() {

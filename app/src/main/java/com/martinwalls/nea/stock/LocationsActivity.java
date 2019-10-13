@@ -57,7 +57,7 @@ public class LocationsActivity extends AppCompatActivity
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            Intent editLocationIntent = new Intent(this, EditLocationsActivity.class);
+            Intent editLocationIntent = new Intent(this, NewLocationActivity.class);
             startActivity(editLocationIntent);
         });
     }

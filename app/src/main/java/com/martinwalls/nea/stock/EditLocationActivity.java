@@ -7,9 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
@@ -19,54 +18,40 @@ import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.Location;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
-public class EditLocationsActivity extends AppCompatActivity
+public class EditLocationActivity extends AppCompatActivity
         implements ConfirmCancelDialog.ConfirmCancelListener {
 
-    public static final String EXTRA_LOCATION_TYPE = "location_type";
+    public static final String EXTRA_LOCATION_ID = "location_id";
 
     private DBHandler dbHandler;
+
+    private Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_locations);
 
-        final String locationTypeDefault = getString(R.string.locations_type_generic);
-
-        String locationType = locationTypeDefault;
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            locationType = extras.getString(EXTRA_LOCATION_TYPE, locationType);
-        }
-
-        getSupportActionBar().setTitle(getString(R.string.locations_add_new_title, locationType.toLowerCase()));
 
         dbHandler = new DBHandler(this);
 
-        // get enum values as a list of strings
-        List<String> locationTypesList = Arrays.stream(Location.LocationType.values())
-                .map(Location.LocationType::name)
-                .collect(Collectors.toList());
-        ArrayAdapter<String> autocompleteAdapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, locationTypesList);
-        AutoCompleteTextView editTextLocationType = findViewById(R.id.edit_text_location_type);
-        editTextLocationType.setAdapter(autocompleteAdapter);
-        editTextLocationType.setThreshold(0);
-
-        editTextLocationType.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                editTextLocationType.showDropDown();
-                hideKeyboard();
-            }
-        });
-
-        if (!locationType.equals(locationTypeDefault)) {
-            editTextLocationType.setText(locationType);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            int locationId = extras.getInt(EXTRA_LOCATION_ID);
+            location = dbHandler.getLocation(locationId);
         }
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(getString(R.string.location_edit_title, location.getLocationType().name().toLowerCase()));
+        }
+
+        TextInputLayout inputLayoutLocationType = findViewById(R.id.input_layout_location_type);
+        inputLayoutLocationType.setVisibility(View.GONE);
+
+        fillFields();
     }
 
     @Override
@@ -87,14 +72,15 @@ public class EditLocationsActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                if (addLocationToDb()) {
+                if (updateLocationInDb()) {
                     finish();
                 } else {
-                    Toast.makeText(this, getString(R.string.db_error_insert, "location"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.db_error_update, "location"),
+                            Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.action_cancel:
-                if (!areAllFieldsEmpty()) {
+                if (haveFieldsChanged()) {
                     showConfirmCancelDialog();
                 } else {
                     finish();
@@ -121,15 +107,57 @@ public class EditLocationsActivity extends AppCompatActivity
         dialog.show(getSupportFragmentManager(), "confirm_cancel");
     }
 
-    private boolean addLocationToDb() {
+    private void fillFields() {
+        TextInputEditText editTextName = findViewById(R.id.edit_text_location_name);
+        editTextName.setText(location.getLocationName());
+
+        TextInputEditText editTextAddr1= findViewById(R.id.edit_text_addr_1);
+        editTextAddr1.setText(location.getAddrLine1());
+
+        TextInputEditText editTextAddr2= findViewById(R.id.edit_text_addr_2);
+        editTextAddr2.setText(location.getAddrLine2());
+
+        TextInputEditText editTextCity= findViewById(R.id.edit_text_city);
+        editTextCity.setText(location.getCity());
+
+        TextInputEditText editTextPostcode= findViewById(R.id.edit_text_postcode);
+        editTextPostcode.setText(location.getPostcode());
+
+        TextInputEditText editTextCountry= findViewById(R.id.edit_text_country);
+        editTextCountry.setText(location.getCountry());
+
+        TextInputEditText editTextEmail= findViewById(R.id.edit_text_email);
+        editTextEmail.setText(location.getEmail());
+
+        TextInputEditText editTextPhone= findViewById(R.id.edit_text_phone);
+        editTextPhone.setText(location.getPhone());
+    }
+
+    private boolean haveFieldsChanged() {
+        TextInputEditText editTextName = findViewById(R.id.edit_text_location_name);
+        TextInputEditText editTextAddr1= findViewById(R.id.edit_text_addr_1);
+        TextInputEditText editTextAddr2= findViewById(R.id.edit_text_addr_2);
+        TextInputEditText editTextCity= findViewById(R.id.edit_text_city);
+        TextInputEditText editTextPostcode= findViewById(R.id.edit_text_postcode);
+        TextInputEditText editTextCountry= findViewById(R.id.edit_text_country);
+        TextInputEditText editTextEmail= findViewById(R.id.edit_text_email);
+        TextInputEditText editTextPhone= findViewById(R.id.edit_text_phone);
+
+        return !TextUtils.equals(editTextName.getText(), location.getLocationName())
+                || !TextUtils.equals(editTextAddr1.getText(), location.getAddrLine1())
+                || !TextUtils.equals(editTextAddr2.getText(), location.getAddrLine2())
+                || !TextUtils.equals(editTextCity.getText(), location.getCity())
+                || !TextUtils.equals(editTextPostcode.getText(), location.getPostcode())
+                || !TextUtils.equals(editTextCountry.getText(), location.getCountry())
+                || !TextUtils.equals(editTextEmail.getText(), location.getEmail())
+                || !TextUtils.equals(editTextPhone.getText(), location.getPhone());
+    }
+
+    private boolean updateLocationInDb() {
         boolean isValid = true;
-        Location newLocation = new Location();
 
         TextInputEditText editTextName = findViewById(R.id.edit_text_location_name);
         TextInputLayout inputLayoutName = findViewById(R.id.input_layout_location_name);
-
-        AutoCompleteTextView editTextType= findViewById(R.id.edit_text_location_type);
-        TextInputLayout inputLayoutType = findViewById(R.id.input_layout_location_type);
 
         TextInputEditText editTextAddr1= findViewById(R.id.edit_text_addr_1);
         TextInputLayout inputLayoutAddr1 = findViewById(R.id.input_layout_addr_1);
@@ -153,21 +181,12 @@ public class EditLocationsActivity extends AppCompatActivity
             inputLayoutName.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else if (dbHandler.getAllLocations().stream().map(Location::getLocationName).collect(Collectors.toList())
-                .contains(editTextName.getText().toString())) {
+                .contains(editTextName.getText().toString())
+                && !TextUtils.equals(editTextName.getText(), location.getLocationName())) {
             inputLayoutName.setError(getString(R.string.input_error_duplicate));
             isValid = false;
         } else {
             inputLayoutName.setError(null);
-        }
-        if (editTextType.getText().length() == 0) {
-            inputLayoutType.setError(getString(R.string.input_error_blank));
-            isValid = false;
-        } else if (!Arrays.stream(Location.LocationType.values()).map(Location.LocationType::name)
-                .collect(Collectors.toList()).contains(editTextType.getText().toString())) {
-            inputLayoutType.setError(getString(R.string.input_error_invalid_location_type));
-            isValid = false;
-        } else {
-            inputLayoutType.setError(null);
         }
         if (TextUtils.isEmpty(editTextAddr1.getText())) {
             inputLayoutAddr1.setError(getString(R.string.input_error_blank));
@@ -197,40 +216,17 @@ public class EditLocationsActivity extends AppCompatActivity
         }
 
         if (isValid) {
-            newLocation.setLocationName(editTextName.getText().toString());
-            newLocation.setLocationType(Location.LocationType.parseLocationType(editTextType.getText().toString()));
-            newLocation.setAddrLine1(editTextAddr1.getText().toString());
-            newLocation.setAddrLine2(editTextAddr2.getText() == null ? "" : editTextAddr2.getText().toString());
-            newLocation.setCity(editTextCity.getText() == null ? "" : editTextCity.getText().toString());
-            newLocation.setPostcode(editTextPostcode.getText().toString());
-            newLocation.setCountry(editTextCountry.getText().toString());
-            newLocation.setEmail(editTextEmail.getText() == null ? "" : editTextEmail.getText().toString());
-            newLocation.setPhone(editTextPhone.getText() == null ? "" : editTextPhone.getText().toString());
+            location.setLocationName(editTextName.getText().toString());
+            location.setAddrLine1(editTextAddr1.getText().toString());
+            location.setAddrLine2(editTextAddr2.getText() == null ? "" : editTextAddr2.getText().toString());
+            location.setCity(editTextCity.getText() == null ? "" : editTextCity.getText().toString());
+            location.setPostcode(editTextPostcode.getText().toString());
+            location.setCountry(editTextCountry.getText().toString());
+            location.setEmail(editTextEmail.getText() == null ? "" : editTextEmail.getText().toString());
+            location.setPhone(editTextPhone.getText() == null ? "" : editTextPhone.getText().toString());
 
-            return dbHandler.addLocation(newLocation);
+            return dbHandler.updateLocation(location);
         }
         return false;
-    }
-
-    private boolean areAllFieldsEmpty() {
-        TextInputEditText editTextName = findViewById(R.id.edit_text_location_name);
-        AutoCompleteTextView editTextType= findViewById(R.id.edit_text_location_type);
-        TextInputEditText editTextAddr1= findViewById(R.id.edit_text_addr_1);
-        TextInputEditText editTextAddr2= findViewById(R.id.edit_text_addr_2);
-        TextInputEditText editTextCity= findViewById(R.id.edit_text_city);
-        TextInputEditText editTextPostcode= findViewById(R.id.edit_text_postcode);
-        TextInputEditText editTextCountry= findViewById(R.id.edit_text_country);
-        TextInputEditText editTextEmail= findViewById(R.id.edit_text_email);
-        TextInputEditText editTextPhone= findViewById(R.id.edit_text_phone);
-
-        return TextUtils.isEmpty(editTextName.getText())
-                && TextUtils.isEmpty(editTextType.getText())
-                && TextUtils.isEmpty(editTextAddr1.getText())
-                && TextUtils.isEmpty(editTextAddr2.getText())
-                && TextUtils.isEmpty(editTextCity.getText())
-                && TextUtils.isEmpty(editTextPostcode.getText())
-                && TextUtils.isEmpty(editTextCountry.getText())
-                && TextUtils.isEmpty(editTextEmail.getText())
-                && TextUtils.isEmpty(editTextPhone.getText());
     }
 }

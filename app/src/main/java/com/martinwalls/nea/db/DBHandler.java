@@ -657,6 +657,24 @@ public class DBHandler extends SQLiteOpenHelper {
         return newRowId != -1;
     }
 
+    public boolean updateLocation(Location location) {
+        ContentValues values = new ContentValues();
+        values.put(LocationsTable.NAME, location.getLocationName());
+        values.put(LocationsTable.ADDR_1, location.getAddrLine1());
+        values.put(LocationsTable.ADDR_2, location.getAddrLine2());
+        values.put(LocationsTable.CITY, location.getCity());
+        values.put(LocationsTable.POSTCODE, location.getPostcode());
+        values.put(LocationsTable.COUNTRY, location.getCountry());
+        values.put(LocationsTable.PHONE, location.getPhone());
+        values.put(LocationsTable.EMAIL, location.getEmail());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsAffected = db.update(LocationsTable.TABLE_NAME, values,
+                LocationsTable.ID + "=?", new String[]{location.getLocationId() + ""});
+        db.close();
+        return rowsAffected == 1;
+    }
+
     public boolean isLocationSafeToDelete(int locationId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String stockQuery = "SELECT * FROM " + StockTable.TABLE_NAME

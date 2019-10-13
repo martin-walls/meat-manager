@@ -330,18 +330,18 @@ public class NewStockActivity extends AppCompatActivity
                 dialog.show(getSupportFragmentManager(), "add_new_product");
                 break;
             case INPUT_SUPPLIER:
-                Intent newSupplierIntent = new Intent(this, EditLocationsActivity.class);
-                newSupplierIntent.putExtra(EditLocationsActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Supplier.name());
+                Intent newSupplierIntent = new Intent(this, NewLocationActivity.class);
+                newSupplierIntent.putExtra(NewLocationActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Supplier.name());
                 startActivityForResult(newSupplierIntent, REQUEST_REFRESH_ON_DONE);
                 break;
             case INPUT_LOCATION:
-                Intent newLocationIntent = new Intent(this, EditLocationsActivity.class);
-                newLocationIntent.putExtra(EditLocationsActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Storage.name());
+                Intent newLocationIntent = new Intent(this, NewLocationActivity.class);
+                newLocationIntent.putExtra(NewLocationActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Storage.name());
                 startActivityForResult(newLocationIntent, REQUEST_REFRESH_ON_DONE);
                 break;
             case INPUT_DESTINATION:
-                Intent newDestIntent = new Intent(this, EditLocationsActivity.class);
-                newDestIntent.putExtra(EditLocationsActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Destination.name());
+                Intent newDestIntent = new Intent(this, NewLocationActivity.class);
+                newDestIntent.putExtra(NewLocationActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Destination.name());
                 startActivityForResult(newDestIntent, REQUEST_REFRESH_ON_DONE);
                 break;
         }

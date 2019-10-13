@@ -42,7 +42,7 @@ import com.martinwalls.nea.models.Location;
 import com.martinwalls.nea.models.Product;
 import com.martinwalls.nea.models.ProductQuantity;
 import com.martinwalls.nea.models.SearchItem;
-import com.martinwalls.nea.stock.EditLocationsActivity;
+import com.martinwalls.nea.stock.NewLocationActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -491,8 +491,8 @@ public class NewContractActivity extends AppCompatActivity
                 dialog.show(getSupportFragmentManager(), "add_new_product");
                 break;
             case INPUT_DESTINATION:
-                Intent newDestIntent = new Intent(this, EditLocationsActivity.class);
-                newDestIntent.putExtra(EditLocationsActivity.EXTRA_LOCATION_TYPE,
+                Intent newDestIntent = new Intent(this, NewLocationActivity.class);
+                newDestIntent.putExtra(NewLocationActivity.EXTRA_LOCATION_TYPE,
                         Location.LocationType.Destination.name());
                 startActivityForResult(newDestIntent, REQUEST_REFRESH_ON_DONE);
                 break;

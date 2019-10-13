@@ -1,9 +1,12 @@
 package com.martinwalls.nea.stock;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
@@ -12,6 +15,8 @@ import com.martinwalls.nea.models.Location;
 public class LocationDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_LOCATION_ID = "location_id";
+
+    public static final int REQUEST_REFRESH_ON_DONE = 1;
 
     private DBHandler dbHandler;
     private Location location;
@@ -79,13 +84,48 @@ public class LocationDetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_location_detail, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_delete:
+                deleteLocation();
+                return true;
+            case R.id.action_edit:
+                Intent editIntent = new Intent(this, EditLocationActivity.class);
+                editIntent.putExtra(EditLocationActivity.EXTRA_LOCATION_ID, location.getLocationId());
+                startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
+                return true;
             case android.R.id.home:
                 super.onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_REFRESH_ON_DONE) {
+            recreate();
+        }
+    }
+
+    private void deleteLocation() {
+        if (dbHandler.isLocationSafeToDelete(location.getLocationId())) {
+            boolean success = dbHandler.deleteLocation(location.getLocationId());
+            if (success) {
+                Toast.makeText(this, R.string.location_delete_success, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.location_delete_error, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, R.string.location_delete_error, Toast.LENGTH_SHORT).show();
         }
     }
 }
