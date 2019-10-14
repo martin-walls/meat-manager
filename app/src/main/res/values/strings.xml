@@ -97,7 +97,8 @@
     <string name="stock_input_destination">Destination</string>
     <string name="stock_input_quality">Quality</string>
 
-    <string name="stock_location_tag">&#8226; %s</string>
+    <!--<string name="stock_location_tag">&#8226; %s</string>-->
+    <string name="stock_location_tag">%s</string>
 
     <!-- Edit meat types page -->
     <string name="meat_types_empty">No meat types to show</string>

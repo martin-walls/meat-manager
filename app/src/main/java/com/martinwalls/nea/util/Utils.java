@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class Utils {
+public final class Utils {
     // 1 kg = 2.20462 lbs
     private static final double kgsToLbs = 2.20462;
     // 1 lb = 0.453592 kgs

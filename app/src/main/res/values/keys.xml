@@ -22,6 +22,7 @@
     <string name="pref_restore_db">restore_db</string>
 
     <string name="pref_dashboard_sort_by">dashboard_sort_by</string>
+    <string name="pref_stock_sort_by">stock_sort_by</string>
     <string name="pref_products_sort_by">products_sort_by</string>
 
     <string name="pref_exchange_currency_primary">exchange_currency_primary</string>

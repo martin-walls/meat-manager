@@ -181,16 +181,6 @@ public class StockItem {
         return (stock1, stock2) -> stock1.getProduct().getProductName().compareTo(stock2.getProduct().getProductName());
     }
 
-    public static Comparator<StockItem> comparatorMeatType() {
-        return (stock1, stock2) -> {
-            if (stock1.getProduct().getMeatType().equals(stock2.getProduct().getMeatType())) {
-                return stock1.getProduct().getProductName().compareTo(stock2.getProduct().getProductName());
-            } else {
-                return stock1.getProduct().getMeatType().compareTo(stock2.getProduct().getMeatType());
-            }
-        };
-    }
-
     public static Comparator<StockItem> comparatorAmount(boolean asc) {
         return (stock1, stock2) -> {
             if (stock1.getMass() - stock2.getMass() > 0) {
@@ -199,6 +189,16 @@ public class StockItem {
                 return asc ? -1 : 1;
             } else {
                 return 0;
+            }
+        };
+    }
+
+    public static Comparator<StockItem> comparatorLocation() {
+        return (stock1, stock2) -> {
+            if (stock1.getLocationName().equals(stock2.getLocationName())) {
+                return stock1.getProduct().getProductName().compareTo(stock2.getProduct().getProductName());
+            } else {
+                return stock1.getLocationName().compareTo(stock2.getLocationName());
             }
         };
     }

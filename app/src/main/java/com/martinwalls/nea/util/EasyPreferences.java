@@ -6,7 +6,7 @@ import android.content.res.Resources;
 import androidx.annotation.StringRes;
 import androidx.preference.PreferenceManager;
 
-public class EasyPreferences {
+public final class EasyPreferences {
 
     private final SharedPreferences prefs;
     private final Resources res;
