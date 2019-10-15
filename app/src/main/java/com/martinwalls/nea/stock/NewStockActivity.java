@@ -1,31 +1,21 @@
 package com.martinwalls.nea.stock;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.transition.Transition;
-import androidx.transition.TransitionInflater;
-import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.AddNewProductDialog;
 import com.martinwalls.nea.ConfirmCancelDialog;
+import com.martinwalls.nea.InputFormActivity;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SearchItemAdapter;
-import com.martinwalls.nea.SimpleTextWatcher;
-import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.Location;
@@ -36,13 +26,10 @@ import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.util.undo.AddStockAction;
 import com.martinwalls.nea.util.undo.UndoStack;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
-public class NewStockActivity extends AppCompatActivity
-        implements SearchItemAdapter.SearchItemAdapterListener,
-        AddNewProductDialog.AddNewProductListener,
+public class NewStockActivity extends InputFormActivity
+        implements AddNewProductDialog.AddNewProductListener,
         ConfirmCancelDialog.ConfirmCancelListener {
 
     private final int REQUEST_REFRESH_ON_DONE = 1;
@@ -54,18 +41,7 @@ public class NewStockActivity extends AppCompatActivity
     private final String INPUT_DESTINATION = "destination";
     private final String INPUT_QUALITY = "quality";
 
-    private String currentSearchType = INPUT_PRODUCT; // default value so it's not null
-
     private DBHandler dbHandler;
-
-    private HashMap<String, Integer> inputViews = new HashMap<>();
-
-    private SearchItemAdapter itemAdapter;
-    private ArrayList<SearchItem> searchItemList = new ArrayList<>();
-
-    private LinearLayout searchResultsLayout;
-    private AddNewTextView addNewView;
-    private ViewGroup rootView;
 
     // store ids of selected items
     private int selectedProductId;
@@ -83,26 +59,27 @@ public class NewStockActivity extends AppCompatActivity
         dbHandler = new DBHandler(this);
 
         // store reference to each row to show/hide later
-        inputViews.put(INPUT_PRODUCT, R.id.input_layout_product);
-        inputViews.put(INPUT_SUPPLIER, R.id.input_layout_supplier);
-        inputViews.put(INPUT_QUANTITY, R.id.input_row_quantity);
-        inputViews.put(INPUT_LOCATION, R.id.input_layout_location);
-        inputViews.put(INPUT_DESTINATION, R.id.input_layout_destination);
-        inputViews.put(INPUT_QUALITY, R.id.input_layout_quality);
+        addInputView(INPUT_PRODUCT, R.id.input_layout_product);
+        addInputView(INPUT_SUPPLIER, R.id.input_layout_supplier);
+        addInputView(INPUT_QUANTITY, R.id.input_row_quantity);
+        addInputView(INPUT_LOCATION, R.id.input_layout_location);
+        addInputView(INPUT_DESTINATION, R.id.input_layout_destination);
+        addInputView(INPUT_QUALITY, R.id.input_layout_quality);
 
-        addNewView = findViewById(R.id.add_new);
-        addNewView.setOnClickListener(v -> addNewItem());
+        setAddNewView(R.id.add_new);
 
-        rootView = findViewById(R.id.root_layout);
+        setRootView(R.id.root_layout);
+
+        setCurrentSearchType(INPUT_PRODUCT);
 
         // setup recycler view
-        itemAdapter = new SearchItemAdapter(searchItemList, currentSearchType, this);
+        setSearchItemAdapter(new SearchItemAdapter(getSearchItemList(), getCurrentSearchType(), this));
         TextView emptyView = findViewById(R.id.no_results);
         CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
         recyclerView.setEmptyView(emptyView);
-        recyclerView.setAdapter(itemAdapter);
+        recyclerView.setAdapter(getSearchItemAdapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        searchResultsLayout = findViewById(R.id.search_results_layout);
+        setSearchResultsLayout(R.id.search_results_layout);
 
 
         setListeners(INPUT_PRODUCT,
@@ -167,7 +144,40 @@ public class NewStockActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_REFRESH_ON_DONE) {
             cancelSearch();
-            openSearch(currentSearchType);
+            openSearch(getCurrentSearchType());
+        }
+    }
+
+    @Override
+    protected void loadSearchItems(String searchType) {
+        switch (searchType) {
+            case INPUT_PRODUCT:
+                for (Product product : Utils.mergeSort(dbHandler.getAllProducts(), Product.comparatorAlpha())) {
+                    addSearchItemToList(new SearchItem(product.getProductName(), product.getProductId()));
+                }
+                break;
+            case INPUT_SUPPLIER:
+                for (Location location : Utils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Supplier), Location.comparatorAlpha())) {
+                    addSearchItemToList(new SearchItem(location.getLocationName(), location.getLocationId()));
+                }
+                break;
+            case INPUT_DESTINATION:
+                for (Location location : Utils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Destination), Location.comparatorAlpha())) {
+                    addSearchItemToList(new SearchItem(location.getLocationName(), location.getLocationId()));
+                }
+                break;
+            case INPUT_LOCATION:
+                for (Location location : Utils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Storage), Location.comparatorAlpha())) {
+                    addSearchItemToList(new SearchItem(location.getLocationName(), location.getLocationId()));
+                }
+                break;
+            case INPUT_QUALITY:
+                int i = 0;
+                for (String quality : StockItem.Quality.getQualityStrings()) {
+                    addSearchItemToList(new SearchItem(quality, i));
+                    i++;
+                }
+                break;
         }
     }
 
@@ -200,7 +210,7 @@ public class NewStockActivity extends AppCompatActivity
         if (successful) {
             // refresh list
             cancelSearch();
-            openSearch(currentSearchType);
+            openSearch(getCurrentSearchType());
         }
     }
 
@@ -209,122 +219,14 @@ public class NewStockActivity extends AppCompatActivity
         finish();
     }
 
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        View view = findViewById(R.id.root_layout);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
     private void showConfirmCancelDialog() {
         DialogFragment dialog = new ConfirmCancelDialog();
         dialog.show(getSupportFragmentManager(), "confirm_cancel");
     }
 
-    private void setListeners(final String name, final TextInputLayout inputLayout, final TextInputEditText editText) {
-        inputLayout.setEndIconVisible(false);
-
-        editText.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                inputLayout.setEndIconVisible(true);
-                openSearch(name);
-            }
-        });
-
-        inputLayout.setEndIconOnClickListener(v -> {
-                editText.setText("");
-                editText.clearFocus();
-                inputLayout.setEndIconVisible(false);
-                cancelSearch();
-        });
-
-        editText.addTextChangedListener(new SimpleTextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                itemAdapter.getFilter().filter(s);
-            }
-        });
-    }
-
-    private void openSearch(String rowName) {
-        Transition moveTransition = TransitionInflater.from(this).inflateTransition(R.transition.search_open);
-        TransitionManager.beginDelayedTransition(rootView, moveTransition);
-        for (Integer view : inputViews.values()) {
-            if (!view.equals(inputViews.get(rowName))) {
-                findViewById(view).setVisibility(View.GONE);
-            }
-        }
-
-        searchItemList.clear();
-        switch (rowName) {
-            case INPUT_PRODUCT:
-                for (Product product : Utils.mergeSort(dbHandler.getAllProducts(), Product.comparatorAlpha())) {
-                    searchItemList.add(new SearchItem(product.getProductName(), product.getProductId()));
-                }
-                break;
-            case INPUT_SUPPLIER:
-                for (Location location : Utils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Supplier), Location.comparatorAlpha())) {
-                    searchItemList.add(new SearchItem(location.getLocationName(), location.getLocationId()));
-                }
-                break;
-            case INPUT_DESTINATION:
-                for (Location location : Utils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Destination), Location.comparatorAlpha())) {
-                    searchItemList.add(new SearchItem(location.getLocationName(), location.getLocationId()));
-                }
-                break;
-            case INPUT_LOCATION:
-                for (Location location : Utils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Storage), Location.comparatorAlpha())) {
-                    searchItemList.add(new SearchItem(location.getLocationName(), location.getLocationId()));
-                }
-                break;
-            case INPUT_QUALITY:
-                int i = 0;
-                for (String quality : StockItem.Quality.getQualityStrings()) {
-                    searchItemList.add(new SearchItem(quality, i));
-                    i++;
-                }
-                break;
-        }
-        currentSearchType = rowName;
-        itemAdapter.setSearchItemType(currentSearchType);
-        itemAdapter.notifyDataSetChanged();
-
-        // filter data at start for when text is already entered
-        TextInputEditText editText = (TextInputEditText) getCurrentFocus();
-        itemAdapter.getFilter().filter(editText.getText());
-
-        addNewView.setVisibility(rowName.equals(INPUT_QUALITY) ? View.GONE : View.VISIBLE);
-        addNewView.setText(getString(R.string.search_add_new, rowName));
-        addNewView.setSearchItemType(rowName);
-
-        searchResultsLayout.setAlpha(0f);
-        searchResultsLayout.setVisibility(View.VISIBLE);
-
-        searchResultsLayout.animate()
-                .alpha(1f)
-                .setStartDelay(getResources().getInteger(R.integer.search_results_fade_delay))
-                .setDuration(getResources().getInteger(R.integer.search_results_fade_duration))
-                .setListener(null);
-    }
-
-    private void cancelSearch() {
-        Transition closeTransition = TransitionInflater.from(this).inflateTransition(R.transition.search_close);
-        TransitionManager.beginDelayedTransition(rootView, closeTransition);
-        for (int view : inputViews.values()) {
-            View viewToShow = findViewById(view);
-            viewToShow.setVisibility(View.VISIBLE);
-        }
-
-        searchResultsLayout.setVisibility(View.GONE);
-
-        searchItemList.clear();
-        itemAdapter.notifyDataSetChanged();
-
-        hideKeyboard();
-    }
-
-    private void addNewItem() {
-        String searchItemType = addNewView.getSearchItemType();
-        switch (searchItemType) {
+    @Override
+    protected void addNewItem(String searchType) {
+        switch (searchType) {
             case INPUT_PRODUCT:
                 DialogFragment dialog = new AddNewProductDialog();
                 dialog.show(getSupportFragmentManager(), "add_new_product");

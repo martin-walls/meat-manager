@@ -12,7 +12,7 @@ public class AddNewTextView extends AppCompatTextView {
     private String searchItemType;
 
     public AddNewTextView(Context context) {
-        this(context, null, 0);
+        this(context, null);
     }
 
     public AddNewTextView(Context context, @Nullable AttributeSet attrs) {

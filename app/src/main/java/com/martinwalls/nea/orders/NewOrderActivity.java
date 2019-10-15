@@ -330,7 +330,7 @@ public class NewOrderActivity extends AppCompatActivity
         }
     }
 
-    private void setListeners(final String name, final TextInputLayout inputLayout, final TextInputEditText editText) {
+    private void setListeners(String name, TextInputLayout inputLayout, TextInputEditText editText) {
         inputLayout.setEndIconVisible(false);
 
         editText.setOnFocusChangeListener((v, hasFocus) -> {
@@ -363,7 +363,7 @@ public class NewOrderActivity extends AppCompatActivity
                 findViewById(view).setVisibility(GONE);
             }
         }
-        addProductBtn.setVisibility(GONE);
+        addProductBtn.setVisibility(GONE); //todo keep in subclass
         productsAddedRecyclerView.setVisibility(GONE);
 
         searchItemList.clear();
