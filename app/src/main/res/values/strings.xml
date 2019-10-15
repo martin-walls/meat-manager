@@ -236,4 +236,6 @@
     <string name="redo_empty">Nothing to redo</string>
     <string name="undo_add_stock_success">Undo add \"%s\"</string>
     <string name="redo_add_stock_success">Redo add \"%s\"</string>
+    <string name="undo_delete_stock_success">Undo delete \"%s\"</string>
+    <string name="redo_delete_stock_success">Redo delete \"%s\"</string>
 </resources>

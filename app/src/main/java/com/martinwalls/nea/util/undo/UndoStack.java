@@ -46,7 +46,10 @@ public class UndoStack {
         UndoableAction lastAction = undoStack.get(undoStack.size() - 1);
         undoStack.remove(undoStack.size() - 1);
         redoStack.add(lastAction);
-        lastAction.undoAction(context);
+        boolean success = lastAction.undoAction(context);
+        if (success) {
+            lastAction.showUndoMessage(context);
+        }
         return lastAction;
     }
 
@@ -58,7 +61,10 @@ public class UndoStack {
         UndoableAction lastAction = redoStack.get(redoStack.size() - 1);
         redoStack.remove(redoStack.size() - 1);
         undoStack.add(lastAction);
-        lastAction.redoAction(context);
+        boolean success = lastAction.redoAction(context);
+        if (success) {
+            lastAction.showRedoMessage(context);
+        }
         return lastAction;
     }
 }

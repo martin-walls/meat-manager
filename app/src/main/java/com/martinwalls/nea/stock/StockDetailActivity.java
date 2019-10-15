@@ -13,6 +13,8 @@ import com.martinwalls.nea.ConfirmDeleteDialog;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.StockItem;
+import com.martinwalls.nea.util.undo.DeleteStockAction;
+import com.martinwalls.nea.util.undo.UndoStack;
 
 public class StockDetailActivity extends AppCompatActivity 
         implements ConfirmDeleteDialog.ConfirmDeleteListener {
@@ -85,6 +87,9 @@ public class StockDetailActivity extends AppCompatActivity
             case R.id.action_delete:
                 showConfirmDeleteDialog();
                 return true;
+            case R.id.action_edit:
+                //todo
+                return true;
             case android.R.id.home:
                 super.onBackPressed();
                 return true;
@@ -96,15 +101,15 @@ public class StockDetailActivity extends AppCompatActivity
     @Override
     public void onConfirmDelete() {
         boolean success = dbHandler.deleteStockItem(stockItem.getStockId());
-        if (!success) {
-            Toast.makeText(this, getString(R.string.db_error_delete, stockItem.getProduct().getProductName()),
-                    Toast.LENGTH_SHORT).show();
-        } else {
+        if (success) {
             Toast.makeText(this, getString(R.string.db_delete_stock_success,
                     stockItem.getProduct().getProductName(), stockItem.getLocationName()), Toast.LENGTH_SHORT).show();
+            UndoStack.getInstance().push(new DeleteStockAction(stockItem));
+            finish();
+        } else {
+            Toast.makeText(this, getString(R.string.db_error_delete, stockItem.getProduct().getProductName()),
+                    Toast.LENGTH_SHORT).show();
         }
-        finish();
-        //todo add to undo stack
     }
     
     private void showConfirmDeleteDialog() {
