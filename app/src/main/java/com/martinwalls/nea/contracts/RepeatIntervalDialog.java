@@ -63,7 +63,7 @@ public class RepeatIntervalDialog extends DialogFragment {
         radioCustom.setOnClickListener(v -> onRadioBtnClicked(OPTION_CUSTOM));
 
         RadioButton radioCustomSelected = dialogView.findViewById(R.id.radio_custom_selected);
-        radioCustomSelected.setOnClickListener(v -> getDialog().dismiss());
+        radioCustomSelected.setOnClickListener(v -> dismiss());
 
         switch (selectedOption) {
             case OPTION_WEEK:
@@ -148,7 +148,7 @@ public class RepeatIntervalDialog extends DialogFragment {
                     break;
             }
             listener.onCustomIntervalSelected(interval);
-            getDialog().dismiss();
+            dismiss();
         });
 
         builder.setView(dialogView);
@@ -173,7 +173,7 @@ public class RepeatIntervalDialog extends DialogFragment {
             customInterval.setVisibility(View.VISIBLE);
         } else {
             listener.onRadioBtnClicked(id);
-            getDialog().dismiss();
+            dismiss();
         }
     }
 

@@ -152,7 +152,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + StockTable.SUPPLIER_ID + " INTEGER NOT NULL, "
                 + StockTable.DEST_ID + " INTEGER, "
                 + StockTable.MASS + " REAL NOT NULL, "
-                + StockTable.NUM_BOXES + " REAL, "
+                + StockTable.NUM_BOXES + " REAL, " // todo INTEGER?
                 + StockTable.QUALITY + " TEXT NOT NULL, "
                 + "FOREIGN KEY ("+ StockTable.PRODUCT_ID + ") REFERENCES "
                     + ProductsTable.TABLE_NAME + "(" + ProductsTable.ID + ") "
@@ -437,9 +437,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 + " LEFT JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_DEST + " ON "
                 + StockTable.TABLE_NAME + "." + StockTable.DEST_ID
                 + "=" + ALIAS_DEST + "." + LocationsTable.ID
-                + " WHERE " + StockTable.ID + "=" + stockId;
+                + " WHERE " + StockTable.ID + "=?";
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[]{stockId + ""});
         if (cursor.moveToFirst()) {
             // get product data from inner join
             Product stockProduct = new Product();
@@ -447,6 +447,7 @@ public class DBHandler extends SQLiteOpenHelper {
             stockProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.NAME)));
             stockProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.MEAT_TYPE)));
             stockResult.setProduct(stockProduct);
+            stockResult.setStockId(cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.ID)));
             stockResult.setLocationId(cursor.getInt(cursor.getColumnIndexOrThrow(LocationsTable.ID)));
             stockResult.setLocationName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
             stockResult.setSupplierId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_SUPPLIER_ID)));
@@ -509,6 +510,7 @@ public class DBHandler extends SQLiteOpenHelper {
             stockProduct.setProductName(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.NAME)));
             stockProduct.setMeatType(cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.MEAT_TYPE)));
             stockItem.setProduct(stockProduct);
+            stockItem.setStockId(cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.ID)));
             stockItem.setLocationId(cursor.getInt(cursor.getColumnIndexOrThrow(LocationsTable.ID)));
             stockItem.setLocationName(cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
             stockItem.setSupplierId(cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_SUPPLIER_ID)));

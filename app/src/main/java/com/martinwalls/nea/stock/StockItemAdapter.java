@@ -3,6 +3,7 @@ package com.martinwalls.nea.stock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
@@ -14,6 +15,7 @@ import java.util.List;
 public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.ViewHolder> {
 
     private List<StockItem> itemList;
+    private StockItemAdapterListener listener;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView itemName;
@@ -27,11 +29,15 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             itemLocation = view.findViewById(R.id.location);
             itemMass = view.findViewById(R.id.mass);
             itemNumBoxes = view.findViewById(R.id.num_boxes);
+
+            LinearLayout itemLayout = view.findViewById(R.id.stock_item_layout);
+            itemLayout.setOnClickListener(v -> listener.onStockItemClicked(itemList.get(getAdapterPosition())));
         }
     }
 
-    StockItemAdapter(List<StockItem> itemList) {
+    StockItemAdapter(List<StockItem> itemList, StockItemAdapterListener listener) {
         this.itemList = itemList;
+        this.listener = listener;
     }
 
     @Override
@@ -63,5 +69,9 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     @Override
     public int getItemCount() {
         return itemList.size();
+    }
+
+    public interface StockItemAdapterListener {
+        void onStockItemClicked(StockItem stockItem);
     }
 }

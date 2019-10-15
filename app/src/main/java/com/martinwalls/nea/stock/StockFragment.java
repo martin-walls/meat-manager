@@ -27,7 +27,8 @@ import com.martinwalls.nea.util.undo.UndoStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StockFragment extends Fragment {
+public class StockFragment extends Fragment
+        implements StockItemAdapter.StockItemAdapterListener {
 
     private final int REQUEST_REFRESH_ON_DONE = 1;
 
@@ -54,7 +55,7 @@ public class StockFragment extends Fragment {
         TextView emptyView = fragmentView.findViewById(R.id.empty);
         recyclerView.setEmptyView(emptyView);
 
-        stockAdapter = new StockItemAdapter(stockList);
+        stockAdapter = new StockItemAdapter(stockList, this);
         recyclerView.setAdapter(stockAdapter);
         loadStock();
 
@@ -151,6 +152,13 @@ public class StockFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onStockItemClicked(StockItem stockItem) {
+        Intent detailIntent = new Intent(getContext(), StockDetailActivity.class);
+        detailIntent.putExtra(StockDetailActivity.EXTRA_STOCK_ID, stockItem.getStockId());
+        startActivity(detailIntent); //todo startActivityForResult?
     }
 
     private void setSortMode(int sortMode) {

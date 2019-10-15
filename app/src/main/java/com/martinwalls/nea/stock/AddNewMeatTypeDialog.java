@@ -43,12 +43,12 @@ public class AddNewMeatTypeDialog extends DialogFragment {
                 inputLayoutMeatType.setError(getString(R.string.input_error_duplicate));
             } else {
                 listener.onAddNewMeatTypeDoneAction(newMeatType);
-                getDialog().dismiss();
+                dismiss();
             }
         });
 
         buttonCancel.setOnClickListener(v -> {
-            getDialog().dismiss();
+            dismiss();
         });
 
 

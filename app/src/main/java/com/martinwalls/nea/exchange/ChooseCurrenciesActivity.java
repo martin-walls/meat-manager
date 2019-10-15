@@ -3,18 +3,19 @@ package com.martinwalls.nea.exchange;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.ExchangeDbHandler;
 import com.martinwalls.nea.models.Currency;
+import com.martinwalls.nea.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+//todo search currencies?
 public class ChooseCurrenciesActivity extends AppCompatActivity
         implements CurrencyAdapter.CurrencyAdapterListener {
 
@@ -69,7 +70,6 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
 
     @Override
     public void onCurrencyStarClicked(int position, boolean isFavList) {
-        Toast.makeText(this, position + (isFavList ? "fav" : ""), Toast.LENGTH_SHORT).show();
         if (isFavList) {
             dbHandler.setCurrencyFavourite(favCurrencyList.get(position).getCode(), false);
             favCurrencyList.get(position).toggleFavourite();

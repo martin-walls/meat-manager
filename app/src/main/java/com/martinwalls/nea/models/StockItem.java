@@ -44,15 +44,7 @@ public class StockItem {
     private int numBoxes;
     private Quality quality;
 
-    public StockItem() {
-    }
-
-    // for testing
-    public StockItem(Product product, double mass, int numBoxes) {
-        this.product = product;
-        this.mass = mass;
-        this.numBoxes = numBoxes;
-    }
+    public StockItem() {}
 
     // db "not null" fields
     public StockItem(Product product, int locationId, int supplierId, double mass, Quality quality) {

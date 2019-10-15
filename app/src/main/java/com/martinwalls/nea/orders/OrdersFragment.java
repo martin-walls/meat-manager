@@ -100,7 +100,7 @@ public class OrdersFragment extends Fragment
     public void onOrderClicked(Order order) {
         Intent detailIntent = new Intent(getContext(), OrderDetailActivity.class);
         detailIntent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, order.getOrderId());
-        startActivity(detailIntent);
+        startActivity(detailIntent); //todo startActivityForResult?
     }
 
     private void loadOrders() {

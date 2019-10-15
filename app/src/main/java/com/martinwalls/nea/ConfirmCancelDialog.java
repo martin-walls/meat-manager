@@ -1,6 +1,5 @@
 package com.martinwalls.nea;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ public class ConfirmCancelDialog extends DialogFragment {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        @SuppressLint("InflateParams")
         View dialogView = inflater.inflate(R.layout.dialog_confirm_cancel, null);
 
         Button btnYes = dialogView.findViewById(R.id.btn_yes);
@@ -27,11 +25,11 @@ public class ConfirmCancelDialog extends DialogFragment {
 
         btnYes.setOnClickListener(v -> {
             listener.onConfirmCancelYesAction();
-            getDialog().dismiss();
+            dismiss();
         });
         btnNo.setOnClickListener(v -> {
             listener.onConfirmCancelNoAction();
-            getDialog().dismiss();
+            dismiss();
         });
 
         builder.setView(dialogView);

@@ -16,6 +16,9 @@
 
     <string name="dialog_confirm_cancel_msg">Do you want to discard your changes?</string>
 
+    <string name="dialog_confirm_delete_msg">Are you sure you want to delete \"%s\"?</string>
+    <string name="dialog_confirm_delete_msg_default">Are you sure you want to delete this item?</string>
+
     <!-- Menus -->
     <string name="action_edit_locations">Edit locations</string>
     <string name="action_edit_meat_types">Edit meat types</string>
@@ -45,6 +48,10 @@
     <!-- db errors -->
     <string name="db_error_insert">Error adding %s</string>
     <string name="db_error_update">Error saving %s</string>
+
+    <string name="db_error_delete">Error deleting %s</string>
+    <string name="db_delete_stock_success">Deleted %s from %s</string>
+
     <string name="db_error_delete_meat_type">Cannot delete %s while products still exist</string>
     <string name="db_error_delete_product">Cannot delete %s while stock, contracts or orders still exist</string>
     <string name="db_error_delete_location">Cannot delete %s while stock, contracts or orders still exist</string>
@@ -96,6 +103,15 @@
     <string name="stock_input_location">Location</string>
     <string name="stock_input_destination">Destination</string>
     <string name="stock_input_quality">Quality</string>
+
+    <string name="stock_details_title">Stock details</string>
+    <string name="stock_details_quantity_kg">Quantity (kg)</string>
+    <string name="stock_details_quantity_lbs">Quantity (lbs)</string>
+    <string name="stock_details_quantity_boxes">Number of boxes</string>
+    <string name="stock_details_quantity_boxes_hint">(optional)</string>
+    <string name="stock_details_supplier">Supplier:</string>
+    <string name="stock_details_destination">Destination:</string>
+    <string name="stock_details_quality">Quality:</string>
 
     <!--<string name="stock_location_tag">&#8226; %s</string>-->
     <string name="stock_location_tag">%s</string>

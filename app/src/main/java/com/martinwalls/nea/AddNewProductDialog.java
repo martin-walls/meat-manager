@@ -80,11 +80,11 @@ public class AddNewProductDialog extends DialogFragment {
                 newProduct.setProductName(newProductName);
                 newProduct.setMeatType(newMeatType);
                 listener.onAddNewProductDoneAction(newProduct);
-                getDialog().dismiss();
+                dismiss();
             }
         });
 
-        btnCancel.setOnClickListener(v -> getDialog().dismiss());
+        btnCancel.setOnClickListener(v -> dismiss());
 
         return builder.create();
     }
