@@ -1,8 +1,12 @@
-package com.martinwalls.nea;
+package com.martinwalls.nea.util;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 
+/**
+ * {@link TextWatcher} implementation that does nothing by default, so
+ * not all methods have to be overridden when implemented.
+ */
 public class SimpleTextWatcher implements TextWatcher {
 
     @Override

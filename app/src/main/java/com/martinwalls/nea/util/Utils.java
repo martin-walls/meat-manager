@@ -14,9 +14,7 @@ public final class Utils {
     // 1 lb = 0.453592 kgs
     private static final double lbsToKgs = 0.453592;
 
-    /**
-     * The constructor is private as {@link Utils} shouldn't be instantiated.
-     */
+    // Utils shouldn't be instantiated
     private Utils() {}
 
     public static double convertToLbs(double kgs) {

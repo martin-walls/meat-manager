@@ -16,6 +16,8 @@ import java.util.List;
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder> {
 
+    private final String DATE_FORMAT = "d MMMM";
+
     private List<Order> orderList;
     private OrdersAdapterListener listener;
 
@@ -58,7 +60,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
 
         if (position > 0 && orderList.get(position - 1).getOrderDate().isBefore(order.getOrderDate())
                 || position == 0) {
-            viewHolder.dateDivider.setText(order.getOrderDate().format(DateTimeFormatter.ofPattern("dd MMMM")));
+            viewHolder.dateDivider.setText(order.getOrderDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
             viewHolder.dateDivider.setVisibility(View.VISIBLE);
         }
     }

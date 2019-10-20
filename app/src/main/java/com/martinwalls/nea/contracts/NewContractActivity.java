@@ -24,7 +24,7 @@ import com.martinwalls.nea.InputFormActivity;
 import com.martinwalls.nea.ProductsAddedAdapter;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.SearchItemAdapter;
-import com.martinwalls.nea.SimpleTextWatcher;
+import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.Contract;

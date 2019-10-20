@@ -49,7 +49,7 @@ public class NewOrderActivity extends InputFormActivity
         ConfirmCancelDialog.ConfirmCancelListener {
 
     private final int REQUEST_REFRESH_ON_DONE = 1;
-    private final String DATE_FORMAT = "dd MMMM yyyy, HH:mm"; //todo move to Utils?
+    private final String DATE_FORMAT = "dd MMMM yyyy, HH:mm";
 
     private final String INPUT_PRODUCT = "product";
     private final String INPUT_QUANTITY = "quantity";

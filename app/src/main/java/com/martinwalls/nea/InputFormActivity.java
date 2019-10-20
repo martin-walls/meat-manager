@@ -15,6 +15,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.components.AddNewTextView;
 import com.martinwalls.nea.models.SearchItem;
+import com.martinwalls.nea.util.SimpleTextWatcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;

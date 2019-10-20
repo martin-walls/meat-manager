@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.util.EasyPreferences;
 import com.martinwalls.nea.MainActivity;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.SimpleTextWatcher;
+import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.ExchangeDbHandler;
