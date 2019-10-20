@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import androidx.annotation.CallSuper;
 import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.transition.Transition;
@@ -24,26 +25,29 @@ import static android.view.View.GONE;
 public abstract class InputFormActivity extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener {
 
-    private SearchItemAdapter searchItemAdapter; //todo setters?
-    private ViewGroup rootView;
+    private SearchItemAdapter searchItemAdapter;
 
-    private HashMap<String, Integer> inputViews = new HashMap<>();
+    private HashMap<String, Integer> viewsToHide = new HashMap<>();
     private List<SearchItem> searchItemList = new ArrayList<>();
     private String currentSearchType;
 
+    private ViewGroup rootView;
     private AddNewTextView addNewView;
     private LinearLayout searchResultsLayout;
 
     @Override
     public abstract void onSearchItemSelected(SearchItem item, String searchItemType);
 
-    protected abstract void loadSearchItems(String searchType);
+    @CallSuper
+    protected void loadSearchItems(String searchType) {
+        searchItemList.clear();
+    }
 
-    protected abstract void addNewItem(String searchType);
+    protected abstract void addNewItemFromSearch(String searchType);
 
     protected void setAddNewView(@IdRes int resId) {
         addNewView = findViewById(resId);
-        addNewView.setOnClickListener(v -> addNewItem(addNewView.getSearchItemType()));
+        addNewView.setOnClickListener(v -> addNewItemFromSearch(addNewView.getSearchItemType()));
     }
 
     protected void setRootView(@IdRes int resId) {
@@ -57,6 +61,10 @@ public abstract class InputFormActivity extends AppCompatActivity
     protected void setSearchItemAdapter(SearchItemAdapter adapter) {
         this.searchItemAdapter = adapter;
     }
+
+//    protected void setDefaultSearchItemAdapter() {
+//        searchItemAdapter = new SearchItemAdapter(searchItemList, currentSearchType, this);
+//    }
 
     protected SearchItemAdapter getSearchItemAdapter() {
         return searchItemAdapter;
@@ -78,13 +86,15 @@ public abstract class InputFormActivity extends AppCompatActivity
         this.currentSearchType = currentSearchType;
     }
 
-    protected void addInputView(String inputName, @IdRes int resId) {
-        inputViews.put(inputName, resId);
+    protected void addViewToHide(String name, @IdRes int resId) {
+        viewsToHide.put(name, resId);
     }
 
-    private void hideKeyboard() {
+    protected void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
+        }
     }
 
     protected void setListeners(String name, TextInputLayout inputLayout, TextInputEditText editText) {
@@ -112,16 +122,16 @@ public abstract class InputFormActivity extends AppCompatActivity
         });
     }
 
+    @CallSuper
     protected void openSearch(String inputName) {
         Transition moveTransition = TransitionInflater.from(this).inflateTransition(R.transition.search_open);
         TransitionManager.beginDelayedTransition(rootView, moveTransition);
-        for (int view : inputViews.values()) {
-            if (view != inputViews.get(inputName)) {
+        for (int view : viewsToHide.values()) {
+            if (view != viewsToHide.get(inputName)) {
                 findViewById(view).setVisibility(GONE);
             }
         }
 
-        searchItemList.clear();
         loadSearchItems(inputName);
         currentSearchType = inputName;
         searchItemAdapter.setSearchItemType(currentSearchType);
@@ -145,10 +155,11 @@ public abstract class InputFormActivity extends AppCompatActivity
                 .setListener(null);
     }
 
+    @CallSuper
     protected void cancelSearch() {
         Transition closeTransition = TransitionInflater.from(this).inflateTransition(R.transition.search_close);
         TransitionManager.beginDelayedTransition(rootView, closeTransition);
-        for (int view : inputViews.values()) {
+        for (int view : viewsToHide.values()) {
             View viewToShow = findViewById(view);
             viewToShow.setVisibility(View.VISIBLE);
         }

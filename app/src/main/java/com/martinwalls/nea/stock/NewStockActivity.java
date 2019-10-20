@@ -59,12 +59,12 @@ public class NewStockActivity extends InputFormActivity
         dbHandler = new DBHandler(this);
 
         // store reference to each row to show/hide later
-        addInputView(INPUT_PRODUCT, R.id.input_layout_product);
-        addInputView(INPUT_SUPPLIER, R.id.input_layout_supplier);
-        addInputView(INPUT_QUANTITY, R.id.input_row_quantity);
-        addInputView(INPUT_LOCATION, R.id.input_layout_location);
-        addInputView(INPUT_DESTINATION, R.id.input_layout_destination);
-        addInputView(INPUT_QUALITY, R.id.input_layout_quality);
+        addViewToHide(INPUT_PRODUCT, R.id.input_layout_product);
+        addViewToHide(INPUT_SUPPLIER, R.id.input_layout_supplier);
+        addViewToHide(INPUT_QUANTITY, R.id.input_row_quantity);
+        addViewToHide(INPUT_LOCATION, R.id.input_layout_location);
+        addViewToHide(INPUT_DESTINATION, R.id.input_layout_destination);
+        addViewToHide(INPUT_QUALITY, R.id.input_layout_quality);
 
         setAddNewView(R.id.add_new);
 
@@ -150,6 +150,7 @@ public class NewStockActivity extends InputFormActivity
 
     @Override
     protected void loadSearchItems(String searchType) {
+        super.loadSearchItems(searchType);
         switch (searchType) {
             case INPUT_PRODUCT:
                 for (Product product : Utils.mergeSort(dbHandler.getAllProducts(), Product.comparatorAlpha())) {
@@ -225,7 +226,7 @@ public class NewStockActivity extends InputFormActivity
     }
 
     @Override
-    protected void addNewItem(String searchType) {
+    protected void addNewItemFromSearch(String searchType) {
         switch (searchType) {
             case INPUT_PRODUCT:
                 DialogFragment dialog = new AddNewProductDialog();
