@@ -834,6 +834,41 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return newRowId != 1;
     }
+
+    public boolean updateOrder(Order order) { // todo test
+        ContentValues values = new ContentValues();
+        values.put(OrdersTable.ID, order.getOrderId());
+        values.put(OrdersTable.DEST_ID, order.getDestId());
+        values.put(OrdersTable.ORDER_DATE, order.getOrderDate().atZone(ZoneId.systemDefault()).toEpochSecond());
+        values.put(OrdersTable.COMPLETED, order.isCompleted() ? 1 : 0);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsAffected = db.update(LocationsTable.TABLE_NAME, values,
+                OrdersTable.ID + "=?", new String[]{order.getOrderId() + ""});
+
+        // delete products in db for order, then re-add the updated ones
+        String orderProductsQuery = "SELECT * FROM " + OrderProductsTable.TABLE_NAME
+                + " WHERE " + OrderProductsTable.ORDER_ID + "=?";
+        Cursor cursor = db.rawQuery(orderProductsQuery, new String[]{order.getOrderId() + ""});
+        while (cursor.moveToNext()) {
+            db.delete(OrderProductsTable.TABLE_NAME,
+                    OrderProductsTable.ORDER_ID + "=? AND " + OrderProductsTable.PRODUCT_ID + "=?",
+                    new String[]{order.getOrderId() + "",
+                            cursor.getInt(cursor.getColumnIndexOrThrow(OrderProductsTable.PRODUCT_ID)) + ""});
+        }
+        cursor.close();
+
+        for (ProductQuantity productQuantity : order.getProductList()) {
+            ContentValues productValues = new ContentValues();
+            productValues.put(OrderProductsTable.PRODUCT_ID, productQuantity.getProduct().getProductId());
+            productValues.put(OrderProductsTable.ORDER_ID, order.getOrderId());
+            productValues.put(OrderProductsTable.QUANTITY_MASS, productQuantity.getQuantityMass());
+            productValues.put(OrderProductsTable.QUANTITY_BOXES, productQuantity.getQuantityBoxes());
+            db.insert(OrderProductsTable.TABLE_NAME, null, productValues);
+        }
+        db.close();
+        return rowsAffected == 1;
+    }
     //endregion order
 
     //region contract

@@ -521,18 +521,17 @@ public class EditOrderActivity extends InputFormActivity
         return false;
     }
 
-    private boolean areAllFieldsEmpty() {
-        //todo have they changed for edit
-        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
-        TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
-        TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
-        TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
-        TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
-
-        return TextUtils.isEmpty(editTextProduct.getText())
-                && TextUtils.isEmpty(editTextMass.getText())
-                && TextUtils.isEmpty(editTextNumBoxes.getText())
-                && TextUtils.isEmpty(editTextDest.getText())
-                && TextUtils.isEmpty(editTextDate.getText());
-    }
+//    private boolean areAllFieldsEmpty() {
+//        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
+//        TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
+//        TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
+//        TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
+//        TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
+//
+//        return TextUtils.isEmpty(editTextProduct.getText())
+//                && TextUtils.isEmpty(editTextMass.getText())
+//                && TextUtils.isEmpty(editTextNumBoxes.getText())
+//                && TextUtils.isEmpty(editTextDest.getText())
+//                && TextUtils.isEmpty(editTextDate.getText());
+//    }
 }
