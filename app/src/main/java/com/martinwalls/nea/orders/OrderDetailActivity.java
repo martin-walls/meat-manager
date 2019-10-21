@@ -13,11 +13,14 @@ import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.Order;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class OrderDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_ORDER_ID = "order_id";
+
+    private final String DATE_FORMAT = "dd MMMM yyyy, HH:mm";
 
     private DBHandler dbHandler;
     private Order order;
@@ -47,7 +50,11 @@ public class OrderDetailActivity extends AppCompatActivity {
         destination.setText(order.getDestName());
 
         TextView date = findViewById(R.id.date);
-        date.setText(order.getOrderDate().format(DateTimeFormatter.ofPattern("dd MMMM yyyy, HH:mm")));
+        date.setText(order.getOrderDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+
+        if (order.getOrderDate().isBefore(LocalDateTime.now())) {
+            date.setTextColor(getColor(R.color.error_red));
+        }
     }
 
     @Override
@@ -68,7 +75,8 @@ public class OrderDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_edit:
-                Toast.makeText(this, "EDIT", Toast.LENGTH_SHORT).show(); //todo
+                Toast.makeText(this, "EDIT", Toast.LENGTH_SHORT).show();
+                //todo edit order fragment
                 return true;
             case android.R.id.home:
                 super.onBackPressed();

@@ -48,7 +48,7 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
         this.listener = listener;
     }
 
-    ProductsAddedAdapter(List<ProductQuantity> productList, ProductsAddedAdapterListener listener,
+    public ProductsAddedAdapter(List<ProductQuantity> productList, ProductsAddedAdapterListener listener,
                                 boolean showEditBtn, boolean showDeleteBtn) {
         this.productList = productList;
         this.listener = listener;

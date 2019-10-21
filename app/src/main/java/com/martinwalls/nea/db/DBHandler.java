@@ -30,7 +30,7 @@ import java.util.List;
 @SuppressWarnings("FieldCanBeLocal")
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "stockDB.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     private static final String BACKUP_DIR = "/nea/db_backup/";
 
@@ -275,11 +275,15 @@ public class DBHandler extends SQLiteOpenHelper {
         // not completed orders
         String orderProductsQuery = "SELECT " + OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.PRODUCT_ID + ","
                 + OrderProductsTable.QUANTITY_MASS + "," + OrderProductsTable.QUANTITY_BOXES + ","
-                + ProductsTable.NAME + "," + ProductsTable.MEAT_TYPE
+                + ProductsTable.NAME + "," + ProductsTable.MEAT_TYPE + ","
+                + OrdersTable.COMPLETED
                 + " FROM " + OrderProductsTable.TABLE_NAME
                 + " INNER JOIN " + ProductsTable.TABLE_NAME + " ON "
                 + OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.PRODUCT_ID
                 + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID
+                + " INNER JOIN " + OrdersTable.TABLE_NAME + " ON "
+                + OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.ORDER_ID
+                + "=" + OrdersTable.TABLE_NAME + "." + OrdersTable.ID
                 + " WHERE " + OrdersTable.COMPLETED + "=0";
         String contractProductsQuery = "SELECT " + ContractProductsTable.TABLE_NAME
                 + "." + ContractProductsTable.PRODUCT_ID + ","
@@ -884,7 +888,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public List<Contract> getAllContracts() {
         List<Contract> contractResultList = new ArrayList<>();
-        //todo refactor these queries into global variables, for getting a single order just append the WHERE clause - eliminate repetition
         String query = "SELECT " + ContractsTable.TABLE_NAME + ".*," + ProductsTable.TABLE_NAME + ".*,"
                 + ContractProductsTable.QUANTITY_MASS + "," + ContractProductsTable.QUANTITY_BOXES + ","
                 + LocationsTable.NAME

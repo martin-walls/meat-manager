@@ -60,7 +60,6 @@ public class NewOrderActivity extends InputFormActivity
 
     private ProductsAddedAdapter productsAddedAdapter;
     private List<ProductQuantity> productsAddedList = new ArrayList<>();
-    private RecyclerView productsAddedRecyclerView;
 
     private TextView addProductBtn;
 
@@ -108,8 +107,9 @@ public class NewOrderActivity extends InputFormActivity
                 findViewById(R.id.input_layout_destination),
                 findViewById(R.id.edit_text_destination));
 
-        productsAddedAdapter = new ProductsAddedAdapter(productsAddedList, this);
-        productsAddedRecyclerView = findViewById(R.id.products_added_recycler_view);
+        productsAddedAdapter =
+                new ProductsAddedAdapter(productsAddedList, this, false, true);
+        RecyclerView productsAddedRecyclerView = findViewById(R.id.products_added_recycler_view);
         productsAddedRecyclerView.setAdapter(productsAddedAdapter);
         productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 

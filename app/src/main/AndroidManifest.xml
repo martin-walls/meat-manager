@@ -19,7 +19,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         >
-        <activity android:name=".stock.StockDetailActivity"></activity>
+        <activity android:name=".stock.StockDetailActivity" />
         <activity android:name=".stock.EditLocationActivity" />
         <activity
             android:name=".SettingsActivity"
