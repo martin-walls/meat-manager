@@ -80,6 +80,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             case R.id.action_edit:
                 Toast.makeText(this, "EDIT", Toast.LENGTH_SHORT).show();
                 Intent editIntent = new Intent(this, EditOrderActivity.class);
+                editIntent.putExtra(EditOrderActivity.EXTRA_EDIT_TYPE, EditOrderActivity.EDIT_TYPE_EDIT);
                 editIntent.putExtra(EditOrderActivity.EXTRA_ORDER_ID, order.getOrderId());
                 startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
                 return true;

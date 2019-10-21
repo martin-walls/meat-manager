@@ -266,7 +266,7 @@ public class NewContractActivity extends InputFormActivity
     }
 
     @Override
-    public void deleteProductAdded(int position) {
+    public void onProductAddedDelete(int position) {
         productsAddedList.remove(position);
         productsAddedAdapter.notifyItemRemoved(position);
     }

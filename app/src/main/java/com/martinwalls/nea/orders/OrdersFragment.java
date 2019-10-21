@@ -57,7 +57,8 @@ public class OrdersFragment extends Fragment
 
         FloatingActionButton fab = fragmentView.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            Intent newOrderIntent = new Intent(getContext(), NewOrderActivity.class);
+            Intent newOrderIntent = new Intent(getContext(), EditOrderActivity.class);
+            newOrderIntent.putExtra(EditOrderActivity.EXTRA_EDIT_TYPE, EditOrderActivity.EDIT_TYPE_NEW);
             startActivity(newOrderIntent);
         });
 

@@ -31,8 +31,8 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
             deleteBtn = view.findViewById(R.id.btn_delete);
             editBtn = view.findViewById(R.id.btn_edit);
 
-            deleteBtn.setOnClickListener(v -> listener.deleteProductAdded(getAdapterPosition()));
-            editBtn.setOnClickListener(v -> listener.editProductAdded(getAdapterPosition()));
+            deleteBtn.setOnClickListener(v -> listener.onProductAddedDelete(getAdapterPosition()));
+            editBtn.setOnClickListener(v -> listener.onProductAddedEdit(getAdapterPosition()));
         }
     }
 
@@ -67,9 +67,8 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         ProductQuantity productQuantity = productList.get(position);
         viewHolder.name.setText(productQuantity.getProduct().getProductName());
-        viewHolder.mass.setText(
-                viewHolder.mass.getContext().getString(R.string.amount_kg,
-                        new DecimalFormat("#.0###").format(productQuantity.getQuantityMass())));
+        viewHolder.mass.setText(viewHolder.mass.getContext().getString(R.string.amount_kg,
+                new DecimalFormat("#.0###").format(productQuantity.getQuantityMass())));
         if (productQuantity.getQuantityBoxes() < 0) {
             viewHolder.numBoxes.setVisibility(View.GONE);
         } else {
@@ -91,7 +90,7 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
     }
 
     public interface ProductsAddedAdapterListener {
-        default void deleteProductAdded(int position) {}
-        default void editProductAdded(int position) {}
+        default void onProductAddedDelete(int position) {}
+        default void onProductAddedEdit(int position) {}
     }
 }

@@ -35,7 +35,6 @@
         <activity android:name=".contracts.ContractDetailActivity" />
         <activity android:name=".contracts.NewContractActivity" />
         <activity android:name=".orders.OrderDetailActivity" />
-        <activity android:name=".orders.NewOrderActivity" />
         <activity android:name=".stock.NewLocationActivity" />
         <activity android:name=".stock.EditProductsActivity" />
         <activity android:name=".stock.EditMeatTypesActivity" />
