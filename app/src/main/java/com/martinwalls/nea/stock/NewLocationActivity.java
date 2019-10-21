@@ -79,7 +79,7 @@ public class NewLocationActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_edit_locations, menu);
+        getMenuInflater().inflate(R.menu.activity_edit_location, menu);
         return true;
     }
 

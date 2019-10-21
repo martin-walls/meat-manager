@@ -54,6 +54,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".stock.NewStockActivity" />
+        <activity android:name=".orders.EditOrderActivity" />
 
         <service
             android:name=".exchange.ApiIntentService"

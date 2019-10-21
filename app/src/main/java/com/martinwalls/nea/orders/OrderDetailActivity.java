@@ -1,5 +1,6 @@
 package com.martinwalls.nea.orders;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,8 @@ import java.time.format.DateTimeFormatter;
 public class OrderDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_ORDER_ID = "order_id";
+
+    public static final int REQUEST_REFRESH_ON_DONE = 1;
 
     private final String DATE_FORMAT = "dd MMMM yyyy, HH:mm";
 
@@ -76,13 +79,23 @@ public class OrderDetailActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_edit:
                 Toast.makeText(this, "EDIT", Toast.LENGTH_SHORT).show();
-                //todo edit order fragment
+                Intent editIntent = new Intent(this, EditOrderActivity.class);
+                editIntent.putExtra(EditOrderActivity.EXTRA_ORDER_ID, order.getOrderId());
+                startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
                 return true;
             case android.R.id.home:
                 super.onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_REFRESH_ON_DONE) {
+            recreate();
         }
     }
 }

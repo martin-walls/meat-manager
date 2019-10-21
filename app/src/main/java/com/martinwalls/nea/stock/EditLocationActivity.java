@@ -6,7 +6,6 @@ import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +47,7 @@ public class EditLocationActivity extends AppCompatActivity
             actionBar.setTitle(getString(R.string.location_edit_title, location.getLocationType().name().toLowerCase()));
         }
 
+        // hide location type input, this can't be edited
         TextInputLayout inputLayoutLocationType = findViewById(R.id.input_layout_location_type);
         inputLayoutLocationType.setVisibility(View.GONE);
 
@@ -64,7 +64,7 @@ public class EditLocationActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_edit_locations, menu);
+        getMenuInflater().inflate(R.menu.activity_edit_location, menu);
         return true;
     }
 
@@ -94,12 +94,6 @@ public class EditLocationActivity extends AppCompatActivity
     @Override
     public void onConfirmCancelYesAction() {
         finish();
-    }
-
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        View view = findViewById(R.id.root_layout);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void showConfirmCancelDialog() {
