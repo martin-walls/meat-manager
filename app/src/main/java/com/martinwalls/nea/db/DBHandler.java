@@ -152,7 +152,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + StockTable.SUPPLIER_ID + " INTEGER NOT NULL, "
                 + StockTable.DEST_ID + " INTEGER, "
                 + StockTable.MASS + " REAL NOT NULL, "
-                + StockTable.NUM_BOXES + " REAL, " // todo INTEGER?
+                + StockTable.NUM_BOXES + " INTEGER, "
                 + StockTable.QUALITY + " TEXT NOT NULL, "
                 + "FOREIGN KEY ("+ StockTable.PRODUCT_ID + ") REFERENCES "
                     + ProductsTable.TABLE_NAME + "(" + ProductsTable.ID + ") "
@@ -272,14 +272,15 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public List<ProductQuantity> getAllProductsRequired() {
         List<ProductQuantity> productQuantityResultList = new ArrayList<>();
-        //todo where order not completed
+        // not completed orders
         String orderProductsQuery = "SELECT " + OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.PRODUCT_ID + ","
                 + OrderProductsTable.QUANTITY_MASS + "," + OrderProductsTable.QUANTITY_BOXES + ","
                 + ProductsTable.NAME + "," + ProductsTable.MEAT_TYPE
                 + " FROM " + OrderProductsTable.TABLE_NAME
                 + " INNER JOIN " + ProductsTable.TABLE_NAME + " ON "
                 + OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.PRODUCT_ID
-                + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID;
+                + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID
+                + " WHERE " + OrdersTable.COMPLETED + "=0";
         String contractProductsQuery = "SELECT " + ContractProductsTable.TABLE_NAME
                 + "." + ContractProductsTable.PRODUCT_ID + ","
                 + ContractProductsTable.QUANTITY_MASS + "," + ContractProductsTable.QUANTITY_BOXES + ","
@@ -405,7 +406,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //region stock
     public StockItem getStockItem(int stockId) {
-        // TODO check for null values
         StockItem stockResult = new StockItem();
         final String ALIAS_LOCATION = "Location";
         final String ALIAS_SUPPLIER = "Supplier";
