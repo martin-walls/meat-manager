@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.martinwalls.nea.ProductsAddedAdapter;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
@@ -32,8 +34,11 @@ public class OrderDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
 
-        getSupportActionBar().setTitle(R.string.order_details_title);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.order_details_title);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         dbHandler = new DBHandler(this);
 
@@ -57,6 +62,14 @@ public class OrderDetailActivity extends AppCompatActivity {
         if (order.getOrderDate().isBefore(LocalDateTime.now())) {
             date.setTextColor(getColor(R.color.error_red));
         }
+
+        MaterialCheckBox checkboxCompleted = findViewById(R.id.checkbox_completed);
+        checkboxCompleted.setChecked(order.isCompleted());
+
+        checkboxCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            order.setCompleted(isChecked);
+            dbHandler.updateOrder(order);
+        });
     }
 
     @Override
