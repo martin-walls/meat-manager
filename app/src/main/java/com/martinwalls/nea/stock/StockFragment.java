@@ -100,16 +100,20 @@ public class StockFragment extends Fragment
         super.onPrepareOptionsMenu(menu);
         switch (prefs.getInt(R.string.pref_stock_sort_by, SORT_BY_DEFAULT)) {
             case SortMode.NAME:
-                menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_name).setChecked(true);
+                menu.findItem(R.id.action_sort_by).getSubMenu()
+                        .findItem(R.id.action_sort_by_name).setChecked(true);
                 break;
             case SortMode.LOCATION:
-                menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_location).setChecked(true);
+                menu.findItem(R.id.action_sort_by).getSubMenu()
+                        .findItem(R.id.action_sort_by_location).setChecked(true);
                 break;
             case SortMode.AMOUNT_DESC:
-                menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_amount_desc).setChecked(true);
+                menu.findItem(R.id.action_sort_by).getSubMenu()
+                        .findItem(R.id.action_sort_by_amount_desc).setChecked(true);
                 break;
             case SortMode.AMOUNT_ASC:
-                menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_amount_asc).setChecked(true);
+                menu.findItem(R.id.action_sort_by).getSubMenu()
+                        .findItem(R.id.action_sort_by_amount_asc).setChecked(true);
                 break;
         }
     }

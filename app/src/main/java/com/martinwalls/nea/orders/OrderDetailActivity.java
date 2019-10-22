@@ -5,20 +5,26 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.martinwalls.nea.ConfirmDeleteDialog;
 import com.martinwalls.nea.ProductsAddedAdapter;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.Order;
+import com.martinwalls.nea.util.undo.DeleteOrderAction;
+import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class OrderDetailActivity extends AppCompatActivity {
+public class OrderDetailActivity extends AppCompatActivity
+        implements ConfirmDeleteDialog.ConfirmDeleteListener {
 
     public static final String EXTRA_ORDER_ID = "order_id";
 
@@ -89,6 +95,9 @@ public class OrderDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_delete:
+                showConfirmDeleteDialog();
+                return true;
             case R.id.action_edit:
                 Intent editIntent = new Intent(this, EditOrderActivity.class);
                 editIntent.putExtra(EditOrderActivity.EXTRA_EDIT_TYPE, EditOrderActivity.EDIT_TYPE_EDIT);
@@ -109,5 +118,22 @@ public class OrderDetailActivity extends AppCompatActivity {
         if (requestCode == REQUEST_REFRESH_ON_DONE) {
             recreate();
         }
+    }
+
+    @Override
+    public void onConfirmDelete() {
+        boolean success = dbHandler.deleteOrder(order.getOrderId());
+        if (success) {
+            Toast.makeText(this, R.string.db_delete_order_success, Toast.LENGTH_SHORT).show();
+            UndoStack.getInstance().push(new DeleteOrderAction(order));
+            finish();
+        } else {
+            Toast.makeText(this, R.string.db_delete_order_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showConfirmDeleteDialog() {
+        DialogFragment dialog = new ConfirmDeleteDialog();
+        dialog.show(getSupportFragmentManager(), "confirm_delete");
     }
 }

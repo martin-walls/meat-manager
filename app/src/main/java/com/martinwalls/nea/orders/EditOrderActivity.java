@@ -36,6 +36,9 @@ import com.martinwalls.nea.models.SearchItem;
 import com.martinwalls.nea.stock.NewLocationActivity;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.util.undo.AddOrderAction;
+import com.martinwalls.nea.util.undo.EditOrderAction;
+import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -111,7 +114,9 @@ public class EditOrderActivity extends InputFormActivity
 
         addViewToHide("add_product_btn", R.id.add_product);
         addViewToHide("products_added_recycler_view", R.id.products_added_recycler_view);
-        addViewToHide("completed_checkbox", R.id.checkbox_completed);
+        if (editType.equals(EDIT_TYPE_EDIT)) {
+            addViewToHide("completed_checkbox", R.id.checkbox_completed);
+        }
 
         setAddNewView(R.id.add_new);
 
@@ -529,12 +534,19 @@ public class EditOrderActivity extends InputFormActivity
             newOrder.setCompleted(false);
 
             if (editType.equals(EDIT_TYPE_NEW)) {
-                return dbHandler.addOrder(newOrder);
+                int newRowId = dbHandler.addOrder(newOrder);
+                newOrder.setOrderId(newRowId);
+                UndoStack.getInstance().push(new AddOrderAction(newOrder));
+                return newRowId != -1;
             } else {
                 newOrder.setOrderId(orderToEdit.getOrderId());
                 MaterialCheckBox checkboxCompleted = findViewById(R.id.checkbox_completed);
                 newOrder.setCompleted(checkboxCompleted.isChecked());
-                return dbHandler.updateOrder(newOrder);
+                boolean success = dbHandler.updateOrder(newOrder);
+
+                UndoStack.getInstance().push(new EditOrderAction(orderToEdit, newOrder));
+
+                return success;
             }
         }
         return false;

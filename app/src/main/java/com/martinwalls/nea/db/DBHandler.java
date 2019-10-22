@@ -822,7 +822,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return getAllOrders(true);
     }
 
-    public boolean addOrder(Order order) {
+    public int addOrder(Order order) {
         ContentValues values = new ContentValues();
         values.put(OrdersTable.DEST_ID, order.getDestId());
         values.put(OrdersTable.ORDER_DATE, order.getOrderDate().atZone(ZoneId.systemDefault()).toEpochSecond());
@@ -841,12 +841,11 @@ public class DBHandler extends SQLiteOpenHelper {
             db.insert(OrderProductsTable.TABLE_NAME, null, productValues);
         }
         db.close();
-        return newRowId != 1;
+        return (int) newRowId;
     }
 
     public boolean updateOrder(Order order) { // todo test
         ContentValues values = new ContentValues();
-        values.put(OrdersTable.ID, order.getOrderId());
         values.put(OrdersTable.DEST_ID, order.getDestId());
         values.put(OrdersTable.ORDER_DATE, order.getOrderDate().atZone(ZoneId.systemDefault()).toEpochSecond());
         values.put(OrdersTable.COMPLETED, order.isCompleted() ? 1 : 0);
@@ -877,6 +876,14 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.close();
         return rowsAffected == 1;
+    }
+
+    public boolean deleteOrder(int orderId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int deletedRows = db.delete(OrdersTable.TABLE_NAME,
+                OrdersTable.ID + "=?", new String[]{orderId + ""});
+        db.close();
+        return deletedRows == 1;
     }
     //endregion order
 

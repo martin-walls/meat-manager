@@ -52,6 +52,8 @@
 
     <string name="db_error_delete">Error deleting %s</string>
     <string name="db_delete_stock_success">Deleted %s from %s</string>
+    <string name="db_delete_order_success">Deleted order</string>
+    <string name="db_delete_order_error">Error deleting order</string>
 
     <string name="db_error_delete_meat_type">Cannot delete %s while products still exist</string>
     <string name="db_error_delete_product">Cannot delete %s while stock, contracts or orders still exist</string>
@@ -242,4 +244,10 @@
     <string name="redo_add_stock_success">Redo add \"%s\"</string>
     <string name="undo_delete_stock_success">Undo delete \"%s\"</string>
     <string name="redo_delete_stock_success">Redo delete \"%s\"</string>
+    <string name="undo_add_order_success">Undo add order</string>
+    <string name="redo_add_order_success">Redo add order</string>
+    <string name="undo_edit_order_success">Undo edit order</string>
+    <string name="redo_edit_order_success">Redo edit order</string>
+    <string name="undo_delete_order_success">Undo delete order</string>
+    <string name="redo_delete_order_success">Redo delete order</string>
 </resources>
