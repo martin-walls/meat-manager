@@ -6,10 +6,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
-import androidx.annotation.AttrRes;
 import androidx.annotation.Nullable;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.util.Utils;
@@ -82,14 +80,14 @@ public class BarChartView extends View {
     private void init(Context context) {
         this.context = context;
 
-        int barColor = getColorFromTheme(context, R.attr.dashboardGraphBarColor);
-        int outerTextColor = getColorFromTheme(context, R.attr.dashboardGraphBarOuterTextColor);
-        int innerTextColor = getColorFromTheme(context, R.attr.dashboardGraphBarInnerTextColor);
-        int reqBarColor = getColorFromTheme(context, R.attr.dashboardGraphReqBarColor);
-        int ttColor = getColorFromTheme(context, R.attr.dashboardTooltipColor);
-        int ttTextColor = getColorFromTheme(context, R.attr.dashboardTooltipTextColor);
-        int reqTtColor = getColorFromTheme(context, R.attr.dashboardReqTooltipColor);
-        int reqTtTextColor = getColorFromTheme(context, R.attr.dashboardReqTooltipTextColor);
+        int barColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphBarColor);
+        int outerTextColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphBarOuterTextColor);
+        int innerTextColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphBarInnerTextColor);
+        int reqBarColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphReqBarColor);
+        int ttColor = Utils.getColorFromTheme(context, R.attr.dashboardTooltipColor);
+        int ttTextColor = Utils.getColorFromTheme(context, R.attr.dashboardTooltipTextColor);
+        int reqTtColor = Utils.getColorFromTheme(context, R.attr.dashboardReqTooltipColor);
+        int reqTtTextColor = Utils.getColorFromTheme(context, R.attr.dashboardReqTooltipTextColor);
 
 
         barFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -340,11 +338,5 @@ public class BarChartView extends View {
         dataSet.clear();
         dataSet.addAll(newDataSet);
         invalidate();
-    }
-
-    private int getColorFromTheme(Context context, @AttrRes int resId) {
-        TypedValue outValue = new TypedValue();
-        context.getTheme().resolveAttribute(resId, outValue, true);
-        return outValue.data;
     }
 }

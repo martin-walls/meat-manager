@@ -2,6 +2,7 @@ package com.martinwalls.nea.util;
 
 import android.content.Context;
 import android.util.TypedValue;
+import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -90,5 +91,11 @@ public final class Utils {
         }
 
         return merged;
+    }
+
+    public static int getColorFromTheme(Context context, @AttrRes int resId) {
+        TypedValue outValue = new TypedValue();
+        context.getTheme().resolveAttribute(resId, outValue, true);
+        return outValue.data;
     }
 }

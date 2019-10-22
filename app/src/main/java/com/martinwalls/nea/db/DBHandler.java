@@ -763,7 +763,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return orderResult;
     }
 
-    public List<Order> getAllOrders() {
+    public List<Order> getAllOrders(boolean completed) {
         List<Order> orderResultList = new ArrayList<>();
         String query = "SELECT " + OrdersTable.TABLE_NAME + ".*," + ProductsTable.TABLE_NAME + ".*,"
                 + OrderProductsTable.QUANTITY_MASS + "," + OrderProductsTable.QUANTITY_BOXES + ","
@@ -777,9 +777,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID
                 + " INNER JOIN " + LocationsTable.TABLE_NAME + " ON "
                 + OrdersTable.TABLE_NAME + "." + OrdersTable.DEST_ID
-                + "=" + LocationsTable.TABLE_NAME + "." + LocationsTable.ID;
+                + "=" + LocationsTable.TABLE_NAME + "." + LocationsTable.ID
+                + " WHERE " + OrdersTable.COMPLETED + "=?";
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[]{completed ? "1" : "0"});
         int lastOrderId = -1;
         while (cursor.moveToNext()) {
             int thisOrderId = cursor.getInt(cursor.getColumnIndexOrThrow(OrdersTable.ID));
@@ -813,6 +814,14 @@ public class DBHandler extends SQLiteOpenHelper {
         return orderResultList;
     }
 
+    public List<Order> getAllOrdersNotCompleted() {
+        return getAllOrders(false);
+    }
+
+    public List<Order> getAllOrdersCompleted() {
+        return getAllOrders(true);
+    }
+
     public boolean addOrder(Order order) {
         ContentValues values = new ContentValues();
         values.put(OrdersTable.DEST_ID, order.getDestId());
@@ -843,7 +852,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(OrdersTable.COMPLETED, order.isCompleted() ? 1 : 0);
 
         SQLiteDatabase db = this.getWritableDatabase();
-        int rowsAffected = db.update(LocationsTable.TABLE_NAME, values,
+        int rowsAffected = db.update(OrdersTable.TABLE_NAME, values,
                 OrdersTable.ID + "=?", new String[]{order.getOrderId() + ""});
 
         // delete products in db for order, then re-add the updated ones

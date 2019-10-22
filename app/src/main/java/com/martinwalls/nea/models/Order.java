@@ -2,6 +2,7 @@ package com.martinwalls.nea.models;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Order {
@@ -83,5 +84,9 @@ public class Order {
 
     public void addProduct(Product product, double quantityMass, int quantityBoxes) {
         productList.add(new ProductQuantity(product, quantityMass, quantityBoxes));
+    }
+
+    public static Comparator<Order> comparatorDate() {
+        return (order1, order2) -> order1.getOrderDate().compareTo(order2.getOrderDate());
     }
 }

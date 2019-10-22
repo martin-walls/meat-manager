@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -151,7 +152,7 @@ public class EditOrderActivity extends InputFormActivity
         });
 
         addProductBtn = findViewById(R.id.add_product);
-        addProductBtn.setOnClickListener(v -> addProduct());
+        addProductBtn.setOnClickListener(v -> addProductToProductsAddedList());
 
         if (editType.equals(EDIT_TYPE_NEW)) {
             findViewById(R.id.checkbox_completed).setVisibility(View.GONE);
@@ -160,6 +161,12 @@ public class EditOrderActivity extends InputFormActivity
             findViewById(R.id.product_inputs).setVisibility(View.GONE);
 
             fillFields();
+
+            ImageButton productBtnDone = findViewById(R.id.product_btn_done);
+            productBtnDone.setOnClickListener(v -> {
+                addProductToProductsAddedList();
+                findViewById(R.id.product_inputs).setVisibility(View.GONE);
+            });
         }
 
         setTextChangedListeners();
@@ -280,6 +287,8 @@ public class EditOrderActivity extends InputFormActivity
 
         productsAddedList.remove(position);
         productsAddedAdapter.notifyItemRemoved(position);
+
+        selectedProductId = productAdded.getProduct().getProductId();
     }
 
     @Override
@@ -339,7 +348,7 @@ public class EditOrderActivity extends InputFormActivity
         dialog.show(getSupportFragmentManager(), "confirm_cancel");
     }
 
-    private void addProduct() {
+    private void addProductToProductsAddedList() {
         ProductQuantity product = getProductFromInputsAndClear();
         if (product != null) {
             productsAddedList.add(product);
@@ -456,6 +465,10 @@ public class EditOrderActivity extends InputFormActivity
 
         MaterialCheckBox checkBoxCompleted = findViewById(R.id.checkbox_completed);
         checkBoxCompleted.setChecked(orderToEdit.isCompleted());
+
+        selectedDestId = orderToEdit.getDestId();
+        selectedDateTime = orderToEdit.getOrderDate();
+
     }
 
     private boolean addOrderToDb() {
@@ -512,11 +525,17 @@ public class EditOrderActivity extends InputFormActivity
             productList.addAll(productsAddedList);
             newOrder.setProductList(productList);
             newOrder.setDest(dbHandler.getLocation(selectedDestId));
-            newOrder.setOrderDate(LocalDateTime.parse(editTextDate.getText().toString(),
-                    DateTimeFormatter.ofPattern(DATE_FORMAT)));
+            newOrder.setOrderDate(selectedDateTime);
             newOrder.setCompleted(false);
 
-            return dbHandler.addOrder(newOrder);
+            if (editType.equals(EDIT_TYPE_NEW)) {
+                return dbHandler.addOrder(newOrder);
+            } else {
+                newOrder.setOrderId(orderToEdit.getOrderId());
+                MaterialCheckBox checkboxCompleted = findViewById(R.id.checkbox_completed);
+                newOrder.setCompleted(checkboxCompleted.isChecked());
+                return dbHandler.updateOrder(newOrder);
+            }
         }
         return false;
     }

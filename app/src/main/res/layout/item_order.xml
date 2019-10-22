@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -18,14 +19,14 @@
         android:id="@+id/order_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
         android:baselineAligned="false"
+        android:clickable="true"
         android:orientation="vertical"
         android:paddingStart="24dp"
         android:paddingTop="16dp"
         android:paddingEnd="24dp"
         android:paddingBottom="16dp"
-        android:background="?selectableItemBackground"
-        android:clickable="true"
         >
 
         <androidx.recyclerview.widget.RecyclerView
@@ -39,10 +40,10 @@
 
         <TextView
             android:id="@+id/order_dest"
+            style="@style/ItemInfoSecondary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical|start"
-            style="@style/ItemInfoSecondary"
             tools:text="Destination"
             />
 

@@ -30,6 +30,7 @@
     <string name="action_sort_by_amount_desc">Sort by amount (high-low)</string>
     <string name="action_sort_by_location">Sort by location</string>
     <string name="action_order_history">Order history</string>
+    <string name="action_current_orders">Current orders</string>
     <string name="action_favourites">Favourites</string>
 
     <!-- Common -->
@@ -152,6 +153,7 @@
 
     <!-- Orders page -->
     <string name="orders_title">Orders</string>
+    <string name="orders_history_title">Order history</string>
     <string name="orders_empty">No orders to show</string>
     <string name="orders_new_title">Add new order</string>
     <string name="orders_input_product">Product</string>

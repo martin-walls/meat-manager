@@ -16,14 +16,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.components.RecyclerViewDivider;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.Order;
+import com.martinwalls.nea.util.Utils;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class OrdersFragment extends Fragment
@@ -34,10 +33,12 @@ public class OrdersFragment extends Fragment
     private OrdersAdapter ordersAdapter;
     private List<Order> orderList = new ArrayList<>();
 
+    private boolean isCurrentView = true;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        getActivity().setTitle(R.string.orders_title);
+        setTitle();
         View fragmentView = inflater.inflate(R.layout.fragment_orders, container, false);
 
         dbHandler = new DBHandler(getContext());
@@ -76,7 +77,11 @@ public class OrdersFragment extends Fragment
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_orders, menu);
+        if (isCurrentView) {
+            inflater.inflate(R.menu.fragment_orders_current, menu);
+        } else {
+            inflater.inflate(R.menu.fragment_orders_history, menu);
+        }
     }
 
     @Override
@@ -89,8 +94,12 @@ public class OrdersFragment extends Fragment
             case R.id.action_redo:
                 Toast.makeText(getContext(), "REDO", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.action_current_orders:
             case R.id.action_order_history:
-                //todo order history
+                isCurrentView = !isCurrentView;
+                setTitle();
+                getActivity().invalidateOptionsMenu();
+                loadOrders();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -101,18 +110,26 @@ public class OrdersFragment extends Fragment
     public void onOrderClicked(Order order) {
         Intent detailIntent = new Intent(getContext(), OrderDetailActivity.class);
         detailIntent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, order.getOrderId());
-        startActivity(detailIntent); //todo startActivityForResult?
+        startActivity(detailIntent);
+    }
+
+    private void setTitle() {
+        if (isCurrentView) {
+            getActivity().setTitle(R.string.orders_title);
+        } else {
+            getActivity().setTitle(R.string.orders_history_title);
+        }
     }
 
     private void loadOrders() {
         orderList.clear();
         // sort by date
-        orderList.addAll(Utils.mergeSort(dbHandler.getAllOrders(), new Comparator<Order>() {
-            @Override
-            public int compare(Order order1, Order order2) {
-                return order1.getOrderDate().compareTo(order2.getOrderDate());
-            }
-        }));
+        if (isCurrentView) {
+            orderList.addAll(Utils.mergeSort(dbHandler.getAllOrdersNotCompleted(), Order.comparatorDate()));
+        } else {
+            orderList.addAll(Utils.mergeSort(dbHandler.getAllOrdersCompleted(), Order.comparatorDate()));
+        }
+        ordersAdapter.setCurrentView(isCurrentView);
         ordersAdapter.notifyDataSetChanged();
     }
 }

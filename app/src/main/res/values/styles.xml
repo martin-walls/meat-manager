@@ -83,7 +83,7 @@
     <!-- For text date dividers in lists -->
     <style name="ListSectionDividerText">
         <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">?attr/textColorEmphasis</item>
+        <item name="android:textColor">?textColorEmphasis</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
     </style>

@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.ProductsQuantityAdapter;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.models.Order;
+import com.martinwalls.nea.util.Utils;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -20,6 +22,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
 
     private List<Order> orderList;
     private OrdersAdapterListener listener;
+
+    private boolean isCurrentView = true;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView orderDest, dateDivider;
@@ -63,11 +67,23 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             viewHolder.dateDivider.setText(order.getOrderDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
             viewHolder.dateDivider.setVisibility(View.VISIBLE);
         }
+
+        // show past dates in red
+        if (isCurrentView && order.getOrderDate().isBefore(LocalDateTime.now())) {
+            viewHolder.dateDivider.setTextColor(viewHolder.dateDivider.getContext().getColor(R.color.error_red));
+        } else {
+            viewHolder.dateDivider.setTextColor(
+                    Utils.getColorFromTheme(viewHolder.dateDivider.getContext(), R.attr.textColorEmphasis));
+        }
     }
 
     @Override
     public int getItemCount() {
         return orderList.size();
+    }
+
+    public void setCurrentView(boolean isCurrentView) {
+        this.isCurrentView = isCurrentView;
     }
 
     public interface OrdersAdapterListener {
