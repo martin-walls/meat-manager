@@ -90,7 +90,8 @@
     <!-- Stock page -->
     <string name="stock_title">Stock</string>
     <string name="stock_empty">No stock to show</string>
-    <string name="stock_new">Add new stock</string>
+    <string name="stock_new_title">Add new stock</string>
+    <string name="stock_edit_title">Edit stock</string>
 
     <string name="stock_product_new">Add new product</string>
     <string name="stock_product_input_name">Name</string>
@@ -108,9 +109,9 @@
     <string name="stock_input_quality">Quality</string>
 
     <string name="stock_details_title">Stock details</string>
-    <string name="stock_details_quantity_kg">Quantity (kg)</string>
-    <string name="stock_details_quantity_lbs">Quantity (lbs)</string>
-    <string name="stock_details_quantity_boxes">Number of boxes</string>
+    <string name="stock_details_quantity_kg">Quantity (kg):</string>
+    <string name="stock_details_quantity_lbs">Quantity (lbs):</string>
+    <string name="stock_details_quantity_boxes">Number of boxes:</string>
     <string name="stock_details_quantity_boxes_hint">(optional)</string>
     <string name="stock_details_supplier">Supplier:</string>
     <string name="stock_details_destination">Destination:</string>
@@ -242,8 +243,11 @@
     <string name="redo_empty">Nothing to redo</string>
     <string name="undo_add_stock_success">Undo add \"%s\"</string>
     <string name="redo_add_stock_success">Redo add \"%s\"</string>
+    <string name="undo_edit_stock_success">Undo edit stock</string>
+    <string name="redo_edit_stock_success">Redo edit stock</string>
     <string name="undo_delete_stock_success">Undo delete \"%s\"</string>
     <string name="redo_delete_stock_success">Redo delete \"%s\"</string>
+
     <string name="undo_add_order_success">Undo add order</string>
     <string name="redo_add_order_success">Redo add order</string>
     <string name="undo_edit_order_success">Undo edit order</string>

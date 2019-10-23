@@ -554,6 +554,25 @@ public class DBHandler extends SQLiteOpenHelper {
         return (int) newRowId;
     }
 
+    public boolean updateStockItem(StockItem stockItem) {
+        ContentValues values = new ContentValues();
+        values.put(StockTable.PRODUCT_ID, stockItem.getProduct().getProductId());
+        values.put(StockTable.LOCATION_ID, stockItem.getLocationId());
+        values.put(StockTable.SUPPLIER_ID, stockItem.getSupplierId());
+        if (stockItem.getDestId() != -1) {
+            values.put(StockTable.DEST_ID, stockItem.getDestId());
+        }
+        values.put(StockTable.MASS, stockItem.getMass());
+        values.put(StockTable.NUM_BOXES, stockItem.getNumBoxes());
+        values.put(StockTable.QUALITY, stockItem.getQuality().name());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsAffected = db.update(StockTable.TABLE_NAME, values,
+                StockTable.ID + "=?", new String[]{stockItem.getStockId() + ""});
+        db.close();
+        return rowsAffected == 1;
+    }
+
     public boolean deleteStockItem(int stockId) {
         SQLiteDatabase db = this.getWritableDatabase();
         int deletedRows = db.delete(StockTable.TABLE_NAME,
@@ -844,7 +863,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return (int) newRowId;
     }
 
-    public boolean updateOrder(Order order) { // todo test
+    public boolean updateOrder(Order order) {
         ContentValues values = new ContentValues();
         values.put(OrdersTable.DEST_ID, order.getDestId());
         values.put(OrdersTable.ORDER_DATE, order.getOrderDate().atZone(ZoneId.systemDefault()).toEpochSecond());
@@ -1014,6 +1033,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
     //endregion contract
 
+    //region import/export
     public static String exportDbToFile(String outputPath) {
         File sdDir = Environment.getExternalStorageDirectory();
         File dataDir = Environment.getDataDirectory();
@@ -1088,6 +1108,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public static boolean importDbFromFile() {
         return importDbFromFile(BACKUP_DIR + DATABASE_NAME);
     }
+    //endregion import/export
 
     //todo backup to google drive https://developers.google.com/drive/api/v3/about-sdk
 }

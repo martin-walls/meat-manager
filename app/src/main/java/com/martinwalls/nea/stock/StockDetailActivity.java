@@ -1,5 +1,6 @@
 package com.martinwalls.nea.stock;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,8 @@ public class StockDetailActivity extends AppCompatActivity
         implements ConfirmDeleteDialog.ConfirmDeleteListener {
 
     public static final String EXTRA_STOCK_ID = "stock_id";
+
+    public static final int REQUEST_REFRESH_ON_DONE = 1;
 
     private DBHandler dbHandler;
     private StockItem stockItem;
@@ -88,13 +91,24 @@ public class StockDetailActivity extends AppCompatActivity
                 showConfirmDeleteDialog();
                 return true;
             case R.id.action_edit:
-                //todo
+                Intent editIntent = new Intent(this, EditStockActivity.class);
+                editIntent.putExtra(EditStockActivity.EXTRA_EDIT_TYPE, EditStockActivity.EDIT_TYPE_EDIT);
+                editIntent.putExtra(EditStockActivity.EXTRA_STOCK_ID, stockItem.getStockId());
+                startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
                 return true;
             case android.R.id.home:
                 super.onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_REFRESH_ON_DONE) {
+            recreate();
         }
     }
     

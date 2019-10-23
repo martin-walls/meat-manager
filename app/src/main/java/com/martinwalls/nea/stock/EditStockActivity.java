@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.textfield.TextInputEditText;
@@ -22,15 +23,22 @@ import com.martinwalls.nea.models.Location;
 import com.martinwalls.nea.models.Product;
 import com.martinwalls.nea.models.SearchItem;
 import com.martinwalls.nea.models.StockItem;
+import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.util.undo.AddStockAction;
+import com.martinwalls.nea.util.undo.EditStockAction;
 import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.util.Arrays;
 
-public class NewStockActivity extends InputFormActivity
+public class EditStockActivity extends InputFormActivity
         implements AddNewProductDialog.AddNewProductListener,
         ConfirmCancelDialog.ConfirmCancelListener {
+
+    public static final String EXTRA_EDIT_TYPE = "edit_type";
+    public static final int EDIT_TYPE_NEW = 0;
+    public static final int EDIT_TYPE_EDIT = 1;
+    public static final String EXTRA_STOCK_ID = "stock_id";
 
     private final int REQUEST_REFRESH_ON_DONE = 1;
 
@@ -41,7 +49,10 @@ public class NewStockActivity extends InputFormActivity
     private final String INPUT_DESTINATION = "destination";
     private final String INPUT_QUALITY = "quality";
 
+    private int editType = EDIT_TYPE_NEW;
+
     private DBHandler dbHandler;
+    private StockItem stockToEdit;
 
     // store ids of selected items
     private int selectedProductId;
@@ -49,14 +60,28 @@ public class NewStockActivity extends InputFormActivity
     private int selectedLocationId;
     private int selectedDestId;
 
+    private boolean hasChanged = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_stock);
 
-        getSupportActionBar().setTitle(R.string.stock_new);
-
         dbHandler = new DBHandler(this);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            editType = extras.getInt(EXTRA_EDIT_TYPE, EDIT_TYPE_NEW);
+            if (editType == EDIT_TYPE_EDIT) {
+                int stockId = extras.getInt(EXTRA_STOCK_ID);
+                stockToEdit = dbHandler.getStockItem(stockId);
+            }
+        }
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(editType == EDIT_TYPE_NEW ? R.string.stock_new_title : R.string.stock_edit_title);
+        }
 
         // store reference to each row to show/hide later
         addViewToHide(INPUT_PRODUCT, R.id.input_layout_product);
@@ -101,6 +126,14 @@ public class NewStockActivity extends InputFormActivity
         setListeners(INPUT_QUALITY,
                 findViewById(R.id.input_layout_quality),
                 findViewById(R.id.edit_text_quality));
+
+        if (editType == EDIT_TYPE_EDIT) {
+            TextInputLayout inputLayoutProduct = findViewById(R.id.input_layout_product);
+            inputLayoutProduct.setEnabled(false); //todo change this to just a textview so its clearer to the user
+            fillFields();
+        }
+
+        setTextChangedListeners();
     }
 
     @Override
@@ -128,7 +161,7 @@ public class NewStockActivity extends InputFormActivity
                 }
                 return true;
             case R.id.action_cancel:
-                if (!areAllFieldsEmpty()) {
+                if (hasChanged) {
                     showConfirmCancelDialog();
                 } else {
                     finish();
@@ -250,111 +283,207 @@ public class NewStockActivity extends InputFormActivity
         }
     }
 
+    private void setTextChangedListeners() {
+        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
+        editTextProduct.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hasChanged = true;
+            }
+        });
+
+        TextInputEditText editTextSupplier = findViewById(R.id.edit_text_supplier);
+        editTextSupplier.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hasChanged = true;
+            }
+        });
+
+        TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
+        editTextMass.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hasChanged = true;
+            }
+        });
+
+        TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
+        editTextNumBoxes.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hasChanged = true;
+            }
+        });
+
+        TextInputEditText editTextLocation = findViewById(R.id.edit_text_location);
+        editTextLocation.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hasChanged = true;
+            }
+        });
+
+        TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
+        editTextDest.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hasChanged = true;
+            }
+        });
+
+        TextInputEditText editTextQuality = findViewById(R.id.edit_text_quality);
+        editTextQuality.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hasChanged = true;
+            }
+        });
+    }
+
+    private void fillFields() {
+        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
+        editTextProduct.setText(stockToEdit.getProduct().getProductName());
+
+        TextInputEditText editTextSupplier = findViewById(R.id.edit_text_supplier);
+        editTextSupplier.setText(stockToEdit.getSupplierName());
+
+        TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
+        editTextMass.setText(String.valueOf(stockToEdit.getMass()));
+
+        TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
+        if (stockToEdit.getNumBoxes() != -1) {
+            editTextNumBoxes.setText(String.valueOf(stockToEdit.getNumBoxes()));
+        }
+
+        TextInputEditText editTextLocation = findViewById(R.id.edit_text_location);
+        editTextLocation.setText(stockToEdit.getLocationName());
+
+        TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
+        editTextDest.setText(stockToEdit.getDestName());
+
+        TextInputEditText editTextQuality = findViewById(R.id.edit_text_quality);
+        editTextQuality.setText(stockToEdit.getQuality().getDisplayName());
+
+        selectedProductId = stockToEdit.getProduct().getProductId();
+        selectedSupplierId = stockToEdit.getSupplierId();
+        selectedLocationId = stockToEdit.getLocationId();
+        selectedDestId = stockToEdit.getDestId();
+    }
+
     private boolean addStockToDb() {
         boolean isValid = true;
         StockItem newStockItem = new StockItem();
 
-        TextInputEditText editProduct = findViewById(R.id.edit_text_product);
+        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
         TextInputLayout inputLayoutProduct = findViewById(R.id.input_layout_product);
 
-        TextInputEditText editSupplier = findViewById(R.id.edit_text_supplier);
+        TextInputEditText editTextSupplier = findViewById(R.id.edit_text_supplier);
         TextInputLayout inputLayoutSupplier = findViewById(R.id.input_layout_supplier);
 
-        TextInputEditText editMass = findViewById(R.id.edit_text_quantity_mass);
+        TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
         TextInputLayout inputLayoutMass = findViewById(R.id.input_layout_quantity_mass);
 
-        TextInputEditText editNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
+        TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
 
-        TextInputEditText editLocation = findViewById(R.id.edit_text_location);
+        TextInputEditText editTextLocation = findViewById(R.id.edit_text_location);
         TextInputLayout inputLayoutLocation = findViewById(R.id.input_layout_location);
 
-        TextInputEditText editDest = findViewById(R.id.edit_text_destination);
+        TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
 
-        TextInputEditText editQuality = findViewById(R.id.edit_text_quality);
+        TextInputEditText editTextQuality = findViewById(R.id.edit_text_quality);
         TextInputLayout inputLayoutQuality = findViewById(R.id.input_layout_quality);
 
-        if (editProduct.getText().length() == 0) {
+        if (editTextProduct.getText().length() == 0) {
             inputLayoutProduct.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutProduct.setError(null);
         }
-        if (editSupplier.getText().length() == 0) {
+        if (editTextSupplier.getText().length() == 0) {
             inputLayoutSupplier.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutSupplier.setError(null);
         }
-        if (editMass.getText().length() == 0) {
+        if (editTextMass.getText().length() == 0) {
             inputLayoutMass.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutMass.setError(null);
         }
-        if (editLocation.getText().length() == 0) {
+        if (editTextLocation.getText().length() == 0) {
             inputLayoutLocation.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutLocation.setError(null);
         }
-        if (editQuality.getText().length() == 0) {
+        if (editTextQuality.getText().length() == 0) {
             inputLayoutQuality.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutQuality.setError(null);
         }
 
-        if (dbHandler.getAllStock().stream().map(stockItem -> new int[] {stockItem.getProduct().getProductId(), stockItem.getLocationId()})
-                .anyMatch(x -> Arrays.equals(x, new int[] {selectedProductId, selectedLocationId}))) {
-            inputLayoutLocation.setError(getString(R.string.input_error_stock_already_in_location));
-            isValid = false;
+        // if new stock item or location has changed
+        if (editType == EDIT_TYPE_NEW
+                || (editType == EDIT_TYPE_EDIT && selectedLocationId != stockToEdit.getLocationId())) {
+            if (dbHandler.getAllStock().stream()
+                    .map(stockItem -> new int[]{stockItem.getProduct().getProductId(), stockItem.getLocationId()})
+                    .anyMatch(x -> Arrays.equals(x, new int[]{selectedProductId, selectedLocationId}))) {
+                inputLayoutLocation.setError(getString(R.string.input_error_stock_already_in_location));
+                isValid = false;
+            }
         }
 
 
         if (isValid) {
             newStockItem.setProduct(dbHandler.getProduct(selectedProductId));
             newStockItem.setSupplier(dbHandler.getLocation(selectedSupplierId));
-            newStockItem.setMass(Double.parseDouble(editMass.getText().toString()));
-            if (!TextUtils.isEmpty(editNumBoxes.getText())) {
-                newStockItem.setNumBoxes(Integer.parseInt(editNumBoxes.getText().toString()));
+            newStockItem.setMass(Double.parseDouble(editTextMass.getText().toString()));
+            if (!TextUtils.isEmpty(editTextNumBoxes.getText())) {
+                newStockItem.setNumBoxes(Integer.parseInt(editTextNumBoxes.getText().toString()));
             } else {
                 newStockItem.setNumBoxes(-1);
             }
             newStockItem.setLocation(dbHandler.getLocation(selectedLocationId));
-            if (!TextUtils.isEmpty(editDest.getText())) {
+            if (!TextUtils.isEmpty(editTextDest.getText())) {
                 newStockItem.setDest(dbHandler.getLocation(selectedDestId));
             } else {
                 newStockItem.setDestId(-1);
             }
-            newStockItem.setQuality(StockItem.Quality.parseQuality(editQuality.getText().toString()));
+            newStockItem.setQuality(StockItem.Quality.parseQuality(editTextQuality.getText().toString()));
 
-
-            int newRowId = dbHandler.addStockItem(newStockItem);
-
-            newStockItem.setStockId(newRowId);
-            UndoStack.getInstance().push(new AddStockAction(newStockItem));
-
-            return newRowId != -1;
+            if (editType == EDIT_TYPE_NEW) {
+                int newRowId = dbHandler.addStockItem(newStockItem);
+                newStockItem.setStockId(newRowId);
+                UndoStack.getInstance().push(new AddStockAction(newStockItem));
+                return newRowId != -1;
+            } else {
+                newStockItem.setStockId(stockToEdit.getStockId());
+                boolean success = dbHandler.updateStockItem(newStockItem);
+                UndoStack.getInstance().push(new EditStockAction(stockToEdit, newStockItem));
+                return success;
+            }
         }
-
         return false;
     }
 
-    private boolean areAllFieldsEmpty() {
-        TextInputEditText editProduct = findViewById(R.id.edit_text_product);
-        TextInputEditText editSupplier = findViewById(R.id.edit_text_supplier);
-        TextInputEditText editMass = findViewById(R.id.edit_text_quantity_mass);
-        TextInputEditText editNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
-        TextInputEditText editLocation = findViewById(R.id.edit_text_location);
-        TextInputEditText editDest = findViewById(R.id.edit_text_destination);
-        TextInputEditText editQuality = findViewById(R.id.edit_text_quality);
-
-        return TextUtils.isEmpty(editProduct.getText())
-                && TextUtils.isEmpty(editSupplier.getText())
-                && TextUtils.isEmpty(editMass.getText())
-                && TextUtils.isEmpty(editNumBoxes.getText())
-                && TextUtils.isEmpty(editLocation.getText())
-                && TextUtils.isEmpty(editDest.getText())
-                && TextUtils.isEmpty(editQuality.getText());
-    }
+//    private boolean areAllFieldsEmpty() {
+//        TextInputEditText editProduct = findViewById(R.id.edit_text_product);
+//        TextInputEditText editSupplier = findViewById(R.id.edit_text_supplier);
+//        TextInputEditText editMass = findViewById(R.id.edit_text_quantity_mass);
+//        TextInputEditText editNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
+//        TextInputEditText editLocation = findViewById(R.id.edit_text_location);
+//        TextInputEditText editDest = findViewById(R.id.edit_text_destination);
+//        TextInputEditText editQuality = findViewById(R.id.edit_text_quality);
+//
+//        return TextUtils.isEmpty(editProduct.getText())
+//                && TextUtils.isEmpty(editSupplier.getText())
+//                && TextUtils.isEmpty(editMass.getText())
+//                && TextUtils.isEmpty(editNumBoxes.getText())
+//                && TextUtils.isEmpty(editLocation.getText())
+//                && TextUtils.isEmpty(editDest.getText())
+//                && TextUtils.isEmpty(editQuality.getText());
+//    }
 }

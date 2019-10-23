@@ -63,6 +63,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
             android:layout_weight="1"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
+            android:textColor="?textColorPrimary"
             tools:text="1900.00"
             />
     </LinearLayout>
@@ -93,7 +96,10 @@
             android:layout_marginEnd="24dp"
             android:layout_weight="1"
             android:hint="@string/stock_details_quantity_boxes_hint"
-            tools:text="12"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:textColor="?textColorPrimary"
+            android:textColorHint="?textColorSecondary"
             />
     </LinearLayout>
 

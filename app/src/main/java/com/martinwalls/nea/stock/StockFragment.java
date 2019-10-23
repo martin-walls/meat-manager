@@ -66,7 +66,7 @@ public class StockFragment extends Fragment
 
         FloatingActionButton fab = fragmentView.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            Intent newStockIntent = new Intent(getContext(), NewStockActivity.class);
+            Intent newStockIntent = new Intent(getContext(), EditStockActivity.class);
             startActivityForResult(newStockIntent, REQUEST_REFRESH_ON_DONE);
         });
 

@@ -56,8 +56,8 @@ public class EditOrderActivity extends InputFormActivity
         ConfirmCancelDialog.ConfirmCancelListener {
 
     public static final String EXTRA_EDIT_TYPE = "edit_type";
-    public static final String EDIT_TYPE_NEW = "new";
-    public static final String EDIT_TYPE_EDIT = "edit";
+    public static final int EDIT_TYPE_NEW = 0;
+    public static final int EDIT_TYPE_EDIT = 1;
     public static final String EXTRA_ORDER_ID = "order_id";
 
     private final int REQUEST_REFRESH_ON_DONE = 1;
@@ -68,7 +68,7 @@ public class EditOrderActivity extends InputFormActivity
     private final String INPUT_DESTINATION = "destination";
     private final String INPUT_DATE = "date";
 
-    private String editType = EDIT_TYPE_NEW;
+    private int editType = EDIT_TYPE_NEW;
 
     private DBHandler dbHandler;
     private Order orderToEdit;
@@ -95,8 +95,8 @@ public class EditOrderActivity extends InputFormActivity
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            editType = extras.getString(EXTRA_EDIT_TYPE, EDIT_TYPE_NEW);
-            if (editType.equals(EDIT_TYPE_EDIT)) {
+            editType = extras.getInt(EXTRA_EDIT_TYPE, EDIT_TYPE_NEW);
+            if (editType == EDIT_TYPE_EDIT) {
                 int orderId = extras.getInt(EXTRA_ORDER_ID);
                 orderToEdit = dbHandler.getOrder(orderId);
             }
@@ -104,7 +104,7 @@ public class EditOrderActivity extends InputFormActivity
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(editType.equals(EDIT_TYPE_NEW) ? R.string.orders_new_title : R.string.order_edit_title);
+            actionBar.setTitle(editType == EDIT_TYPE_NEW ? R.string.orders_new_title : R.string.order_edit_title);
         }
 
         addViewToHide(INPUT_PRODUCT, R.id.input_layout_product);
@@ -114,7 +114,7 @@ public class EditOrderActivity extends InputFormActivity
 
         addViewToHide("add_product_btn", R.id.add_product);
         addViewToHide("products_added_recycler_view", R.id.products_added_recycler_view);
-        if (editType.equals(EDIT_TYPE_EDIT)) {
+        if (editType == EDIT_TYPE_EDIT) {
             addViewToHide("completed_checkbox", R.id.checkbox_completed);
         }
 
@@ -139,7 +139,7 @@ public class EditOrderActivity extends InputFormActivity
                 findViewById(R.id.edit_text_destination));
 
         productsAddedAdapter =
-                new ProductsAddedAdapter(productsAddedList, this, editType.equals(EDIT_TYPE_EDIT), true);
+                new ProductsAddedAdapter(productsAddedList, this, editType == EDIT_TYPE_EDIT, true);
         RecyclerView productsAddedRecyclerView = findViewById(R.id.products_added_recycler_view);
         productsAddedRecyclerView.setAdapter(productsAddedAdapter);
         productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -159,7 +159,7 @@ public class EditOrderActivity extends InputFormActivity
         addProductBtn = findViewById(R.id.add_product);
         addProductBtn.setOnClickListener(v -> addProductToProductsAddedList());
 
-        if (editType.equals(EDIT_TYPE_NEW)) {
+        if (editType == EDIT_TYPE_NEW) {
             findViewById(R.id.checkbox_completed).setVisibility(View.GONE);
             findViewById(R.id.product_btn_done).setVisibility(View.GONE);
         } else {
@@ -533,7 +533,7 @@ public class EditOrderActivity extends InputFormActivity
             newOrder.setOrderDate(selectedDateTime);
             newOrder.setCompleted(false);
 
-            if (editType.equals(EDIT_TYPE_NEW)) {
+            if (editType == EDIT_TYPE_NEW) {
                 int newRowId = dbHandler.addOrder(newOrder);
                 newOrder.setOrderId(newRowId);
                 UndoStack.getInstance().push(new AddOrderAction(newOrder));

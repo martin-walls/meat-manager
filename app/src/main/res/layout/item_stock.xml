@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/stock_item_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:clickable="true"
     android:orientation="horizontal"
     android:paddingStart="24dp"
     android:paddingTop="16dp"
     android:paddingEnd="24dp"
     android:paddingBottom="16dp"
-    android:id="@+id/stock_item_layout"
     >
 
     <RelativeLayout
@@ -19,22 +21,22 @@
 
         <TextView
             android:id="@+id/name"
+            style="@style/ItemInfoPrimary"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            style="@style/ItemInfoPrimary"
             tools:text="Product name"
             />
 
         <TextView
             android:id="@+id/location"
+            style="@style/ItemInfoSecondary"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignBaseline="@id/name"
+            android:layout_toEndOf="@id/name"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:layout_toEndOf="@id/name"
-            android:layout_alignBaseline="@id/name"
-            style="@style/ItemInfoSecondary"
             tools:text="UK1535"
             />
 
@@ -49,21 +51,21 @@
 
         <TextView
             android:id="@+id/mass"
+            style="@style/ItemAmountPrimary"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical|end"
-            style="@style/ItemAmountPrimary"
             tools:text="1900.00 kg"
             />
 
         <TextView
             android:id="@+id/num_boxes"
+            style="@style/ItemAmountSecondary"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical|end"
-            style="@style/ItemAmountSecondary"
             tools:text="100 boxes"
             />
     </LinearLayout>
