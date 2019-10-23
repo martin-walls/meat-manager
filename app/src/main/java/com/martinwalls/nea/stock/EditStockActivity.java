@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
@@ -65,7 +66,7 @@ public class EditStockActivity extends InputFormActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_stock);
+        setContentView(R.layout.activity_edit_stock);
 
         dbHandler = new DBHandler(this);
 
@@ -128,9 +129,12 @@ public class EditStockActivity extends InputFormActivity
                 findViewById(R.id.edit_text_quality));
 
         if (editType == EDIT_TYPE_EDIT) {
-            TextInputLayout inputLayoutProduct = findViewById(R.id.input_layout_product);
-            inputLayoutProduct.setEnabled(false); //todo change this to just a textview so its clearer to the user
+            findViewById(R.id.text_product).setVisibility(View.VISIBLE);
+            findViewById(R.id.input_layout_product).setVisibility(View.GONE);
             fillFields();
+        } else {
+            findViewById(R.id.text_product).setVisibility(View.GONE);
+            findViewById(R.id.input_layout_product).setVisibility(View.VISIBLE);
         }
 
         setTextChangedListeners();
@@ -146,7 +150,7 @@ public class EditStockActivity extends InputFormActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_new_stock, menu);
+        getMenuInflater().inflate(R.menu.activity_edit_stock, menu);
         return true;
     }
 
@@ -157,7 +161,8 @@ public class EditStockActivity extends InputFormActivity
                 if (addStockToDb()) {
                     finish();
                 } else {
-                    Toast.makeText(this, getString(R.string.db_error_insert, "stock"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,
+                            getString(R.string.db_error_insert, "stock"), Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.action_cancel:
@@ -342,8 +347,8 @@ public class EditStockActivity extends InputFormActivity
     }
 
     private void fillFields() {
-        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
-        editTextProduct.setText(stockToEdit.getProduct().getProductName());
+        TextView textProduct = findViewById(R.id.text_product);
+        textProduct.setText(stockToEdit.getProduct().getProductName());
 
         TextInputEditText editTextSupplier = findViewById(R.id.edit_text_supplier);
         editTextSupplier.setText(stockToEdit.getSupplierName());
@@ -394,11 +399,13 @@ public class EditStockActivity extends InputFormActivity
         TextInputEditText editTextQuality = findViewById(R.id.edit_text_quality);
         TextInputLayout inputLayoutQuality = findViewById(R.id.input_layout_quality);
 
-        if (editTextProduct.getText().length() == 0) {
-            inputLayoutProduct.setError(getString(R.string.input_error_blank));
-            isValid = false;
-        } else {
-            inputLayoutProduct.setError(null);
+        if (editType != EDIT_TYPE_EDIT) {
+            if (editTextProduct.getText().length() == 0) {
+                inputLayoutProduct.setError(getString(R.string.input_error_blank));
+                isValid = false;
+            } else {
+                inputLayoutProduct.setError(null);
+            }
         }
         if (editTextSupplier.getText().length() == 0) {
             inputLayoutSupplier.setError(getString(R.string.input_error_blank));

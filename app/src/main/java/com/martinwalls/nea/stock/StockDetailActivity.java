@@ -46,28 +46,7 @@ public class StockDetailActivity extends AppCompatActivity
             stockItem = dbHandler.getStockItem(stockId);
         }
 
-        TextView productName = findViewById(R.id.product_name);
-        productName.setText(stockItem.getProduct().getProductName());
-
-        TextView location = findViewById(R.id.location);
-        location.setText(stockItem.getLocationName());
-
-        EditText quantityMass = findViewById(R.id.edit_text_quantity_mass);
-        quantityMass.setText(String.valueOf(stockItem.getMass()));
-
-        EditText quantityBoxes = findViewById(R.id.edit_text_quantity_boxes);
-        if (stockItem.getNumBoxes() != -1) {
-            quantityBoxes.setText(String.valueOf(stockItem.getNumBoxes()));
-        }
-
-        TextView supplier = findViewById(R.id.supplier);
-        supplier.setText(stockItem.getSupplierName());
-
-        TextView destination = findViewById(R.id.destination);
-        destination.setText(stockItem.getDestName());
-
-        TextView quality = findViewById(R.id.quality);
-        quality.setText(stockItem.getQuality().getDisplayName());
+        fillData();
     }
 
     @Override
@@ -125,7 +104,33 @@ public class StockDetailActivity extends AppCompatActivity
                     Toast.LENGTH_SHORT).show();
         }
     }
-    
+
+    private void fillData() {
+        TextView productName = findViewById(R.id.product_name);
+        productName.setText(stockItem.getProduct().getProductName());
+
+        TextView location = findViewById(R.id.location);
+        location.setText(stockItem.getLocationName());
+
+        //todo mass and boxes don't update when edit activity returns, not urgent tho
+        EditText quantityMass = findViewById(R.id.edit_text_quantity_mass);
+        quantityMass.setText(String.valueOf(stockItem.getMass()));
+
+        EditText quantityBoxes = findViewById(R.id.edit_text_quantity_boxes);
+        if (stockItem.getNumBoxes() != -1) {
+            quantityBoxes.setText(String.valueOf(stockItem.getNumBoxes()));
+        }
+
+        TextView supplier = findViewById(R.id.supplier);
+        supplier.setText(stockItem.getSupplierName());
+
+        TextView destination = findViewById(R.id.destination);
+        destination.setText(stockItem.getDestName());
+
+        TextView quality = findViewById(R.id.quality);
+        quality.setText(stockItem.getQuality().getDisplayName());
+    }
+
     private void showConfirmDeleteDialog() {
         DialogFragment dialog = new ConfirmDeleteDialog();
         Bundle args = new Bundle();

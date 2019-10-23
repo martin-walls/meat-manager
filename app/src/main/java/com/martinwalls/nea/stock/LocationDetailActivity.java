@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
@@ -26,8 +27,11 @@ public class LocationDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_detail);
 
-        getSupportActionBar().setTitle(R.string.location_details_title);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.location_details_title);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         dbHandler = new DBHandler(this);
 
@@ -114,6 +118,10 @@ public class LocationDetailActivity extends AppCompatActivity {
         if (requestCode == REQUEST_REFRESH_ON_DONE) {
             recreate();
         }
+    }
+
+    private void fillData() {
+
     }
 
     private void deleteLocation() {
