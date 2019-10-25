@@ -13,21 +13,22 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.martinwalls.nea.util.EasyPreferences;
 import com.martinwalls.nea.MainActivity;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.util.SimpleTextWatcher;
-import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.db.ExchangeDbHandler;
 import com.martinwalls.nea.models.Conversion;
 import com.martinwalls.nea.models.Currency;
+import com.martinwalls.nea.util.EasyPreferences;
+import com.martinwalls.nea.util.SimpleTextWatcher;
+import com.martinwalls.nea.util.Utils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,9 @@ public class ExchangeFragment extends Fragment {
 
     private ExchangeDbHandler dbHandler;
     private EasyPreferences preferences;
+
+    private LinearLayout ratesLayout;
+    private TextView emptyView;
 
     private TextView primaryCurrencyText;
     private TextView secondaryCurrencyText;
@@ -52,11 +56,6 @@ public class ExchangeFragment extends Fragment {
 
     private HashMap<String, Double> rates = new HashMap<>();
 
-
-    /*
-    private List<String> currenciesList = new ArrayList<>();
-    */
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,6 +66,12 @@ public class ExchangeFragment extends Fragment {
         dbHandler = new ExchangeDbHandler(getContext());
         preferences = EasyPreferences.createForDefaultPreferences(getContext());
 
+        fetchRatesFromApi();
+        ratesLayout = fragmentView.findViewById(R.id.rates_layout);
+        emptyView = fragmentView.findViewById(R.id.empty);
+        ratesLayout.setVisibility(View.GONE);
+        emptyView.setVisibility(View.VISIBLE);
+
         primaryCurrencyText = fragmentView.findViewById(R.id.currency_primary);
         secondaryCurrencyText = fragmentView.findViewById(R.id.currency_secondary);
         secondaryCurrencyValueText = fragmentView.findViewById(R.id.currency_secondary_value);
@@ -74,8 +79,7 @@ public class ExchangeFragment extends Fragment {
         currencyPickerLeft = fragmentView.findViewById(R.id.currency_picker_left);
         currencyPickerRight = fragmentView.findViewById(R.id.currency_picker_right);
 
-        initCurrencyPickers();
-        currencyPickerRight.setValue(1);
+//        initCurrencyPickers();
 
         /*
         SharedPreferences sharedPref = getContext().getSharedPreferences(
@@ -122,15 +126,12 @@ public class ExchangeFragment extends Fragment {
             return false;
         });
 
-        fetchRatesFromApi();
-
         return fragmentView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        initCurrencyPickers();
         fetchRatesFromApi();
     }
 
@@ -177,6 +178,11 @@ public class ExchangeFragment extends Fragment {
         rates = (HashMap<String, Double>) data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
         updateRates();
 
+        initCurrencyPickers();
+
+        ratesLayout.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.GONE);
+
 //        long timestamp = Long.parseLong(CacheHelper.retrieve(getContext(), "last_cache_timestamp"));
 //        Toast.makeText(getContext(), "fetched", Toast.LENGTH_SHORT).show();
     }
@@ -203,6 +209,7 @@ public class ExchangeFragment extends Fragment {
         currencyPickerRight.setOnValueChangedListener(
                 (picker, oldVal, newVal) -> setSecondaryCurrency(currencies[newVal]));
         setSecondaryCurrency(currencies[currencyPickerRight.getValue()]);
+
     }
 
     private void setPrimaryCurrency(String currency) {

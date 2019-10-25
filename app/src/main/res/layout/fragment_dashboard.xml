@@ -12,20 +12,31 @@
     <!--/>-->
 
     <ScrollView
+        android:id="@+id/graph_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
         >
 
-        <!-- todo move color attrs to here?? (from BarChartView init()) -->
-    <com.martinwalls.nea.components.BarChartView
-        android:id="@+id/graph"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:paddingTop="8dp"
-        />
+        <com.martinwalls.nea.components.BarChartView
+            android:id="@+id/graph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:paddingTop="8dp"
+            />
+
     </ScrollView>
+
+    <TextView
+        android:id="@+id/empty"
+        style="@style/TextNormal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/dashboard_no_data"
+        android:visibility="gone"
+        />
 
 </LinearLayout>

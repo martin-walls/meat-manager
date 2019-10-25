@@ -7,6 +7,7 @@ import android.net.Uri;
 import com.martinwalls.nea.db.ExchangeDbHandler;
 import com.martinwalls.nea.models.Currency;
 
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -26,8 +27,9 @@ public class ApiIntentService extends IntentService {
         System.loadLibrary("native-lib");
     }
 
-    @SuppressWarnings("FieldCanBeLocal")
     private final String REQUEST_URL = "http://data.fixer.io/api/";
+
+    private final String[] DEFAULT_FAV_CURRENCIES = {"GBP", "EUR", "USD"};
 
     public ApiIntentService() {
         super(TAG);
@@ -78,6 +80,14 @@ public class ApiIntentService extends IntentService {
             builder.appendQueryParameter("access_key", getDecodedAccessKey());
 
             List<Currency> currencyList = QueryUtils.fetchCurrencies(builder.toString());
+
+            for (Currency currency : currencyList) {
+                if (Arrays.asList(DEFAULT_FAV_CURRENCIES).contains(currency.getCode())) {
+                    currency.setFavourite(true);
+                } else {
+                    currency.setFavourite(false);
+                }
+            }
 
             dbHandler.addAllCurrencies(currencyList);
         }

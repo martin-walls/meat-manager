@@ -20,6 +20,8 @@ public class StockItem {
             for (Quality q : values()) {
                 if (q.getDisplayName().equalsIgnoreCase(name)) {
                     return q;
+                } else if (q.name().equalsIgnoreCase(name)) {
+                    return q;
                 }
             }
             return null;

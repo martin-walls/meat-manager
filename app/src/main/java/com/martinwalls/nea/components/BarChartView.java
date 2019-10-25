@@ -324,6 +324,9 @@ public class BarChartView extends View {
     }
 
     public void setData(List<BarChartEntry> newDataSet) {
+        if (newDataSet.size() == 0) {
+            return;
+        }
         xMax = newDataSet.get(0).getAmount();
 
         for (BarChartEntry entry : newDataSet) {

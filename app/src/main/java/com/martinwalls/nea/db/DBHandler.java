@@ -463,7 +463,11 @@ public class DBHandler extends SQLiteOpenHelper {
             }
             stockResult.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_DEST_NAME)));
             stockResult.setMass(cursor.getDouble(cursor.getColumnIndexOrThrow(StockTable.MASS)));
-            stockResult.setNumBoxes(cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.NUM_BOXES)));
+            if (!cursor.isNull(cursor.getColumnIndexOrThrow(StockTable.NUM_BOXES))) {
+                stockResult.setNumBoxes(cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.NUM_BOXES)));
+            } else {
+                stockResult.setNumBoxes(-1);
+            }
             stockResult.setQuality(StockItem.Quality.parseQuality(
                     cursor.getString(cursor.getColumnIndexOrThrow(StockTable.QUALITY))));
         }
@@ -526,7 +530,11 @@ public class DBHandler extends SQLiteOpenHelper {
             }
             stockItem.setDestName(cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_DEST_NAME)));
             stockItem.setMass(cursor.getDouble(cursor.getColumnIndexOrThrow(StockTable.MASS)));
-            stockItem.setNumBoxes(cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.NUM_BOXES)));
+            if (!cursor.isNull(cursor.getColumnIndexOrThrow(StockTable.NUM_BOXES))) {
+                stockItem.setNumBoxes(cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.NUM_BOXES)));
+            } else {
+                stockItem.setNumBoxes(-1);
+            }
             stockItem.setQuality(StockItem.Quality.parseQuality(cursor.getString(
                     cursor.getColumnIndexOrThrow(StockTable.QUALITY))));
             stockResultList.add(stockItem);
@@ -545,7 +553,9 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(StockTable.DEST_ID, stockItem.getDestId());
         }
         values.put(StockTable.MASS, stockItem.getMass());
-        values.put(StockTable.NUM_BOXES, stockItem.getNumBoxes());
+        if (stockItem.getNumBoxes() != -1) {
+            values.put(StockTable.NUM_BOXES, stockItem.getNumBoxes());
+        }
         values.put(StockTable.QUALITY, stockItem.getQuality().name());
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -563,7 +573,9 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(StockTable.DEST_ID, stockItem.getDestId());
         }
         values.put(StockTable.MASS, stockItem.getMass());
-        values.put(StockTable.NUM_BOXES, stockItem.getNumBoxes());
+        if (stockItem.getNumBoxes() != -1) {
+            values.put(StockTable.NUM_BOXES, stockItem.getNumBoxes());
+        }
         values.put(StockTable.QUALITY, stockItem.getQuality().name());
 
         SQLiteDatabase db = this.getWritableDatabase();

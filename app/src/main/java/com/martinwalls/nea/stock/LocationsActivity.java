@@ -92,6 +92,4 @@ public class LocationsActivity extends AppCompatActivity
         locationList.addAll(Utils.mergeSort(dbHandler.getAllLocations(), Location.comparatorAlpha()));
         locationsAdapter.notifyDataSetChanged();
     }
-
-    //todo be able to edit locations
 }

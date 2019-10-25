@@ -174,6 +174,7 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(CurrenciesTable.CURRENCY_CODE, currency.getCode());
             values.put(CurrenciesTable.CURRENCY_NAME, currency.getName());
+            values.put(CurrenciesTable.FAVOURITE, currency.isFavourite() ? 1 : 0);
             db.insert(CurrenciesTable.TABLE_NAME, null, values);
         }
         db.close();

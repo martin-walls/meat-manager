@@ -162,7 +162,7 @@ public class StockFragment extends Fragment
     public void onStockItemClicked(StockItem stockItem) {
         Intent detailIntent = new Intent(getContext(), StockDetailActivity.class);
         detailIntent.putExtra(StockDetailActivity.EXTRA_STOCK_ID, stockItem.getStockId());
-        startActivity(detailIntent); //todo startActivityForResult?
+        startActivity(detailIntent);
     }
 
     private void setSortMode(int sortMode) {

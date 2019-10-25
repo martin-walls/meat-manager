@@ -7,6 +7,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.components.BarChartEntry;
@@ -29,6 +31,8 @@ public class DashboardFragment extends Fragment {
     private EasyPreferences prefs;
 
     private BarChartView graphView;
+    private TextView emptyView;
+    private ScrollView graphLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,6 +45,8 @@ public class DashboardFragment extends Fragment {
         prefs = EasyPreferences.createForDefaultPreferences(getContext());
 
         graphView = fragmentView.findViewById(R.id.graph);
+        emptyView = fragmentView.findViewById(R.id.empty);
+        graphLayout = fragmentView.findViewById(R.id.graph_layout);
         loadData();
 
         return fragmentView;
@@ -94,6 +100,15 @@ public class DashboardFragment extends Fragment {
         List<BarChartEntry> entries = new ArrayList<>();
 
         List<StockItem> stockList = dbHandler.getAllStock();
+
+        if (stockList.size() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+            graphLayout.setVisibility(View.GONE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+            graphLayout.setVisibility(View.VISIBLE);
+        }
+
 
         switch (prefs.getInt(R.string.pref_dashboard_sort_by, SORT_BY_DEFAULT)) {
             case SortMode.NAME:

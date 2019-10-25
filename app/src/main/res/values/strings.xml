@@ -64,6 +64,7 @@
     <string name="db_import_success">Database imported successfully</string>
     <string name="db_import_error">Error importing database</string>
 
+
     <!-- permissions -->
     <string name="perm_error_storage_denied">Please allow external storage permissions for this feature.</string>
 
@@ -86,6 +87,7 @@
 
     <!-- Dashboard page -->
     <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_no_data">No data to show</string>
 
     <!-- Stock page -->
     <string name="stock_title">Stock</string>
@@ -220,6 +222,10 @@
     </plurals>
     <string name="exchange_history_today">Today</string>
     <string name="exchange_choose_currencies_no_fav">No Currencies Starred</string>
+
+    <string name="exchange_loading">Loading…</string>
+    <string name="exchange_no_connection">No internet connection available.
+        \nPlease connect to WiFi or mobile data and try again.</string>
 
     <!-- 5 significant figures -->
     <string name="exchange_rate">%.5G</string>
