@@ -4,7 +4,7 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
-import com.martinwalls.nea.db.ExchangeDbHandler;
+import com.martinwalls.nea.db.ExchangeDBHandler;
 import com.martinwalls.nea.models.Currency;
 
 import java.util.Arrays;
@@ -70,7 +70,7 @@ public class ApiIntentService extends IntentService {
         CacheHelper.save(getApplicationContext(), CACHE_KEY_TIMESTAMP, String.valueOf(timestamp));
 
 
-        ExchangeDbHandler dbHandler = new ExchangeDbHandler(this);
+        ExchangeDBHandler dbHandler = new ExchangeDBHandler(this);
 
         if (dbHandler.getCurrencyCount() == 0) {
             Uri baseUri = Uri.parse(REQUEST_URL);

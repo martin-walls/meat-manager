@@ -1,7 +1,10 @@
 package com.martinwalls.nea.exchange;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -23,20 +26,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.MainActivity;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.components.CustomRecyclerView;
-import com.martinwalls.nea.db.ExchangeDbHandler;
+import com.martinwalls.nea.db.ExchangeDBHandler;
 import com.martinwalls.nea.models.Conversion;
 import com.martinwalls.nea.models.Currency;
 import com.martinwalls.nea.util.EasyPreferences;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.Utils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public class ExchangeFragment extends Fragment {
 
-    private ExchangeDbHandler dbHandler;
-    private EasyPreferences preferences;
+    private static final int REQUEST_REFRESH_ON_DONE = 1;
+
+    private ExchangeDBHandler dbHandler;
+    private EasyPreferences prefs;
 
     private LinearLayout ratesLayout;
     private TextView emptyView;
@@ -63,14 +69,15 @@ public class ExchangeFragment extends Fragment {
         getActivity().setTitle(R.string.exchange_title);
         View fragmentView = inflater.inflate(R.layout.fragment_exchange, container, false);
 
-        dbHandler = new ExchangeDbHandler(getContext());
-        preferences = EasyPreferences.createForDefaultPreferences(getContext());
+        dbHandler = new ExchangeDBHandler(getContext());
+        prefs = EasyPreferences.createForDefaultPreferences(getContext());
 
-        fetchRatesFromApi();
         ratesLayout = fragmentView.findViewById(R.id.rates_layout);
         emptyView = fragmentView.findViewById(R.id.empty);
         ratesLayout.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
+
+        checkConnectionAndFetchRates();
 
         primaryCurrencyText = fragmentView.findViewById(R.id.currency_primary);
         secondaryCurrencyText = fragmentView.findViewById(R.id.currency_secondary);
@@ -132,7 +139,7 @@ public class ExchangeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        fetchRatesFromApi();
+//        fetchRatesFromApi();
     }
 
     @Override
@@ -145,13 +152,63 @@ public class ExchangeFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_favourites:
                 Intent favouritesIntent = new Intent(getContext(), ChooseCurrenciesActivity.class);
-                startActivity(favouritesIntent);
+                startActivityForResult(favouritesIntent, REQUEST_REFRESH_ON_DONE);
                 return true;
             case R.id.action_refresh:
-                fetchRatesFromApi();
+                checkConnectionAndFetchRates();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_REFRESH_ON_DONE) {
+            initCurrencyPickers();
+        }
+    }
+
+    private boolean checkInternetConnection() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo network = cm.getActiveNetworkInfo(); //deprecated
+
+//        return network != null && network.isConnectedOrConnecting();
+
+        return cm.getActiveNetwork() != null;
+    }
+
+    private void fetchRatesFromApi() {
+        PendingIntent pendingResult = getActivity().createPendingResult(
+                MainActivity.REQUEST_EXCHANGE_API_SERVICE, new Intent(), 0);
+        Intent intent = new Intent(getContext().getApplicationContext(), ApiIntentService.class);
+        intent.putExtra(ApiIntentService.EXTRA_PENDING_RESULT, pendingResult);
+        getActivity().startService(intent);
+    }
+
+    private void checkConnectionAndFetchRates() {
+        if (checkInternetConnection()) {
+            fetchRatesFromApi();
+            emptyView.setText(R.string.exchange_loading);
+        } else {
+            ratesLayout.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+            emptyView.setText(R.string.exchange_no_connection);
+        }
+    }
+
+    public void onRatesFetched(Intent data) {
+        rates = (HashMap<String, Double>) data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
+        updateRates();
+
+        initCurrencyPickers();
+
+        ratesLayout.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.GONE);
+
+//        long timestamp = Long.parseLong(CacheHelper.retrieve(getContext(), "last_cache_timestamp"));
+//        Toast.makeText(getContext(), "fetched", Toast.LENGTH_SHORT).show();
     }
 
     private String[] fetchCurrenciesToShow() {
@@ -165,33 +222,12 @@ public class ExchangeFragment extends Fragment {
         return currencyCodes;
     }
 
-    private void fetchRatesFromApi() {
-        PendingIntent pendingResult = getActivity().createPendingResult(
-                MainActivity.REQUEST_EXCHANGE_API_SERVICE, new Intent(), 0);
-        Intent intent = new Intent(getContext().getApplicationContext(), ApiIntentService.class);
-        intent.putExtra(ApiIntentService.EXTRA_PENDING_RESULT, pendingResult);
-        getActivity().startService(intent);
-    }
-
-    public void onRatesFetched(Intent data) {
-        //noinspection unchecked
-        rates = (HashMap<String, Double>) data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
-        updateRates();
-
-        initCurrencyPickers();
-
-        ratesLayout.setVisibility(View.VISIBLE);
-        emptyView.setVisibility(View.GONE);
-
-//        long timestamp = Long.parseLong(CacheHelper.retrieve(getContext(), "last_cache_timestamp"));
-//        Toast.makeText(getContext(), "fetched", Toast.LENGTH_SHORT).show();
-    }
-
     private void initCurrencyPickers() {
         String[] currencies = fetchCurrenciesToShow();
-        /*
-        currenciesList = Arrays.asList(currencies);
-        */
+        if (currencies.length == 0) {
+            return;
+        }
+
         currencyPickerLeft.setMinValue(0);
         currencyPickerLeft.setMaxValue(currencies.length - 1);
         currencyPickerLeft.setDisplayedValues(currencies);
@@ -199,7 +235,6 @@ public class ExchangeFragment extends Fragment {
         currencyPickerLeft.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
         currencyPickerLeft.setOnValueChangedListener(
                 (picker, oldVal, newVal) -> setPrimaryCurrency(currencies[newVal]));
-        setPrimaryCurrency(currencies[currencyPickerLeft.getValue()]);
 
         currencyPickerRight.setMinValue(0);
         currencyPickerRight.setMaxValue(currencies.length - 1);
@@ -208,21 +243,34 @@ public class ExchangeFragment extends Fragment {
         currencyPickerRight.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
         currencyPickerRight.setOnValueChangedListener(
                 (picker, oldVal, newVal) -> setSecondaryCurrency(currencies[newVal]));
-        setSecondaryCurrency(currencies[currencyPickerRight.getValue()]);
 
+        // load last selected currencies
+        String primaryCurrencyValue = prefs.getString(R.string.pref_exchange_currency_primary, "");
+        String secondaryCurrencyValue = prefs.getString(R.string.pref_exchange_currency_secondary, "");
+
+        List<String> currencyList = Arrays.asList(currencies);
+        if (currencyList.contains(primaryCurrencyValue)) {
+            currencyPickerLeft.setValue(currencyList.indexOf(primaryCurrencyValue));
+        }
+        if (currencyList.contains(secondaryCurrencyValue)) {
+            currencyPickerRight.setValue(currencyList.indexOf(secondaryCurrencyValue));
+        }
+
+        setPrimaryCurrency(currencies[currencyPickerLeft.getValue()]);
+        setSecondaryCurrency(currencies[currencyPickerRight.getValue()]);
     }
 
     private void setPrimaryCurrency(String currency) {
         primaryCurrency = currency;
         primaryCurrencyText.setText(currency);
-        preferences.setString(R.string.pref_exchange_currency_primary, currency);
+        prefs.setString(R.string.pref_exchange_currency_primary, currency);
         updateRates();
     }
 
     private void setSecondaryCurrency(String currency) {
         secondaryCurrency = currency;
         secondaryCurrencyText.setText(currency);
-        preferences.setString(R.string.pref_exchange_currency_secondary, currency);
+        prefs.setString(R.string.pref_exchange_currency_secondary, currency);
         updateRates();
     }
 

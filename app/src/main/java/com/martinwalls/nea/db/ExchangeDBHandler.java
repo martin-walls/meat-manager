@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("FieldCanBeLocal")
-public class ExchangeDbHandler extends SQLiteOpenHelper {
+public class ExchangeDBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "exchangeDB.db";
     private static final int DATABASE_VERSION = 3;
 
@@ -33,7 +33,7 @@ public class ExchangeDbHandler extends SQLiteOpenHelper {
         static final String FAVOURITE = "IsFavourite";
     }
 
-    public ExchangeDbHandler(Context context) {
+    public ExchangeDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

@@ -3,11 +3,12 @@ package com.martinwalls.nea.exchange;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.components.CustomRecyclerView;
-import com.martinwalls.nea.db.ExchangeDbHandler;
+import com.martinwalls.nea.db.ExchangeDBHandler;
 import com.martinwalls.nea.models.Currency;
 import com.martinwalls.nea.util.Utils;
 
@@ -19,7 +20,7 @@ import java.util.List;
 public class ChooseCurrenciesActivity extends AppCompatActivity
         implements CurrencyAdapter.CurrencyAdapterListener {
 
-    private ExchangeDbHandler dbHandler;
+    private ExchangeDBHandler dbHandler;
 
     private CurrencyAdapter currencyAdapter;
     private List<Currency> allCurrencyList;
@@ -32,7 +33,7 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
 
         getSupportActionBar().setTitle(R.string.exchange_choose_currencies);
 
-        dbHandler = new ExchangeDbHandler(this);
+        dbHandler = new ExchangeDBHandler(this);
 
         allCurrencyList = Utils.mergeSort(dbHandler.getCurrencies(),
                 (currency1, currency2) -> currency1.getCode().compareTo(currency2.getCode()));
@@ -61,7 +62,12 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                finish();
+                if (favCurrencyList.size() >= 2) {
+                    finish();
+                } else {
+                    Toast.makeText(this, R.string.exchange_choose_currencies_not_enough,
+                            Toast.LENGTH_SHORT).show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
