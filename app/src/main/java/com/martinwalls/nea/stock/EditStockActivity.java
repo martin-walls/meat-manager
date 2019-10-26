@@ -436,8 +436,10 @@ public class EditStockActivity extends InputFormActivity
         if (editType == EDIT_TYPE_NEW
                 || (editType == EDIT_TYPE_EDIT && selectedLocationId != stockToEdit.getLocationId())) {
             if (dbHandler.getAllStock().stream()
-                    .map(stockItem -> new int[]{stockItem.getProduct().getProductId(), stockItem.getLocationId()})
-                    .anyMatch(x -> Arrays.equals(x, new int[]{selectedProductId, selectedLocationId}))) {
+                    .map(stockItem -> new int[]{stockItem.getProduct().getProductId(),
+                            stockItem.getSupplierId(), stockItem.getLocationId()})
+                    .anyMatch(x -> Arrays.equals(x, new int[]{selectedProductId,
+                            selectedSupplierId, selectedLocationId}))) {
                 inputLayoutLocation.setError(getString(R.string.input_error_stock_already_in_location));
                 isValid = false;
             }

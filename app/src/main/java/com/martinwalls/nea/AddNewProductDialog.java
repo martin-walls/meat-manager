@@ -17,6 +17,7 @@ import com.martinwalls.nea.models.Product;
 import com.martinwalls.nea.util.Utils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AddNewProductDialog extends DialogFragment {
 
@@ -28,12 +29,14 @@ public class AddNewProductDialog extends DialogFragment {
     private TextInputLayout inputLayoutMeatType;
     private AutoCompleteTextView editTextMeatType;
 
+    private View dialogView;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.dialog_add_new_product, null);
+        dialogView = inflater.inflate(R.layout.dialog_add_new_product, null);
         editTextProductName = dialogView.findViewById(R.id.edit_text_product_name);
         inputLayoutProductName = dialogView.findViewById(R.id.input_layout_product_name);
         editTextMeatType = dialogView.findViewById(R.id.edit_text_meat_type);
@@ -66,6 +69,10 @@ public class AddNewProductDialog extends DialogFragment {
             inputLayoutMeatType.setError(null);
             if (newProductName.isEmpty()) {
                 inputLayoutProductName.setError(getString(R.string.input_error_blank));
+                isValid = false;
+            } else if (dbHandler.getAllProducts().stream().map(Product::getProductName)
+                    .collect(Collectors.toList()).contains(newProductName)) {
+                inputLayoutProductName.setError(getString(R.string.input_error_duplicate));
                 isValid = false;
             }
             if (newMeatType.isEmpty()) {

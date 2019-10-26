@@ -78,7 +78,8 @@
     <string name="input_error_duplicate">Already added</string>
     <string name="input_error_invalid_email">Invalid email</string>
     <string name="input_error_invalid_location_type">Invalid location type. Please select from the dropdown.</string>
-    <string name="input_error_stock_already_in_location">This product has already been added in this location.</string>
+    <string name="input_error_stock_already_in_location">This product has already been added
+        with this supplier in this location.</string>
     <string name="input_error_time_must_be_future">Please select a time at least 10 minutes from now</string>
     <string name="input_error_blank_date">Please select a date</string>
 
@@ -111,16 +112,14 @@
     <string name="stock_input_quality">Quality</string>
 
     <string name="stock_details_title">Stock details</string>
-    <string name="stock_details_quantity_kg">Quantity (kg):</string>
-    <string name="stock_details_quantity_lbs">Quantity (lbs):</string>
-    <string name="stock_details_quantity_boxes">Number of boxes:</string>
-    <string name="stock_details_quantity_boxes_hint">(optional)</string>
+    <string name="stock_details_quantity">Quantity:</string>
+    <string name="stock_details_quantity_boxes">No. of boxes:</string>
     <string name="stock_details_supplier">Supplier:</string>
     <string name="stock_details_destination">Destination:</string>
     <string name="stock_details_quality">Quality:</string>
 
     <!--<string name="stock_location_tag">&#8226; %s</string>-->
-    <string name="stock_location_tag">%s</string>
+    <string name="stock_location_tag">%s &#8226; %s</string>
 
     <!-- Edit meat types page -->
     <string name="meat_types_empty">No meat types to show</string>

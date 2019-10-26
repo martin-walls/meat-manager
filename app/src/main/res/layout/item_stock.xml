@@ -38,6 +38,8 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             tools:text="UK1535"
+            android:ellipsize="end"
+            android:maxLines="1"
             />
 
     </RelativeLayout>

@@ -53,7 +53,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         holder.itemName.setText(item.getProduct().getProductName());
 //        holder.itemLocation.setText(item.getLocationName());
         holder.itemLocation.setText(holder.itemLocation.getContext()
-                .getString(R.string.stock_location_tag, item.getLocationName()));
+                .getString(R.string.stock_location_tag, item.getLocationName(), item.getSupplierName()));
         //todo shared preferences for kg / lbs
         holder.itemMass.setText(holder.itemMass.getContext().getString(R.string.amount_kg,
                 new DecimalFormat("#.0###").format(item.getMass())));
@@ -61,6 +61,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         if (item.getNumBoxes() >= 0) {
             holder.itemNumBoxes.setText(holder.itemNumBoxes.getContext().getResources()
                     .getQuantityString(R.plurals.amount_boxes, item.getNumBoxes(), item.getNumBoxes()));
+            holder.itemNumBoxes.setVisibility(View.VISIBLE);
         } else {
             holder.itemNumBoxes.setVisibility(View.GONE);
         }

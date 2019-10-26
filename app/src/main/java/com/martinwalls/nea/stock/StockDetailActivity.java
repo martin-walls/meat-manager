@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
@@ -16,7 +17,6 @@ import com.martinwalls.nea.R;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.StockItem;
 import com.martinwalls.nea.util.undo.DeleteStockAction;
-import com.martinwalls.nea.util.undo.EditStockAction;
 import com.martinwalls.nea.util.undo.UndoStack;
 
 public class StockDetailActivity extends AppCompatActivity 
@@ -60,38 +60,6 @@ public class StockDetailActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
-        boolean hasChanged = false;
-        EditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
-        if (Double.parseDouble(editTextMass.getText().toString()) != stockItem.getMass()) {
-            hasChanged = true;
-        }
-
-        EditText editTextBoxes = findViewById(R.id.edit_text_quantity_boxes);
-        if (!TextUtils.isEmpty(editTextBoxes.getText())
-                && Integer.parseInt(editTextBoxes.getText().toString()) != stockItem.getNumBoxes()) {
-            hasChanged = true;
-        }
-
-        if (hasChanged) {
-            StockItem newStock = new StockItem();
-            newStock.setStockId(stockItem.getStockId());
-            newStock.setProduct(dbHandler.getProduct(stockItem.getProduct().getProductId()));
-            newStock.setLocation(dbHandler.getLocation(stockItem.getLocationId()));
-            newStock.setSupplier(dbHandler.getLocation(stockItem.getSupplierId()));
-            newStock.setDest(dbHandler.getLocation(stockItem.getDestId()));
-            newStock.setMass(Double.parseDouble(editTextMass.getText().toString()));
-            newStock.setNumBoxes(Integer.parseInt(editTextBoxes.getText().toString()));
-            newStock.setQuality(StockItem.Quality.parseQuality(stockItem.getQuality().getDisplayName()));
-
-            dbHandler.updateStockItem(stockItem);
-
-            UndoStack.getInstance().push(new EditStockAction(stockItem, newStock));
-        }
-        super.onBackPressed();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_stock_detail, menu);
         return true;
@@ -110,7 +78,7 @@ public class StockDetailActivity extends AppCompatActivity
                 startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
                 return true;
             case android.R.id.home:
-                onBackPressed();
+                super.onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -146,20 +114,30 @@ public class StockDetailActivity extends AppCompatActivity
         TextView location = findViewById(R.id.location);
         location.setText(stockItem.getLocationName());
 
-        //todo not urgent: mass and boxes don't update when edit activity returns
-        EditText quantityMass = findViewById(R.id.edit_text_quantity_mass);
-        quantityMass.setText(String.valueOf(stockItem.getMass()));
+        TextView quantityMass = findViewById(R.id.edit_text_quantity_mass);
+        quantityMass.setText(getString(R.string.amount_kg, String.valueOf(stockItem.getMass())));
 
-        EditText quantityBoxes = findViewById(R.id.edit_text_quantity_boxes);
+        TextView quantityBoxes = findViewById(R.id.edit_text_quantity_boxes);
+        LinearLayout rowBoxes = findViewById(R.id.row_boxes);
         if (stockItem.getNumBoxes() != -1) {
-            quantityBoxes.setText(String.valueOf(stockItem.getNumBoxes()));
+            quantityBoxes.setText(getResources().getQuantityString(R.plurals.amount_boxes,
+                    stockItem.getNumBoxes(), stockItem.getNumBoxes()));
+            rowBoxes.setVisibility(View.VISIBLE);
+        } else {
+            rowBoxes.setVisibility(View.GONE);
         }
 
         TextView supplier = findViewById(R.id.supplier);
         supplier.setText(stockItem.getSupplierName());
 
         TextView destination = findViewById(R.id.destination);
-        destination.setText(stockItem.getDestName());
+        LinearLayout rowDestination = findViewById(R.id.row_destination);
+        if (!TextUtils.isEmpty(stockItem.getDestName())) {
+            destination.setText(stockItem.getDestName());
+            rowDestination.setVisibility(View.VISIBLE);
+        } else {
+            rowDestination.setVisibility(View.GONE);
+        }
 
         TextView quality = findViewById(R.id.quality);
         quality.setText(stockItem.getQuality().getDisplayName());

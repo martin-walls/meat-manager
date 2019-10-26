@@ -228,6 +228,10 @@ public class ExchangeFragment extends Fragment {
             return;
         }
 
+        // load last selected currencies
+        String primaryCurrencyValue = prefs.getString(R.string.pref_exchange_currency_primary, "");
+        String secondaryCurrencyValue = prefs.getString(R.string.pref_exchange_currency_secondary, "");
+
         currencyPickerLeft.setMinValue(0);
         currencyPickerLeft.setMaxValue(currencies.length - 1);
         currencyPickerLeft.setDisplayedValues(currencies);
@@ -244,10 +248,7 @@ public class ExchangeFragment extends Fragment {
         currencyPickerRight.setOnValueChangedListener(
                 (picker, oldVal, newVal) -> setSecondaryCurrency(currencies[newVal]));
 
-        // load last selected currencies
-        String primaryCurrencyValue = prefs.getString(R.string.pref_exchange_currency_primary, "");
-        String secondaryCurrencyValue = prefs.getString(R.string.pref_exchange_currency_secondary, "");
-
+        // select last selected currencies
         List<String> currencyList = Arrays.asList(currencies);
         if (currencyList.contains(primaryCurrencyValue)) {
             currencyPickerLeft.setValue(currencyList.indexOf(primaryCurrencyValue));

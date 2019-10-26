@@ -42,6 +42,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
         >
 
         <TextView
@@ -49,31 +53,29 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingStart="24dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="24dp"
-            android:paddingBottom="16dp"
-            android:text="@string/stock_details_quantity_kg"
+            android:text="@string/stock_details_quantity"
             />
 
-        <EditText
+        <TextView
             android:id="@+id/edit_text_quantity_mass"
             style="@style/DetailsText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:layout_weight="1"
-            android:imeOptions="actionDone"
-            android:inputType="numberDecimal"
+            android:layout_weight="2"
             android:textColor="?textColorPrimary"
             tools:text="1900.00"
             />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/row_boxes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
         >
 
         <TextView
@@ -81,25 +83,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingStart="24dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="24dp"
-            android:paddingBottom="16dp"
             android:text="@string/stock_details_quantity_boxes"
             />
 
-        <EditText
+        <TextView
             android:id="@+id/edit_text_quantity_boxes"
             style="@style/DetailsText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:layout_weight="1"
-            android:hint="@string/stock_details_quantity_boxes_hint"
-            android:imeOptions="actionDone"
-            android:inputType="number"
+            android:layout_weight="2"
             android:textColor="?textColorPrimary"
-            android:textColorHint="?textColorSecondary"
             />
     </LinearLayout>
 
@@ -132,6 +125,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/row_destination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -119,8 +120,11 @@ public class EditProductsActivity extends AppCompatActivity
 
     @Override
     public void onAddNewProductDoneAction(Product newProduct) {
-        dbHandler.addProduct(newProduct);
+        boolean success = dbHandler.addProduct(newProduct);
         loadProducts();
+        if (!success) {
+            Toast.makeText(this, "Error adding product", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadProducts() {
@@ -131,5 +135,5 @@ public class EditProductsActivity extends AppCompatActivity
         productsAdapter.notifyDataSetChanged();
     }
 
-    //todo be able to edit products ? -- may not be needed, can just delete and re-add
+    //todo not urgent: be able to edit products ? -- may not be needed, can just delete and re-add
 }
