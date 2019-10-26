@@ -1,9 +1,13 @@
 package com.martinwalls.nea.models;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Contract {
+    public static Comparator<Contract> comparatorId =
+            (contract1, contract2) -> contract1.getContractId() - contract2.getContractId();
+
     private int contractId;
     private int destId;
     private String destName;

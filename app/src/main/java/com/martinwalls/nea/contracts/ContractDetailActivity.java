@@ -80,11 +80,16 @@ public class ContractDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                super.onBackPressed();
+            case R.id.action_delete:
+                Toast.makeText(this, "DELETE", Toast.LENGTH_SHORT).show();
+                //todo delete contract
                 return true;
             case R.id.action_edit:
                 Toast.makeText(this, "EDIT", Toast.LENGTH_SHORT).show();
+                //todo edit contract
+                return true;
+            case android.R.id.home:
+                super.onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

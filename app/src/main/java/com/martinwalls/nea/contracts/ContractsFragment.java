@@ -2,7 +2,12 @@ package com.martinwalls.nea.contracts;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -10,14 +15,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.components.CustomRecyclerView;
 import com.martinwalls.nea.components.RecyclerViewDivider;
 import com.martinwalls.nea.db.DBHandler;
 import com.martinwalls.nea.models.Contract;
+import com.martinwalls.nea.util.Utils;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class ContractsFragment extends Fragment
@@ -77,6 +81,7 @@ public class ContractsFragment extends Fragment
         switch (item.getItemId()) {
             case R.id.action_undo:
                 Toast.makeText(getContext(), "UNDO", Toast.LENGTH_SHORT).show();
+                //todo undo and redo in contracts page
                 return true;
             case R.id.action_redo:
                 Toast.makeText(getContext(), "REDO", Toast.LENGTH_SHORT).show();
@@ -95,12 +100,7 @@ public class ContractsFragment extends Fragment
 
     private void loadContracts() {
         contractList.clear();
-        contractList.addAll(Utils.mergeSort(dbHandler.getAllContracts(), new Comparator<Contract>() {
-            @Override
-            public int compare(Contract contract1, Contract contract2) {
-                return contract1.getContractId() - contract2.getContractId();
-            }
-        }));
+        contractList.addAll(Utils.mergeSort(dbHandler.getAllContracts(), Contract.comparatorId));
         contractsAdapter.notifyDataSetChanged();
     }
 }
