@@ -204,7 +204,9 @@
     <string name="contracts_repeat_display_multiple">Repeats every %d %ss on %s</string>
 
     <string name="contracts_repeat_on_week">Repeat weekly on</string>
+    <string name="contracts_repeat_on_two_week">Repeat fortnightly on</string>
     <string name="contracts_repeat_on_month">Repeat monthly on</string>
+    <string name="contracts_repeat_on_default">Repeat on</string>
 
     <string name="contract_details_title">Contract details</string>
 

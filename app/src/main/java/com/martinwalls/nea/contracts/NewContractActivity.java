@@ -389,12 +389,10 @@ public class NewContractActivity extends InputFormActivity
             editTextRepeatInterval.setText(getString(R.string.contracts_repeat_interval_display_multiple,
                     interval.getValue(), interval.getUnit().name().toLowerCase()));
         }
-        TextView repeatOnTxt = findViewById(R.id.text_repeat_on);
         if (!isWeek && interval.getUnit() == Interval.TimeUnit.WEEK) {
             repeatOnSpnAdapter.clear();
             repeatOnSpnAdapter.addAll(getResources().getStringArray(R.array.weekdays));
             repeatOnSpnAdapter.notifyDataSetChanged();
-            repeatOnTxt.setText(R.string.contracts_repeat_on_week);
             isWeek = true;
         } else if (isWeek && interval.getUnit() == Interval.TimeUnit.MONTH) {
             repeatOnSpnAdapter.clear();
@@ -402,8 +400,26 @@ public class NewContractActivity extends InputFormActivity
                 repeatOnSpnAdapter.add("Day " + i);
             }
             repeatOnSpnAdapter.notifyDataSetChanged();
-            repeatOnTxt.setText(R.string.contracts_repeat_on_month);
             isWeek = false;
+        }
+
+        TextView repeatOnTxt = findViewById(R.id.text_repeat_on);
+        if (interval.getUnit() == Interval.TimeUnit.WEEK) {
+            if (interval.getValue() == 1) {
+                repeatOnTxt.setText(R.string.contracts_repeat_on_week);
+            } else if (interval.getValue() == 2) {
+                repeatOnTxt.setText(R.string.contracts_repeat_on_two_week);
+            } else {
+                repeatOnTxt.setText(R.string.contracts_repeat_on_default);
+            }
+        } else if (interval.getUnit() == Interval.TimeUnit.MONTH) {
+            if (interval.getValue() == 1) {
+                repeatOnTxt.setText(R.string.contracts_repeat_on_month);
+            } else {
+                repeatOnTxt.setText(R.string.contracts_repeat_on_default);
+            }
+        } else {
+            repeatOnTxt.setText(R.string.contracts_repeat_on_default);
         }
     }
 
