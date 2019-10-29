@@ -20,30 +20,30 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         >
-        <activity android:name=".stock.StockDetailActivity" />
-        <activity android:name=".stock.EditLocationActivity" />
+        <activity android:name=".ui.stock.StockDetailActivity" />
+        <activity android:name=".ui.locations.EditLocationActivity" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ui.settings.SettingsActivity"
             android:label="@string/settings_title"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.FadeTransition"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.martinwalls.nea.MainActivity"
+                android:value="com.martinwalls.nea.ui.MainActivity"
                 />
         </activity>
-        <activity android:name=".contracts.ContractDetailActivity" />
-        <activity android:name=".contracts.NewContractActivity" />
-        <activity android:name=".orders.OrderDetailActivity" />
-        <activity android:name=".stock.NewLocationActivity" />
-        <activity android:name=".stock.EditProductsActivity" />
-        <activity android:name=".stock.EditMeatTypesActivity" />
-        <activity android:name=".stock.LocationsActivity" />
-        <activity android:name=".stock.LocationDetailActivity" />
-        <activity android:name=".exchange.ChooseCurrenciesActivity" />
+        <activity android:name=".ui.contracts.ContractDetailActivity" />
+        <activity android:name=".ui.contracts.NewContractActivity" />
+        <activity android:name=".ui.orders.OrderDetailActivity" />
+        <activity android:name=".ui.locations.NewLocationActivity" />
+        <activity android:name=".ui.products.EditProductsActivity" />
+        <activity android:name=".ui.meat_types.EditMeatTypesActivity" />
+        <activity android:name=".ui.locations.LocationsActivity" />
+        <activity android:name=".ui.locations.LocationDetailActivity" />
+        <activity android:name=".ui.exchange.ChooseCurrenciesActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             >
@@ -53,11 +53,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".stock.EditStockActivity" />
-        <activity android:name=".orders.EditOrderActivity" />
+        <activity android:name=".ui.stock.EditStockActivity" />
+        <activity android:name=".ui.orders.EditOrderActivity" />
 
         <service
-            android:name=".exchange.ApiIntentService"
+            android:name=".data.api.ApiIntentService"
             android:exported="false"
             />
     </application>

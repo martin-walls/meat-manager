@@ -18,7 +18,7 @@
         android:scrollbars="none"
         >
 
-        <com.martinwalls.nea.components.BarChartView
+        <com.martinwalls.nea.ui.dashboard.BarChartView
             android:id="@+id/graph"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

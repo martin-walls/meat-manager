@@ -5,10 +5,10 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".stock.EditMeatTypesActivity"
+    tools:context=".ui.meat_types.EditMeatTypesActivity"
     >
 
-    <com.martinwalls.nea.components.CustomRecyclerView
+    <com.martinwalls.nea.ui.misc.CustomRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

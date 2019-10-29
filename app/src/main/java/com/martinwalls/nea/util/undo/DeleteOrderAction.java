@@ -3,8 +3,8 @@ package com.martinwalls.nea.util.undo;
 import android.content.Context;
 import android.widget.Toast;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.db.DBHandler;
-import com.martinwalls.nea.models.Order;
+import com.martinwalls.nea.data.db.DBHandler;
+import com.martinwalls.nea.data.models.Order;
 
 public class DeleteOrderAction extends UndoableAction {
 
