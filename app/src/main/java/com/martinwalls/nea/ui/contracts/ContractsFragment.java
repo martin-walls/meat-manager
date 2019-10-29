@@ -55,7 +55,8 @@ public class ContractsFragment extends Fragment
 
         FloatingActionButton fab = fragmentView.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            Intent newContractIntent = new Intent(getContext(), NewContractActivity.class);
+            Intent newContractIntent = new Intent(getContext(), EditContractActivity.class);
+            newContractIntent.putExtra(EditContractActivity.EXTRA_EDIT_TYPE, EditContractActivity.EDIT_TYPE_NEW);
             startActivity(newContractIntent);
         });
 

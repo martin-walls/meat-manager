@@ -1,5 +1,6 @@
 package com.martinwalls.nea.ui.contracts;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,15 +9,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.martinwalls.nea.ui.ProductsAddedAdapter;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Contract;
 import com.martinwalls.nea.data.models.Interval;
+import com.martinwalls.nea.ui.ProductsAddedAdapter;
 
 public class ContractDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_CONTRACT_ID = "contract_id";
+
+    private static final int REQUEST_REFRESH_ON_DONE = 1;
 
     private DBHandler dbHandler;
     private Contract contract;
@@ -85,8 +88,12 @@ public class ContractDetailActivity extends AppCompatActivity {
                 //todo delete contract
                 return true;
             case R.id.action_edit:
-                Toast.makeText(this, "EDIT", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "EDIT", Toast.LENGTH_SHORT).show();
                 //todo edit contract
+                Intent editIntent = new Intent(this, EditContractActivity.class);
+                editIntent.putExtra(EditContractActivity.EXTRA_EDIT_TYPE, EditContractActivity.EDIT_TYPE_EDIT);
+                editIntent.putExtra(EditContractActivity.EXTRA_CONTRACT_ID, contract.getContractId());
+                startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
                 return true;
             case android.R.id.home:
                 super.onBackPressed();

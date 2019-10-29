@@ -34,7 +34,7 @@
                 />
         </activity>
         <activity android:name=".ui.contracts.ContractDetailActivity" />
-        <activity android:name=".ui.contracts.NewContractActivity" />
+        <activity android:name=".ui.contracts.EditContractActivity" />
         <activity android:name=".ui.orders.OrderDetailActivity" />
         <activity android:name=".ui.locations.NewLocationActivity" />
         <activity android:name=".ui.products.EditProductsActivity" />

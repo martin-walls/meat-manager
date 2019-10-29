@@ -885,17 +885,20 @@ public class DBHandler extends SQLiteOpenHelper {
         int rowsAffected = db.update(OrdersTable.TABLE_NAME, values,
                 OrdersTable.ID + "=?", new String[]{order.getOrderId() + ""});
 
-        // delete products in db for order, then re-add the updated ones
-        String orderProductsQuery = "SELECT * FROM " + OrderProductsTable.TABLE_NAME
-                + " WHERE " + OrderProductsTable.ORDER_ID + "=?";
-        Cursor cursor = db.rawQuery(orderProductsQuery, new String[]{order.getOrderId() + ""});
-        while (cursor.moveToNext()) {
-            db.delete(OrderProductsTable.TABLE_NAME,
-                    OrderProductsTable.ORDER_ID + "=? AND " + OrderProductsTable.PRODUCT_ID + "=?",
-                    new String[]{order.getOrderId() + "",
-                            cursor.getInt(cursor.getColumnIndexOrThrow(OrderProductsTable.PRODUCT_ID)) + ""});
-        }
-        cursor.close();
+        //todo simplify like in contracts if that works
+        //delete products in db for order, then re-add the updated ones
+//        String orderProductsQuery = "SELECT * FROM " + OrderProductsTable.TABLE_NAME
+//                + " WHERE " + OrderProductsTable.ORDER_ID + "=?";
+//        Cursor cursor = db.rawQuery(orderProductsQuery, new String[]{order.getOrderId() + ""});
+//        while (cursor.moveToNext()) {
+//            db.delete(OrderProductsTable.TABLE_NAME,
+//                    OrderProductsTable.ORDER_ID + "=? AND " + OrderProductsTable.PRODUCT_ID + "=?",
+//                    new String[]{order.getOrderId() + "",
+//                            cursor.getInt(cursor.getColumnIndexOrThrow(OrderProductsTable.PRODUCT_ID)) + ""});
+//        }
+//        cursor.close();
+        db.delete(OrderProductsTable.TABLE_NAME, OrderProductsTable.ORDER_ID + "=?",
+                new String[]{order.getOrderId() + ""});
 
         for (ProductQuantity productQuantity : order.getProductList()) {
             ContentValues productValues = new ContentValues();
@@ -913,6 +916,8 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         int deletedRows = db.delete(OrdersTable.TABLE_NAME,
                 OrdersTable.ID + "=?", new String[]{orderId + ""});
+        db.delete(OrderProductsTable.TABLE_NAME,
+                OrderProductsTable.ORDER_ID + "=?", new String[]{orderId + ""});
         db.close();
         return deletedRows == 1;
     }
@@ -1021,7 +1026,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return contractResultList;
     }
 
-    public boolean addContract(Contract contract) {
+    public int addContract(Contract contract) {
         ContentValues values = new ContentValues();
         values.put(ContractsTable.DEST_ID, contract.getDestId());
         values.put(ContractsTable.REPEAT_INTERVAL, contract.getRepeatInterval().getValue());
@@ -1041,7 +1046,46 @@ public class DBHandler extends SQLiteOpenHelper {
             db.insert(ContractProductsTable.TABLE_NAME, null, productValues);
         }
         db.close();
-        return newRowId != -1;
+        return (int) newRowId;
+    }
+
+    public boolean updateContract(Contract contract) {
+        ContentValues values = new ContentValues();
+        values.put(ContractsTable.DEST_ID, contract.getDestId());
+        values.put(ContractsTable.REPEAT_INTERVAL, contract.getRepeatInterval().getValue());
+        values.put(ContractsTable.REPEAT_INTERVAL_UNIT, contract.getRepeatInterval().getUnit().name());
+        values.put(ContractsTable.REPEAT_ON, contract.getRepeatOn());
+        values.put(ContractsTable.REMINDER, contract.getReminder());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsAffected = db.update(ContractsTable.TABLE_NAME, values,
+                ContractsTable.ID + "=?", new String[]{contract.getContractId() + ""});
+
+        //testme
+        db.delete(ContractProductsTable.TABLE_NAME, ContractProductsTable.CONTRACT_ID + "=?",
+                new String[]{contract.getContractId() + ""});
+
+        for (ProductQuantity productQuantity : contract.getProductList()) {
+            ContentValues productValues = new ContentValues();
+            productValues.put(ContractProductsTable.PRODUCT_ID, productQuantity.getProduct().getProductId());
+            productValues.put(ContractProductsTable.CONTRACT_ID, contract.getContractId());
+            productValues.put(ContractProductsTable.QUANTITY_MASS, productQuantity.getQuantityMass());
+            productValues.put(ContractProductsTable.QUANTITY_BOXES, productQuantity.getQuantityBoxes());
+            db.insert(ContractProductsTable.TABLE_NAME, null, productValues);
+        }
+        db.close();
+        return rowsAffected == 1;
+    }
+
+    public boolean deleteContract(int contractId) {
+        //testme
+        SQLiteDatabase db = this.getWritableDatabase();
+        int deletedRows = db.delete(ContractsTable.TABLE_NAME,
+                ContractsTable.ID + "=?", new String[]{contractId + ""});
+        db.delete(ContractProductsTable.TABLE_NAME,
+                ContractProductsTable.CONTRACT_ID + "=?", new String[]{contractId + ""});
+        db.close();
+        return deletedRows == 1;
     }
     //endregion contract
 

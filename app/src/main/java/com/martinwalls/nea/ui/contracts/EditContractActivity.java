@@ -6,8 +6,10 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -18,14 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.martinwalls.nea.ui.products.AddNewProductDialog;
-import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
-import com.martinwalls.nea.ui.InputFormActivity;
-import com.martinwalls.nea.ui.ProductsAddedAdapter;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.ui.SearchItemAdapter;
-import com.martinwalls.nea.util.SimpleTextWatcher;
-import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Contract;
 import com.martinwalls.nea.data.models.Interval;
@@ -33,18 +28,30 @@ import com.martinwalls.nea.data.models.Location;
 import com.martinwalls.nea.data.models.Product;
 import com.martinwalls.nea.data.models.ProductQuantity;
 import com.martinwalls.nea.data.models.SearchItem;
+import com.martinwalls.nea.ui.InputFormActivity;
+import com.martinwalls.nea.ui.ProductsAddedAdapter;
+import com.martinwalls.nea.ui.SearchItemAdapter;
 import com.martinwalls.nea.ui.locations.NewLocationActivity;
+import com.martinwalls.nea.ui.misc.CustomRecyclerView;
+import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
+import com.martinwalls.nea.ui.products.AddNewProductDialog;
+import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class NewContractActivity extends InputFormActivity
+public class EditContractActivity extends InputFormActivity
         implements ProductsAddedAdapter.ProductsAddedAdapterListener,
         AddNewProductDialog.AddNewProductListener,
         RepeatIntervalDialog.RepeatIntervalDialogListener,
         ConfirmCancelDialog.ConfirmCancelListener {
+
+    public static final String EXTRA_EDIT_TYPE = "edit_type";
+    public static final int EDIT_TYPE_NEW = 0;
+    public static final int EDIT_TYPE_EDIT = 1;
+    public static final String EXTRA_CONTRACT_ID = "contract_id";
 
     private final int REQUEST_REFRESH_ON_DONE = 1;
 
@@ -55,7 +62,10 @@ public class NewContractActivity extends InputFormActivity
     private final String INPUT_REPEAT_ON = "repeat_on";
     private final String INPUT_REMINDER = "reminder";
 
+    private int editType = EDIT_TYPE_NEW;
+
     private DBHandler dbHandler;
+    private Contract contractToEdit;
 
     private ProductsAddedAdapter productsAddedAdapter;
     private List<ProductQuantity> productsAddedList = new ArrayList<>();
@@ -69,20 +79,33 @@ public class NewContractActivity extends InputFormActivity
     private Interval selectedRepeatInterval;
 
     private ArrayAdapter<CharSequence> repeatOnSpnAdapter;
+    private boolean isSpinnerInitialised = false;
 
     private boolean isWeek = true;
+
+    private boolean hasChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_contract);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.contracts_title);
+        dbHandler = new DBHandler(this);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            editType = extras.getInt(EXTRA_EDIT_TYPE, EDIT_TYPE_NEW);
+            if (editType == EDIT_TYPE_EDIT) {
+                int contractId = extras.getInt(EXTRA_CONTRACT_ID);
+                contractToEdit = dbHandler.getContract(contractId);
+            }
         }
 
-        dbHandler = new DBHandler(this);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(editType == EDIT_TYPE_NEW ? R.string.contract_new_title : R.string.contract_edit_title);
+        }
+
 
         addViewToHide(INPUT_PRODUCT, R.id.input_layout_product);
         addViewToHide(INPUT_QUANTITY, R.id.input_row_quantity);
@@ -95,7 +118,6 @@ public class NewContractActivity extends InputFormActivity
         addViewToHide("products_added_recycler_view", R.id.products_added_recycler_view);
 
         setAddNewView(R.id.add_new);
-
         setRootView(R.id.root_layout);
 
         setCurrentSearchType(INPUT_PRODUCT);
@@ -116,13 +138,14 @@ public class NewContractActivity extends InputFormActivity
                 findViewById(R.id.input_layout_destination),
                 findViewById(R.id.edit_text_destination));
 
-        productsAddedAdapter = new ProductsAddedAdapter(productsAddedList, this);
+        productsAddedAdapter = new ProductsAddedAdapter(productsAddedList, this,
+                editType == EDIT_TYPE_EDIT, true);
         productsAddedRecyclerView = findViewById(R.id.products_added_recycler_view);
         productsAddedRecyclerView.setAdapter(productsAddedAdapter);
         productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         addProductBtn = findViewById(R.id.add_product);
-        addProductBtn.setOnClickListener(v -> addProduct());
+        addProductBtn.setOnClickListener(v -> addProductToProductsAddedList());
 
         TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
         editTextRepeatInterval.setOnClickListener(v -> {
@@ -172,6 +195,22 @@ public class NewContractActivity extends InputFormActivity
                 }
             }
         });
+
+        if (editType == EDIT_TYPE_NEW) {
+            findViewById(R.id.product_btn_done).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.product_inputs).setVisibility(View.GONE);
+
+            fillFields();
+
+            ImageButton productBtnDone = findViewById(R.id.product_btn_done);
+            productBtnDone.setOnClickListener(v -> {
+                addProductToProductsAddedList();
+                findViewById(R.id.product_inputs).setVisibility(View.GONE);
+            });
+        }
+
+        setTextChangedListeners();
     }
 
     @Override
@@ -196,11 +235,11 @@ public class NewContractActivity extends InputFormActivity
                     finish();
                 } else {
                     Toast.makeText(this,
-                            getString(R.string.db_error_insert, "order"), Toast.LENGTH_SHORT).show();
+                            getString(R.string.db_error_insert, "contract"), Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.action_cancel:
-                if (!areAllFieldsEmpty()) {
+                if (hasChanged) {
                     showConfirmCancelDialog();
                 } else {
                     finish();
@@ -272,6 +311,29 @@ public class NewContractActivity extends InputFormActivity
     }
 
     @Override
+    public void onProductAddedEdit(int position) {
+        ProductQuantity productAdded = productsAddedList.get(position);
+
+        findViewById(R.id.product_inputs).setVisibility(View.VISIBLE);
+
+        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
+        editTextProduct.setText(productAdded.getProduct().getProductName());
+
+        TextInputEditText editTextQuantityMass = findViewById(R.id.edit_text_quantity_mass);
+        editTextQuantityMass.setText(String.valueOf(productAdded.getQuantityMass()));
+
+        if (productAdded.getQuantityBoxes() != -1) {
+            TextInputEditText editTextQuantityBoxes = findViewById(R.id.edit_text_quantity_boxes);
+            editTextQuantityBoxes.setText(String.valueOf(productAdded.getQuantityBoxes()));
+        }
+
+        productsAddedList.remove(position);
+        productsAddedAdapter.notifyItemRemoved(position);
+
+        selectedProductId = productAdded.getProduct().getProductId();
+    }
+
+    @Override
     public void onRadioBtnClicked(int id) {
         switch (id) {
             case RepeatIntervalDialog.OPTION_WEEK:
@@ -317,12 +379,77 @@ public class NewContractActivity extends InputFormActivity
         dialog.show(getSupportFragmentManager(), "confirm_cancel");
     }
 
-    private void addProduct() {
+    private void addProductToProductsAddedList() {
         ProductQuantity product = getProductFromInputsAndClear();
         if (product != null) {
             productsAddedList.add(product);
             productsAddedAdapter.notifyItemInserted(productsAddedList.size());
         }
+    }
+
+    private void setTextChangedListeners() {
+        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
+        editTextProduct.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hasChanged = true;
+            }
+        });
+
+        TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
+        editTextMass.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hasChanged = true;
+            }
+        });
+
+        TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
+        editTextNumBoxes.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hasChanged = true;
+            }
+        });
+
+        TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
+        editTextDest.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hasChanged = true;
+            }
+        });
+
+        TextInputEditText editTextRepeat = findViewById(R.id.edit_text_repeat_interval);
+        editTextRepeat.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hasChanged = true;
+            }
+        });
+
+        Spinner spinnerRepeatOn = findViewById(R.id.spn_repeat_on);
+        spinnerRepeatOn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!isSpinnerInitialised) {
+                    isSpinnerInitialised = true;
+                    return;
+                }
+                hasChanged = true;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        EditText editTextReminder = findViewById(R.id.edit_text_reminder);
+        editTextReminder.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                hasChanged = true;
+            }
+        });
     }
 
     private ProductQuantity getProductFromInputsAndClear() {
@@ -373,6 +500,23 @@ public class NewContractActivity extends InputFormActivity
         } else {
             return null;
         }
+    }
+
+    private void fillFields() {
+        productsAddedList.clear();
+
+        productsAddedList.addAll(contractToEdit.getProductList());
+        productsAddedAdapter.notifyDataSetChanged();
+
+        TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
+        editTextDest.setText(contractToEdit.getDestName());
+
+        setSelectedRepeatInterval(contractToEdit.getRepeatInterval());
+
+        EditText editTextReminder = findViewById(R.id.edit_text_reminder);
+        editTextReminder.setText(String.valueOf(contractToEdit.getReminder()));
+
+        selectedDestId = contractToEdit.getDestId();
     }
 
     private void setSelectedRepeatInterval(Interval interval) {
@@ -487,23 +631,31 @@ public class NewContractActivity extends InputFormActivity
                     newContract.setReminder(Integer.parseInt(editTextReminder.getText().toString()));
                 }
 
-                return dbHandler.addContract(newContract);
+                if (editType == EDIT_TYPE_NEW) {
+                    int newRowId = dbHandler.addContract(newContract);
+                    return newRowId != -1;
+                } else {
+                    newContract.setContractId(contractToEdit.getContractId());
+                    boolean success = dbHandler.updateContract(newContract);
+                    //todo add to undo stack
+                    return success;
+                }
             }
         }
         return false;
     }
 
-    private boolean areAllFieldsEmpty() {
-        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
-        TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
-        TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
-        TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
-        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
-
-        return TextUtils.isEmpty(editTextProduct.getText())
-                && TextUtils.isEmpty(editTextMass.getText())
-                && TextUtils.isEmpty(editTextNumBoxes.getText())
-                && TextUtils.isEmpty(editTextDest.getText())
-                && TextUtils.isEmpty(editTextRepeatInterval.getText());
-    }
+//    private boolean areAllFieldsEmpty() {
+//        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
+//        TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
+//        TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
+//        TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
+//        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
+//
+//        return TextUtils.isEmpty(editTextProduct.getText())
+//                && TextUtils.isEmpty(editTextMass.getText())
+//                && TextUtils.isEmpty(editTextNumBoxes.getText())
+//                && TextUtils.isEmpty(editTextDest.getText())
+//                && TextUtils.isEmpty(editTextRepeatInterval.getText());
+//    }
 }

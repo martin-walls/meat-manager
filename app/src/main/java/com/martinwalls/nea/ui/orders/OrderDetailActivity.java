@@ -28,7 +28,7 @@ public class OrderDetailActivity extends AppCompatActivity
 
     public static final String EXTRA_ORDER_ID = "order_id";
 
-    public static final int REQUEST_REFRESH_ON_DONE = 1;
+    private static final int REQUEST_REFRESH_ON_DONE = 1;
 
     private final String DATE_FORMAT = "dd MMMM yyyy, HH:mm";
 

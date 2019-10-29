@@ -119,8 +119,9 @@ public class EditOrderActivity extends InputFormActivity
         }
 
         setAddNewView(R.id.add_new);
-
         setRootView(R.id.root_layout);
+
+        setCurrentSearchType(INPUT_PRODUCT);
 
         setSearchItemAdapter(new SearchItemAdapter(getSearchItemList(), getCurrentSearchType(), this));
         TextView emptyView = findViewById(R.id.no_results);
@@ -139,7 +140,9 @@ public class EditOrderActivity extends InputFormActivity
                 findViewById(R.id.edit_text_destination));
 
         productsAddedAdapter =
-                new ProductsAddedAdapter(productsAddedList, this, editType == EDIT_TYPE_EDIT, true);
+                new ProductsAddedAdapter(productsAddedList, this,
+                        //todo edit button for new product as well as edit
+                        editType == EDIT_TYPE_EDIT, true);
         RecyclerView productsAddedRecyclerView = findViewById(R.id.products_added_recycler_view);
         productsAddedRecyclerView.setAdapter(productsAddedAdapter);
         productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -198,7 +201,8 @@ public class EditOrderActivity extends InputFormActivity
                 if (addOrderToDb()) {
                     finish();
                 } else {
-                    Toast.makeText(this, getString(R.string.db_error_insert, "order"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,
+                            getString(R.string.db_error_insert, "order"), Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.action_cancel:

@@ -159,7 +159,6 @@
     <string name="orders_title">Orders</string>
     <string name="orders_history_title">Order history</string>
     <string name="orders_empty">No orders to show</string>
-    <string name="orders_new_title">Add new order</string>
     <string name="orders_input_product">Product</string>
     <string name="orders_input_quantity_kg">Quantity (kg)</string>
     <string name="orders_input_quantity_lbs">Quantity (lbs)</string>
@@ -169,8 +168,9 @@
     <string name="orders_input_date">Date</string>
     <string name="orders_input_completed">Completed</string>
 
-    <string name="order_details_title">Order details</string>
+    <string name="orders_new_title">Add new order</string>
     <string name="order_edit_title">Edit order</string>
+    <string name="order_details_title">Order details</string>
 
     <!-- Contracts page -->
     <string name="contracts_title">Contracts</string>
@@ -208,6 +208,8 @@
     <string name="contracts_repeat_on_month">Repeat monthly on</string>
     <string name="contracts_repeat_on_default">Repeat on</string>
 
+    <string name="contract_new_title">New contract</string>
+    <string name="contract_edit_title">Edit contract</string>
     <string name="contract_details_title">Contract details</string>
 
     <!-- Exchange page -->
