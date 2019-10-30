@@ -885,18 +885,7 @@ public class DBHandler extends SQLiteOpenHelper {
         int rowsAffected = db.update(OrdersTable.TABLE_NAME, values,
                 OrdersTable.ID + "=?", new String[]{order.getOrderId() + ""});
 
-        //todo simplify like in contracts if that works
         //delete products in db for order, then re-add the updated ones
-//        String orderProductsQuery = "SELECT * FROM " + OrderProductsTable.TABLE_NAME
-//                + " WHERE " + OrderProductsTable.ORDER_ID + "=?";
-//        Cursor cursor = db.rawQuery(orderProductsQuery, new String[]{order.getOrderId() + ""});
-//        while (cursor.moveToNext()) {
-//            db.delete(OrderProductsTable.TABLE_NAME,
-//                    OrderProductsTable.ORDER_ID + "=? AND " + OrderProductsTable.PRODUCT_ID + "=?",
-//                    new String[]{order.getOrderId() + "",
-//                            cursor.getInt(cursor.getColumnIndexOrThrow(OrderProductsTable.PRODUCT_ID)) + ""});
-//        }
-//        cursor.close();
         db.delete(OrderProductsTable.TABLE_NAME, OrderProductsTable.ORDER_ID + "=?",
                 new String[]{order.getOrderId() + ""});
 
@@ -1077,7 +1066,6 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public boolean deleteContract(int contractId) {
-        //testme
         SQLiteDatabase db = this.getWritableDatabase();
         int deletedRows = db.delete(ContractsTable.TABLE_NAME,
                 ContractsTable.ID + "=?", new String[]{contractId + ""});

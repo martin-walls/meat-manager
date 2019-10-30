@@ -25,6 +25,7 @@ import com.martinwalls.nea.data.models.Product;
 import com.martinwalls.nea.data.models.SearchItem;
 import com.martinwalls.nea.data.models.StockItem;
 import com.martinwalls.nea.ui.locations.NewLocationActivity;
+import com.martinwalls.nea.util.MassUnit;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.util.undo.stock.AddStockAction;
@@ -71,6 +72,7 @@ public class EditStockActivity extends InputFormActivity
 
         dbHandler = new DBHandler(this);
 
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             editType = extras.getInt(EXTRA_EDIT_TYPE, EDIT_TYPE_NEW);
@@ -108,6 +110,10 @@ public class EditStockActivity extends InputFormActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         setSearchResultsLayout(R.id.search_results_layout);
 
+        if (MassUnit.getMassUnit(this) == MassUnit.LBS) {
+            TextInputLayout inputLayoutQuantityMass = findViewById(R.id.input_layout_quantity_mass);
+            inputLayoutQuantityMass.setHint(getString(R.string.stock_input_quantity_lbs));
+        }
 
         setListeners(INPUT_PRODUCT,
                 findViewById(R.id.input_layout_product),
@@ -358,7 +364,7 @@ public class EditStockActivity extends InputFormActivity
         editTextSupplier.setText(stockToEdit.getSupplierName());
 
         TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
-        editTextMass.setText(String.valueOf(stockToEdit.getMass()));
+        editTextMass.setText(String.valueOf(Utils.convertToCurrentMassUnit(this, stockToEdit.getMass())));
 
         TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
         if (stockToEdit.getNumBoxes() != -1) {
@@ -453,7 +459,8 @@ public class EditStockActivity extends InputFormActivity
         if (isValid) {
             newStockItem.setProduct(dbHandler.getProduct(selectedProductId));
             newStockItem.setSupplier(dbHandler.getLocation(selectedSupplierId));
-            newStockItem.setMass(Double.parseDouble(editTextMass.getText().toString()));
+            newStockItem.setMass(Utils.getKgsFromCurrentMassUnit(this,
+                    Double.parseDouble(editTextMass.getText().toString())));
             if (!TextUtils.isEmpty(editTextNumBoxes.getText())) {
                 newStockItem.setNumBoxes(Integer.parseInt(editTextNumBoxes.getText().toString()));
             } else {

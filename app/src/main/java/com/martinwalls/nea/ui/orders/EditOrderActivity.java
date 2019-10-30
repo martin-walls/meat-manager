@@ -115,7 +115,7 @@ public class EditOrderActivity extends InputFormActivity
         addViewToHide("add_product_btn", R.id.add_product);
         addViewToHide("products_added_recycler_view", R.id.products_added_recycler_view);
         if (editType == EDIT_TYPE_EDIT) {
-            addViewToHide("completed_checkbox", R.id.checkbox_completed);
+            addViewToHide("completed_checkbox", R.id.row_completed);
         }
 
         setAddNewView(R.id.add_new);

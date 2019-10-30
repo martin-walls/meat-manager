@@ -8,11 +8,15 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.models.StockItem;
+import com.martinwalls.nea.util.MassUnit;
+import com.martinwalls.nea.util.Utils;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
 public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.ViewHolder> {
+
+    private final String DECIMAL_FORMAT_PATTERN = "#.0###";
 
     private List<StockItem> itemList;
     private StockItemAdapterListener listener;
@@ -51,12 +55,13 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         StockItem item = itemList.get(position);
         holder.itemName.setText(item.getProduct().getProductName());
-//        holder.itemLocation.setText(item.getLocationName());
         holder.itemLocation.setText(holder.itemLocation.getContext()
                 .getString(R.string.stock_location_tag, item.getLocationName(), item.getSupplierName()));
-        //todo shared preferences for kg / lbs
-        holder.itemMass.setText(holder.itemMass.getContext().getString(R.string.amount_kg,
-                new DecimalFormat("#.0###").format(item.getMass())));
+        double mass = Utils.convertToCurrentMassUnit(holder.itemMass.getContext(), item.getMass());
+        MassUnit massUnit = MassUnit.getMassUnit(holder.itemMass.getContext());
+        holder.itemMass.setText(holder.itemMass.getContext()
+                .getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
+                new DecimalFormat(DECIMAL_FORMAT_PATTERN).format(mass)));
         // hide num boxes text if not specified
         if (item.getNumBoxes() >= 0) {
             holder.itemNumBoxes.setText(holder.itemNumBoxes.getContext().getResources()

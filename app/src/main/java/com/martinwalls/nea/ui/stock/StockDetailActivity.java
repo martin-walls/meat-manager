@@ -16,6 +16,8 @@ import com.martinwalls.nea.ui.misc.dialog.ConfirmDeleteDialog;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.StockItem;
+import com.martinwalls.nea.util.MassUnit;
+import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.util.undo.stock.DeleteStockAction;
 import com.martinwalls.nea.util.undo.UndoStack;
 
@@ -115,7 +117,10 @@ public class StockDetailActivity extends AppCompatActivity
         location.setText(stockItem.getLocationName());
 
         TextView quantityMass = findViewById(R.id.edit_text_quantity_mass);
-        quantityMass.setText(getString(R.string.amount_kg, String.valueOf(stockItem.getMass())));
+        MassUnit massUnit = MassUnit.getMassUnit(this);
+        //todo round to 4dp or similar to avoid massively long decimals due to conversion
+        quantityMass.setText(getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
+                String.valueOf(Utils.convertToCurrentMassUnit(this, stockItem.getMass()))));
 
         TextView quantityBoxes = findViewById(R.id.edit_text_quantity_boxes);
         LinearLayout rowBoxes = findViewById(R.id.row_boxes);

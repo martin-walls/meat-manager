@@ -37,10 +37,7 @@
     <string name="unit_kg">kg</string>
     <string name="unit_lbs">lbs</string>
     <string name="amount_kg">%s kg</string>
-    <plurals name="amount_lbs">
-        <item quantity="one">%s lb</item>
-        <item quantity="other">%s lbs</item>
-    </plurals>
+    <string name="amount_lbs">%s lbs</string>
     <plurals name="amount_boxes">
         <item quantity="one">%d box</item>
         <item quantity="other">%d boxes</item>

@@ -51,7 +51,12 @@ public final class EasyPreferences {
     }
 
     public int getIntFromString(@StringRes int keyId, int defaultValue) {
-        return Integer.parseInt(prefs.getString(key(keyId), String.valueOf(defaultValue)));
+        try {
+            return Integer.parseInt(prefs.getString(key(keyId), String.valueOf(defaultValue)));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return defaultValue;
+        }
     }
 
     public void setIntToString(@StringRes int keyId, int value) {

@@ -11,19 +11,38 @@ import java.util.List;
 
 public final class Utils {
     // 1 kg = 2.20462 lbs
-    private static final double kgsToLbs = 2.20462;
+    private static final double kgsToLbs = 2.20462262185;
     // 1 lb = 0.453592 kgs
-    private static final double lbsToKgs = 0.453592;
+    private static final double lbsToKgs = 0.45359237;
 
     // Utils shouldn't be instantiated
     private Utils() {}
 
     public static double convertToLbs(double kgs) {
-        return kgs * kgsToLbs;
+        return kgs / lbsToKgs;
     }
 
     public static double convertToKgs(double lbs) {
         return lbs * lbsToKgs;
+    }
+
+    /**
+     * Get the current setting for kg/lbs and convert the kg value to lbs if appropriate.
+     */
+    public static double convertToCurrentMassUnit(Context context, double kgs) {
+        if (MassUnit.getMassUnit(context) == MassUnit.LBS) {
+            return convertToLbs(kgs);
+        } else {
+            return kgs;
+        }
+    }
+
+    public static double getKgsFromCurrentMassUnit(Context context, double mass) {
+        if (MassUnit.getMassUnit(context) == MassUnit.LBS) {
+            return convertToKgs(mass);
+        } else {
+            return mass;
+        }
     }
 
     /**
