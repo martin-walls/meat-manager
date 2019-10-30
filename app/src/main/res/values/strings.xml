@@ -46,7 +46,7 @@
         <item quantity="other">%d boxes</item>
     </plurals>
 
-    <!-- db errors -->
+    <!-- db -->
     <string name="db_error_insert">Error adding %s</string>
     <string name="db_error_update">Error saving %s</string>
 
@@ -54,6 +54,8 @@
     <string name="db_delete_stock_success">Deleted %s from %s</string>
     <string name="db_delete_order_success">Deleted order</string>
     <string name="db_delete_order_error">Error deleting order</string>
+    <string name="db_delete_contract_success">Deleted contract</string>
+    <string name="db_delete_contract_error">Error deleting contract</string>
 
     <string name="db_error_delete_meat_type">Cannot delete %s while products still exist</string>
     <string name="db_error_delete_product">Cannot delete %s while stock, contracts or orders still exist</string>
@@ -252,6 +254,7 @@
     <!-- Undo messages -->
     <string name="undo_empty">Nothing to undo</string>
     <string name="redo_empty">Nothing to redo</string>
+
     <string name="undo_add_stock_success">Undo add \"%s\"</string>
     <string name="redo_add_stock_success">Redo add \"%s\"</string>
     <string name="undo_edit_stock_success">Undo edit stock</string>
@@ -265,4 +268,11 @@
     <string name="redo_edit_order_success">Redo edit order</string>
     <string name="undo_delete_order_success">Undo delete order</string>
     <string name="redo_delete_order_success">Redo delete order</string>
+
+    <string name="undo_add_contract_success">Undo add contract</string>
+    <string name="redo_add_contract_success">Redo add contract</string>
+    <string name="undo_edit_contract_success">Undo edit contract</string>
+    <string name="redo_edit_contract_success">Redo edit contract</string>
+    <string name="undo_delete_contract_success">Undo delete contract</string>
+    <string name="redo_delete_contract_success">Redo delete contract</string>
 </resources>

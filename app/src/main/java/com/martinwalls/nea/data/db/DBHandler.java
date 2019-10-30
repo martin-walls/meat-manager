@@ -1061,7 +1061,6 @@ public class DBHandler extends SQLiteOpenHelper {
         int rowsAffected = db.update(ContractsTable.TABLE_NAME, values,
                 ContractsTable.ID + "=?", new String[]{contract.getContractId() + ""});
 
-        //testme
         db.delete(ContractProductsTable.TABLE_NAME, ContractProductsTable.CONTRACT_ID + "=?",
                 new String[]{contract.getContractId() + ""});
 

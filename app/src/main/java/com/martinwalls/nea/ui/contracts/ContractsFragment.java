@@ -9,17 +9,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.ui.misc.CustomRecyclerView;
-import com.martinwalls.nea.ui.misc.RecyclerViewDivider;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Contract;
+import com.martinwalls.nea.ui.misc.CustomRecyclerView;
+import com.martinwalls.nea.ui.misc.RecyclerViewDivider;
 import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,11 +81,12 @@ public class ContractsFragment extends Fragment
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_undo:
-                Toast.makeText(getContext(), "UNDO", Toast.LENGTH_SHORT).show();
-                //todo undo and redo in contracts page
+                UndoStack.getInstance().undo(getContext());
+                loadContracts();
                 return true;
             case R.id.action_redo:
-                Toast.makeText(getContext(), "REDO", Toast.LENGTH_SHORT).show();
+                UndoStack.getInstance().redo(getContext());
+                loadContracts();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

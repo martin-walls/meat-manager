@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
@@ -14,8 +15,12 @@ import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Contract;
 import com.martinwalls.nea.data.models.Interval;
 import com.martinwalls.nea.ui.ProductsAddedAdapter;
+import com.martinwalls.nea.ui.misc.dialog.ConfirmDeleteDialog;
+import com.martinwalls.nea.util.undo.DeleteContractAction;
+import com.martinwalls.nea.util.undo.UndoStack;
 
-public class ContractDetailActivity extends AppCompatActivity {
+public class ContractDetailActivity extends AppCompatActivity
+        implements ConfirmDeleteDialog.ConfirmDeleteListener {
 
     public static final String EXTRA_CONTRACT_ID = "contract_id";
 
@@ -84,12 +89,9 @@ public class ContractDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete:
-                Toast.makeText(this, "DELETE", Toast.LENGTH_SHORT).show();
-                //todo delete contract
+                showConfirmDeleteDialog();
                 return true;
             case R.id.action_edit:
-//                Toast.makeText(this, "EDIT", Toast.LENGTH_SHORT).show();
-                //todo edit contract
                 Intent editIntent = new Intent(this, EditContractActivity.class);
                 editIntent.putExtra(EditContractActivity.EXTRA_EDIT_TYPE, EditContractActivity.EDIT_TYPE_EDIT);
                 editIntent.putExtra(EditContractActivity.EXTRA_CONTRACT_ID, contract.getContractId());
@@ -101,5 +103,30 @@ public class ContractDetailActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_REFRESH_ON_DONE) {
+            recreate();
+        }
+    }
+
+    @Override
+    public void onConfirmDelete() {
+        boolean success = dbHandler.deleteContract(contract.getContractId());
+        if (success) {
+            Toast.makeText(this, R.string.db_delete_contract_success, Toast.LENGTH_SHORT).show();
+            UndoStack.getInstance().push(new DeleteContractAction(contract));
+            finish();
+        } else {
+            Toast.makeText(this, R.string.db_delete_contract_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showConfirmDeleteDialog() {
+        DialogFragment dialog = new ConfirmDeleteDialog();
+        dialog.show(getSupportFragmentManager(), "confirm_delete");
     }
 }

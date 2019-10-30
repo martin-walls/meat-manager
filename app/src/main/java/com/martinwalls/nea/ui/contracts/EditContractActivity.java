@@ -37,6 +37,9 @@ import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
 import com.martinwalls.nea.ui.products.AddNewProductDialog;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.util.undo.AddContractAction;
+import com.martinwalls.nea.util.undo.EditContractAction;
+import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -620,26 +623,28 @@ public class EditContractActivity extends InputFormActivity
                         Double.parseDouble(editTextMass.getText().toString()),
                         TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1
                                 : Integer.parseInt(editTextNumBoxes.getText().toString())));
-                newContract.setProductList(productsAddedList);
-                newContract.setDest(dbHandler.getLocation(selectedDestId));
-                newContract.setRepeatInterval(selectedRepeatInterval);
-                newContract.setRepeatOn(repeatOnSpn.getSelectedItemPosition());
-                if (TextUtils.isEmpty(editTextReminder.getText())
-                        || editTextReminder.getText().toString().equals("0")) {
-                    newContract.setReminder(-1);
-                } else {
-                    newContract.setReminder(Integer.parseInt(editTextReminder.getText().toString()));
-                }
+            }
+            newContract.setProductList(productsAddedList);
+            newContract.setDest(dbHandler.getLocation(selectedDestId));
+            newContract.setRepeatInterval(selectedRepeatInterval);
+            newContract.setRepeatOn(repeatOnSpn.getSelectedItemPosition());
+            if (TextUtils.isEmpty(editTextReminder.getText())
+                    || editTextReminder.getText().toString().equals("0")) {
+                newContract.setReminder(-1);
+            } else {
+                newContract.setReminder(Integer.parseInt(editTextReminder.getText().toString()));
+            }
 
-                if (editType == EDIT_TYPE_NEW) {
-                    int newRowId = dbHandler.addContract(newContract);
-                    return newRowId != -1;
-                } else {
-                    newContract.setContractId(contractToEdit.getContractId());
-                    boolean success = dbHandler.updateContract(newContract);
-                    //todo add to undo stack
-                    return success;
-                }
+            if (editType == EDIT_TYPE_NEW) {
+                int newRowId = dbHandler.addContract(newContract);
+                newContract.setContractId(newRowId);
+                UndoStack.getInstance().push(new AddContractAction(newContract));
+                return newRowId != -1;
+            } else {
+                newContract.setContractId(contractToEdit.getContractId());
+                boolean success = dbHandler.updateContract(newContract);
+                UndoStack.getInstance().push(new EditContractAction(contractToEdit, newContract));
+                return success;
             }
         }
         return false;
