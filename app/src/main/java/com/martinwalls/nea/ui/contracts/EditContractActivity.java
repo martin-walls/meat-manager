@@ -37,8 +37,8 @@ import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
 import com.martinwalls.nea.ui.products.AddNewProductDialog;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.Utils;
-import com.martinwalls.nea.util.undo.AddContractAction;
-import com.martinwalls.nea.util.undo.EditContractAction;
+import com.martinwalls.nea.util.undo.contracts.AddContractAction;
+import com.martinwalls.nea.util.undo.contracts.EditContractAction;
 import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.util.ArrayList;

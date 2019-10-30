@@ -1,10 +1,11 @@
-package com.martinwalls.nea.util.undo;
+package com.martinwalls.nea.util.undo.contracts;
 
 import android.content.Context;
 import android.widget.Toast;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Contract;
+import com.martinwalls.nea.util.undo.UndoableAction;
 
 public class DeleteContractAction extends UndoableAction {
 

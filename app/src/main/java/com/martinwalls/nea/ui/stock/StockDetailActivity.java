@@ -16,7 +16,7 @@ import com.martinwalls.nea.ui.misc.dialog.ConfirmDeleteDialog;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.StockItem;
-import com.martinwalls.nea.util.undo.DeleteStockAction;
+import com.martinwalls.nea.util.undo.stock.DeleteStockAction;
 import com.martinwalls.nea.util.undo.UndoStack;
 
 public class StockDetailActivity extends AppCompatActivity 

@@ -36,8 +36,8 @@ import com.martinwalls.nea.data.models.SearchItem;
 import com.martinwalls.nea.ui.locations.NewLocationActivity;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.Utils;
-import com.martinwalls.nea.util.undo.AddOrderAction;
-import com.martinwalls.nea.util.undo.EditOrderAction;
+import com.martinwalls.nea.util.undo.orders.AddOrderAction;
+import com.martinwalls.nea.util.undo.orders.EditOrderAction;
 import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.time.LocalDate;

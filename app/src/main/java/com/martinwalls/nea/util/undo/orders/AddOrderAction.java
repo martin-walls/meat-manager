@@ -1,10 +1,11 @@
-package com.martinwalls.nea.util.undo;
+package com.martinwalls.nea.util.undo.orders;
 
 import android.content.Context;
 import android.widget.Toast;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Order;
+import com.martinwalls.nea.util.undo.UndoableAction;
 
 public class AddOrderAction extends UndoableAction {
     private Order order;

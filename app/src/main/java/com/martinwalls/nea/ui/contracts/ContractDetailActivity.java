@@ -16,7 +16,7 @@ import com.martinwalls.nea.data.models.Contract;
 import com.martinwalls.nea.data.models.Interval;
 import com.martinwalls.nea.ui.ProductsAddedAdapter;
 import com.martinwalls.nea.ui.misc.dialog.ConfirmDeleteDialog;
-import com.martinwalls.nea.util.undo.DeleteContractAction;
+import com.martinwalls.nea.util.undo.contracts.DeleteContractAction;
 import com.martinwalls.nea.util.undo.UndoStack;
 
 public class ContractDetailActivity extends AppCompatActivity

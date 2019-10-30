@@ -27,8 +27,8 @@ import com.martinwalls.nea.data.models.StockItem;
 import com.martinwalls.nea.ui.locations.NewLocationActivity;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.Utils;
-import com.martinwalls.nea.util.undo.AddStockAction;
-import com.martinwalls.nea.util.undo.EditStockAction;
+import com.martinwalls.nea.util.undo.stock.AddStockAction;
+import com.martinwalls.nea.util.undo.stock.EditStockAction;
 import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.util.Arrays;
