@@ -30,11 +30,11 @@ public class UndoStack {
         redoStack.clear();
     }
 
-    public boolean canUndo() {
+    private boolean canUndo() {
         return undoStack.size() > 0;
     }
 
-    public boolean canRedo() {
+    private boolean canRedo() {
         return redoStack.size() > 0;
     }
 
