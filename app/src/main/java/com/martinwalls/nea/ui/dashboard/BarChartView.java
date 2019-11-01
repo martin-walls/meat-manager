@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.martinwalls.nea.R;
+import com.martinwalls.nea.util.MassUnit;
 import com.martinwalls.nea.util.Utils;
 
 import java.text.DecimalFormat;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BarChartView extends View {
+
+    private final String DECIMAL_FORMAT_PATTERN = "#.##";
 
     private Context context;
 
@@ -149,7 +152,7 @@ public class BarChartView extends View {
         ttMargin = Utils.convertDpToPixelSize(8, context);
         ttPadding = Utils.convertDpToPixelSize(8, context);
 
-        decimalFormat = new DecimalFormat("#.###");
+        decimalFormat = new DecimalFormat(DECIMAL_FORMAT_PATTERN);
     }
 
     @Override
@@ -173,6 +176,7 @@ public class BarChartView extends View {
 
             float reqBarLength = 0;
             boolean isReqBarShown = false;
+            //todo show green req bar if there is more stock than needed
             if (entry.getAmountRequired() > entry.getAmount()) {
                 reqBarLength = entry.getAmountRequired() / xMax * getWidth();
                 c.drawRoundRect(barLeft, barTop, reqBarLength, barBottom,
@@ -212,13 +216,18 @@ public class BarChartView extends View {
 
             // show tooltips
             if (i == selectedIndex || i == prevSelectedIndex) {
-                String ttText = context.getString(R.string.amount_kg, decimalFormat.format(entry.getAmount()));
+//                String ttText = context.getString(R.string.amount_kg, decimalFormat.format(entry.getAmount()));
+                MassUnit massUnit = MassUnit.getMassUnit(context);
+                String ttText = context.getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
+                        decimalFormat.format(Utils.convertToCurrentMassUnit(context, entry.getAmount())));
                 tooltipTextPaint.getTextBounds(ttText, 0, ttText.length(), ttTextBounds);
 
                 String reqTtText = "";
                 if (isReqBarShown) {
-                    reqTtText = context.getString(R.string.amount_kg,
-                            decimalFormat.format(entry.getAmountRequired()));
+//                    reqTtText = context.getString(R.string.amount_kg,
+//                            decimalFormat.format(entry.getAmountRequired()));
+                    reqTtText = context.getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
+                            decimalFormat.format(Utils.convertToCurrentMassUnit(context, entry.getAmountRequired())));
                     reqTooltipTextPaint.getTextBounds(reqTtText, 0, reqTtText.length(), reqTtTextBounds);
                 }
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
@@ -11,14 +12,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.checkbox.MaterialCheckBox;
-import com.martinwalls.nea.ui.misc.dialog.ConfirmDeleteDialog;
-import com.martinwalls.nea.ui.ProductsAddedAdapter;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Order;
-import com.martinwalls.nea.util.undo.orders.DeleteOrderAction;
+import com.martinwalls.nea.ui.ProductsAddedAdapter;
+import com.martinwalls.nea.ui.misc.dialog.ConfirmDeleteDialog;
 import com.martinwalls.nea.util.undo.UndoStack;
+import com.martinwalls.nea.util.undo.orders.DeleteOrderAction;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -54,28 +54,7 @@ public class OrderDetailActivity extends AppCompatActivity
             order = dbHandler.getOrder(orderId);
         }
 
-        ProductsAddedAdapter productsAdapter = new ProductsAddedAdapter(order.getProductList());
-        RecyclerView productsRecyclerView = findViewById(R.id.recycler_view_products);
-        productsRecyclerView.setAdapter(productsAdapter);
-        productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        TextView destination = findViewById(R.id.destination);
-        destination.setText(order.getDestName());
-
-        TextView date = findViewById(R.id.date);
-        date.setText(order.getOrderDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
-
-        if (order.getOrderDate().isBefore(LocalDateTime.now())) {
-            date.setTextColor(getColor(R.color.error_red));
-        }
-
-        MaterialCheckBox checkboxCompleted = findViewById(R.id.checkbox_completed);
-        checkboxCompleted.setChecked(order.isCompleted());
-
-        checkboxCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            order.setCompleted(isChecked);
-            dbHandler.updateOrder(order);
-        });
+        fillData();
     }
 
     @Override
@@ -135,5 +114,30 @@ public class OrderDetailActivity extends AppCompatActivity
     private void showConfirmDeleteDialog() {
         DialogFragment dialog = new ConfirmDeleteDialog();
         dialog.show(getSupportFragmentManager(), "confirm_delete");
+    }
+
+    private void fillData() {
+        ProductsAddedAdapter productsAdapter = new ProductsAddedAdapter(order.getProductList());
+        RecyclerView productsRecyclerView = findViewById(R.id.recycler_view_products);
+        productsRecyclerView.setAdapter(productsAdapter);
+        productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        TextView destination = findViewById(R.id.destination);
+        destination.setText(order.getDestName());
+
+        TextView date = findViewById(R.id.date);
+        date.setText(order.getOrderDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+
+        if (order.getOrderDate().isBefore(LocalDateTime.now())) {
+            date.setTextColor(getColor(R.color.error_red));
+        }
+
+        CheckBox checkboxCompleted = findViewById(R.id.checkbox_completed);
+        checkboxCompleted.setChecked(order.isCompleted());
+
+        checkboxCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            order.setCompleted(isChecked);
+            dbHandler.updateOrder(order);
+        });
     }
 }

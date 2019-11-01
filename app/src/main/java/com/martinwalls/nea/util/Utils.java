@@ -5,6 +5,7 @@ import android.util.TypedValue;
 import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -37,12 +38,30 @@ public final class Utils {
         }
     }
 
+    /**
+     * Get the kg value of a mass that is stored in the current mass unit.
+     */
     public static double getKgsFromCurrentMassUnit(Context context, double mass) {
         if (MassUnit.getMassUnit(context) == MassUnit.LBS) {
             return convertToKgs(mass);
         } else {
             return mass;
         }
+    }
+
+    public static String getMassDisplayValue(Context context, double mass, int dp) {
+        return roundToDp(convertToCurrentMassUnit(context, mass), dp);
+    }
+
+    public static String roundToDp(double value, int dp) {
+        if (dp == 0) {
+            return new DecimalFormat("#").format(value);
+        }
+        StringBuilder pattern = new StringBuilder("#.0");
+        for (int i = 0; i < dp - 1; i++) {
+            pattern.append("#");
+        }
+        return new DecimalFormat(pattern.toString()).format(value);
     }
 
     /**

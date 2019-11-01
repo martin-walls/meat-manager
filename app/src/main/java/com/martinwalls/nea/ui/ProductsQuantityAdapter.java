@@ -7,8 +7,9 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.models.ProductQuantity;
+import com.martinwalls.nea.util.MassUnit;
+import com.martinwalls.nea.util.Utils;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 public class ProductsQuantityAdapter extends RecyclerView.Adapter<ProductsQuantityAdapter.ViewHolder> {
@@ -38,18 +39,19 @@ public class ProductsQuantityAdapter extends RecyclerView.Adapter<ProductsQuanti
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         ProductQuantity productQuantity = productList.get(position);
-        viewHolder.productName.setText(productQuantity.getProduct().getProductName());
-        viewHolder.mass.setText(
-                viewHolder.mass.getContext().getString(R.string.amount_kg,
-                        new DecimalFormat("#.0###").format(productQuantity.getQuantityMass())));
+        holder.productName.setText(productQuantity.getProduct().getProductName());
+        MassUnit massUnit = MassUnit.getMassUnit(holder.mass.getContext());
+        holder.mass.setText(holder.mass.getContext()
+                .getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
+                        Utils.getMassDisplayValue(holder.mass.getContext(), productQuantity.getQuantityMass(), 3)));
         if (productQuantity.getQuantityBoxes() >= 0) {
-            viewHolder.numBoxes.setText(viewHolder.numBoxes.getContext().getResources()
+            holder.numBoxes.setText(holder.numBoxes.getContext().getResources()
                     .getQuantityString(R.plurals.amount_boxes,
                             productQuantity.getQuantityBoxes(), productQuantity.getQuantityBoxes()));
         } else {
-            viewHolder.numBoxes.setVisibility(View.GONE);
+            holder.numBoxes.setVisibility(View.GONE);
         }
     }
 

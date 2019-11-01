@@ -117,31 +117,26 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout navDrawerContent = findViewById(R.id.nav_drawer_content);
         TextView navDashboard = navDrawerContent.findViewById(R.id.nav_dashboard);
         navDashboard.setOnClickListener(v -> {
-            currentPage = Page.DASHBOARD;
             replaceFragment(Page.DASHBOARD);
         });
 
         TextView navStock = navDrawerContent.findViewById(R.id.nav_stock);
         navStock.setOnClickListener(v -> {
-            currentPage = Page.STOCK;
             replaceFragment(Page.STOCK);
         });
 
         TextView navOrders = navDrawerContent.findViewById(R.id.nav_orders);
         navOrders.setOnClickListener(v -> {
-            currentPage = Page.ORDERS;
             replaceFragment(Page.ORDERS);
         });
 
         TextView navContracts = navDrawerContent.findViewById(R.id.nav_contracts);
         navContracts.setOnClickListener(v -> {
-            currentPage = Page.CONTRACTS;
             replaceFragment(Page.CONTRACTS);
         });
 
         TextView navExchange = navDrawerContent.findViewById(R.id.nav_exchange);
         navExchange.setOnClickListener(v -> {
-            currentPage = Page.EXCHANGE;
             replaceFragment(Page.EXCHANGE);
         });
 
@@ -177,20 +172,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void replaceFragment(Page newPage) {
-        Fragment newFragment = newPage.getFragment();
+        if (currentPage != newPage) {
+            Fragment newFragment = newPage.getFragment();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentManager fragmentManager = getSupportFragmentManager();
 
-        fragmentManager.popBackStack();
+            fragmentManager.popBackStack();
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_holder, newFragment)
-                .addToBackStack(newFragment.getClass().getSimpleName())
-                .commit();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_holder, newFragment)
+                    .addToBackStack(newFragment.getClass().getSimpleName())
+                    .commit();
 
-        currentPage = newPage;
+            currentPage = newPage;
 
-        preferences.setString(R.string.pref_last_opened_page, currentPage.name());
+            preferences.setString(R.string.pref_last_opened_page, currentPage.name());
+        }
 
         // close nav drawer if open
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);

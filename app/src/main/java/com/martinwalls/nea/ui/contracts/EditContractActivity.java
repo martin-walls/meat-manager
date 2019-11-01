@@ -35,6 +35,7 @@ import com.martinwalls.nea.ui.locations.NewLocationActivity;
 import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
 import com.martinwalls.nea.ui.products.AddNewProductDialog;
+import com.martinwalls.nea.util.MassUnit;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.util.undo.contracts.AddContractAction;
@@ -132,6 +133,11 @@ public class EditContractActivity extends InputFormActivity
         recyclerView.setAdapter(getSearchItemAdapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         setSearchResultsLayout(R.id.search_results_layout);
+
+        if (MassUnit.getMassUnit(this) == MassUnit.LBS) {
+            TextInputLayout inputLayoutQuantityMass = findViewById(R.id.input_layout_quantity_mass);
+            inputLayoutQuantityMass.setHint(getString(R.string.contracts_input_quantity_lbs));
+        }
 
         setListeners(INPUT_PRODUCT,
                 findViewById(R.id.input_layout_product),
@@ -323,7 +329,7 @@ public class EditContractActivity extends InputFormActivity
         editTextProduct.setText(productAdded.getProduct().getProductName());
 
         TextInputEditText editTextQuantityMass = findViewById(R.id.edit_text_quantity_mass);
-        editTextQuantityMass.setText(String.valueOf(productAdded.getQuantityMass()));
+        editTextQuantityMass.setText(Utils.getMassDisplayValue(this, productAdded.getQuantityMass(), 4));
 
         if (productAdded.getQuantityBoxes() != -1) {
             TextInputEditText editTextQuantityBoxes = findViewById(R.id.edit_text_quantity_boxes);
@@ -490,7 +496,7 @@ public class EditContractActivity extends InputFormActivity
 
         if (isValid) {
             ProductQuantity productQuantity = new ProductQuantity(dbHandler.getProduct(selectedProductId),
-                    Double.parseDouble(editTextMass.getText().toString()),
+                    Utils.getKgsFromCurrentMassUnit(this, Double.parseDouble(editTextMass.getText().toString())),
                     TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1 :
                             Integer.parseInt(editTextNumBoxes.getText().toString()));
             editTextProduct.setText("");
@@ -620,7 +626,8 @@ public class EditContractActivity extends InputFormActivity
         if (isValid) {
             if (!TextUtils.isEmpty(editTextProduct.getText())) {
                 productsAddedList.add(new ProductQuantity(dbHandler.getProduct(selectedProductId),
-                        Double.parseDouble(editTextMass.getText().toString()),
+                        Utils.getKgsFromCurrentMassUnit(this,
+                                Double.parseDouble(editTextMass.getText().toString())),
                         TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1
                                 : Integer.parseInt(editTextNumBoxes.getText().toString())));
             }

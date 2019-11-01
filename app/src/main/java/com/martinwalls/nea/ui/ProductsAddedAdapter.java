@@ -8,8 +8,9 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.models.ProductQuantity;
+import com.martinwalls.nea.util.MassUnit;
+import com.martinwalls.nea.util.Utils;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdapter.ViewHolder> {
@@ -65,23 +66,25 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         ProductQuantity productQuantity = productList.get(position);
-        viewHolder.name.setText(productQuantity.getProduct().getProductName());
-        viewHolder.mass.setText(viewHolder.mass.getContext().getString(R.string.amount_kg,
-                new DecimalFormat("#.0###").format(productQuantity.getQuantityMass())));
+        holder.name.setText(productQuantity.getProduct().getProductName());
+        MassUnit massUnit = MassUnit.getMassUnit(holder.mass.getContext());
+        holder.mass.setText(holder.mass.getContext()
+                .getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
+                        Utils.getMassDisplayValue(holder.mass.getContext(), productQuantity.getQuantityMass(), 3)));
         if (productQuantity.getQuantityBoxes() < 0) {
-            viewHolder.numBoxes.setVisibility(View.GONE);
+            holder.numBoxes.setVisibility(View.GONE);
         } else {
-            viewHolder.numBoxes.setText(viewHolder.numBoxes.getContext().getResources()
+            holder.numBoxes.setText(holder.numBoxes.getContext().getResources()
                     .getQuantityString(R.plurals.amount_boxes,
                             productQuantity.getQuantityBoxes(), productQuantity.getQuantityBoxes()));
         }
         if (!showDeleteBtn) {
-            viewHolder.deleteBtn.setVisibility(View.GONE);
+            holder.deleteBtn.setVisibility(View.GONE);
         }
         if (!showEditBtn) {
-            viewHolder.editBtn.setVisibility(View.GONE);
+            holder.editBtn.setVisibility(View.GONE);
         }
     }
 

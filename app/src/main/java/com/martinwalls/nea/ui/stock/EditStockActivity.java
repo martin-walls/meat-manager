@@ -282,17 +282,20 @@ public class EditStockActivity extends InputFormActivity
                 break;
             case INPUT_SUPPLIER:
                 Intent newSupplierIntent = new Intent(this, NewLocationActivity.class);
-                newSupplierIntent.putExtra(NewLocationActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Supplier.name());
+                newSupplierIntent.putExtra(
+                        NewLocationActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Supplier.name());
                 startActivityForResult(newSupplierIntent, REQUEST_REFRESH_ON_DONE);
                 break;
             case INPUT_LOCATION:
                 Intent newLocationIntent = new Intent(this, NewLocationActivity.class);
-                newLocationIntent.putExtra(NewLocationActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Storage.name());
+                newLocationIntent.putExtra(
+                        NewLocationActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Storage.name());
                 startActivityForResult(newLocationIntent, REQUEST_REFRESH_ON_DONE);
                 break;
             case INPUT_DESTINATION:
                 Intent newDestIntent = new Intent(this, NewLocationActivity.class);
-                newDestIntent.putExtra(NewLocationActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Destination.name());
+                newDestIntent.putExtra(
+                        NewLocationActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Destination.name());
                 startActivityForResult(newDestIntent, REQUEST_REFRESH_ON_DONE);
                 break;
         }
@@ -364,7 +367,7 @@ public class EditStockActivity extends InputFormActivity
         editTextSupplier.setText(stockToEdit.getSupplierName());
 
         TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
-        editTextMass.setText(String.valueOf(Utils.convertToCurrentMassUnit(this, stockToEdit.getMass())));
+        editTextMass.setText(Utils.getMassDisplayValue(this, stockToEdit.getMass(), 4));
 
         TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
         if (stockToEdit.getNumBoxes() != -1) {

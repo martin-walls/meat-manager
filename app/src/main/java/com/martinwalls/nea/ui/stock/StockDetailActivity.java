@@ -12,14 +12,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
-import com.martinwalls.nea.ui.misc.dialog.ConfirmDeleteDialog;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.StockItem;
+import com.martinwalls.nea.ui.misc.dialog.ConfirmDeleteDialog;
 import com.martinwalls.nea.util.MassUnit;
 import com.martinwalls.nea.util.Utils;
-import com.martinwalls.nea.util.undo.stock.DeleteStockAction;
 import com.martinwalls.nea.util.undo.UndoStack;
+import com.martinwalls.nea.util.undo.stock.DeleteStockAction;
 
 public class StockDetailActivity extends AppCompatActivity 
         implements ConfirmDeleteDialog.ConfirmDeleteListener {
@@ -118,9 +118,12 @@ public class StockDetailActivity extends AppCompatActivity
 
         TextView quantityMass = findViewById(R.id.edit_text_quantity_mass);
         MassUnit massUnit = MassUnit.getMassUnit(this);
-        //todo round to 4dp or similar to avoid massively long decimals due to conversion
+//        quantityMass.setText(getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
+//                new DecimalFormat(DECIMAL_FORMAT_PATTERN).format(
+//                        Utils.convertToCurrentMassUnit(this, stockItem.getMass()))));
+
         quantityMass.setText(getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
-                String.valueOf(Utils.convertToCurrentMassUnit(this, stockItem.getMass()))));
+                Utils.getMassDisplayValue(this, stockItem.getMass(), 3)));
 
         TextView quantityBoxes = findViewById(R.id.edit_text_quantity_boxes);
         LinearLayout rowBoxes = findViewById(R.id.row_boxes);

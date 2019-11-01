@@ -34,6 +34,7 @@ import com.martinwalls.nea.data.models.Product;
 import com.martinwalls.nea.data.models.ProductQuantity;
 import com.martinwalls.nea.data.models.SearchItem;
 import com.martinwalls.nea.ui.locations.NewLocationActivity;
+import com.martinwalls.nea.util.MassUnit;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.util.undo.orders.AddOrderAction;
@@ -130,6 +131,11 @@ public class EditOrderActivity extends InputFormActivity
         recyclerView.setAdapter(getSearchItemAdapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         setSearchResultsLayout(R.id.search_results_layout);
+
+        if (MassUnit.getMassUnit(this) == MassUnit.LBS) {
+            TextInputLayout inputLayoutQuantityMass = findViewById(R.id.input_layout_quantity_mass);
+            inputLayoutQuantityMass.setHint(getString(R.string.orders_input_quantity_lbs));
+        }
 
         setListeners(INPUT_PRODUCT,
                 findViewById(R.id.input_layout_product),
@@ -287,7 +293,7 @@ public class EditOrderActivity extends InputFormActivity
         editTextProduct.setText(productAdded.getProduct().getProductName());
 
         TextInputEditText editTextQuantityMass = findViewById(R.id.edit_text_quantity_mass);
-        editTextQuantityMass.setText(String.valueOf(productAdded.getQuantityMass()));
+        editTextQuantityMass.setText(Utils.getMassDisplayValue(this, productAdded.getQuantityMass(), 4));
 
         if (productAdded.getQuantityBoxes() != -1) {
             TextInputEditText editTextQuantityBoxes = findViewById(R.id.edit_text_quantity_boxes);
@@ -445,7 +451,7 @@ public class EditOrderActivity extends InputFormActivity
 
         if (isValid) {
             ProductQuantity productQuantity = new ProductQuantity(dbHandler.getProduct(selectedProductId),
-                    Double.parseDouble(editTextMass.getText().toString()),
+                    Utils.getKgsFromCurrentMassUnit(this, Double.parseDouble(editTextMass.getText().toString())),
                     TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1 :
                             Integer.parseInt(editTextNumBoxes.getText().toString()));
             editTextProduct.setText("");
@@ -527,7 +533,8 @@ public class EditOrderActivity extends InputFormActivity
             List<ProductQuantity> productList = new ArrayList<>();
             if (!TextUtils.isEmpty(editTextProduct.getText())) {
                 productList.add(new ProductQuantity(dbHandler.getProduct(selectedProductId),
-                        Double.parseDouble(editTextMass.getText().toString()),
+                        Utils.getKgsFromCurrentMassUnit(this,
+                                Double.parseDouble(editTextMass.getText().toString())),
                         TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1
                                 : Integer.parseInt(editTextNumBoxes.getText().toString())));
             }

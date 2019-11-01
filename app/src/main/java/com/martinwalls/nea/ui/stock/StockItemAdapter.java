@@ -11,12 +11,11 @@ import com.martinwalls.nea.data.models.StockItem;
 import com.martinwalls.nea.util.MassUnit;
 import com.martinwalls.nea.util.Utils;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.ViewHolder> {
 
-    private final String DECIMAL_FORMAT_PATTERN = "#.0###";
+    private final String DECIMAL_FORMAT_PATTERN = "#.0##";
 
     private List<StockItem> itemList;
     private StockItemAdapterListener listener;
@@ -57,11 +56,10 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         holder.itemName.setText(item.getProduct().getProductName());
         holder.itemLocation.setText(holder.itemLocation.getContext()
                 .getString(R.string.stock_location_tag, item.getLocationName(), item.getSupplierName()));
-        double mass = Utils.convertToCurrentMassUnit(holder.itemMass.getContext(), item.getMass());
         MassUnit massUnit = MassUnit.getMassUnit(holder.itemMass.getContext());
         holder.itemMass.setText(holder.itemMass.getContext()
                 .getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
-                new DecimalFormat(DECIMAL_FORMAT_PATTERN).format(mass)));
+                        Utils.getMassDisplayValue(holder.itemMass.getContext(), item.getMass(), 3)));
         // hide num boxes text if not specified
         if (item.getNumBoxes() >= 0) {
             holder.itemNumBoxes.setText(holder.itemNumBoxes.getContext().getResources()
