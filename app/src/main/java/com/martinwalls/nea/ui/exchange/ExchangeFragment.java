@@ -34,6 +34,7 @@ import com.martinwalls.nea.util.EasyPreferences;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.SortUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +63,9 @@ public class ExchangeFragment extends Fragment {
     private double secondaryCurrencyValue = 0;
 
     private HashMap<String, Double> rates = new HashMap<>();
+
+    private ExchangeHistoryAdapter exchangeHistoryAdapter;
+    private List<Conversion> conversionList = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -104,9 +108,10 @@ public class ExchangeFragment extends Fragment {
         ImageButton swapBtn = fragmentView.findViewById(R.id.swap_currencies);
         swapBtn.setOnClickListener(v -> swapCurrencies());
 
-        List<Conversion> conversionList = SortUtils.mergeSort(dbHandler.getAllConversions(),
-                (conv1, conv2) -> (int) (conv2.getTimestamp() - conv1.getTimestamp()));
-        ExchangeHistoryAdapter exchangeHistoryAdapter = new ExchangeHistoryAdapter(conversionList);
+//        List<Conversion> conversionList = SortUtils.mergeSort(dbHandler.getAllConversions(),
+//                (conv1, conv2) -> (int) (conv2.getTimestamp() - conv1.getTimestamp()));
+        exchangeHistoryAdapter = new ExchangeHistoryAdapter(conversionList);
+        loadConversionHistory();
 
         TextView emptyView = fragmentView.findViewById(R.id.no_exchange_history);
         CustomRecyclerView conversionHistoryView = fragmentView.findViewById(R.id.exchange_history);
@@ -306,5 +311,12 @@ public class ExchangeFragment extends Fragment {
         newConversion.setSecondaryCurrency(dbHandler.getCurrency(secondaryCurrency));
         newConversion.setSecondaryValue(secondaryCurrencyValue);
         dbHandler.addConversion(newConversion);
+        loadConversionHistory();
+    }
+
+    private void loadConversionHistory() {
+        conversionList.clear();
+        conversionList.addAll(SortUtils.mergeSort(dbHandler.getAllConversions(), Conversion.comparatorTime()));
+        exchangeHistoryAdapter.notifyDataSetChanged();
     }
 }

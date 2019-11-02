@@ -162,6 +162,7 @@ public class BarChartView extends View {
         setMeasuredDimension(width, height);
     }
 
+    //todo add location label to each bar, similar to in stock screen
     @Override
     public void onDraw(Canvas c) {
         super.onDraw(c);

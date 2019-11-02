@@ -7,6 +7,7 @@ import com.martinwalls.nea.R;
 import java.util.ArrayList;
 import java.util.List;
 
+//todo make undo messages snackbars rather than toasts
 public class UndoStack {
 
     private static UndoStack instance = new UndoStack();

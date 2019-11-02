@@ -80,6 +80,7 @@ public class EditProductsActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_edit_products, menu);
+        //todo add search option
         return true;
     }
 

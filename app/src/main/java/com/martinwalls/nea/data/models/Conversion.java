@@ -2,6 +2,7 @@ package com.martinwalls.nea.data.models;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 
 public class Conversion {
     private int conversionId;
@@ -77,5 +78,9 @@ public class Conversion {
         LocalDate today = LocalDate.now();
 
         return (int) ChronoUnit.DAYS.between(conversionDate, today);
+    }
+
+    public static Comparator<Conversion> comparatorTime() {
+        return (conv1, conv2) -> (int) (conv2.getTimestamp() - conv1.getTimestamp());
     }
 }
