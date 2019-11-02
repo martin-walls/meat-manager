@@ -45,10 +45,18 @@ public final class Utils {
         }
     }
 
+    /**
+     * Converts the {@code mass} value to the mass unit currently in use
+     * and rounds it to {@code dp} decimal places, to use when displaying
+     * mass values on screen.
+     */
     public static String getMassDisplayValue(Context context, double mass, int dp) {
         return roundToDp(convertToCurrentMassUnit(context, mass), dp);
     }
 
+    /**
+     * Rounds {@code value} to {@code dp} decimal places.
+     */
     public static String roundToDp(double value, int dp) {
         if (dp == 0) {
             return new DecimalFormat("#").format(value);
@@ -61,22 +69,24 @@ public final class Utils {
     }
 
     /**
-     * Converts a dp value to pixels, depending on the display density.
-     * @param dpValue A dp value (display independent pixels)
-     * @param context Context needed to get display density
+     * Converts a dp value to pixels.
      */
     public static int convertDpToPixelSize(float dpValue, Context context) {
-//        final float density = context.getResources().getDisplayMetrics().density;
-//        return (int) (dpValue * density + 0.5f);
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpValue, context.getResources().getDisplayMetrics());
     }
 
+    /**
+     * Converts an sp value (for text sizes) to pixels.
+     */
     public static int convertSpToPixelSize(float spValue, Context context) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
                 spValue, context.getResources().getDisplayMetrics());
     }
 
+    /**
+     * Gets a colour value from a theme attribute.
+     */
     public static int getColorFromTheme(Context context, @AttrRes int resId) {
         TypedValue outValue = new TypedValue();
         context.getTheme().resolveAttribute(resId, outValue, true);
