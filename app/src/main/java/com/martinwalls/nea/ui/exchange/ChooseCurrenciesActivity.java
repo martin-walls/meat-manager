@@ -1,8 +1,11 @@
 package com.martinwalls.nea.ui.exchange;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -55,6 +58,30 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_choose_currencies, menu);
+
+        //setup search bar
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                currencyAdapter.getFilter().filter(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                currencyAdapter.getFilter().filter(query);
+                return true;
+            }
+        });
+
+        //todo fix starring currencies when list is filtered, as position is returned but activity
+        // doesn't have filtered list. Try having adapter handle fav list, just passing it the list of
+        // all currencies, then set favs in database when done action selected
+
         return true;
     }
 
