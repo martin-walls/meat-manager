@@ -18,7 +18,6 @@ import com.martinwalls.nea.util.SortUtils;
 import java.util.List;
 
 
-//todo search currencies?
 public class ChooseCurrenciesActivity extends AppCompatActivity
         implements CurrencyAdapter.CurrencyAdapterListener {
 

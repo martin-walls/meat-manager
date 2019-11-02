@@ -26,11 +26,9 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
     private final int VIEW_SECTION_NO_FAV = 2;
     private final int VIEW_SECTION_NO_RESULTS = 3;
 
-    //todo just use currencyList and filter favs here not in activity
     private List<Currency> currencyList;
     private List<Currency> currencyListFiltered;
     private List<Currency> favCurrencyList = new ArrayList<>();
-//    private List<Currency> favCurrencyListFiltered;
     private CurrencyAdapterListener listener;
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -65,16 +63,13 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
     CurrencyAdapter(List<Currency> currencyList, CurrencyAdapterListener listener) {
         this.currencyList = currencyList;
         this.currencyListFiltered = currencyList;
-//        this.favCurrencyList = favCurrencyList;
 
         for (Currency currency : currencyList) {
             if (currency.isFavourite()) {
                 favCurrencyList.add(currency);
             }
         }
-//
-//        this.favCurrencyListFiltered = favCurrencyList;
-//
+
         this.listener = listener;
     }
 
@@ -154,7 +149,6 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
                 List<Currency> filteredList = new ArrayList<>();
                 if (charSequence.length() == 0) {
                     filteredList = currencyList;
-//                    favCurrencyListFiltered = favCurrencyList;
                 } else {
                     for (Currency currency : currencyList) {
                         if (currency.getCode().toLowerCase().contains(charSequence.toString().toLowerCase())
