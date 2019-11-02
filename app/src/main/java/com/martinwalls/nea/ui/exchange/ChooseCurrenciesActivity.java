@@ -7,10 +7,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.data.db.ExchangeDBHandler;
 import com.martinwalls.nea.data.models.Currency;
-import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.ui.misc.CustomRecyclerView;
+import com.martinwalls.nea.util.SortUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
 
         dbHandler = new ExchangeDBHandler(this);
 
-        allCurrencyList = Utils.mergeSort(dbHandler.getCurrencies(),
+        allCurrencyList = SortUtils.mergeSort(dbHandler.getCurrencies(),
                 (currency1, currency2) -> currency1.getCode().compareTo(currency2.getCode()));
 
         // fav currencies have to be found like this so there it is the same object for currencies in both lists
@@ -93,7 +93,7 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
         List<Currency> tempFavCurrencyList = new ArrayList<>();
         tempFavCurrencyList.addAll(favCurrencyList);
         favCurrencyList.clear();
-        favCurrencyList.addAll(Utils.mergeSort(tempFavCurrencyList,
+        favCurrencyList.addAll(SortUtils.mergeSort(tempFavCurrencyList,
                 (currency1, currency2) -> currency1.getCode().compareTo(currency2.getCode())));
         currencyAdapter.notifyDataSetChanged();
     }

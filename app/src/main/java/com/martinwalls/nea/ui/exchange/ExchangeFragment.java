@@ -23,16 +23,16 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.martinwalls.nea.ui.MainActivity;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.api.ApiIntentService;
-import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.data.db.ExchangeDBHandler;
 import com.martinwalls.nea.data.models.Conversion;
 import com.martinwalls.nea.data.models.Currency;
+import com.martinwalls.nea.ui.MainActivity;
+import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.util.EasyPreferences;
 import com.martinwalls.nea.util.SimpleTextWatcher;
-import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.util.SortUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -104,7 +104,7 @@ public class ExchangeFragment extends Fragment {
         ImageButton swapBtn = fragmentView.findViewById(R.id.swap_currencies);
         swapBtn.setOnClickListener(v -> swapCurrencies());
 
-        List<Conversion> conversionList = Utils.mergeSort(dbHandler.getAllConversions(),
+        List<Conversion> conversionList = SortUtils.mergeSort(dbHandler.getAllConversions(),
                 (conv1, conv2) -> (int) (conv2.getTimestamp() - conv1.getTimestamp()));
         ExchangeHistoryAdapter exchangeHistoryAdapter = new ExchangeHistoryAdapter(conversionList);
 
@@ -213,7 +213,7 @@ public class ExchangeFragment extends Fragment {
     }
 
     private String[] fetchCurrenciesToShow() {
-        List<Currency> currencies = Utils.mergeSort(dbHandler.getFavCurrencies(),
+        List<Currency> currencies = SortUtils.mergeSort(dbHandler.getFavCurrencies(),
                 (currency1, currency2) -> currency1.getCode().compareTo(currency2.getCode()));
 
         String[] currencyCodes = new String[currencies.size()];

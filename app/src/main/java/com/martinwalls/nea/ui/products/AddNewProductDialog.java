@@ -15,7 +15,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Product;
-import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.util.SortUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,7 +45,7 @@ public class AddNewProductDialog extends DialogFragment {
 
         dbHandler = new DBHandler(getContext());
 
-        List<String> meatTypesList = Utils.mergeSort(dbHandler.getAllMeatTypes());
+        List<String> meatTypesList = SortUtils.mergeSort(dbHandler.getAllMeatTypes());
         ArrayAdapter<String> autocompleteAdapter =
                 new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, meatTypesList);
         editTextMeatType.setAdapter(autocompleteAdapter);

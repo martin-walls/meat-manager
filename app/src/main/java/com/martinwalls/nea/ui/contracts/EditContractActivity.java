@@ -37,6 +37,7 @@ import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
 import com.martinwalls.nea.ui.products.AddNewProductDialog;
 import com.martinwalls.nea.util.MassUnit;
 import com.martinwalls.nea.util.SimpleTextWatcher;
+import com.martinwalls.nea.util.SortUtils;
 import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.util.undo.contracts.AddContractAction;
 import com.martinwalls.nea.util.undo.contracts.EditContractAction;
@@ -273,12 +274,12 @@ public class EditContractActivity extends InputFormActivity
         super.loadSearchItems(searchType);
         switch (searchType) {
             case INPUT_PRODUCT:
-                for (Product product : Utils.mergeSort(dbHandler.getAllProducts(), Product.comparatorAlpha())) {
+                for (Product product : SortUtils.mergeSort(dbHandler.getAllProducts(), Product.comparatorAlpha())) {
                     addSearchItemToList(new SearchItem(product.getProductName(), product.getProductId()));
                 }
                 break;
             case INPUT_DESTINATION:
-                for (Location location : Utils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Destination),
+                for (Location location : SortUtils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Destination),
                         Location.comparatorAlpha())) {
                     addSearchItemToList(new SearchItem(location.getLocationName(), location.getLocationId()));
                 }

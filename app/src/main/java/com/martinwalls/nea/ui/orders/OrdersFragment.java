@@ -15,11 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.ui.misc.CustomRecyclerView;
-import com.martinwalls.nea.ui.misc.RecyclerViewDivider;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Order;
-import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.ui.misc.CustomRecyclerView;
+import com.martinwalls.nea.ui.misc.RecyclerViewDivider;
+import com.martinwalls.nea.util.SortUtils;
 import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.util.ArrayList;
@@ -126,9 +126,9 @@ public class OrdersFragment extends Fragment
         orderList.clear();
         // sort by date
         if (isCurrentView) {
-            orderList.addAll(Utils.mergeSort(dbHandler.getAllOrdersNotCompleted(), Order.comparatorDate()));
+            orderList.addAll(SortUtils.mergeSort(dbHandler.getAllOrdersNotCompleted(), Order.comparatorDate()));
         } else {
-            orderList.addAll(Utils.mergeSort(dbHandler.getAllOrdersCompleted(), Order.comparatorDate()));
+            orderList.addAll(SortUtils.mergeSort(dbHandler.getAllOrdersCompleted(), Order.comparatorDate()));
         }
         ordersAdapter.setCurrentView(isCurrentView);
         ordersAdapter.notifyDataSetChanged();

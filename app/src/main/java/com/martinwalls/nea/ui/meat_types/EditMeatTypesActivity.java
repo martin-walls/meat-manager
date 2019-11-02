@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.ui.misc.RecyclerViewDivider;
 import com.martinwalls.nea.ui.misc.SwipeToDeleteCallback;
-import com.martinwalls.nea.data.db.DBHandler;
+import com.martinwalls.nea.util.SortUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +87,7 @@ public class EditMeatTypesActivity extends AppCompatActivity
 
     private void loadMeatTypes() {
         meatTypesList.clear();
-        meatTypesList.addAll(Utils.mergeSort(dbHandler.getAllMeatTypes()));
+        meatTypesList.addAll(SortUtils.mergeSort(dbHandler.getAllMeatTypes()));
         meatTypesAdapter.notifyDataSetChanged();
     }
 }

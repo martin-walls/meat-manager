@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void replaceFragment(Page newPage) {
+        // don't replace fragment if same page
         if (currentPage != newPage) {
             Fragment newFragment = newPage.getFragment();
 

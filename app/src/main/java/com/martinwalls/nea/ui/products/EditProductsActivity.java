@@ -11,15 +11,14 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.martinwalls.nea.util.EasyPreferences;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.util.SortMode;
-import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.data.db.DBHandler;
+import com.martinwalls.nea.data.models.Product;
 import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.ui.misc.RecyclerViewDivider;
 import com.martinwalls.nea.ui.misc.SwipeToDeleteCallback;
-import com.martinwalls.nea.data.db.DBHandler;
-import com.martinwalls.nea.data.models.Product;
+import com.martinwalls.nea.util.EasyPreferences;
+import com.martinwalls.nea.util.SortUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,11 +86,11 @@ public class EditProductsActivity extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        switch (prefs.getInt(R.string.pref_products_sort_by, SortMode.MEAT_TYPE)) {
-            case SortMode.MEAT_TYPE:
+        switch (prefs.getInt(R.string.pref_products_sort_by, SortUtils.SORT_MEAT_TYPE)) {
+            case SortUtils.SORT_MEAT_TYPE:
                 menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_meat_type).setChecked(true);
                 break;
-            case SortMode.NAME:
+            case SortUtils.SORT_NAME:
                 menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_name).setChecked(true);
                 break;
         }
@@ -102,12 +101,12 @@ public class EditProductsActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_sort_by_name:
-                prefs.setInt(R.string.pref_products_sort_by, SortMode.NAME);
+                prefs.setInt(R.string.pref_products_sort_by, SortUtils.SORT_NAME);
                 invalidateOptionsMenu();
                 loadProducts();
                 return true;
             case R.id.action_sort_by_meat_type:
-                prefs.setInt(R.string.pref_products_sort_by, SortMode.MEAT_TYPE);
+                prefs.setInt(R.string.pref_products_sort_by, SortUtils.SORT_MEAT_TYPE);
                 invalidateOptionsMenu();
                 loadProducts();
                 return true;
@@ -129,10 +128,10 @@ public class EditProductsActivity extends AppCompatActivity
     }
 
     private void loadProducts() {
-        int sortBy = prefs.getInt(R.string.pref_products_sort_by, SortMode.MEAT_TYPE);
+        int sortBy = prefs.getInt(R.string.pref_products_sort_by, SortUtils.SORT_MEAT_TYPE);
         productList.clear();
-        productList.addAll(Utils.mergeSort(dbHandler.getAllProducts(),
-                sortBy == SortMode.NAME ? Product.comparatorAlpha() : Product.comparatorMeatType()));
+        productList.addAll(SortUtils.mergeSort(dbHandler.getAllProducts(),
+                sortBy == SortUtils.SORT_NAME ? Product.comparatorAlpha() : Product.comparatorMeatType()));
         productsAdapter.notifyDataSetChanged();
     }
 

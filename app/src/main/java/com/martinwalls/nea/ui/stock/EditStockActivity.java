@@ -27,6 +27,7 @@ import com.martinwalls.nea.data.models.StockItem;
 import com.martinwalls.nea.ui.locations.NewLocationActivity;
 import com.martinwalls.nea.util.MassUnit;
 import com.martinwalls.nea.util.SimpleTextWatcher;
+import com.martinwalls.nea.util.SortUtils;
 import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.util.undo.stock.AddStockAction;
 import com.martinwalls.nea.util.undo.stock.EditStockAction;
@@ -198,24 +199,24 @@ public class EditStockActivity extends InputFormActivity
         super.loadSearchItems(searchType);
         switch (searchType) {
             case INPUT_PRODUCT:
-                for (Product product : Utils.mergeSort(dbHandler.getAllProducts(), Product.comparatorAlpha())) {
+                for (Product product : SortUtils.mergeSort(dbHandler.getAllProducts(), Product.comparatorAlpha())) {
                     addSearchItemToList(new SearchItem(product.getProductName(), product.getProductId()));
                 }
                 break;
             case INPUT_SUPPLIER:
-                for (Location location : Utils.mergeSort(
+                for (Location location : SortUtils.mergeSort(
                         dbHandler.getAllLocations(Location.LocationType.Supplier), Location.comparatorAlpha())) {
                     addSearchItemToList(new SearchItem(location.getLocationName(), location.getLocationId()));
                 }
                 break;
             case INPUT_DESTINATION:
-                for (Location location : Utils.mergeSort(
+                for (Location location : SortUtils.mergeSort(
                         dbHandler.getAllLocations(Location.LocationType.Destination), Location.comparatorAlpha())) {
                     addSearchItemToList(new SearchItem(location.getLocationName(), location.getLocationId()));
                 }
                 break;
             case INPUT_LOCATION:
-                for (Location location : Utils.mergeSort(
+                for (Location location : SortUtils.mergeSort(
                         dbHandler.getAllLocations(Location.LocationType.Storage), Location.comparatorAlpha())) {
                     addSearchItemToList(new SearchItem(location.getLocationName(), location.getLocationId()));
                 }

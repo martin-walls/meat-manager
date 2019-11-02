@@ -15,15 +15,14 @@ import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.ProductQuantity;
 import com.martinwalls.nea.data.models.StockItem;
 import com.martinwalls.nea.util.EasyPreferences;
-import com.martinwalls.nea.util.SortMode;
-import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.util.SortUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardFragment extends Fragment {
 
-    private final int SORT_BY_DEFAULT = SortMode.AMOUNT_DESC;
+    private final int SORT_BY_DEFAULT = SortUtils.SORT_AMOUNT_DESC;
 
     private DBHandler dbHandler;
     private EasyPreferences prefs;
@@ -59,13 +58,13 @@ public class DashboardFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         switch (prefs.getInt(R.string.pref_dashboard_sort_by, SORT_BY_DEFAULT)) {
-            case SortMode.NAME:
+            case SortUtils.SORT_NAME:
                 menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_name).setChecked(true);
                 break;
-            case SortMode.AMOUNT_DESC:
+            case SortUtils.SORT_AMOUNT_DESC:
                 menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_amount_desc).setChecked(true);
                 break;
-            case SortMode.AMOUNT_ASC:
+            case SortUtils.SORT_AMOUNT_ASC:
                 menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_amount_asc).setChecked(true);
                 break;
         }
@@ -75,13 +74,13 @@ public class DashboardFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_sort_by_name:
-                setSortMode(SortMode.NAME);
+                setSortMode(SortUtils.SORT_NAME);
                 return true;
             case R.id.action_sort_by_amount_desc:
-                setSortMode(SortMode.AMOUNT_DESC);
+                setSortMode(SortUtils.SORT_AMOUNT_DESC);
                 return true;
             case R.id.action_sort_by_amount_asc:
-                setSortMode(SortMode.AMOUNT_ASC);
+                setSortMode(SortUtils.SORT_AMOUNT_ASC);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -109,14 +108,14 @@ public class DashboardFragment extends Fragment {
 
 
         switch (prefs.getInt(R.string.pref_dashboard_sort_by, SORT_BY_DEFAULT)) {
-            case SortMode.NAME:
-                stockList = Utils.mergeSort(stockList, StockItem.comparatorAlpha());
+            case SortUtils.SORT_NAME:
+                stockList = SortUtils.mergeSort(stockList, StockItem.comparatorAlpha());
                 break;
-            case SortMode.AMOUNT_DESC:
-                stockList = Utils.mergeSort(stockList, StockItem.comparatorAmount(false));
+            case SortUtils.SORT_AMOUNT_DESC:
+                stockList = SortUtils.mergeSort(stockList, StockItem.comparatorAmount(false));
                 break;
-            case SortMode.AMOUNT_ASC:
-                stockList = Utils.mergeSort(stockList, StockItem.comparatorAmount(true));
+            case SortUtils.SORT_AMOUNT_ASC:
+                stockList = SortUtils.mergeSort(stockList, StockItem.comparatorAmount(true));
                 break;
         }
 

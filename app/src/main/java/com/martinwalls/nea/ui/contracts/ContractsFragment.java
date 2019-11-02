@@ -18,7 +18,7 @@ import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Contract;
 import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.ui.misc.RecyclerViewDivider;
-import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.util.SortUtils;
 import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.util.ArrayList;
@@ -102,7 +102,7 @@ public class ContractsFragment extends Fragment
 
     private void loadContracts() {
         contractList.clear();
-        contractList.addAll(Utils.mergeSort(dbHandler.getAllContracts(), Contract.comparatorId()));
+        contractList.addAll(SortUtils.mergeSort(dbHandler.getAllContracts(), Contract.comparatorId()));
         contractsAdapter.notifyDataSetChanged();
     }
 }

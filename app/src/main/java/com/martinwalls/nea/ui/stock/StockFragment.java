@@ -15,16 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.ui.misc.CustomRecyclerView;
-import com.martinwalls.nea.ui.misc.RecyclerViewDivider;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.StockItem;
 import com.martinwalls.nea.ui.locations.LocationsActivity;
 import com.martinwalls.nea.ui.meat_types.EditMeatTypesActivity;
+import com.martinwalls.nea.ui.misc.CustomRecyclerView;
+import com.martinwalls.nea.ui.misc.RecyclerViewDivider;
 import com.martinwalls.nea.ui.products.EditProductsActivity;
 import com.martinwalls.nea.util.EasyPreferences;
-import com.martinwalls.nea.util.SortMode;
-import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.util.SortUtils;
 import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ public class StockFragment extends Fragment
 
     private final int REQUEST_REFRESH_ON_DONE = 1;
 
-    private final int SORT_BY_DEFAULT = SortMode.NAME;
+    private final int SORT_BY_DEFAULT = SortUtils.SORT_NAME;
 
     private DBHandler dbHandler;
     private EasyPreferences prefs;
@@ -102,19 +101,19 @@ public class StockFragment extends Fragment
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         switch (prefs.getInt(R.string.pref_stock_sort_by, SORT_BY_DEFAULT)) {
-            case SortMode.NAME:
+            case SortUtils.SORT_NAME:
                 menu.findItem(R.id.action_sort_by).getSubMenu()
                         .findItem(R.id.action_sort_by_name).setChecked(true);
                 break;
-            case SortMode.LOCATION:
+            case SortUtils.SORT_LOCATION:
                 menu.findItem(R.id.action_sort_by).getSubMenu()
                         .findItem(R.id.action_sort_by_location).setChecked(true);
                 break;
-            case SortMode.AMOUNT_DESC:
+            case SortUtils.SORT_AMOUNT_DESC:
                 menu.findItem(R.id.action_sort_by).getSubMenu()
                         .findItem(R.id.action_sort_by_amount_desc).setChecked(true);
                 break;
-            case SortMode.AMOUNT_ASC:
+            case SortUtils.SORT_AMOUNT_ASC:
                 menu.findItem(R.id.action_sort_by).getSubMenu()
                         .findItem(R.id.action_sort_by_amount_asc).setChecked(true);
                 break;
@@ -145,16 +144,16 @@ public class StockFragment extends Fragment
                 startActivity(meatTypesIntent);
                 return true;
             case R.id.action_sort_by_name:
-                setSortMode(SortMode.NAME);
+                setSortMode(SortUtils.SORT_NAME);
                 return true;
             case R.id.action_sort_by_location:
-                setSortMode(SortMode.LOCATION);
+                setSortMode(SortUtils.SORT_LOCATION);
                 return true;
             case R.id.action_sort_by_amount_desc:
-                setSortMode(SortMode.AMOUNT_DESC);
+                setSortMode(SortUtils.SORT_AMOUNT_DESC);
                 return true;
             case R.id.action_sort_by_amount_asc:
-                setSortMode(SortMode.AMOUNT_ASC);
+                setSortMode(SortUtils.SORT_AMOUNT_ASC);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -178,17 +177,17 @@ public class StockFragment extends Fragment
         stockList.clear();
         List<StockItem> stock = dbHandler.getAllStock();
         switch (prefs.getInt(R.string.pref_stock_sort_by, SORT_BY_DEFAULT)) {
-            case SortMode.NAME:
-                stockList.addAll(Utils.mergeSort(stock, StockItem.comparatorAlpha()));
+            case SortUtils.SORT_NAME:
+                stockList.addAll(SortUtils.mergeSort(stock, StockItem.comparatorAlpha()));
                 break;
-            case SortMode.LOCATION:
-                stockList.addAll(Utils.mergeSort(stock, StockItem.comparatorLocation()));
+            case SortUtils.SORT_LOCATION:
+                stockList.addAll(SortUtils.mergeSort(stock, StockItem.comparatorLocation()));
                 break;
-            case SortMode.AMOUNT_DESC:
-                stockList.addAll(Utils.mergeSort(stock, StockItem.comparatorAmount(false)));
+            case SortUtils.SORT_AMOUNT_DESC:
+                stockList.addAll(SortUtils.mergeSort(stock, StockItem.comparatorAmount(false)));
                 break;
-            case SortMode.AMOUNT_ASC:
-                stockList.addAll(Utils.mergeSort(stock, StockItem.comparatorAmount(true)));
+            case SortUtils.SORT_AMOUNT_ASC:
+                stockList.addAll(SortUtils.mergeSort(stock, StockItem.comparatorAmount(true)));
                 break;
         }
         stockAdapter.notifyDataSetChanged();
