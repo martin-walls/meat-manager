@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.models.Currency;
+import com.martinwalls.nea.util.SortUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +21,15 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
         implements Filterable {
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final int STANDARD_VIEW = 0;
-    private final int SECTION_VIEW = 1;
-    private final int SECTION_VIEW_NO_FAV = 2;
+    private final int VIEW_STANDARD = 0;
+    private final int VIEW_SECTION = 1;
+    private final int VIEW_SECTION_NO_FAV = 2;
+    private final int VIEW_SECTION_NO_RESULTS = 3;
 
     //todo just use currencyList and filter favs here not in activity
     private List<Currency> currencyList;
     private List<Currency> currencyListFiltered;
-    private List<Currency> favCurrencyList;
+    private List<Currency> favCurrencyList = new ArrayList<>();
 //    private List<Currency> favCurrencyListFiltered;
     private CurrencyAdapterListener listener;
 
@@ -41,7 +43,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
 
         ViewHolder(View view, int viewType) {
             super(view);
-            if (viewType == SECTION_VIEW) {
+            if (viewType == VIEW_SECTION) {
                 divider = view.findViewById(R.id.divider);
                 sectionTitle = view.findViewById(R.id.section_title);
             }
@@ -52,26 +54,24 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
 
             favouritesStar.setOnClickListener(v -> {
                 if (getLayoutPosition() < favCurrencyList.size()) {
-                    listener.onCurrencyStarClicked(getLayoutPosition(), true);
+                    onStarClicked(getLayoutPosition(), true);
                 } else {
-                    listener.onCurrencyStarClicked(
-                            getLayoutPosition() - favCurrencyList.size(), false);
+                    onStarClicked(getLayoutPosition() - favCurrencyList.size(), false);
                 }
             });
         }
     }
 
-    CurrencyAdapter(List<Currency> currencyList, List<Currency> favCurrencyList,
-                           CurrencyAdapterListener listener) {
+    CurrencyAdapter(List<Currency> currencyList, CurrencyAdapterListener listener) {
         this.currencyList = currencyList;
         this.currencyListFiltered = currencyList;
-        this.favCurrencyList = favCurrencyList;
+//        this.favCurrencyList = favCurrencyList;
 
-//        for (Currency currency : currencyList) {
-//            if (currency.isFavourite()) {
-//                favCurrencyList.add(currency);
-//            }
-//        }
+        for (Currency currency : currencyList) {
+            if (currency.isFavourite()) {
+                favCurrencyList.add(currency);
+            }
+        }
 //
 //        this.favCurrencyListFiltered = favCurrencyList;
 //
@@ -81,22 +81,31 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
-        if (viewType == SECTION_VIEW) {
-            itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_currencies_section, parent, false);
-        } else if (viewType == SECTION_VIEW_NO_FAV) {
-            itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_currencies_section_no_fav, parent, false);
-        } else {
-            itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_currencies, parent, false);
+        switch (viewType) {
+            case VIEW_SECTION:
+                itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_currencies_section, parent, false);
+                break;
+            case VIEW_SECTION_NO_FAV:
+                itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_currencies_section_no_fav, parent, false);
+                break;
+            case VIEW_SECTION_NO_RESULTS:
+                itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_currencies_no_results, parent, false);
+                break;
+            case VIEW_STANDARD:
+            default:
+                itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_currencies, parent, false);
+                break;
         }
         return new ViewHolder(itemView, viewType);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if (getItemViewType(position) == SECTION_VIEW) {
+        if (getItemViewType(position) == VIEW_SECTION) {
             if (position == 0) {
                 holder.divider.setVisibility(View.GONE);
                 holder.sectionTitle.setText(R.string.exchange_favourites);
@@ -122,11 +131,13 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
     @Override
     public int getItemViewType(int position) {
         if (position == 0 && favCurrencyList.size() == 0) {
-            return SECTION_VIEW_NO_FAV;
+            return VIEW_SECTION_NO_FAV;
+        } else if (position == favCurrencyList.size() - 1 && currencyListFiltered.size() == 0) {
+            return VIEW_SECTION_NO_RESULTS;
         } else if (position == 0 || position == favCurrencyList.size()) {
-            return SECTION_VIEW;
+            return VIEW_SECTION;
         } else {
-            return STANDARD_VIEW;
+            return VIEW_STANDARD;
         }
     }
 
@@ -151,14 +162,6 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
                             filteredList.add(currency);
                         }
                     }
-
-//                    favCurrencyListFiltered.clear();
-//                    for (Currency currency : favCurrencyList) {
-//                        if (currency.getCode().toLowerCase().contains(charSequence.toString().toLowerCase())
-//                                || currency.getName().toLowerCase().contains(charSequence.toString().toLowerCase())) {
-//                            favCurrencyListFiltered.add(currency);
-//                        }
-//                    }
                 }
 
                 FilterResults filterResults = new FilterResults();
@@ -168,13 +171,38 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults results) {
+                //noinspection unchecked
                 currencyListFiltered = (List<Currency>) results.values;
                 notifyDataSetChanged();
             }
         };
     }
 
+    int getFavCurrencyCount() {
+        return favCurrencyList.size();
+    }
+
+    private void onStarClicked(int position, boolean isFavList) {
+        if (isFavList) {
+            favCurrencyList.get(position).toggleFavourite();
+            listener.onCurrencyFavStateChange(favCurrencyList.get(position));
+            favCurrencyList.remove(position);
+        } else {
+            Currency currency = currencyListFiltered.get(position);
+            if (currency.toggleFavourite()) {
+                favCurrencyList.add(currency);
+            } else {
+                favCurrencyList.remove(currency);
+            }
+            listener.onCurrencyFavStateChange(currency);
+        }
+        List<Currency> tempFavCurrencyList = new ArrayList<>(favCurrencyList);
+        favCurrencyList.clear();
+        favCurrencyList.addAll(SortUtils.mergeSort(tempFavCurrencyList, Currency.comparatorCode()));
+        notifyDataSetChanged();
+    }
+
     public interface CurrencyAdapterListener {
-        void onCurrencyStarClicked(int position, boolean isFavList);
+        void onCurrencyFavStateChange(Currency currency);
     }
 }

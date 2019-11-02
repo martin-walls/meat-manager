@@ -1,5 +1,7 @@
 package com.martinwalls.nea.data.models;
 
+import java.util.Comparator;
+
 public class Currency {
     private String code;
     private String name;
@@ -54,5 +56,9 @@ public class Currency {
     public boolean toggleFavourite() {
         isFavourite = !isFavourite;
         return isFavourite;
+    }
+
+    public static Comparator<Currency> comparatorCode() {
+        return (currency1, currency2) -> currency1.getCode().compareTo(currency2.getCode());
     }
 }

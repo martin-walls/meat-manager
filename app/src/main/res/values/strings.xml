@@ -227,6 +227,7 @@
     <string name="exchange_choose_currencies_no_fav">No currencies starred. Please select at least two.</string>
     <string name="exchange_choose_currencies_not_enough">Not enough currencies selected.
         Please select at least two.</string>
+    <string name="exchange_choose_currencies_no_results">No matching currencies found.</string>
 
     <string name="exchange_loading">Loading…</string>
     <string name="exchange_no_connection">No internet connection available.
