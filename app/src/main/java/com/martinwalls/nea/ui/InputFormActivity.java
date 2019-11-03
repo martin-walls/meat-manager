@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static android.view.View.GONE;
-
 public abstract class InputFormActivity extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener {
 
@@ -50,6 +48,10 @@ public abstract class InputFormActivity extends AppCompatActivity
     protected void setAddNewView(@IdRes int resId) {
         addNewView = findViewById(resId);
         addNewView.setOnClickListener(v -> addNewItemFromSearch(addNewView.getSearchItemType()));
+    }
+
+    protected void hideAddNewView() {
+        addNewView.setVisibility(View.GONE);
     }
 
     protected void setRootView(@IdRes int resId) {
@@ -130,7 +132,7 @@ public abstract class InputFormActivity extends AppCompatActivity
         TransitionManager.beginDelayedTransition(rootView, moveTransition);
         for (int view : viewsToHide.values()) {
             if (view != viewsToHide.get(inputName)) {
-                findViewById(view).setVisibility(GONE);
+                findViewById(view).setVisibility(View.GONE);
             }
         }
 
@@ -166,7 +168,7 @@ public abstract class InputFormActivity extends AppCompatActivity
             viewToShow.setVisibility(View.VISIBLE);
         }
 
-        searchResultsLayout.setVisibility(GONE);
+        searchResultsLayout.setVisibility(View.GONE);
 
         hideKeyboard();
     }

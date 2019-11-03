@@ -195,6 +195,14 @@ public class EditStockActivity extends InputFormActivity
     }
 
     @Override
+    protected void openSearch(String inputName) {
+        super.openSearch(inputName);
+        if (inputName.equals(INPUT_QUALITY)) {
+            hideAddNewView();
+        }
+    }
+
+    @Override
     protected void loadSearchItems(String searchType) {
         super.loadSearchItems(searchType);
         switch (searchType) {
