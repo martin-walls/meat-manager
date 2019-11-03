@@ -1,13 +1,16 @@
 package com.martinwalls.nea.util.undo;
 
+import android.app.Activity;
 import android.content.Context;
+import android.view.View;
 import android.widget.Toast;
+import androidx.annotation.StringRes;
+import com.google.android.material.snackbar.Snackbar;
 import com.martinwalls.nea.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//todo make undo messages snackbars rather than toasts
 public class UndoStack {
 
     private static UndoStack instance = new UndoStack();
@@ -41,7 +44,7 @@ public class UndoStack {
 
     public UndoableAction undo(Context context) {
         if (!canUndo()) {
-            Toast.makeText(context, R.string.undo_empty, Toast.LENGTH_SHORT).show();
+            showSnackbar(context, R.string.undo_empty);
             return null;
         }
         UndoableAction lastAction = undoStack.get(undoStack.size() - 1);
@@ -56,7 +59,7 @@ public class UndoStack {
 
     public UndoableAction redo(Context context) {
         if (!canRedo()) {
-            Toast.makeText(context, R.string.redo_empty, Toast.LENGTH_SHORT).show();
+            showSnackbar(context, R.string.redo_empty);
             return null;
         }
         UndoableAction lastAction = redoStack.get(redoStack.size() - 1);
@@ -67,5 +70,14 @@ public class UndoStack {
             lastAction.showRedoMessage(context);
         }
         return lastAction;
+    }
+
+    private void showSnackbar(Context context, @StringRes int resId) {
+        try {
+            View view = ((Activity) context).getWindow().getDecorView();
+            Snackbar.make(view, resId, Snackbar.LENGTH_SHORT).show();
+        } catch (ClassCastException e) {
+            Toast.makeText(context, resId, Toast.LENGTH_SHORT).show();
+        }
     }
 }

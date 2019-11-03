@@ -1,7 +1,6 @@
 package com.martinwalls.nea.util.undo.orders;
 
 import android.content.Context;
-import android.widget.Toast;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Order;
@@ -25,7 +24,7 @@ public class DeleteOrderAction extends UndoableAction {
 
     @Override
     public void showUndoMessage(Context context) {
-        Toast.makeText(context, R.string.undo_delete_order_success, Toast.LENGTH_SHORT).show();
+        showUndoSnackbar(context, R.string.undo_delete_order_success);
     }
 
     @Override
@@ -36,6 +35,6 @@ public class DeleteOrderAction extends UndoableAction {
 
     @Override
     public void showRedoMessage(Context context) {
-        Toast.makeText(context, R.string.redo_delete_order_success, Toast.LENGTH_SHORT).show();
+        showRedoSnackbar(context, R.string.redo_delete_order_success);
     }
 }

@@ -1,7 +1,6 @@
 package com.martinwalls.nea.util.undo.stock;
 
 import android.content.Context;
-import android.widget.Toast;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.StockItem;
@@ -24,7 +23,7 @@ public class EditStockAction extends UndoableAction {
 
     @Override
     public void showUndoMessage(Context context) {
-        Toast.makeText(context, R.string.undo_edit_stock_success, Toast.LENGTH_SHORT).show();
+        showUndoSnackbar(context, R.string.undo_edit_stock_success);
     }
 
     @Override
@@ -35,6 +34,6 @@ public class EditStockAction extends UndoableAction {
 
     @Override
     public void showRedoMessage(Context context) {
-        Toast.makeText(context, R.string.redo_edit_stock_success, Toast.LENGTH_SHORT).show();
+        showRedoSnackbar(context, R.string.redo_edit_stock_success);
     }
 }
