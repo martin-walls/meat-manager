@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/white" />
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <stroke
-        android:width="2dp"
-        android:color="?colorControlNormal"
-        />
+    <item android:drawable="@drawable/outline_rounded_selected" android:state_selected="true" />
 
-    <corners android:radius="16dp" />
+    <item android:drawable="@drawable/outline_rounded_normal" android:state_selected="false" />
 
-</shape>
+</selector>

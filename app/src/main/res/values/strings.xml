@@ -89,6 +89,7 @@
     <!-- Dashboard page -->
     <string name="dashboard_title">Dashboard</string>
     <string name="dashboard_no_data">No data to show</string>
+    <string name="dashboard_filter_locations_all">ALL</string>
 
     <!-- Stock page -->
     <string name="stock_title">Stock</string>

@@ -1,6 +1,7 @@
 package com.martinwalls.nea.ui.dashboard;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,9 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
+import com.martinwalls.nea.data.models.Location;
 import com.martinwalls.nea.data.models.ProductQuantity;
 import com.martinwalls.nea.data.models.StockItem;
 import com.martinwalls.nea.util.EasyPreferences;
@@ -20,7 +25,8 @@ import com.martinwalls.nea.util.SortUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment
+        implements LocationsMenuAdapter.LocationsMenuAdapterListener {
 
     private final int SORT_BY_DEFAULT = SortUtils.SORT_AMOUNT_DESC;
 
@@ -31,6 +37,10 @@ public class DashboardFragment extends Fragment {
     private TextView emptyView;
     private ScrollView graphLayout;
 
+    private RecyclerView locationsRecyclerView;
+
+    private Location filterLocation;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -40,6 +50,18 @@ public class DashboardFragment extends Fragment {
 
         dbHandler = new DBHandler(getContext());
         prefs = EasyPreferences.createForDefaultPreferences(getContext());
+
+        locationsRecyclerView = fragmentView.findViewById(R.id.recycler_view_locations);
+        LocationsMenuAdapter locationsAdapter =
+                new LocationsMenuAdapter(dbHandler.getAllLocations(Location.LocationType.Storage), this);
+        locationsRecyclerView.setAdapter(locationsAdapter);
+
+        if (filterLocation == null || !TextUtils.isEmpty(filterLocation.getLocationName())) {
+            filterLocation = new Location();
+        }
+
+        locationsRecyclerView.setLayoutManager(
+                new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
 
         graphView = fragmentView.findViewById(R.id.graph);
         emptyView = fragmentView.findViewById(R.id.empty);
@@ -88,6 +110,19 @@ public class DashboardFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onLocationItemClicked(Location location, int position) {
+        Toast.makeText(getContext(), location.getLocationName(), Toast.LENGTH_SHORT).show();
+        locationsRecyclerView.getLayoutManager().findViewByPosition(position).setSelected(true);
+        for (int i = 0; i < locationsRecyclerView.getAdapter().getItemCount(); i++) {
+            if (i != position) {
+                locationsRecyclerView.getLayoutManager().findViewByPosition(i).setSelected(false);
+            }
+        }
+        filterLocation = location;
+        loadData();
+    }
+
     private void setSortMode(int sortMode) {
         prefs.setInt(R.string.pref_dashboard_sort_by, sortMode);
         getActivity().invalidateOptionsMenu();
@@ -97,7 +132,24 @@ public class DashboardFragment extends Fragment {
     private void loadData() {
         List<BarChartEntry> entries = new ArrayList<>();
 
-        List<StockItem> stockList = dbHandler.getAllStock();
+        List<StockItem> stockList;
+        if (filterLocation == null || TextUtils.isEmpty(filterLocation.getLocationName())) {
+            stockList = SortUtils.mergeSort(dbHandler.getAllStock(), StockItem.comparatorAlpha());
+        } else {
+            stockList = SortUtils.mergeSort(dbHandler.getAllStockFromLocation(filterLocation.getLocationId()),
+                    StockItem.comparatorAlpha());
+        }
+
+        for (int i = 1; i < stockList.size(); i++) {
+            StockItem lastStockItem = stockList.get(i - 1);
+            StockItem thisStockItem = stockList.get(i);
+            if (lastStockItem.getProduct().getProductId() == thisStockItem.getProduct().getProductId()) {
+                lastStockItem.setMass(lastStockItem.getMass() + thisStockItem.getMass());
+                lastStockItem.setNumBoxes(lastStockItem.getNumBoxes() + thisStockItem.getNumBoxes());
+                stockList.remove(i);
+                i--;
+            }
+        }
 
         if (stockList.size() == 0) {
             emptyView.setVisibility(View.VISIBLE);
