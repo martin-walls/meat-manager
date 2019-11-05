@@ -19,8 +19,6 @@ import java.util.List;
 
 public class BarChartView extends View {
 
-    private final String DECIMAL_FORMAT_PATTERN = "#.##";
-
     private Context context;
 
     private List<BarChartEntry> dataSet = new ArrayList<>();
@@ -62,8 +60,8 @@ public class BarChartView extends View {
     private float barCornerRadius;
 
     // space between label text and edge of bar
-    private float textMarginInside;
-    private float textMarginOutside;
+    private float labelMarginInside;
+    private float labelMarginOutside;
 
     // space around tooltip
     private float tooltipMargin;
@@ -80,11 +78,12 @@ public class BarChartView extends View {
     // how much to change opacity by each time the view is redrawn
     private int tooltipAlphaStep = 255 / (tooltipAlphaAnimLength / tooltipAlphaDelay);
 
-
+    // to store bounds of labels and tooltips
     private Rect labelTextBounds = new Rect();
-    private Rect ttTextBounds = new Rect();
-    private Rect reqTtTextBounds = new Rect();
+    private Rect tooltipTextBounds = new Rect();
+    private Rect reqTooltipTextBounds = new Rect();
 
+    // to round values to 2 d.p.
     private DecimalFormat decimalFormat;
 
     public BarChartView(Context context) {
@@ -105,64 +104,71 @@ public class BarChartView extends View {
     private void init(Context context) {
         this.context = context;
 
-        int barColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphBarColor);
-        int outerTextColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphBarOuterTextColor);
-        int innerTextColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphBarInnerTextColor);
+        // get colours from theme attrs
+        int amountBarColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphBarColor);
         int reqBarColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphReqBarColor);
-        int ttColor = Utils.getColorFromTheme(context, R.attr.dashboardTooltipColor);
-        int ttTextColor = Utils.getColorFromTheme(context, R.attr.dashboardTooltipTextColor);
-        int reqTtColor = Utils.getColorFromTheme(context, R.attr.dashboardReqTooltipColor);
-        int reqTtTextColor = Utils.getColorFromTheme(context, R.attr.dashboardReqTooltipTextColor);
+        int barOuterTextColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphBarOuterTextColor);
+        int barInnerTextColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphBarInnerTextColor);
+        int amountTooltipFillColor = Utils.getColorFromTheme(context, R.attr.dashboardTooltipColor);
+        int amountTooltipTextColor = Utils.getColorFromTheme(context, R.attr.dashboardTooltipTextColor);
+        int reqTooltipFillColor = Utils.getColorFromTheme(context, R.attr.dashboardReqTooltipColor);
+        int reqTooltipTextColor = Utils.getColorFromTheme(context, R.attr.dashboardReqTooltipTextColor);
 
-
+        // bar paints
         amountBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        amountBarFillPaint.setColor(barColor);
-
-        barOuterLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        barOuterLabelPaint.setColor(outerTextColor);
-        barOuterLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        barOuterLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
-
-        barInnerLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        barInnerLabelPaint.setColor(innerTextColor);
-        barInnerLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        barInnerLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+        amountBarFillPaint.setColor(amountBarColor);
 
         reqBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         reqBarFillPaint.setColor(reqBarColor);
 
+        // label paints
+        barOuterLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        barOuterLabelPaint.setColor(barOuterTextColor);
+        barOuterLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        barOuterLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+
+        barInnerLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        barInnerLabelPaint.setColor(barInnerTextColor);
+        barInnerLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        barInnerLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+
+        // tooltip paints
         amountTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        amountTooltipFillPaint.setColor(ttColor);
+        amountTooltipFillPaint.setColor(amountTooltipFillColor);
 
         amountTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        amountTooltipTextPaint.setColor(ttTextColor);
+        amountTooltipTextPaint.setColor(amountTooltipTextColor);
         amountTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         amountTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
         reqTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        reqTooltipFillPaint.setColor(reqTtColor);
+        reqTooltipFillPaint.setColor(reqTooltipFillColor);
 
         reqTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        reqTooltipTextPaint.setColor(reqTtTextColor);
+        reqTooltipTextPaint.setColor(reqTooltipTextColor);
         reqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         reqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
-
+        // spacing and size values
         barWidth = Utils.convertDpToPixelSize(barWidthDp, context);
+        // spacing is 1/10 of bar thickness
         barSpacing = barWidth * 0.1f;
         barCornerRadius = Utils.convertDpToPixelSize(8, context);
 
-        textMarginInside = Utils.convertDpToPixelSize(12, context);
-        textMarginOutside = Utils.convertDpToPixelSize(8, context);
+        labelMarginInside = Utils.convertDpToPixelSize(12, context);
+        labelMarginOutside = Utils.convertDpToPixelSize(8, context);
 
         tooltipMargin = Utils.convertDpToPixelSize(8, context);
         tooltipPadding = Utils.convertDpToPixelSize(8, context);
 
-        decimalFormat = new DecimalFormat(DECIMAL_FORMAT_PATTERN);
+        // round to 2 d.p.
+        decimalFormat = new DecimalFormat("#.##");
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // set custom height of view, from number of bars shown (plus padding),
+        // this allows the view to extend below the screen so it can scroll
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = Utils.convertDpToPixelSize(barWidthDp * dataSet.size() + getPaddingTop(), context);
         setMeasuredDimension(width, height);
@@ -273,9 +279,9 @@ public class BarChartView extends View {
     // label drawing methods
     private float getLabelTextWidth(boolean isInside) {
         if (isInside) {
-            return labelTextBounds.width() + textMarginInside * 2f;
+            return labelTextBounds.width() + labelMarginInside * 2f;
         } else {
-            return labelTextBounds.width() + textMarginOutside * 2f;
+            return labelTextBounds.width() + labelMarginOutside * 2f;
         }
     }
 
@@ -321,12 +327,12 @@ public class BarChartView extends View {
 
         switch (getLabelPos(data)) {
             case INSIDE_NORMAL:
-                return textMarginInside;
+                return labelMarginInside;
             case INSIDE_REQ:
             case OUTSIDE_NO_REQ:
-                return barLength + textMarginOutside;
+                return barLength + labelMarginOutside;
             case OUTSIDE_REQ:
-                return reqBarLength + textMarginOutside;
+                return reqBarLength + labelMarginOutside;
         }
         return 0;
     }
@@ -353,7 +359,7 @@ public class BarChartView extends View {
 
     // tooltip drawing methods
     private float getTooltipWidth() {
-        return ttTextBounds.width() + tooltipPadding * 2f;
+        return tooltipTextBounds.width() + tooltipPadding * 2f;
     }
 
     private float getTooltipWidthWithMargin() {
@@ -361,7 +367,7 @@ public class BarChartView extends View {
     }
 
     private float getReqTooltipWidth() {
-        return reqTtTextBounds.width() + tooltipPadding * 2f;
+        return reqTooltipTextBounds.width() + tooltipPadding * 2f;
     }
 
     private float getReqTooltipWidthWithMargin() {
@@ -433,11 +439,11 @@ public class BarChartView extends View {
     }
 
     private float getTooltipTop(int pos) {
-        return (getBarTop(pos) + getBarBottom(pos) - ttTextBounds.height()) / 2f - tooltipPadding;
+        return (getBarTop(pos) + getBarBottom(pos) - tooltipTextBounds.height()) / 2f - tooltipPadding;
     }
 
     private float getTooltipBottom(int pos) {
-        return (getBarTop(pos) + getBarBottom(pos) + ttTextBounds.height()) / 2f + tooltipPadding;
+        return (getBarTop(pos) + getBarBottom(pos) + tooltipTextBounds.height()) / 2f + tooltipPadding;
     }
 
     private void drawTooltip(Canvas c,
@@ -458,7 +464,7 @@ public class BarChartView extends View {
         String tooltipText = context.getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
                 decimalFormat.format(Utils.convertToCurrentMassUnit(context, data.getAmount())));
 
-        amountTooltipTextPaint.getTextBounds(tooltipText, 0, tooltipText.length(), ttTextBounds);
+        amountTooltipTextPaint.getTextBounds(tooltipText, 0, tooltipText.length(), tooltipTextBounds);
 
         float left = getTooltipLeft(data, getLabelPos(data));
         float top = getTooltipTop(pos);
@@ -492,7 +498,7 @@ public class BarChartView extends View {
         MassUnit massUnit = MassUnit.getMassUnit(context);
         String text = context.getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
                 decimalFormat.format(Utils.convertToCurrentMassUnit(context, data.getAmountRequired())));
-        reqTooltipTextPaint.getTextBounds(text, 0, text.length(), reqTtTextBounds);
+        reqTooltipTextPaint.getTextBounds(text, 0, text.length(), reqTooltipTextBounds);
 
         float left = getReqTooltipLeft(data, getLabelPos(data), normalTooltipRight);
         float top = getTooltipTop(pos);
