@@ -6,13 +6,6 @@ public class BarChartEntry {
     private float amount;
     private float amountRequired;
 
-    public BarChartEntry() {
-    }
-
-    public BarChartEntry(String name, float amount) {
-        this.name = name;
-        this.amount = amount;
-    }
 
     public BarChartEntry(String name, float amount, float amountRequired) {
         this.name = name;
