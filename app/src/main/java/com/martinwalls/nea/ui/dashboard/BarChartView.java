@@ -105,12 +105,12 @@ public class BarChartView extends View {
         this.context = context;
 
         // get colours from theme attrs
-        int amountBarColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphBarColor);
+        int amountBarColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphAmountBarColor);
         int reqBarColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphReqBarColor);
         int barOuterTextColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphBarOuterTextColor);
         int barInnerTextColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphBarInnerTextColor);
-        int amountTooltipFillColor = Utils.getColorFromTheme(context, R.attr.dashboardTooltipColor);
-        int amountTooltipTextColor = Utils.getColorFromTheme(context, R.attr.dashboardTooltipTextColor);
+        int amountTooltipFillColor = Utils.getColorFromTheme(context, R.attr.dashboardAmountTooltipColor);
+        int amountTooltipTextColor = Utils.getColorFromTheme(context, R.attr.dashboardAmountTooltipTextColor);
         int reqTooltipFillColor = Utils.getColorFromTheme(context, R.attr.dashboardReqTooltipColor);
         int reqTooltipTextColor = Utils.getColorFromTheme(context, R.attr.dashboardReqTooltipTextColor);
 

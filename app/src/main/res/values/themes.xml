@@ -47,9 +47,9 @@
         <item name="dividerColor">@color/medium_dark_grey</item>
 
         <!-- Dashboard graph -->
-        <item name="dashboardGraphBarColor">@color/dashboard_graph_bar</item>
-        <item name="dashboardTooltipColor">@color/dashboard_tooltip</item>
-        <item name="dashboardTooltipTextColor">?textColorPrimary</item>
+        <item name="dashboardGraphAmountBarColor">@color/dashboard_graph_bar</item>
+        <item name="dashboardAmountTooltipColor">@color/dashboard_tooltip</item>
+        <item name="dashboardAmountTooltipTextColor">?textColorPrimary</item>
         <item name="dashboardGraphBarInnerTextColor">?textColorPrimary</item>
         <item name="dashboardGraphBarOuterTextColor">?textColorPrimary</item>
 

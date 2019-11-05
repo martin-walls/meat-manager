@@ -16,12 +16,12 @@
 
     <attr name="menuPopupOverlay" format="reference" />
 
-    <attr name="dashboardGraphBarColor" format="reference" />
+    <attr name="dashboardGraphAmountBarColor" format="reference" />
     <attr name="dashboardGraphReqBarColor" format="reference" />
     <attr name="dashboardGraphBarInnerTextColor" format="reference" />
     <attr name="dashboardGraphBarOuterTextColor" format="reference" />
-    <attr name="dashboardTooltipColor" format="reference" />
-    <attr name="dashboardTooltipTextColor" format="reference" />
+    <attr name="dashboardAmountTooltipColor" format="reference" />
+    <attr name="dashboardAmountTooltipTextColor" format="reference" />
     <attr name="dashboardReqTooltipColor" format="reference" />
     <attr name="dashboardReqTooltipTextColor" format="reference" />
 
