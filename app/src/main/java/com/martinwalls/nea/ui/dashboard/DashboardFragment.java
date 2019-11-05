@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -112,7 +111,6 @@ public class DashboardFragment extends Fragment
 
     @Override
     public void onLocationItemClicked(Location location, int position) {
-        Toast.makeText(getContext(), location.getLocationName(), Toast.LENGTH_SHORT).show();
         locationsRecyclerView.getLayoutManager().findViewByPosition(position).setSelected(true);
         for (int i = 0; i < locationsRecyclerView.getAdapter().getItemCount(); i++) {
             if (i != position) {
