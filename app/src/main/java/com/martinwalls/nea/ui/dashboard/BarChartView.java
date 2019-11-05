@@ -27,37 +27,59 @@ public class BarChartView extends View {
 
     private float xMax = 0;
 
-    private Paint barFillPaint;
-    private Paint barLabelPaint;
-    private Paint barInnerLabelPaint;
-    private Paint reqBarFillPaint;
-    private Paint tooltipFillPaint;
-    private Paint tooltipTextPaint;
-    private Paint prevTooltipFillPaint;
-    private Paint prevTooltipTextPaint;
-    private Paint reqTooltipFillPaint;
-    private Paint reqTooltipTextPaint;
-    private Paint prevReqTooltipFillPaint;
-    private Paint prevReqTooltipTextPaint;
+    // no bar selected at start
+    private int selectedIndex = -1;
+    private int prevSelectedIndex = -1;
 
+    // colour of bar to show amount of stock held
+    private Paint amountBarFillPaint;
+    // colour of required bar
+    private Paint reqBarFillPaint;
+
+    // text colour outside bar
+    private Paint barOuterLabelPaint;
+    // text colour inside bar
+    private Paint barInnerLabelPaint;
+
+    // colour of tooltip for amount bar
+    private Paint amountTooltipFillPaint;
+    // text colour in amount tooltip
+    private Paint amountTooltipTextPaint;
+
+    // colour of tooltip for required bar
+    private Paint reqTooltipFillPaint;
+    // text colour in required tooltip
+    private Paint reqTooltipTextPaint;
+
+    // thickness of each bar, in dp
     private final int barWidthDp = 48;
+    // thickness of each bar
     private float barWidth;
+
+    // space between each bar
     private float barSpacing;
+    // corner radius for bars
     private float barCornerRadius;
+
+    // space between label text and edge of bar
     private float textMarginInside;
     private float textMarginOutside;
-    private float ttMargin;
-    private float ttPadding;
 
-    private int selectedIndex = -1;
+    // space around tooltip
+    private float tooltipMargin;
+    // space between tooltip text and edge of tooltip
+    private float tooltipPadding;
 
-    private int ttAlpha = 0;
-    private int ttAlphaDelay = 10;
-    private int ttAlphaLength = 200;
-    private int ttAlphaStep = 255 / (ttAlphaLength / ttAlphaDelay);
+    // opacity of tooltips
+    private int tooltipAlpha = 0;
+    private int prevTooltipAlpha = 255;
+    // delay between redrawing the view each time
+    private int tooltipAlphaDelay = 10;
+    // length of fade animation in ms
+    private int tooltipAlphaAnimLength = 200;
+    // how much to change opacity by each time the view is redrawn
+    private int tooltipAlphaStep = 255 / (tooltipAlphaAnimLength / tooltipAlphaDelay);
 
-    private int prevSelectedIndex = -1;
-    private int prevTtAlpha = 255;
 
     private Rect labelTextBounds = new Rect();
     private Rect ttTextBounds = new Rect();
@@ -93,13 +115,13 @@ public class BarChartView extends View {
         int reqTtTextColor = Utils.getColorFromTheme(context, R.attr.dashboardReqTooltipTextColor);
 
 
-        barFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        barFillPaint.setColor(barColor);
+        amountBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        amountBarFillPaint.setColor(barColor);
 
-        barLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        barLabelPaint.setColor(outerTextColor);
-        barLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        barLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+        barOuterLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        barOuterLabelPaint.setColor(outerTextColor);
+        barOuterLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        barOuterLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
         barInnerLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         barInnerLabelPaint.setColor(innerTextColor);
@@ -109,21 +131,13 @@ public class BarChartView extends View {
         reqBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         reqBarFillPaint.setColor(reqBarColor);
 
-        tooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        tooltipFillPaint.setColor(ttColor);
+        amountTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        amountTooltipFillPaint.setColor(ttColor);
 
-        tooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        tooltipTextPaint.setColor(ttTextColor);
-        tooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        tooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
-
-        prevTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        prevTooltipFillPaint.setColor(ttColor);
-
-        prevTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        prevTooltipTextPaint.setColor(ttTextColor);
-        prevTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        prevTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+        amountTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        amountTooltipTextPaint.setColor(ttTextColor);
+        amountTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        amountTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
         reqTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         reqTooltipFillPaint.setColor(reqTtColor);
@@ -133,14 +147,6 @@ public class BarChartView extends View {
         reqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         reqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
-        prevReqTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        prevReqTooltipFillPaint.setColor(reqTtColor);
-
-        prevReqTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        prevReqTooltipTextPaint.setColor(reqTtTextColor);
-        prevReqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        prevReqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
-
 
         barWidth = Utils.convertDpToPixelSize(barWidthDp, context);
         barSpacing = barWidth * 0.1f;
@@ -149,8 +155,8 @@ public class BarChartView extends View {
         textMarginInside = Utils.convertDpToPixelSize(12, context);
         textMarginOutside = Utils.convertDpToPixelSize(8, context);
 
-        ttMargin = Utils.convertDpToPixelSize(8, context);
-        ttPadding = Utils.convertDpToPixelSize(8, context);
+        tooltipMargin = Utils.convertDpToPixelSize(8, context);
+        tooltipPadding = Utils.convertDpToPixelSize(8, context);
 
         decimalFormat = new DecimalFormat(DECIMAL_FORMAT_PATTERN);
     }
@@ -201,8 +207,8 @@ public class BarChartView extends View {
             selectedIndex = (int) y / (int) barWidth;
 
             // reset tooltip alpha values
-            ttAlpha = 0;
-            prevTtAlpha = 255;
+            tooltipAlpha = 0;
+            prevTooltipAlpha = 255;
 
             // redraw graph
             invalidate();
@@ -261,7 +267,7 @@ public class BarChartView extends View {
 
     private void drawAmountBar(Canvas c, BarChartEntry data, int pos) {
         float length = getBarLength(data.getAmount());
-        drawBar(c, 0, getBarTop(pos), length, getBarBottom(pos), barFillPaint);
+        drawBar(c, 0, getBarTop(pos), length, getBarBottom(pos), amountBarFillPaint);
     }
 
     // label drawing methods
@@ -283,7 +289,7 @@ public class BarChartView extends View {
 
     private LabelPos getLabelPos(BarChartEntry data) {
         String label = data.getName().toUpperCase();
-        barLabelPaint.getTextBounds(label, 0, label.length(), labelTextBounds);
+        barOuterLabelPaint.getTextBounds(label, 0, label.length(), labelTextBounds);
 
         float barLength = getBarLength(data.getAmount());
         float reqBarLength = getBarLength(data.getAmountRequired());
@@ -308,7 +314,7 @@ public class BarChartView extends View {
 
     private float getLabelX(BarChartEntry data) {
         String label = data.getName().toUpperCase();
-        barLabelPaint.getTextBounds(label, 0, label.length(), labelTextBounds);
+        barOuterLabelPaint.getTextBounds(label, 0, label.length(), labelTextBounds);
 
         float barLength = getBarLength(data.getAmount());
         float reqBarLength = getBarLength(data.getAmountRequired());
@@ -341,25 +347,25 @@ public class BarChartView extends View {
         if (getLabelPos(data) == LabelPos.INSIDE_NORMAL) {
             c.drawText(label, labelX, labelY, barInnerLabelPaint);
         } else {
-            c.drawText(label, labelX, labelY, barLabelPaint);
+            c.drawText(label, labelX, labelY, barOuterLabelPaint);
         }
     }
 
     // tooltip drawing methods
     private float getTooltipWidth() {
-        return ttTextBounds.width() + ttPadding * 2f;
+        return ttTextBounds.width() + tooltipPadding * 2f;
     }
 
     private float getTooltipWidthWithMargin() {
-        return getTooltipWidth() + ttMargin * 2f;
+        return getTooltipWidth() + tooltipMargin * 2f;
     }
 
     private float getReqTooltipWidth() {
-        return reqTtTextBounds.width() + ttPadding * 2f;
+        return reqTtTextBounds.width() + tooltipPadding * 2f;
     }
 
     private float getReqTooltipWidthWithMargin() {
-        return getReqTooltipWidth() + ttMargin * 2f;
+        return getReqTooltipWidth() + tooltipMargin * 2f;
     }
 
     // different positions the tooltip can be in
@@ -407,17 +413,17 @@ public class BarChartView extends View {
 
         switch (getTooltipPos(data, labelPos)) {
             case INSIDE_NORMAL:
-                return barLength - getTooltipWidth() - ttMargin;
+                return barLength - getTooltipWidth() - tooltipMargin;
             case INSIDE_REQ:
-                return reqBarLength - (getReqTooltipWidth() + ttMargin) - (getTooltipWidth() + ttMargin);
+                return reqBarLength - (getReqTooltipWidth() + tooltipMargin) - (getTooltipWidth() + tooltipMargin);
             case OUTSIDE_REQ_LABEL_IN:
-                return reqBarLength + ttMargin;
+                return reqBarLength + tooltipMargin;
             case OUTSIDE_NO_REQ_LABEL_IN:
-                return barLength + ttMargin;
+                return barLength + tooltipMargin;
             case OUTSIDE_REQ_LABEL_OUT:
-                return reqBarLength + getLabelTextWidth(false) + ttMargin;
+                return reqBarLength + getLabelTextWidth(false) + tooltipMargin;
             case OUTSIDE_NO_REQ_LABEL_OUT:
-                return barLength + getLabelTextWidth(false) + ttMargin;
+                return barLength + getLabelTextWidth(false) + tooltipMargin;
         }
         return 0;
     }
@@ -427,11 +433,11 @@ public class BarChartView extends View {
     }
 
     private float getTooltipTop(int pos) {
-        return (getBarTop(pos) + getBarBottom(pos) - ttTextBounds.height()) / 2f - ttPadding;
+        return (getBarTop(pos) + getBarBottom(pos) - ttTextBounds.height()) / 2f - tooltipPadding;
     }
 
     private float getTooltipBottom(int pos) {
-        return (getBarTop(pos) + getBarBottom(pos) + ttTextBounds.height()) / 2f + ttPadding;
+        return (getBarTop(pos) + getBarBottom(pos) + ttTextBounds.height()) / 2f + tooltipPadding;
     }
 
     private void drawTooltip(Canvas c,
@@ -452,17 +458,17 @@ public class BarChartView extends View {
         String tooltipText = context.getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
                 decimalFormat.format(Utils.convertToCurrentMassUnit(context, data.getAmount())));
 
-        tooltipTextPaint.getTextBounds(tooltipText, 0, tooltipText.length(), ttTextBounds);
+        amountTooltipTextPaint.getTextBounds(tooltipText, 0, tooltipText.length(), ttTextBounds);
 
         float left = getTooltipLeft(data, getLabelPos(data));
         float top = getTooltipTop(pos);
         float right = getTooltipRight(left);
         float bottom = getTooltipBottom(pos);
 
-        float textX = left + ttPadding;
+        float textX = left + tooltipPadding;
         float textY = getLabelY(pos);
 
-        drawTooltip(c, left, top, right, bottom, tooltipFillPaint, tooltipText, textX, textY, tooltipTextPaint);
+        drawTooltip(c, left, top, right, bottom, amountTooltipFillPaint, tooltipText, textX, textY, amountTooltipTextPaint);
 
         return right;
     }
@@ -474,11 +480,11 @@ public class BarChartView extends View {
         float reqBarLength = getBarLength(data.getAmountRequired());
 
         if (getReqTooltipWidthWithMargin() < reqBarLength - barLength) {
-            return reqBarLength - getReqTooltipWidth() - ttMargin;
+            return reqBarLength - getReqTooltipWidth() - tooltipMargin;
         } else if (tooltipPos == TooltipPos.INSIDE_NORMAL) {
-            return reqBarLength + ttMargin;
+            return reqBarLength + tooltipMargin;
         } else {
-            return normalTooltipRight + ttMargin;
+            return normalTooltipRight + tooltipMargin;
         }
     }
 
@@ -493,52 +499,52 @@ public class BarChartView extends View {
         float right = getTooltipRight(left);
         float bottom = getTooltipBottom(pos);
 
-        float textX = left + ttPadding;
+        float textX = left + tooltipPadding;
         float textY = getLabelY(pos);
 
         drawTooltip(c, left, top, right, bottom, reqTooltipFillPaint, text, textX, textY, reqTooltipTextPaint);
     }
 
     private void drawTooltips(Canvas c, BarChartEntry data, int pos) {
-        tooltipFillPaint.setAlpha(ttAlpha);
-        tooltipTextPaint.setAlpha(ttAlpha);
+        amountTooltipFillPaint.setAlpha(tooltipAlpha);
+        amountTooltipTextPaint.setAlpha(tooltipAlpha);
         float normalTooltipRight = drawAmountTooltip(c, data, pos);
 
         if (isReqBarShown(data)) {
-            reqTooltipFillPaint.setAlpha(ttAlpha);
-            reqTooltipTextPaint.setAlpha(ttAlpha);
+            reqTooltipFillPaint.setAlpha(tooltipAlpha);
+            reqTooltipTextPaint.setAlpha(tooltipAlpha);
             drawReqTooltip(c, data, pos, normalTooltipRight);
         }
     }
 
     private void drawPreviousTooltips(Canvas c, BarChartEntry data, int pos) {
-        tooltipFillPaint.setAlpha(prevTtAlpha);
-        tooltipTextPaint.setAlpha(prevTtAlpha);
+        amountTooltipFillPaint.setAlpha(prevTooltipAlpha);
+        amountTooltipTextPaint.setAlpha(prevTooltipAlpha);
         float normalTooltipRight = drawAmountTooltip(c, data, pos);
 
         if (isReqBarShown(data)) {
-            reqTooltipFillPaint.setAlpha(prevTtAlpha);
-            reqTooltipTextPaint.setAlpha(prevTtAlpha);
+            reqTooltipFillPaint.setAlpha(prevTooltipAlpha);
+            reqTooltipTextPaint.setAlpha(prevTooltipAlpha);
             drawReqTooltip(c, data, pos, normalTooltipRight);
         }
     }
 
     private void updateTooltipAlpha() {
-        if (ttAlpha < 255 || prevTtAlpha > 0) {
-            postInvalidateDelayed(ttAlphaDelay);
+        if (tooltipAlpha < 255 || prevTooltipAlpha > 0) {
+            postInvalidateDelayed(tooltipAlphaDelay);
         }
 
-        if (ttAlpha < 255) {
-            ttAlpha += ttAlphaStep;
-            if (ttAlpha > 255) {
-                ttAlpha = 255;
+        if (tooltipAlpha < 255) {
+            tooltipAlpha += tooltipAlphaStep;
+            if (tooltipAlpha > 255) {
+                tooltipAlpha = 255;
             }
         }
 
-        if (prevTtAlpha > 0) {
-            prevTtAlpha -= ttAlphaStep;
-            if (prevTtAlpha < 0) {
-                prevTtAlpha = 0;
+        if (prevTooltipAlpha > 0) {
+            prevTooltipAlpha -= tooltipAlphaStep;
+            if (prevTooltipAlpha < 0) {
+                prevTooltipAlpha = 0;
             }
         }
     }
