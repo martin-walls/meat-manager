@@ -20,6 +20,12 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         >
+        <receiver
+            android:name=".ui.ReminderReceiver"
+            android:enabled="true"
+            android:exported="false"
+            />
+
         <activity android:name=".ui.stock.StockDetailActivity" />
         <activity android:name=".ui.locations.EditLocationActivity" />
         <activity

@@ -36,12 +36,13 @@ import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
 import com.martinwalls.nea.ui.products.AddNewProductDialog;
 import com.martinwalls.nea.util.MassUnit;
+import com.martinwalls.nea.util.ReminderUtils;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.SortUtils;
 import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.util.undo.UndoStack;
 import com.martinwalls.nea.util.undo.contracts.AddContractAction;
 import com.martinwalls.nea.util.undo.contracts.EditContractAction;
-import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -649,28 +650,20 @@ public class EditContractActivity extends InputFormActivity
                 int newRowId = dbHandler.addContract(newContract);
                 newContract.setContractId(newRowId);
                 UndoStack.getInstance().push(new AddContractAction(newContract));
+                registerReminder(newContract);
                 return newRowId != -1;
             } else {
                 newContract.setContractId(contractToEdit.getContractId());
                 boolean success = dbHandler.updateContract(newContract);
                 UndoStack.getInstance().push(new EditContractAction(contractToEdit, newContract));
+                //todo edit reminder for editing contract
                 return success;
             }
         }
         return false;
     }
 
-//    private boolean areAllFieldsEmpty() {
-//        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
-//        TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
-//        TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
-//        TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
-//        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
-//
-//        return TextUtils.isEmpty(editTextProduct.getText())
-//                && TextUtils.isEmpty(editTextMass.getText())
-//                && TextUtils.isEmpty(editTextNumBoxes.getText())
-//                && TextUtils.isEmpty(editTextDest.getText())
-//                && TextUtils.isEmpty(editTextRepeatInterval.getText());
-//    }
+    private void registerReminder(Contract contract) {
+        ReminderUtils.setReminder(this, contract, 0);
+    }
 }

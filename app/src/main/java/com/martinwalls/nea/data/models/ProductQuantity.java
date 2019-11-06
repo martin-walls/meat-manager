@@ -1,9 +1,11 @@
 package com.martinwalls.nea.data.models;
 
+import java.io.Serializable;
+
 /**
  * Class to store quantity with product in Order / Contract
  */
-public class ProductQuantity {
+public class ProductQuantity implements Serializable {
     private Product product;
     private double quantityMass; // in kg
     private int quantityBoxes;

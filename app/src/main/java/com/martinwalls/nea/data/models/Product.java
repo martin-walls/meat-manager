@@ -1,8 +1,9 @@
 package com.martinwalls.nea.data.models;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class Product {
+public class Product implements Serializable {
     private int productId;
     private String productName;
     private String meatType;

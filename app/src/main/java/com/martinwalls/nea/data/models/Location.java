@@ -1,9 +1,10 @@
 package com.martinwalls.nea.data.models;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class Location {
-    public enum LocationType {
+public class Location implements Serializable {
+    public enum LocationType implements Serializable {
         Storage,
         Supplier,
         Destination;

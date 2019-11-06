@@ -1,8 +1,10 @@
 package com.martinwalls.nea.data.models;
 
-public class Interval {
+import java.io.Serializable;
 
-    public enum TimeUnit {
+public class Interval implements Serializable {
+
+    public enum TimeUnit implements Serializable {
         WEEK,
         MONTH;
 

@@ -1,11 +1,12 @@
 package com.martinwalls.nea.data.models;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class Order {
+public class Order implements Serializable {
     private int orderId;
     private int destId;
     private String destName;

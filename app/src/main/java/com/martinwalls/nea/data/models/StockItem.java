@@ -1,12 +1,13 @@
 package com.martinwalls.nea.data.models;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class StockItem {
-    public enum Quality {
+public class StockItem implements Serializable {
+    public enum Quality implements Serializable {
         Good,
         Pet_Food,
         Waste;

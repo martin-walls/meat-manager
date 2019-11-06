@@ -1,6 +1,9 @@
 package com.martinwalls.nea;
 
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import com.martinwalls.nea.util.DarkTheme;
 import com.martinwalls.nea.util.EasyPreferences;
 
@@ -16,5 +19,19 @@ public class App extends Application {
 
         // start on default page so clear saved position
         prefs.setString(R.string.pref_last_opened_page, null);
+
+        createNotificationChannel();
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String name = getString(R.string.channel_reminder_name);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            String channelId = getString(R.string.channel_reminder_id);
+            NotificationChannel channel = new NotificationChannel(channelId, name, importance);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }
