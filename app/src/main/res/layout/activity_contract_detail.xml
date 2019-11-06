@@ -35,7 +35,7 @@
         tools:text="Destination"
         />
 
-    <!-- Date -->
+    <!-- Repeat on -->
     <TextView
         android:id="@+id/repeat"
         style="@style/DetailsText"
@@ -48,6 +48,21 @@
         android:paddingEnd="8dp"
         android:paddingBottom="16dp"
         tools:text="Repeats every week on Monday"
+        />
+
+    <!-- Next repeat -->
+    <TextView
+        android:id="@+id/next_repeat"
+        style="@style/DetailsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_date"
+        android:drawablePadding="16dp"
+        android:paddingStart="8dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="16dp"
+        tools:text="Next repeat is in 3 days"
         />
 
 </LinearLayout>

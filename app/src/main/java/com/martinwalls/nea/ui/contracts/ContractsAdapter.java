@@ -20,16 +20,19 @@ public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.View
     private ContractsAdapterListener listener;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView contractDest, contractRepeat;
+        private TextView contractDest;
+        private TextView contractRepeat;
         private RecyclerView recyclerView;
+        private TextView dateDivider;
 
         ViewHolder(View view) {
             super(view);
             contractDest = view.findViewById(R.id.contract_dest);
             contractRepeat = view.findViewById(R.id.contract_repeat);
             recyclerView = view.findViewById(R.id.recycler_view);
+            dateDivider = view.findViewById(R.id.date_divider);
 
-            LinearLayout contractLayout = view.findViewById(R.id.contract_layout);
+            LinearLayout contractLayout = view.findViewById(R.id.contract_info);
             contractLayout.setOnClickListener(v -> listener.onContractClicked(contractList.get(getAdapterPosition())));
         }
     }
@@ -50,15 +53,16 @@ public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         Contract contract = contractList.get(position);
         holder.contractDest.setText(contract.getDestName());
+//        holder.contractDest.setText(contract.getDaysToNextRepeat() + "");
         String repeatStr;
         Interval repeatInterval = contract.getRepeatInterval();
         int repeatOn = contract.getRepeatOn();
         String repeatOnStr;
         if (repeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
             repeatOnStr = holder.contractRepeat.getContext().getResources()
-                    .getStringArray(R.array.weekdays)[repeatOn];
+                    .getStringArray(R.array.weekdays)[repeatOn - 1];
         } else {
-            repeatOnStr = "day " + (repeatOn + 1);
+            repeatOnStr = "day " + repeatOn;
         }
         if (repeatInterval.getValue() == 1) {
             repeatStr = holder.contractRepeat.getContext().getResources().getString(
@@ -75,6 +79,25 @@ public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.View
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.recyclerView.getContext()));
         // allow click events to pass to parent layout
         holder.recyclerView.suppressLayout(true);
+
+        int daysToNextRepeat = contract.getDaysToNextRepeat();
+        if (position == 0 || contractList.get(position - 1).getDaysToNextRepeat() != daysToNextRepeat) {
+            switch (daysToNextRepeat) {
+                case 0:
+                    holder.dateDivider.setText(R.string.contracts_divider_today);
+                    break;
+                case 1:
+                    holder.dateDivider.setText(R.string.contracts_divider_tomorrow);
+                    break;
+                default:
+                    holder.dateDivider.setText(holder.dateDivider.getContext().getString(
+                            R.string.contracts_divider_days_until, contract.getDaysToNextRepeat()));
+                    break;
+            }
+            holder.dateDivider.setVisibility(View.VISIBLE);
+        } else {
+            holder.dateDivider.setVisibility(View.GONE);
+        }
     }
 
     @Override

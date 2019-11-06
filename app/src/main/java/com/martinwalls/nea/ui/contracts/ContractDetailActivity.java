@@ -49,26 +49,7 @@ public class ContractDetailActivity extends AppCompatActivity
         productsRecyclerView.setAdapter(productsAdapter);
         productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        TextView destination = findViewById(R.id.destination);
-        destination.setText(contract.getDestName());
-
-        TextView repeat = findViewById(R.id.repeat);
-        String repeatStr;
-        String repeatOnStr;
-        Interval repeatInterval = contract.getRepeatInterval();
-        if (repeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
-            repeatOnStr = getResources().getStringArray(R.array.weekdays)[contract.getRepeatOn()];
-        } else {
-            repeatOnStr = "day " + (contract.getRepeatOn() + 1);
-        }
-        if (repeatInterval.getValue() == 1) {
-            repeatStr = getString(R.string.contracts_repeat_display_one,
-                    repeatInterval.getUnit().name().toLowerCase(), repeatOnStr);
-        } else {
-            repeatStr = getString(R.string.contracts_repeat_display_multiple,
-                    repeatInterval.getValue(), repeatInterval.getUnit().name().toLowerCase(), repeatOnStr);
-        }
-        repeat.setText(repeatStr);
+        fillData();
     }
 
     @Override
@@ -128,5 +109,42 @@ public class ContractDetailActivity extends AppCompatActivity
     private void showConfirmDeleteDialog() {
         DialogFragment dialog = new ConfirmDeleteDialog();
         dialog.show(getSupportFragmentManager(), "confirm_delete");
+    }
+
+    private void fillData() {
+        TextView destination = findViewById(R.id.destination);
+        destination.setText(contract.getDestName());
+
+        TextView repeat = findViewById(R.id.repeat);
+        String repeatStr;
+        String repeatOnStr;
+        Interval repeatInterval = contract.getRepeatInterval();
+        if (repeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
+            repeatOnStr = getResources().getStringArray(R.array.weekdays)[contract.getRepeatOn() - 1];
+        } else {
+            repeatOnStr = "day " + contract.getRepeatOn();
+        }
+        if (repeatInterval.getValue() == 1) {
+            repeatStr = getString(R.string.contracts_repeat_display_one,
+                    repeatInterval.getUnit().name().toLowerCase(), repeatOnStr);
+        } else {
+            repeatStr = getString(R.string.contracts_repeat_display_multiple,
+                    repeatInterval.getValue(), repeatInterval.getUnit().name().toLowerCase(), repeatOnStr);
+        }
+        repeat.setText(repeatStr);
+
+        TextView nextRepeat = findViewById(R.id.next_repeat);
+        int daysToNextRepeat = contract.getDaysToNextRepeat();
+        switch (daysToNextRepeat) {
+            case 0:
+                nextRepeat.setText(R.string.contracts_next_repeat_today);
+                break;
+            case 1:
+                nextRepeat.setText(R.string.contracts_next_repeat_tomorrow);
+                break;
+            default:
+                nextRepeat.setText(getString(R.string.contracts_next_repeat_on, contract.getDaysToNextRepeat()));
+                break;
+        }
     }
 }

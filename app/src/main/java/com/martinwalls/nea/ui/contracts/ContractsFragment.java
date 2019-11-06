@@ -102,7 +102,7 @@ public class ContractsFragment extends Fragment
 
     private void loadContracts() {
         contractList.clear();
-        contractList.addAll(SortUtils.mergeSort(dbHandler.getAllContracts(), Contract.comparatorId()));
+        contractList.addAll(SortUtils.mergeSort(dbHandler.getAllContracts(), Contract.comparatorDate()));
         contractsAdapter.notifyDataSetChanged();
     }
 }

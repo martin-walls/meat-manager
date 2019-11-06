@@ -43,6 +43,7 @@ import com.martinwalls.nea.util.undo.contracts.AddContractAction;
 import com.martinwalls.nea.util.undo.contracts.EditContractAction;
 import com.martinwalls.nea.util.undo.UndoStack;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -635,7 +636,8 @@ public class EditContractActivity extends InputFormActivity
             newContract.setProductList(productsAddedList);
             newContract.setDest(dbHandler.getLocation(selectedDestId));
             newContract.setRepeatInterval(selectedRepeatInterval);
-            newContract.setRepeatOn(repeatOnSpn.getSelectedItemPosition());
+            newContract.setRepeatOn(repeatOnSpn.getSelectedItemPosition() + 1);
+            newContract.setStartDate(LocalDate.now());
             if (TextUtils.isEmpty(editTextReminder.getText())
                     || editTextReminder.getText().toString().equals("0")) {
                 newContract.setReminder(-1);

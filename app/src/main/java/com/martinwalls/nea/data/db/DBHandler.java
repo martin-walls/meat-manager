@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.List;
 @SuppressWarnings("FieldCanBeLocal")
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "stockDB.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     private static final String BACKUP_DIR = "/nea/db_backup/";
 
@@ -82,6 +83,7 @@ public class DBHandler extends SQLiteOpenHelper {
         static final String REPEAT_INTERVAL = "RepeatInterval";
         static final String REPEAT_INTERVAL_UNIT = "RepeatIntervalUnit";
         static final String REPEAT_ON = "RepeatOn";
+        static final String START_DATE = "StartDate";
         static final String REMINDER = "Reminder";
     }
 
@@ -202,6 +204,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + ContractsTable.REPEAT_INTERVAL + " INTEGER NOT NULL, "
                 + ContractsTable.REPEAT_INTERVAL_UNIT + " TEXT NOT NULL, "
                 + ContractsTable.REPEAT_ON + " INTEGER, "
+                + ContractsTable.START_DATE + " INTEGER NOT NULL, " //doc put into ER diagram
                 + ContractsTable.REMINDER + " INTEGER NOT NULL, "
                 + "FOREIGN KEY (" + ContractsTable.DEST_ID + ") REFERENCES "
                     + LocationsTable.TABLE_NAME + "(" + LocationsTable.ID + ") "
@@ -1013,6 +1016,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 );
                 contractResult.setRepeatInterval(repeatInterval);
                 contractResult.setRepeatOn(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_ON)));
+                // get start date as a LocalDate object from Epoch days
+                contractResult.setStartDate(LocalDate.ofEpochDay(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.START_DATE))));
                 contractResult.setReminder(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REMINDER)));
                 gotContractData = true;
             }
@@ -1063,6 +1069,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 );
                 contract.setRepeatInterval(repeatInterval);
                 contract.setRepeatOn(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REPEAT_ON)));
+                contract.setStartDate(LocalDate.ofEpochDay(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.START_DATE))));
                 contract.setReminder(cursor.getInt(cursor.getColumnIndexOrThrow(ContractsTable.REMINDER)));
                 contractResultList.add(contract);
                 lastContractId = thisContractId;
@@ -1090,6 +1098,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(ContractsTable.REPEAT_INTERVAL, contract.getRepeatInterval().getValue());
         values.put(ContractsTable.REPEAT_INTERVAL_UNIT, contract.getRepeatInterval().getUnit().name());
         values.put(ContractsTable.REPEAT_ON, contract.getRepeatOn());
+        values.put(ContractsTable.START_DATE, contract.getStartDate().toEpochDay());
         values.put(ContractsTable.REMINDER, contract.getReminder());
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1113,6 +1122,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(ContractsTable.REPEAT_INTERVAL, contract.getRepeatInterval().getValue());
         values.put(ContractsTable.REPEAT_INTERVAL_UNIT, contract.getRepeatInterval().getUnit().name());
         values.put(ContractsTable.REPEAT_ON, contract.getRepeatOn());
+        values.put(ContractsTable.START_DATE, contract.getStartDate().toEpochDay());
         values.put(ContractsTable.REMINDER, contract.getReminder());
 
         SQLiteDatabase db = this.getWritableDatabase();

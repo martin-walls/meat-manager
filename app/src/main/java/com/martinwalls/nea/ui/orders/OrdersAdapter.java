@@ -26,7 +26,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     private boolean isCurrentView = true;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView orderDest, dateDivider;
+        private TextView orderDest;
+        private TextView dateDivider;
         private RecyclerView recyclerView;
 
         ViewHolder(View view) {
@@ -53,27 +54,28 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         Order order = orderList.get(position);
-        viewHolder.orderDest.setText(order.getDestName());
+        holder.orderDest.setText(order.getDestName());
         ProductsQuantityAdapter adapter = new ProductsQuantityAdapter(order.getProductList());
-        viewHolder.recyclerView.setAdapter(adapter);
-        viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(viewHolder.recyclerView.getContext()));
+        holder.recyclerView.setAdapter(adapter);
+        holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.recyclerView.getContext()));
         // allow click events to be passed to parent layout
-        viewHolder.recyclerView.suppressLayout(true);
+        holder.recyclerView.suppressLayout(true);
 
-        if (position > 0 && orderList.get(position - 1).getOrderDate().isBefore(order.getOrderDate())
-                || position == 0) {
-            viewHolder.dateDivider.setText(order.getOrderDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
-            viewHolder.dateDivider.setVisibility(View.VISIBLE);
+        if (position == 0 || orderList.get(position - 1).getOrderDate().isBefore(order.getOrderDate())) {
+            holder.dateDivider.setText(order.getOrderDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+            holder.dateDivider.setVisibility(View.VISIBLE);
+        } else {
+            holder.dateDivider.setVisibility(View.GONE);
         }
 
         // show past dates in red
         if (isCurrentView && order.getOrderDate().isBefore(LocalDateTime.now())) {
-            viewHolder.dateDivider.setTextColor(viewHolder.dateDivider.getContext().getColor(R.color.error_red));
+            holder.dateDivider.setTextColor(holder.dateDivider.getContext().getColor(R.color.error_red));
         } else {
-            viewHolder.dateDivider.setTextColor(
-                    Utils.getColorFromTheme(viewHolder.dateDivider.getContext(), R.attr.textColorEmphasis));
+            holder.dateDivider.setTextColor(
+                    Utils.getColorFromTheme(holder.dateDivider.getContext(), R.attr.textColorEmphasis));
         }
     }
 

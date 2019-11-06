@@ -209,6 +209,15 @@
     <string name="contracts_repeat_on_month">Repeat monthly on</string>
     <string name="contracts_repeat_on_default">Repeat on</string>
 
+    <string name="contracts_divider_today">Today</string>
+    <string name="contracts_divider_tomorrow">Tomorrow</string>
+    <string name="contracts_divider_days_until">In %d days</string>
+
+
+    <string name="contracts_next_repeat_today">Next repeat is today</string>
+    <string name="contracts_next_repeat_tomorrow">Next repeat is tomorrow</string>
+    <string name="contracts_next_repeat_on">Next repeat is in %d days</string>
+
     <string name="contract_new_title">New contract</string>
     <string name="contract_edit_title">Edit contract</string>
     <string name="contract_details_title">Contract details</string>

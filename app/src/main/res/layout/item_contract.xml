@@ -1,45 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/contract_layout"
+    android:id="@+id/item_root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?selectableItemBackground"
-    android:baselineAligned="false"
-    android:clickable="true"
     android:orientation="vertical"
-    android:paddingStart="24dp"
-    android:paddingTop="16dp"
-    android:paddingEnd="24dp"
-    android:paddingBottom="16dp"
     >
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <include
+        android:id="@+id/date_divider"
+        layout="@layout/item_date_divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:overScrollMode="never"
-        tools:itemCount="2"
-        tools:listitem="@layout/item_product"
+        android:visibility="gone"
+        tools:visibility="visible"
         />
 
-    <TextView
-        android:id="@+id/contract_repeat"
+    <LinearLayout
+        android:id="@+id/contract_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical|start"
-        style="@style/ItemInfoSecondary"
-        tools:text="Repeats every Wednesday"
-        />
+        android:background="?selectableItemBackground"
+        android:baselineAligned="false"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
+        >
 
-    <TextView
-        android:id="@+id/contract_dest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical|start"
-        style="@style/ItemInfoSecondary"
-        tools:text="Destination"
-        />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_product"
+            />
+
+        <TextView
+            android:id="@+id/contract_repeat"
+            style="@style/ItemInfoSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|start"
+            tools:text="Repeats every Wednesday"
+            />
+
+        <TextView
+            android:id="@+id/contract_dest"
+            style="@style/ItemInfoSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical|start"
+            tools:text="Destination"
+            />
+
+    </LinearLayout>
 
 </LinearLayout>
