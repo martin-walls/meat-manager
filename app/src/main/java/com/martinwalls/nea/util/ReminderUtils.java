@@ -2,8 +2,12 @@ package com.martinwalls.nea.util;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import com.martinwalls.nea.data.models.Contract;
 import com.martinwalls.nea.data.models.Interval;
 import com.martinwalls.nea.data.models.ProductQuantity;
@@ -54,5 +58,23 @@ public class ReminderUtils {
         alarmManager.set(AlarmManager.RTC,
                 reminderDateTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000,
                 pendingIntent);
+    }
+
+    public static void scheduleReminderService(Context context) {
+        ComponentName serviceName = new ComponentName(context, ReminderService.class);
+
+        //todo use AlarmManager? time is more exact
+        JobInfo jobInfo = new JobInfo.Builder(ReminderService.JOB_ID, serviceName)
+                .build();
+
+        JobScheduler scheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+
+        int result = scheduler.schedule(jobInfo);
+
+        if (result == JobScheduler.RESULT_SUCCESS) {
+            Log.d("DEBUG", "Job executed successfully");
+        } else {
+            Log.d("DEBUG", "Job failed");
+        }
     }
 }

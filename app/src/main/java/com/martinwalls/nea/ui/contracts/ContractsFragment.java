@@ -1,6 +1,5 @@
 package com.martinwalls.nea.ui.contracts;
 
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,9 +16,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Contract;
-import com.martinwalls.nea.ui.ReminderReceiver;
 import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.ui.misc.RecyclerViewDivider;
+import com.martinwalls.nea.util.ReminderUtils;
 import com.martinwalls.nea.util.SortUtils;
 import com.martinwalls.nea.util.undo.UndoStack;
 
@@ -110,18 +109,19 @@ public class ContractsFragment extends Fragment
     }
 
     private void showNotification(Contract contract) {
-        Intent notifyIntent = new Intent(getContext(), ReminderReceiver.class);
-
-        notifyIntent.putExtra(ReminderReceiver.EXTRA_TITLE, "Upcoming contract");
-        notifyIntent.putExtra(ReminderReceiver.EXTRA_TEXT, contract.getDaysToNextRepeat() + "");
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),
-                1, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        try {
-            pendingIntent.send();
-        } catch (PendingIntent.CanceledException e) {
-            e.printStackTrace();
-        }
+//        Intent notifyIntent = new Intent(getContext(), ReminderReceiver.class);
+//
+//        notifyIntent.putExtra(ReminderReceiver.EXTRA_TITLE, "Upcoming contract");
+//        notifyIntent.putExtra(ReminderReceiver.EXTRA_TEXT, contract.getDaysToNextRepeat() + "");
+//
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),
+//                1, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        try {
+//            pendingIntent.send();
+//        } catch (PendingIntent.CanceledException e) {
+//            e.printStackTrace();
+//        }
+        ReminderUtils.scheduleReminderService(getContext());
     }
 }

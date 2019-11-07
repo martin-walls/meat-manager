@@ -36,7 +36,6 @@ import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
 import com.martinwalls.nea.ui.products.AddNewProductDialog;
 import com.martinwalls.nea.util.MassUnit;
-import com.martinwalls.nea.util.ReminderUtils;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.SortUtils;
 import com.martinwalls.nea.util.Utils;
@@ -664,6 +663,7 @@ public class EditContractActivity extends InputFormActivity
     }
 
     private void registerReminder(Contract contract) {
-        ReminderUtils.setReminder(this, contract, 0);
+//        ReminderUtils.setReminder(this, contract, 0);
+//        ReminderUtils.scheduleReminderService(this);
     }
 }
