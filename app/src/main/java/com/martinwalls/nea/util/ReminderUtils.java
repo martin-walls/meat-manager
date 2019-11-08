@@ -8,15 +8,18 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.models.Contract;
 import com.martinwalls.nea.data.models.Interval;
 import com.martinwalls.nea.data.models.ProductQuantity;
-import com.martinwalls.nea.ui.ReminderReceiver;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.Calendar;
 
 public class ReminderUtils {
 
@@ -76,5 +79,36 @@ public class ReminderUtils {
         } else {
             Log.d("DEBUG", "Job failed");
         }
+    }
+
+    public static void scheduleReminder(Context context) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 18);
+        calendar.set(Calendar.MINUTE, 30);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (calendar.before(Calendar.getInstance())) {
+            calendar.add(Calendar.DATE, 1);
+        }
+
+        Intent intent = new Intent(context, ReminderService.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    public static void showTestNotification(Context context) {
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(context, context.getString(R.string.channel_reminder_id))
+                        .setSmallIcon(R.drawable.ic_date)
+                        .setContentTitle("9am notification")
+                        .setContentText("Test notification that should be sent daily");
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+        notificationManager.notify(1, builder.build());
     }
 }

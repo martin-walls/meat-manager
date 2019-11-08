@@ -32,4 +32,8 @@
 
     <string name="pref_exchange_currency_primary">exchange_currency_primary</string>
     <string name="pref_exchange_currency_secondary">exchange_currency_secondary</string>
+
+
+    <!-- FOR TESTING -->
+    <string name="test_pref_reminder_set">reminder_set</string>
 </resources>

@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.os.Build;
 import com.martinwalls.nea.util.DarkTheme;
 import com.martinwalls.nea.util.EasyPreferences;
+import com.martinwalls.nea.util.ReminderUtils;
 
 public class App extends Application {
 
@@ -21,6 +22,11 @@ public class App extends Application {
         prefs.setString(R.string.pref_last_opened_page, null);
 
         createNotificationChannel();
+
+        if (!prefs.getBoolean(R.string.test_pref_reminder_set, false)) {
+            ReminderUtils.scheduleReminder(this);
+            prefs.setBoolean(R.string.test_pref_reminder_set, true);
+        }
     }
 
     private void createNotificationChannel() {

@@ -21,7 +21,7 @@
         tools:ignore="GoogleAppIndexingWarning"
         >
         <receiver
-            android:name=".ui.ReminderReceiver"
+            android:name=".util.ReminderReceiver"
             android:enabled="true"
             android:exported="false"
             />
