@@ -222,6 +222,11 @@ public class BarChartView extends View {
         return true;
     }
 
+    private void resetSelectedItem() {
+        selectedIndex = -1;
+        prevSelectedIndex = -1;
+    }
+
     public void setData(List<BarChartEntry> newDataSet) {
         if (newDataSet.size() == 0) {
             return;
@@ -240,6 +245,7 @@ public class BarChartView extends View {
 
         dataSet.clear();
         dataSet.addAll(newDataSet);
+        resetSelectedItem();
         invalidate();
     }
 
