@@ -558,6 +558,9 @@ public class EditContractActivity extends InputFormActivity
             isWeek = false;
         }
 
+        Spinner repeatOnSpn = findViewById(R.id.spn_repeat_on);
+        repeatOnSpn.setSelection(contractToEdit.getRepeatOn() - 1);
+
         TextView repeatOnTxt = findViewById(R.id.text_repeat_on);
         if (interval.getUnit() == Interval.TimeUnit.WEEK) {
             if (interval.getValue() == 1) {

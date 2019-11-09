@@ -18,7 +18,7 @@ import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Contract;
 import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.ui.misc.RecyclerViewDivider;
-import com.martinwalls.nea.util.ReminderUtils;
+import com.martinwalls.nea.util.NotificationUtils;
 import com.martinwalls.nea.util.SortUtils;
 import com.martinwalls.nea.util.undo.UndoStack;
 
@@ -96,10 +96,9 @@ public class ContractsFragment extends Fragment
 
     @Override
     public void onContractClicked(Contract contract) {
-//        Intent detailIntent = new Intent(getContext(), ContractDetailActivity.class);
-//        detailIntent.putExtra(ContractDetailActivity.EXTRA_CONTRACT_ID, contract.getContractId());
-//        startActivity(detailIntent);
-        showNotification(contract);
+        Intent detailIntent = new Intent(getContext(), ContractDetailActivity.class);
+        detailIntent.putExtra(ContractDetailActivity.EXTRA_CONTRACT_ID, contract.getContractId());
+        startActivity(detailIntent);
     }
 
     private void loadContracts() {
@@ -122,6 +121,10 @@ public class ContractsFragment extends Fragment
 //        } catch (PendingIntent.CanceledException e) {
 //            e.printStackTrace();
 //        }
-        ReminderUtils.scheduleReminderService(getContext());
+//        ReminderUtils.scheduleReminderService(getContext());
+
+        NotificationUtils.sendNotification(getContext(), getString(R.string.channel_reminder_id),
+                contract.getProductList().get(0).getProduct().getProductName(), "test", R.drawable.ic_contracts,
+                1);
     }
 }
