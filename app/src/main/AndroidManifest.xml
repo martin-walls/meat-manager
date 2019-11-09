@@ -89,13 +89,13 @@
         <activity android:name=".ui.orders.EditOrderActivity" />
 
         <receiver
-            android:name=".util.ReminderReceiver"
+            android:name=".util.notification.ReminderReceiver"
             android:enabled="true"
             android:exported="false"
             />
 
         <receiver
-            android:name=".util.BootReceiver"
+            android:name=".util.notification.BootReceiver"
             android:enabled="false"
             android:exported="false"
             >

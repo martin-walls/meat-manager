@@ -6,7 +6,7 @@ import android.app.NotificationManager;
 import android.os.Build;
 import com.martinwalls.nea.util.DarkTheme;
 import com.martinwalls.nea.util.EasyPreferences;
-import com.martinwalls.nea.util.ReminderUtils;
+import com.martinwalls.nea.util.notification.ReminderUtils;
 
 public class App extends Application {
 

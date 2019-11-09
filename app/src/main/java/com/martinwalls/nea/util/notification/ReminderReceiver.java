@@ -1,4 +1,4 @@
-package com.martinwalls.nea.util;
+package com.martinwalls.nea.util.notification;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -15,15 +15,6 @@ import java.util.List;
 
 public class ReminderReceiver extends BroadcastReceiver {
 
-    @Deprecated
-    public static final String EXTRA_TITLE = "title";
-    @Deprecated
-    public static final String EXTRA_TEXT = "text";
-    @Deprecated
-    public static final String EXTRA_NUM_ELAPSED = "num_elapsed";
-    @Deprecated
-    public static final String EXTRA_CONTRACT = "contract";
-
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -31,10 +22,9 @@ public class ReminderReceiver extends BroadcastReceiver {
 
         List<Contract> contractList = dbHandler.getAllContracts();
 
-
-
+        // show a notification for each upcoming contract
         for (Contract contract : contractList) {
-            int reminderDaysBefore = contract.getReminder(); //todo handle null case (reminder off)
+            int reminderDaysBefore = contract.getReminder();
             if (contract.getDaysToNextRepeat() == reminderDaysBefore) {
                 String title = context.getResources().getQuantityString(R.plurals.contract_upcoming_days,
                         reminderDaysBefore, reminderDaysBefore);
@@ -48,7 +38,8 @@ public class ReminderReceiver extends BroadcastReceiver {
                 TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
                 stackBuilder.addNextIntentWithParentStack(onClickIntent);
 
-                PendingIntent pendingIntent = stackBuilder.getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent pendingIntent =
+                        stackBuilder.getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 NotificationUtils.sendNotification(context, context.getString(R.string.channel_reminder_id),
                         title, text, R.drawable.ic_date,

@@ -1,4 +1,4 @@
-package com.martinwalls.nea.util;
+package com.martinwalls.nea.util.notification;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.martinwalls.nea.util;
+package com.martinwalls.nea.util.notification;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import com.martinwalls.nea.R;
+import com.martinwalls.nea.util.EasyPreferences;
 
 import java.util.Calendar;
 

@@ -15,7 +15,7 @@ import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.util.DarkTheme;
 import com.martinwalls.nea.util.EasyPreferences;
-import com.martinwalls.nea.util.ReminderUtils;
+import com.martinwalls.nea.util.notification.ReminderUtils;
 
 public class SettingsActivity extends AppCompatActivity {
 
