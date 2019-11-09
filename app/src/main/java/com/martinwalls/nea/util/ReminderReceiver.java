@@ -39,15 +39,7 @@ public class ReminderReceiver extends BroadcastReceiver {
                 String title = context.getResources().getQuantityString(R.plurals.contract_upcoming_days,
                         reminderDaysBefore, reminderDaysBefore);
 
-                StringBuilder builder = new StringBuilder();
-                List<ProductQuantity> productList = contract.getProductList();
-                for (int i = 0; i < productList.size(); i++) {
-                    builder.append(productList.get(i).getProduct().getProductName());
-                    if (i != productList.size() - 1) {
-                        builder.append(", ");
-                    }
-                }
-                String text = builder.toString();
+                String text = getProductListDisplay(contract.getProductList());
 
                 int notificationId = contract.getContractId();
 
@@ -64,13 +56,17 @@ public class ReminderReceiver extends BroadcastReceiver {
             }
         }
 
+        ReminderUtils.scheduleReminderAtDefaultTime(context);
+    }
 
-//        ReminderUtils.showTestNotification(context);
-
-//        Calendar today = Calendar.getInstance();
-
-//        today.add(Calendar.MINUTE, 5);
-
-//        ReminderUtils.scheduleReminder(context, today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE));
+    private String getProductListDisplay(List<ProductQuantity> productList) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < productList.size(); i++) {
+            builder.append(productList.get(i).getProduct().getProductName());
+            if (i != productList.size() - 1) {
+                builder.append(", ");
+            }
+        }
+        return builder.toString();
     }
 }

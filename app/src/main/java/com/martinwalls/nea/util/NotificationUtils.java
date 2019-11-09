@@ -14,19 +14,20 @@ public class NotificationUtils {
 
     public static void sendNotification(Context context, String channelId,
                                         String title, String text, @DrawableRes int iconId,
-                                        int requestCode, String groupKey) {
-        sendNotification(context, channelId, title, text, iconId, null, requestCode, groupKey);
+                                        int notificationId, String groupKey) {
+        sendNotification(context, channelId, title, text, iconId, null, notificationId, groupKey);
     }
 
     public static void sendNotification(Context context, String channelId,
                                         String title, String text, @DrawableRes int iconId,
-                                        PendingIntent pendingIntent, int requestCode, String groupKey) {
+                                        PendingIntent pendingIntent, int notificationId, String groupKey) {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(iconId)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setGroup(groupKey)
+                .setGroupSummary(true)
                 .setAutoCancel(true);
 
 //        if (onClickClass != null) {
@@ -44,7 +45,7 @@ public class NotificationUtils {
         }
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        notificationManager.notify(requestCode, builder.build());
+        notificationManager.notify(notificationId, builder.build());
     }
 
 

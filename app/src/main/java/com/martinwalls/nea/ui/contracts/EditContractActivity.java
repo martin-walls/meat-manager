@@ -652,7 +652,6 @@ public class EditContractActivity extends InputFormActivity
                 int newRowId = dbHandler.addContract(newContract);
                 newContract.setContractId(newRowId);
                 UndoStack.getInstance().push(new AddContractAction(newContract));
-                registerReminder(newContract);
                 return newRowId != -1;
             } else {
                 newContract.setContractId(contractToEdit.getContractId());
@@ -663,10 +662,5 @@ public class EditContractActivity extends InputFormActivity
             }
         }
         return false;
-    }
-
-    private void registerReminder(Contract contract) {
-//        ReminderUtils.setReminder(this, contract, 0);
-//        ReminderUtils.scheduleReminderService(this);
     }
 }

@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
-    <PreferenceCategory app:title="@string/settings_cat_general">
+    <PreferenceCategory app:title="@string/settings_category_general">
 
         <ListPreference
             app:defaultValue="@string/unit_kg"
@@ -29,7 +29,21 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_cat_backup">
+    <PreferenceCategory app:title="@string/settings_category_notifications">
+
+        <SwitchPreference
+            android:key="@string/pref_enable_notifications"
+            android:title="@string/settings_enable_notifications"
+            />
+
+        <Preference
+            android:key="@string/pref_reminder_time"
+            android:title="@string/settings_reminder_time"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/settings_category_backup">
 
         <Preference
             app:key="@string/pref_backup_db"

@@ -1,6 +1,7 @@
 package com.martinwalls.nea.ui.settings;
 
 import android.Manifest;
+import android.app.TimePickerDialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -14,6 +15,7 @@ import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.util.DarkTheme;
 import com.martinwalls.nea.util.EasyPreferences;
+import com.martinwalls.nea.util.ReminderUtils;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -42,6 +44,9 @@ public class SettingsActivity extends AppCompatActivity {
         private final int PERMISSIONS_REQUEST_STORAGE_FOR_BACKUP = 1;
         private final int PERMISSIONS_REQUEST_STORAGE_FOR_RESTORE = 2;
 
+        private EasyPreferences prefs;
+
+        private Preference reminderTimePref;
         private Preference backupDbPref;
         private Preference restoreDbPref;
 
@@ -49,12 +54,31 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.settings, rootKey);
 
+            prefs = EasyPreferences.createForDefaultPreferences(getContext());
+
             Preference darkThemePref = findPreference(R.string.pref_dark_theme);
 
             darkThemePref.setOnPreferenceChangeListener((preference, newValue) -> {
                 getActivity().recreate();
                 return true;
             });
+
+            Preference enableNotificationsPref = findPreference(R.string.pref_enable_notifications);
+            enableNotificationsPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                setNotificationsEnabled((boolean) newValue);
+                return true;
+            });
+
+
+            reminderTimePref = findPreference(R.string.pref_reminder_time);
+            reminderTimePref.setOnPreferenceClickListener(preference -> {
+                showReminderTimeDialog();
+                return true;
+            });
+
+            int hour = prefs.getInt(R.string.pref_reminder_time_hr, ReminderUtils.DEFAULT_REMINDER_HR);
+            int min = prefs.getInt(R.string.pref_reminder_time_min, ReminderUtils.DEFAULT_REMINDER_MIN);
+            setReminderTimeSummary(hour, min);
 
             backupDbPref = findPreference(R.string.pref_backup_db);
             restoreDbPref = findPreference(R.string.pref_restore_db);
@@ -106,7 +130,36 @@ public class SettingsActivity extends AppCompatActivity {
             return findPreference(getString(keyId));
         }
 
+        private void setNotificationsEnabled(boolean enabled) {
+            if (enabled) {
+                ReminderUtils.scheduleReminderAtDefaultTime(getContext());
+            } else {
+                ReminderUtils.cancelReminder(getContext());
+            }
+        }
 
+        private void setReminderTimeSummary(int hour, int min) {
+            reminderTimePref.setSummary(getString(R.string.settings_reminder_time_summary, hour, min));
+        }
+
+        private TimePickerDialog.OnTimeSetListener listener = (view, hourOfDay, minute) -> {
+            prefs.setInt(R.string.pref_reminder_time_hr, hourOfDay);
+            prefs.setInt(R.string.pref_reminder_time_min, minute);
+            setReminderTimeSummary(hourOfDay, minute);
+
+            if (prefs.getBoolean(R.string.pref_enable_notifications, false)) {
+                ReminderUtils.cancelReminder(getContext());
+                ReminderUtils.scheduleReminderAtDefaultTime(getContext());
+            }
+        };
+
+        private void showReminderTimeDialog() {
+            int hour = prefs.getInt(R.string.pref_reminder_time_hr, 9);
+            int min = prefs.getInt(R.string.pref_reminder_time_min, 0);
+            TimePickerDialog timePickerDialog =
+                    new TimePickerDialog(getContext(), listener, hour, min, true);
+            timePickerDialog.show();
+        }
 
         private boolean isExternalStoragePermissionGranted() {
             return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)

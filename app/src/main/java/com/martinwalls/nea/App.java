@@ -8,8 +8,6 @@ import com.martinwalls.nea.util.DarkTheme;
 import com.martinwalls.nea.util.EasyPreferences;
 import com.martinwalls.nea.util.ReminderUtils;
 
-import java.util.Calendar;
-
 public class App extends Application {
 
     @Override
@@ -25,18 +23,12 @@ public class App extends Application {
 
         createNotificationChannel();
 
-//        prefs.setBoolean(R.string.test_pref_reminder_set, false);
 
-//        if (!prefs.getBoolean(R.string.test_pref_reminder_set, false)) {
-//            ReminderUtils.scheduleReminder(this);
-//            prefs.setBoolean(R.string.test_pref_reminder_set, true);
-//        }
+//        ReminderUtils.scheduleReminder(this, calendarNow.get(Calendar.HOUR_OF_DAY), calendarNow.get(Calendar.MINUTE));
 
-        Calendar calendarNow = Calendar.getInstance();
-
-        calendarNow.add(Calendar.MINUTE, 1);
-
-        ReminderUtils.scheduleReminder(this, calendarNow.get(Calendar.HOUR_OF_DAY), calendarNow.get(Calendar.MINUTE));
+        if (prefs.getBoolean(R.string.pref_enable_notifications, false)) {
+            ReminderUtils.scheduleReminderAtDefaultTime(this);
+        }
     }
 
     private void createNotificationChannel() {

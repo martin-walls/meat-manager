@@ -255,10 +255,16 @@
 
     <!-- Settings page -->
     <string name="settings_title">Settings</string>
-    <string name="settings_cat_general">General</string>
+    <string name="settings_category_general">General</string>
     <string name="settings_mass_unit">Unit of mass to use</string>
     <string name="settings_default_reminder_time">Default reminder time (days)</string>
-    <string name="settings_cat_backup">Backup &amp; restore</string>
+
+    <string name="settings_category_notifications">Notifications</string>
+    <string name="settings_enable_notifications">Enable Notifications</string>
+    <string name="settings_reminder_time">Default reminder time</string>
+    <string name="settings_reminder_time_summary">%02d:%02d</string>
+
+    <string name="settings_category_backup">Backup &amp; restore</string>
     <string name="settings_backup_db">Backup database</string>
     <string name="settings_restore_db">Restore database from backup</string>
     <string name="settings_dark_theme">Theme</string>
