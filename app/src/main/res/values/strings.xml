@@ -222,6 +222,11 @@
     <string name="contract_edit_title">Edit contract</string>
     <string name="contract_details_title">Contract details</string>
 
+    <plurals name="contract_upcoming_days">
+        <item quantity="one">Upcoming contract tomorrow</item>
+        <item quantity="other">Upcoming contract in %d days</item>
+    </plurals>
+
     <!-- Exchange page -->
     <string name="exchange_title">Exchange</string>
     <string name="exchange_choose_currencies">Choose currencies</string>

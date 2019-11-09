@@ -20,39 +20,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         >
-        <receiver
-            android:name=".util.ReminderReceiver"
-            android:enabled="true"
-            android:exported="false"
-            />
 
-        <activity android:name=".ui.stock.StockDetailActivity" />
-        <activity android:name=".ui.locations.EditLocationActivity" />
-        <activity
-            android:name=".ui.settings.SettingsActivity"
-            android:label="@string/settings_title"
-            android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/AppTheme.FadeTransition"
-            >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.martinwalls.nea.ui.MainActivity"
-                />
-        </activity>
-        <activity android:name=".ui.contracts.ContractDetailActivity" />
-        <activity android:name=".ui.contracts.EditContractActivity" />
-        <activity android:name=".ui.orders.OrderDetailActivity" />
-        <activity android:name=".ui.locations.NewLocationActivity" />
-        <activity android:name=".ui.products.EditProductsActivity" />
-        <activity android:name=".ui.meat_types.EditMeatTypesActivity" />
-        <activity android:name=".ui.locations.LocationsActivity" />
-        <activity android:name=".ui.locations.LocationDetailActivity" />
-        <activity android:name=".ui.exchange.ChooseCurrenciesActivity">
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable"
-                />
-        </activity>
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name"
@@ -64,8 +32,66 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <activity android:name=".ui.stock.StockDetailActivity"
+            android:parentActivityName=".ui.MainActivity" />
+
+
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:label="@string/settings_title"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme.FadeTransition"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.martinwalls.nea.ui.MainActivity"
+                />
+        </activity>
+
+        <activity android:name=".ui.contracts.ContractDetailActivity"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity android:name=".ui.contracts.EditContractActivity" />
+
+        <activity android:name=".ui.orders.OrderDetailActivity"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity android:name=".ui.locations.NewLocationActivity" />
+
+        <activity android:name=".ui.locations.EditLocationActivity"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity android:name=".ui.products.EditProductsActivity"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity android:name=".ui.meat_types.EditMeatTypesActivity"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity android:name=".ui.locations.LocationsActivity"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity android:name=".ui.locations.LocationDetailActivity"
+            android:parentActivityName=".ui.locations.LocationsActivity" />
+
+        <activity android:name=".ui.exchange.ChooseCurrenciesActivity"
+            android:parentActivityName=".ui.MainActivity" >
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"
+                />
+        </activity>
+
         <activity android:name=".ui.stock.EditStockActivity" />
+
         <activity android:name=".ui.orders.EditOrderActivity" />
+
+        <receiver
+            android:name=".util.ReminderReceiver"
+            android:enabled="true"
+            android:exported="false"
+            />
 
         <service
             android:name=".data.api.ApiIntentService"

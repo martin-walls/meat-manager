@@ -18,7 +18,6 @@ import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Contract;
 import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.ui.misc.RecyclerViewDivider;
-import com.martinwalls.nea.util.NotificationUtils;
 import com.martinwalls.nea.util.SortUtils;
 import com.martinwalls.nea.util.undo.UndoStack;
 
@@ -107,24 +106,24 @@ public class ContractsFragment extends Fragment
         contractsAdapter.notifyDataSetChanged();
     }
 
-    private void showNotification(Contract contract) {
-//        Intent notifyIntent = new Intent(getContext(), ReminderReceiver.class);
+//    private void showNotification(Contract contract) {
+////        Intent notifyIntent = new Intent(getContext(), ReminderReceiver.class);
+////
+////        notifyIntent.putExtra(ReminderReceiver.EXTRA_TITLE, "Upcoming contract");
+////        notifyIntent.putExtra(ReminderReceiver.EXTRA_TEXT, contract.getDaysToNextRepeat() + "");
+////
+////        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),
+////                1, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+////
+////        try {
+////            pendingIntent.send();
+////        } catch (PendingIntent.CanceledException e) {
+////            e.printStackTrace();
+////        }
+////        ReminderUtils.scheduleReminderService(getContext());
 //
-//        notifyIntent.putExtra(ReminderReceiver.EXTRA_TITLE, "Upcoming contract");
-//        notifyIntent.putExtra(ReminderReceiver.EXTRA_TEXT, contract.getDaysToNextRepeat() + "");
-//
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),
-//                1, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        try {
-//            pendingIntent.send();
-//        } catch (PendingIntent.CanceledException e) {
-//            e.printStackTrace();
-//        }
-//        ReminderUtils.scheduleReminderService(getContext());
-
-        NotificationUtils.sendNotification(getContext(), getString(R.string.channel_reminder_id),
-                contract.getProductList().get(0).getProduct().getProductName(), "test", R.drawable.ic_contracts,
-                1);
-    }
+//        NotificationUtils.sendNotification(getContext(), getString(R.string.channel_reminder_id),
+//                contract.getProductList().get(0).getProduct().getProductName(), "test", R.drawable.ic_contracts,
+//                1);
+//    }
 }

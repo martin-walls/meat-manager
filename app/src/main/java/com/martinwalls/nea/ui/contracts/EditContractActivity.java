@@ -524,6 +524,9 @@ public class EditContractActivity extends InputFormActivity
 
         setSelectedRepeatInterval(contractToEdit.getRepeatInterval());
 
+        Spinner repeatOnSpn = findViewById(R.id.spn_repeat_on);
+        repeatOnSpn.setSelection(contractToEdit.getRepeatOn() - 1);
+
         EditText editTextReminder = findViewById(R.id.edit_text_reminder);
         editTextReminder.setText(String.valueOf(contractToEdit.getReminder()));
 
@@ -557,9 +560,6 @@ public class EditContractActivity extends InputFormActivity
             repeatOnSpnAdapter.notifyDataSetChanged();
             isWeek = false;
         }
-
-        Spinner repeatOnSpn = findViewById(R.id.spn_repeat_on);
-        repeatOnSpn.setSelection(contractToEdit.getRepeatOn() - 1);
 
         TextView repeatOnTxt = findViewById(R.id.text_repeat_on);
         if (interval.getUnit() == Interval.TimeUnit.WEEK) {
