@@ -149,7 +149,11 @@ public class ContractDetailActivity extends AppCompatActivity
 
         TextView reminder = findViewById(R.id.reminder);
         int reminderDaysBefore = contract.getReminder();
-        reminder.setText(getResources().getQuantityString(R.plurals.contract_reminder_display,
-                reminderDaysBefore, reminderDaysBefore));
+        if (reminderDaysBefore > 0) {
+            reminder.setText(getResources().getQuantityString(R.plurals.contract_reminder_display,
+                    reminderDaysBefore, reminderDaysBefore));
+        } else {
+            reminder.setText(R.string.contract_reminder_display_off);
+        }
     }
 }
