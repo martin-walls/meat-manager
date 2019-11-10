@@ -2,6 +2,7 @@ package com.martinwalls.nea.data.models;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -113,15 +114,29 @@ public class Contract implements Serializable {
         LocalDate today = LocalDate.now();
 
         if (repeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
-            int dayOfWeekToday = today.getDayOfWeek().getValue();
+            if (repeatInterval.getValue() == 1) {
+                int dayOfWeekToday = today.getDayOfWeek().getValue();
 
-            int daysDifference = repeatOn - dayOfWeekToday;
+                int daysDifference = repeatOn - dayOfWeekToday;
 
-            if (dayOfWeekToday > repeatOn) {
-                daysDifference += 7;
+                if (dayOfWeekToday > repeatOn) {
+                    daysDifference += 7;
+                }
+
+                return daysDifference;
+            } else {
+
+                LocalDate nextRepeat = LocalDate.from(startDate);
+
+                //todo get days to next repeat when more than 1 week cycle
+
+
+                int numWeeks = repeatInterval.getValue();
+                Period diff = Period.between(startDate, today);
+                int daysDiff = diff.getDays();
+                int numWeeksAtNextRepeat = (daysDiff + (7 - daysDiff % 7)) / 7;
+                numWeeksAtNextRepeat % numWeeks
             }
-
-            return daysDifference;
         } else /* MONTH */ {
             int dayOfMonthToday = today.getDayOfMonth();
             int numDaysInMonth = today.getMonth().length(today.isLeapYear());
