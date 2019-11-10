@@ -146,5 +146,10 @@ public class ContractDetailActivity extends AppCompatActivity
                 nextRepeat.setText(getString(R.string.contracts_next_repeat_on, contract.getDaysToNextRepeat()));
                 break;
         }
+
+        TextView reminder = findViewById(R.id.reminder);
+        int reminderDaysBefore = contract.getReminder();
+        reminder.setText(getResources().getQuantityString(R.plurals.contract_reminder_display,
+                reminderDaysBefore, reminderDaysBefore));
     }
 }

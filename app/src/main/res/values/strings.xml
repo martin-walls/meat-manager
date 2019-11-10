@@ -192,6 +192,11 @@
         <item quantity="other">days before</item>
     </plurals>
 
+    <plurals name="contract_reminder_display">
+        <item quantity="one">Reminder %d day in advance</item>
+        <item quantity="other">Reminder %d days in advance</item>
+    </plurals>
+
     <string name="contracts_dialog_repeat_interval_title">Repeat every…</string>
     <string name="contracts_dialog_repeat_interval_week">Every week</string>
     <string name="contracts_dialog_repeat_interval_two_week">Every two weeks</string>

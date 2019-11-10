@@ -65,4 +65,19 @@
         tools:text="Next repeat is in 3 days"
         />
 
+    <!-- Reminder -->
+    <TextView
+        android:id="@+id/reminder"
+        style="@style/DetailsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_alert"
+        android:drawablePadding="16dp"
+        android:paddingStart="8dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="16dp"
+        tools:text="Reminder 2 days in advance"
+        />
+
 </LinearLayout>
