@@ -42,7 +42,7 @@ public class ReminderReceiver extends BroadcastReceiver {
                         stackBuilder.getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 NotificationUtils.sendNotification(context, context.getString(R.string.channel_reminder_id),
-                        title, text, R.drawable.ic_date,
+                        title, text, R.drawable.ic_alert,
                         pendingIntent, notificationId, NotificationUtils.GROUP_CONTRACT_REMINDER);
             }
         }
