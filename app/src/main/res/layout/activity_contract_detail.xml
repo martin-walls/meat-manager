@@ -71,7 +71,7 @@
         style="@style/DetailsText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/ic_alert"
+        android:drawableStart="@drawable/ic_alert_outline"
         android:drawablePadding="16dp"
         android:paddingStart="8dp"
         android:paddingTop="16dp"
