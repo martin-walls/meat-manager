@@ -94,7 +94,7 @@ public class EditContractActivity extends InputFormActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_contract);
+        setContentView(R.layout.activity_edit_contract);
 
         dbHandler = new DBHandler(this);
 
@@ -191,14 +191,14 @@ public class EditContractActivity extends InputFormActivity
 
         EditText editTextReminder = findViewById(R.id.edit_text_reminder);
         TextView txtReminderDaysBefore = findViewById(R.id.reminder_text_days_before);
-        TextView txtReminder = findViewById(R.id.text_reminder);
+        TextView hintReminder = findViewById(R.id.text_reminder);
         editTextReminder.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextUtils.isEmpty(s) || s.toString().equals("0")) {
-                    txtReminder.setText(R.string.contracts_reminder_off);
+                    hintReminder.setText(R.string.contracts_reminder_off_hint);
                 } else {
-                    txtReminder.setText(R.string.contracts_reminder);
+                    hintReminder.setText(R.string.contracts_reminder_hint);
                 }
                 if (!TextUtils.isEmpty(s)) {
                     txtReminderDaysBefore.setText(getResources().getQuantityString(
@@ -209,6 +209,8 @@ public class EditContractActivity extends InputFormActivity
 
         if (editType == EDIT_TYPE_NEW) {
             findViewById(R.id.product_btn_done).setVisibility(View.GONE);
+
+            editTextReminder.setText("1");
         } else {
             findViewById(R.id.product_inputs).setVisibility(View.GONE);
 
@@ -528,7 +530,14 @@ public class EditContractActivity extends InputFormActivity
         repeatOnSpn.setSelection(contractToEdit.getRepeatOn() - 1);
 
         EditText editTextReminder = findViewById(R.id.edit_text_reminder);
-        editTextReminder.setText(String.valueOf(contractToEdit.getReminder()));
+        TextView hintReminder = findViewById(R.id.text_reminder);
+        int reminderDays = contractToEdit.getReminder();
+        if (reminderDays > 0) {
+            editTextReminder.setText(String.valueOf(contractToEdit.getReminder()));
+            hintReminder.setText(R.string.contracts_reminder_hint);
+        } else {
+            hintReminder.setText(R.string.contracts_reminder_off_hint);
+        }
 
         selectedDestId = contractToEdit.getDestId();
     }

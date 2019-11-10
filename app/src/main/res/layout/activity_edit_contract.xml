@@ -219,7 +219,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="start|center_vertical"
-                    android:text="@string/contracts_reminder"
+                    android:text="@string/contracts_reminder_hint"
                     />
 
                 <EditText
@@ -230,7 +230,6 @@
                     android:inputType="number"
                     android:maxLength="2"
                     android:minEms="2"
-                    android:text="1"
                     />
 
                 <TextView

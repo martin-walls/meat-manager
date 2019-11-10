@@ -185,8 +185,8 @@
     <string name="contracts_input_quantity_boxes">Number of boxes</string>
     <string name="contracts_add_product">Add another product</string>
 
-    <string name="contracts_reminder">Reminder</string>
-    <string name="contracts_reminder_off">Reminder (off)</string>
+    <string name="contracts_reminder_hint">Reminder</string>
+    <string name="contracts_reminder_off_hint">Reminder (off)</string>
     <string name="contracts_reminder_day_before_one">day before</string>
     <plurals name="contracts_reminder_days_before">
         <item quantity="one">@string/contracts_reminder_day_before_one</item>
