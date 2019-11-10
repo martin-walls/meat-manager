@@ -26,7 +26,7 @@ public class ReminderReceiver extends BroadcastReceiver {
         for (Contract contract : contractList) {
             int reminderDaysBefore = contract.getReminder();
             if (contract.getDaysToNextRepeat() == reminderDaysBefore) {
-                String title = context.getResources().getQuantityString(R.plurals.contract_upcoming_days,
+                String title = context.getResources().getQuantityString(R.plurals.contract_alert_upcoming_days,
                         reminderDaysBefore, reminderDaysBefore);
 
                 String text = getProductListDisplay(contract.getProductList());
