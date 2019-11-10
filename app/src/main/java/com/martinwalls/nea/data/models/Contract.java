@@ -3,6 +3,7 @@ package com.martinwalls.nea.data.models;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -125,29 +126,45 @@ public class Contract implements Serializable {
 
                 return daysDifference;
             } else {
+                LocalDate repeat = startDate.with(ChronoField.DAY_OF_WEEK, repeatOn);
+                if (repeat.isBefore(startDate)) {
+                    repeat = repeat.plusWeeks(1);
+                }
 
-                LocalDate nextRepeat = LocalDate.from(startDate);
+                while (repeat.isBefore(today)) {
+                    repeat = repeat.plusWeeks(repeatInterval.getValue());
+                }
 
-                //todo get days to next repeat when more than 1 week cycle
+                Period period = Period.between(today, repeat);
 
-
-                int numWeeks = repeatInterval.getValue();
-                Period diff = Period.between(startDate, today);
-                int daysDiff = diff.getDays();
-                int numWeeksAtNextRepeat = (daysDiff + (7 - daysDiff % 7)) / 7;
-                numWeeksAtNextRepeat % numWeeks
+                return period.getDays();
             }
         } else /* MONTH */ {
-            int dayOfMonthToday = today.getDayOfMonth();
-            int numDaysInMonth = today.getMonth().length(today.isLeapYear());
+            if (repeatInterval.getValue() == 1) {
+                int dayOfMonthToday = today.getDayOfMonth();
+                int numDaysInMonth = today.getMonth().length(today.isLeapYear());
 
-            int daysDifference = repeatOn - dayOfMonthToday;
+                int daysDifference = repeatOn - dayOfMonthToday;
 
-            if (dayOfMonthToday > repeatOn) {
-                daysDifference += numDaysInMonth;
+                if (dayOfMonthToday > repeatOn) {
+                    daysDifference += numDaysInMonth;
+                }
+
+                return daysDifference;
+            } else {
+                LocalDate repeat = startDate.with(ChronoField.DAY_OF_MONTH, repeatOn);
+                if (repeat.isBefore(startDate)) {
+                    repeat = repeat.plusMonths(1);
+                }
+
+                while (repeat.isBefore(today)) {
+                    repeat = repeat.plusMonths(repeatInterval.getValue());
+                }
+
+                Period period = Period.between(today, repeat);
+
+                return period.getDays();
             }
-
-            return daysDifference;
         }
     }
 

@@ -650,8 +650,6 @@ public class EditContractActivity extends InputFormActivity
             newContract.setRepeatInterval(selectedRepeatInterval);
             newContract.setRepeatOn(repeatOnSpn.getSelectedItemPosition() + 1);
 
-            //todo make localdate for day of first repeat, not now()
-
             newContract.setStartDate(LocalDate.now());
             if (TextUtils.isEmpty(editTextReminder.getText())
                     || editTextReminder.getText().toString().equals("0")) {
