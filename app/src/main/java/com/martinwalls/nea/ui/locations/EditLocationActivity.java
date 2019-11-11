@@ -12,10 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Location;
+import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
 
 import java.util.stream.Collectors;
 
@@ -47,9 +47,8 @@ public class EditLocationActivity extends AppCompatActivity
             actionBar.setTitle(getString(R.string.location_edit_title, location.getLocationType().name().toLowerCase()));
         }
 
-        // hide location type input, this can't be edited
-        TextInputLayout inputLayoutLocationType = findViewById(R.id.input_layout_location_type);
-        inputLayoutLocationType.setVisibility(View.GONE);
+        // hide location type spinner, this can't be edited
+        findViewById(R.id.row_location_type).setVisibility(View.GONE);
 
         fillFields();
     }

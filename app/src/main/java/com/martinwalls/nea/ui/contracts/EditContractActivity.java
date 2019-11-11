@@ -667,7 +667,6 @@ public class EditContractActivity extends InputFormActivity
                 newContract.setContractId(contractToEdit.getContractId());
                 boolean success = dbHandler.updateContract(newContract);
                 UndoStack.getInstance().push(new EditContractAction(contractToEdit, newContract));
-                //todo edit reminder for editing contract
                 return success;
             }
         }

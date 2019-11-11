@@ -43,6 +43,7 @@
 
     </PreferenceCategory>
 
+    <!--
     <PreferenceCategory app:title="@string/settings_category_backup">
 
         <Preference
@@ -56,5 +57,6 @@
             />
 
     </PreferenceCategory>
+    -->
 
 </androidx.preference.PreferenceScreen>

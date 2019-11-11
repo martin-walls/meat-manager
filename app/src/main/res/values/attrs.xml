@@ -25,6 +25,8 @@
     <attr name="dashboardReqTooltipColor" format="reference" />
     <attr name="dashboardReqTooltipTextColor" format="reference" />
 
+    <attr name="dashboardGreen" format="reference|color" />
+
     <declare-styleable name="AddNewTextView">
         <attr name="searchItemType" format="string" />
     </declare-styleable>

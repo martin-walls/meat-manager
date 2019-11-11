@@ -1,18 +1,13 @@
 package com.martinwalls.nea.ui.settings;
 
-import android.Manifest;
 import android.app.TimePickerDialog;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.widget.Toast;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.util.DarkTheme;
 import com.martinwalls.nea.util.EasyPreferences;
 import com.martinwalls.nea.util.notification.ReminderUtils;
@@ -80,6 +75,8 @@ public class SettingsActivity extends AppCompatActivity {
             int min = prefs.getInt(R.string.pref_reminder_time_min, ReminderUtils.DEFAULT_REMINDER_MIN);
             setReminderTimeSummary(hour, min);
 
+
+            /* todo remove backup options, auto backup to drive is enabled by default on newer android versions
             backupDbPref = findPreference(R.string.pref_backup_db);
             restoreDbPref = findPreference(R.string.pref_restore_db);
 
@@ -92,7 +89,7 @@ public class SettingsActivity extends AppCompatActivity {
                 if (!isExternalStoragePermissionGranted()) {
                     requestExternalStoragePermission(PERMISSIONS_REQUEST_STORAGE_FOR_BACKUP);
                 } else {
-                    exportDb(); //todo custom location
+                    exportDb();
                 }
                 return true; // click handled
             });
@@ -101,12 +98,14 @@ public class SettingsActivity extends AppCompatActivity {
                 if (!isExternalStoragePermissionGranted()) {
                     requestExternalStoragePermission(PERMISSIONS_REQUEST_STORAGE_FOR_RESTORE);
                 } else {
-                    importDB(); //todo custom location
+                    importDB();
                 }
                 return true;
             });
+            */
         }
 
+        /*
         @Override
         public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
             if (requestCode == PERMISSIONS_REQUEST_STORAGE_FOR_BACKUP
@@ -123,7 +122,7 @@ public class SettingsActivity extends AppCompatActivity {
                     Toast.makeText(getContext(), R.string.perm_error_storage_denied, Toast.LENGTH_SHORT).show();
                 }
             }
-        }
+        }*/
 
         // allow use of resource id in parameter rather than string value
         <T extends Preference> T findPreference(@StringRes int keyId) {
@@ -160,7 +159,7 @@ public class SettingsActivity extends AppCompatActivity {
                     new TimePickerDialog(getContext(), listener, hour, min, true);
             timePickerDialog.show();
         }
-
+/*
         private boolean isExternalStoragePermissionGranted() {
             return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED;
@@ -187,6 +186,6 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(getContext(), R.string.db_import_error, Toast.LENGTH_SHORT).show();
             }
-        }
+        }*/
     }
 }

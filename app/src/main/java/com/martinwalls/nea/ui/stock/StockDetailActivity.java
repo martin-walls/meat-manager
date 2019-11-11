@@ -21,6 +21,8 @@ import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.util.undo.UndoStack;
 import com.martinwalls.nea.util.undo.stock.DeleteStockAction;
 
+//todo show related orders/contracts on this page
+// --possibly with links to corresponding pages?
 public class StockDetailActivity extends AppCompatActivity 
         implements ConfirmDeleteDialog.ConfirmDeleteListener {
 

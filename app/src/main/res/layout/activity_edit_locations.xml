@@ -33,23 +33,34 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- todo make this a dropdown rather than an edit text -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_location_type"
+        <LinearLayout
+            android:id="@+id/row_location_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/input_spacing_vertical"
-            android:hint="@string/locations_input_type"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="4dp"
+            android:orientation="horizontal"
             >
 
-            <AutoCompleteTextView
-                android:id="@+id/edit_text_location_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:inputType="textCapWords"
+            <TextView
+                style="@style/InputFormText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="start|center_vertical"
+                android:text="@string/locations_input_type"
                 />
-        </com.google.android.material.textfield.TextInputLayout>
+
+            <Spinner
+                android:id="@+id/spn_location_type"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="24dp"
+                android:spinnerMode="dropdown"
+                />
+
+        </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout_addr_1"

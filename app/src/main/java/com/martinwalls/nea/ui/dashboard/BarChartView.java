@@ -33,6 +33,7 @@ public class BarChartView extends View {
     private Paint amountBarFillPaint;
     // colour of required bar
     private Paint reqBarFillPaint;
+    private Paint greenReqBarFillPaint;
 
     // text colour outside bar
     private Paint barOuterLabelPaint;
@@ -121,6 +122,12 @@ public class BarChartView extends View {
         reqBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         reqBarFillPaint.setColor(reqBarColor);
 
+        //////////////////////
+        greenReqBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        int greenColor = Utils.getColorFromTheme(context, R.attr.dashboardGreen);
+        greenReqBarFillPaint.setColor(greenColor);
+
         // label paints
         barOuterLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         barOuterLabelPaint.setColor(barOuterTextColor);
@@ -174,7 +181,6 @@ public class BarChartView extends View {
         setMeasuredDimension(width, height);
     }
 
-    //todo add location label to each bar, similar to in stock screen
     @Override
     public void onDraw(Canvas c) {
         super.onDraw(c);
@@ -189,6 +195,9 @@ public class BarChartView extends View {
 
             // draw bar for amount of stock held
             drawAmountBar(c, entry, pos);
+
+            ///////////////////////////////////////////
+            drawGreenReqBar(c, entry, pos);
 
             // draw bar label
             drawLabelText(c, entry, pos);
@@ -274,6 +283,13 @@ public class BarChartView extends View {
         if (data.getAmountRequired() > data.getAmount()) {
             float length = getBarLength(data.getAmountRequired());
             drawBar(c, 0, getBarTop(pos), length, getBarBottom(pos), reqBarFillPaint);
+        }
+    }
+
+    private void drawGreenReqBar(Canvas c, BarChartEntry data, int pos) {
+        if (data.getAmountRequired() <= data.getAmount()) {
+            float length = getBarLength(data.getAmountRequired());
+            drawBar(c, 0, getBarTop(pos), length, getBarBottom(pos), greenReqBarFillPaint);
         }
     }
 

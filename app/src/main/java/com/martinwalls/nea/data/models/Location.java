@@ -17,6 +17,14 @@ public class Location implements Serializable {
             }
             return null;
         }
+
+        public static String[] getLocationTypeStrings() {
+            String[] names = new String[values().length];
+            for (int i = 0; i < values().length; i++) {
+                names[i] = values()[i].name();
+            }
+            return names;
+        }
     }
 
     private int locationId;

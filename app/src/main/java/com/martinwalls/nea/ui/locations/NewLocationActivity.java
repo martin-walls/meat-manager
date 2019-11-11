@@ -8,19 +8,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Location;
+import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class NewLocationActivity extends AppCompatActivity
@@ -30,14 +28,14 @@ public class NewLocationActivity extends AppCompatActivity
 
     private DBHandler dbHandler;
 
+    private ArrayAdapter<CharSequence> locationTypeAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_locations);
 
-        final String locationTypeDefault = getString(R.string.locations_type_generic);
-
-        String locationType = locationTypeDefault;
+        String locationType = getString(R.string.locations_type_storage);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             locationType = extras.getString(EXTRA_LOCATION_TYPE, locationType);
@@ -47,26 +45,15 @@ public class NewLocationActivity extends AppCompatActivity
 
         dbHandler = new DBHandler(this);
 
-        // get enum values as a list of strings
-        List<String> locationTypesList = Arrays.stream(Location.LocationType.values())
-                .map(Location.LocationType::name)
-                .collect(Collectors.toList());
-        ArrayAdapter<String> autocompleteAdapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, locationTypesList);
-        AutoCompleteTextView editTextLocationType = findViewById(R.id.edit_text_location_type);
-        editTextLocationType.setAdapter(autocompleteAdapter);
-        editTextLocationType.setThreshold(0);
+        // location type spinner
+        Spinner locationTypeSpn = findViewById(R.id.spn_location_type);
+        locationTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        locationTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationTypeAdapter.addAll(Location.LocationType.getLocationTypeStrings());
+        locationTypeAdapter.notifyDataSetChanged();
+        locationTypeSpn.setAdapter(locationTypeAdapter);
 
-        editTextLocationType.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                editTextLocationType.showDropDown();
-                hideKeyboard();
-            }
-        });
-
-        if (!locationType.equals(locationTypeDefault)) {
-            editTextLocationType.setText(locationType);
-        }
+        locationTypeSpn.setSelection(Location.LocationType.valueOf(locationType).ordinal());
     }
 
     @Override
@@ -129,8 +116,7 @@ public class NewLocationActivity extends AppCompatActivity
         TextInputEditText editTextName = findViewById(R.id.edit_text_location_name);
         TextInputLayout inputLayoutName = findViewById(R.id.input_layout_location_name);
 
-        AutoCompleteTextView editTextType= findViewById(R.id.edit_text_location_type);
-        TextInputLayout inputLayoutType = findViewById(R.id.input_layout_location_type);
+        Spinner locationTypeSpn = findViewById(R.id.spn_location_type);
 
         TextInputEditText editTextAddr1= findViewById(R.id.edit_text_addr_1);
         TextInputLayout inputLayoutAddr1 = findViewById(R.id.input_layout_addr_1);
@@ -159,16 +145,6 @@ public class NewLocationActivity extends AppCompatActivity
             isValid = false;
         } else {
             inputLayoutName.setError(null);
-        }
-        if (editTextType.getText().length() == 0) {
-            inputLayoutType.setError(getString(R.string.input_error_blank));
-            isValid = false;
-        } else if (!Arrays.stream(Location.LocationType.values()).map(Location.LocationType::name)
-                .collect(Collectors.toList()).contains(editTextType.getText().toString())) {
-            inputLayoutType.setError(getString(R.string.input_error_invalid_location_type));
-            isValid = false;
-        } else {
-            inputLayoutType.setError(null);
         }
         if (TextUtils.isEmpty(editTextAddr1.getText())) {
             inputLayoutAddr1.setError(getString(R.string.input_error_blank));
@@ -199,7 +175,7 @@ public class NewLocationActivity extends AppCompatActivity
 
         if (isValid) {
             newLocation.setLocationName(editTextName.getText().toString());
-            newLocation.setLocationType(Location.LocationType.parseLocationType(editTextType.getText().toString()));
+            newLocation.setLocationType(Location.LocationType.values()[locationTypeSpn.getSelectedItemPosition()]);
             newLocation.setAddrLine1(editTextAddr1.getText().toString());
             newLocation.setAddrLine2(editTextAddr2.getText() == null ? "" : editTextAddr2.getText().toString());
             newLocation.setCity(editTextCity.getText() == null ? "" : editTextCity.getText().toString());
@@ -215,7 +191,6 @@ public class NewLocationActivity extends AppCompatActivity
 
     private boolean areAllFieldsEmpty() {
         TextInputEditText editTextName = findViewById(R.id.edit_text_location_name);
-        AutoCompleteTextView editTextType= findViewById(R.id.edit_text_location_type);
         TextInputEditText editTextAddr1= findViewById(R.id.edit_text_addr_1);
         TextInputEditText editTextAddr2= findViewById(R.id.edit_text_addr_2);
         TextInputEditText editTextCity= findViewById(R.id.edit_text_city);
@@ -225,7 +200,6 @@ public class NewLocationActivity extends AppCompatActivity
         TextInputEditText editTextPhone= findViewById(R.id.edit_text_phone);
 
         return TextUtils.isEmpty(editTextName.getText())
-                && TextUtils.isEmpty(editTextType.getText())
                 && TextUtils.isEmpty(editTextAddr1.getText())
                 && TextUtils.isEmpty(editTextAddr2.getText())
                 && TextUtils.isEmpty(editTextCity.getText())

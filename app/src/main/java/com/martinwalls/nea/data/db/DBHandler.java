@@ -1155,6 +1155,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
     //endregion contract
 
+    //todo fix for android 10 ---- or just remove, auto backup to drive is enabled in newer android versions
     //region import/export
     public static String exportDbToFile(String outputPath) {
         File sdDir = Environment.getExternalStorageDirectory();
@@ -1231,6 +1232,4 @@ public class DBHandler extends SQLiteOpenHelper {
         return importDbFromFile(BACKUP_DIR + DATABASE_NAME);
     }
     //endregion import/export
-
-    //todo backup to google drive https://developers.google.com/drive/api/v3/about-sdk
 }
