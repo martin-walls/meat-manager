@@ -25,7 +25,9 @@ public class QueryUtils {
     private QueryUtils() {}
 
     /**
-     * Retrieve the current exchange data from the API at the specified URL.
+     * Retrieves the current exchange data from the API at the specified URL.
+     *
+     * @param urlString the URL to query
      */
     static HashMap<String, Double> fetchExchangeData(String urlString) {
         URL url = createUrl(urlString);
@@ -41,7 +43,9 @@ public class QueryUtils {
     }
 
     /**
-     * Fetch the raw JSON response from the API at the specified URL.
+     * Fetches the raw JSON response from the API at the specified URL.
+     *
+     * @param urlString the URL to query
      */
     static String fetchJsonResponse(String urlString) {
         URL url = createUrl(urlString);
@@ -57,8 +61,11 @@ public class QueryUtils {
     }
 
     /**
-     * Parse the JSON response and extract the current exchange
-     * rates from it. Returns a HashMap of Currency : Rate pairs.
+     * Parses the JSON response and extracts the current exchange
+     * rates from it.
+     *
+     * @param  json the JSON string to parse
+     * @return      a HashMap of (Currency, Rate) pairs
      */
     static HashMap<String, Double> extractExchangeRates(String json) {
         HashMap<String, Double> rates = new HashMap<>();
@@ -81,6 +88,15 @@ public class QueryUtils {
         return rates;
     }
 
+    /**
+     * Queries the API at {@code urlString} and parses the response 
+     * to get a list of the supported currencies.
+     *
+     * @param  urlString the URL to query
+     * @return           a List of Currency objects
+     */
+    // todo refactor this to an API specific class, this class shouldn't be 
+    //  so closely tied to its implementation
     static List<Currency> fetchCurrencies(String urlString) {
         URL url = createUrl(urlString);
 
@@ -110,6 +126,11 @@ public class QueryUtils {
         return currencies;
     }
 
+    /**
+     * Parses the JSON response to extract the timestamp of the response.
+     *
+     * @param json the JSON string to parse
+     */
     static long extractTimestamp(String json) {
         long timestamp = 0;
         try {
