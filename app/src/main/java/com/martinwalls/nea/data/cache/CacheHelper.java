@@ -9,6 +9,12 @@ public class CacheHelper {
 
     private CacheHelper() {}
 
+    /**
+     * Saves the string {@code value} to cache in a file named {@code key}
+     * 
+     * @param key   the name of the cache file to write to
+     * @param value the string to write
+     */
     public static void save(Context context, String key, String value) {
         try {
             File cache = getCacheFile(context, key);
@@ -23,6 +29,11 @@ public class CacheHelper {
         }
     }
 
+    /**
+     * Gets the contents of the cache file named {@code key} as a string.
+     * 
+     * @param key the name of the cache file
+     */
     public static String retrieve(Context context, String key) {
         try {
             File cache = getCacheFile(context, key);
@@ -42,6 +53,11 @@ public class CacheHelper {
         return "";
     }
 
+    /**
+     * Queries whether the specified cache file exists.
+     *
+     * @param key the name of the cache file
+     */
     public static boolean doesCacheExist(Context context, String key) {
         File cache = getCacheFile(context, key);
         if (cache == null) {
