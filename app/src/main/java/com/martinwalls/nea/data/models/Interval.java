@@ -4,10 +4,17 @@ import java.io.Serializable;
 
 public class Interval implements Serializable {
 
+    /**
+     * Stores the different time units that can be used for intervals.
+     */
     public enum TimeUnit implements Serializable {
         WEEK,
         MONTH;
 
+        /**
+         * Parses a {@link TimeUnit} from its name. This should be the same
+         * as the String returned by {@link #name()};
+         */
         public static TimeUnit parseTimeUnit(String unitStr) {
             for (TimeUnit timeUnit : values()) {
                 if (timeUnit.name().equalsIgnoreCase(unitStr)) {

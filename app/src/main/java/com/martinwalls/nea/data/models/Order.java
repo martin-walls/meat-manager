@@ -87,6 +87,9 @@ public class Order implements Serializable {
         productList.add(new ProductQuantity(product, quantityMass, quantityBoxes));
     }
 
+    /**
+     * {@link Comparator} to sort orders by date.
+     */
     public static Comparator<Order> comparatorDate() {
         return (order1, order2) -> order1.getOrderDate().compareTo(order2.getOrderDate());
     }

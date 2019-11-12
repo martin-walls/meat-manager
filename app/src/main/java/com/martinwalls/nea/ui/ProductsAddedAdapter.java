@@ -38,7 +38,9 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
         }
     }
 
-    // when both buttons are hidden, no listener required
+    /**
+     * Constructor for when both buttons are hidden, so no listener is required.
+     */
     public ProductsAddedAdapter(List<ProductQuantity> productList) {
         this.productList = productList;
         showEditBtn = false;
@@ -50,6 +52,9 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
         this.listener = listener;
     }
 
+    /**
+     * Constructor to set which buttons should be showing.
+     */
     public ProductsAddedAdapter(List<ProductQuantity> productList, ProductsAddedAdapterListener listener,
                                 boolean showEditBtn, boolean showDeleteBtn) {
         this.productList = productList;
@@ -93,8 +98,20 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
         return productList.size();
     }
 
+    /**
+     * Interface to handle clicks on the delete and edit buttons.
+     */
     public interface ProductsAddedAdapterListener {
+        /**
+         * Called when the delete button for the item at this position is clicked.
+         * This doesn't need to be implemented if the button is hidden.
+         */
         default void onProductAddedDelete(int position) {}
+
+        /**
+         * Called when the edit button for the item at this position is clicked.
+         * This doesn't need to be implemented if the button is hidden.
+         */
         default void onProductAddedEdit(int position) {}
     }
 }

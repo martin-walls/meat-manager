@@ -93,6 +93,9 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         this.searchItemType = searchItemType;
     }
 
+    /**
+     * Interface to handle clicks on search items.
+     */
     public interface SearchItemAdapterListener {
         void onSearchItemSelected(SearchItem item, String searchItemType);
     }

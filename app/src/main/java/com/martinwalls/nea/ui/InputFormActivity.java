@@ -22,6 +22,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Abstract Activity class that provides methods for managing search fields
+ * in input forms throughout the app. This handles opening and closing search
+ * views.
+ */
 public abstract class InputFormActivity extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener {
 
@@ -35,65 +40,124 @@ public abstract class InputFormActivity extends AppCompatActivity
     private AddNewTextView addNewView;
     private LinearLayout searchResultsLayout;
 
+    /**
+     * This is called when a search result is clicked when the search view is
+     * open for a particular input field.
+     */
     @Override
     public abstract void onSearchItemSelected(SearchItem item, String searchItemType);
 
+    /**
+     * This should be overridden to store a list of search items in
+     * {@link #searchItemList}. It is called whenever the search view is
+     * opened for a particular field.
+     */
     @CallSuper
     protected void loadSearchItems(String searchType) {
         searchItemList.clear();
     }
 
+    /**
+     * This is called when the "Add new item" button is clicked from a search
+     * view. It should be overridden to provide an appropriate implementation
+     * for adding a new item, either with a dialog or a separate activity.
+     */
     protected abstract void addNewItemFromSearch(String searchType);
 
-    protected void setAddNewView(@IdRes int resId) {
-        addNewView = findViewById(resId);
+    /**
+     * Stores a reference to the "Add new item" button in search view.
+     *
+     * @param id The ID of the View.
+     */
+    protected void setAddNewView(@IdRes int id) {
+        addNewView = findViewById(id);
         addNewView.setOnClickListener(v -> addNewItemFromSearch(addNewView.getSearchItemType()));
     }
 
+    /**
+     * Hides the "Add new item" button.
+     */
     protected void hideAddNewView() {
         addNewView.setVisibility(View.GONE);
     }
 
-    protected void setRootView(@IdRes int resId) {
-        rootView = findViewById(resId);
+    /**
+     * Stores a reference to the root layout of the activity.
+     *
+     * @param id The ID of the root layout.
+     */
+    protected void setRootView(@IdRes int id) {
+        rootView = findViewById(id);
     }
 
-    protected void setSearchResultsLayout(@IdRes int resId) {
-        searchResultsLayout = findViewById(resId);
+    /**
+     * Stores a reference to the search results layout.
+     *
+     * @param id The ID of the layout.
+     */
+    protected void setSearchResultsLayout(@IdRes int id) {
+        searchResultsLayout = findViewById(id);
     }
 
+    /**
+     * Sets the {@link SearchItemAdapter} for the search results RecyclerView.
+     */
     protected void setSearchItemAdapter(SearchItemAdapter adapter) {
         this.searchItemAdapter = adapter;
     }
 
-//    protected void setDefaultSearchItemAdapter() {
-//        searchItemAdapter = new SearchItemAdapter(searchItemList, currentSearchType, this);
-//    }
-
+    /**
+     * Returns the {@link SearchItemAdapter} associated with the search
+     * results RecyclerView.
+     */
     protected SearchItemAdapter getSearchItemAdapter() {
         return searchItemAdapter;
     }
 
+    /**
+     * Returns the list of search items shown in the search view.
+     */
     protected List<SearchItem> getSearchItemList() {
         return searchItemList;
     }
 
+    /**
+     * Adds a {@link SearchItem} to the search items list to be shown in
+     * the search results layout.
+     */
     protected void addSearchItemToList(SearchItem item) {
         searchItemList.add(item);
     }
 
+    /**
+     * Returns the current search type of the search view.
+     */
     protected String getCurrentSearchType() {
         return currentSearchType;
     }
 
+    /**
+     * Sets the search type of the search view that is currently open / being opened.
+     */
     protected void setCurrentSearchType(String currentSearchType) {
         this.currentSearchType = currentSearchType;
     }
 
+    /**
+     * Adds a reference to a View that should be hidden when the search view
+     * is open. Typically this should be any View that is part of the input
+     * form.
+     *
+     * @param name  Name of the View so it can be referred to later.
+     * @param resId The ID of the View to hide.
+     */
     protected void addViewToHide(String name, @IdRes int resId) {
         viewsToHide.put(name, resId);
     }
 
+    /**
+     * Hides the soft keyboard if it is showing.
+     */
     protected void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (imm != null) {
@@ -101,6 +165,16 @@ public abstract class InputFormActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Sets up listeners for the input field.
+     * <ul>
+     *     <li>When the View is focused, it opens the search view for that field.
+     *     <li>When the clear icon is clicked, it clears the input field and
+     *         closes the search layout.
+     *     <li>When the text in the field changes, it filters the search results by
+     *         the text entered.
+     * </ul>
+     */
     protected void setListeners(String name, TextInputLayout inputLayout, TextInputEditText editText) {
         inputLayout.setEndIconVisible(false);
 
@@ -126,6 +200,13 @@ public abstract class InputFormActivity extends AppCompatActivity
         });
     }
 
+    /**
+     * Opens the search view for a particular input field. Animates the layout
+     * changes and hides all views in {@link #viewsToHide} apart from the
+     * input field for this search.
+     *
+     * @param inputName Name of the input field
+     */
     @CallSuper
     protected void openSearch(String inputName) {
         Transition moveTransition = TransitionInflater.from(this).inflateTransition(R.transition.search_open);
@@ -159,6 +240,11 @@ public abstract class InputFormActivity extends AppCompatActivity
                 .setListener(null);
     }
 
+    /**
+     * Closes the search view. Animates the layout changes and shows all views
+     * in {@link #viewsToHide} again to return the input form to its original
+     * layout.
+     */
     @CallSuper
     protected void cancelSearch() {
         Transition closeTransition = TransitionInflater.from(this).inflateTransition(R.transition.search_close);

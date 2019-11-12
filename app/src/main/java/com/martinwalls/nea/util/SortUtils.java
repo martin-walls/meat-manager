@@ -18,7 +18,7 @@ public class SortUtils {
      * Merge sort algorithm (recursive). Takes a list of objects
      * that implement {@link Comparable}.
      *
-     * @param list a list of objects that must implement {@link Comparable}
+     * @param list A list of objects that must implement {@link Comparable}
      */
     public static <T extends Comparable<T>> List<T> mergeSort(@NonNull List<T> list) {
         return mergeSort(list, (o1, o2) -> o1.compareTo(o2));

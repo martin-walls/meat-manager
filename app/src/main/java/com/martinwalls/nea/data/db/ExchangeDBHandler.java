@@ -37,6 +37,9 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * Initialises the database. Creates all tables in the database.
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createCurrenciesTableQuery = "CREATE TABLE IF NOT EXISTS "
@@ -70,7 +73,10 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
         db.setForeignKeyConstraintsEnabled(true);
     }
 
-    public List<Conversion> getAllConversions() {
+    /**
+     * Gets all conversions in the database.
+     */
+    public List<Conversion> getAllConversions() { //todo only get conversions from the last week or so (check objectives)
         List<Conversion> conversionsResultList = new ArrayList<>();
         String query = "SELECT * FROM " + ConversionsTable.TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -93,6 +99,9 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
         return conversionsResultList;
     }
 
+    /**
+     * Stores a {@link Conversion} in the database.
+     */
     public boolean addConversion(Conversion conversion) {
         ContentValues values = new ContentValues();
         values.put(ConversionsTable.PRIMARY_CURRENCY, conversion.getPrimaryCurrency().getCode());
@@ -107,6 +116,9 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
         return success;
     }
 
+    /**
+     * Queries the database for a {@link Currency} with the specified code.
+     */
     public Currency getCurrency(String currencyCode) {
         Currency currencyResult = new Currency();
         String query = "SELECT * FROM " + CurrenciesTable.TABLE_NAME
@@ -123,6 +135,9 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
         return currencyResult;
     }
 
+    /**
+     * Gets all currencies in the database.
+     */
     public List<Currency> getCurrencies() {
         List<Currency> currencyResultList = new ArrayList<>();
         String query = "SELECT * FROM " + CurrenciesTable.TABLE_NAME;
@@ -140,6 +155,9 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
         return currencyResultList;
     }
 
+    /**
+     * Gets all currencies in the database that are favourited.
+     */
     public List<Currency> getFavCurrencies() {
         List<Currency> currencyResultList = new ArrayList<>();
         String query = "SELECT * FROM " + CurrenciesTable.TABLE_NAME
@@ -158,6 +176,9 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
         return currencyResultList;
     }
 
+    /**
+     * Counts the number of currencies stored in the database.
+     */
     public int getCurrencyCount() {
         String query = "SELECT * FROM " + CurrenciesTable.TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -168,6 +189,9 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
         return count;
     }
 
+    /**
+     * Adds all currencies in {@code currencyList} to the database.
+     */
     public void addAllCurrencies(List<Currency> currencyList) {
         SQLiteDatabase db = this.getWritableDatabase();
         for (Currency currency : currencyList) {
@@ -180,6 +204,10 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Sets a {@link Currency} in the database to be favourited or not,
+     * depending on {@code isFav}.
+     */
     public void setCurrencyFavourite(String currencyCode, boolean isFav) {
         ContentValues values = new ContentValues();
         values.put(CurrenciesTable.FAVOURITE, isFav ? 1 : 0);

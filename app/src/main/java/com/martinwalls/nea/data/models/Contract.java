@@ -14,9 +14,15 @@ public class Contract implements Serializable {
     private int destId;
     private String destName;
     private Interval repeatInterval;
-    // which day of week/month to repeat on (first day is 1),
-    // start of week is MONDAY
+    /**
+     * Which day of the week/month to repeat on (first day is 1).
+     * Weeks start on Monday.
+     */
     private int repeatOn;
+    /**
+     * Stores the date the contract was created, not necessarily the date of
+     * the first repeat.
+     */
     private LocalDate startDate;
     private int reminder;
 
@@ -111,6 +117,9 @@ public class Contract implements Serializable {
         productList.add(new ProductQuantity(product, quantityMass, quantityBoxes));
     }
 
+    /**
+     * Calculates the number of days until the contract next repeats.
+     */
     public int getDaysToNextRepeat() {
         LocalDate today = LocalDate.now();
 
@@ -168,10 +177,9 @@ public class Contract implements Serializable {
         }
     }
 
-    public static Comparator<Contract> comparatorId() {
-        return (contract1, contract2) -> contract1.getContractId() - contract2.getContractId();
-    }
-
+    /**
+     * {@link Comparator} to sort contracts by date.
+     */
     public static Comparator<Contract> comparatorDate() {
         return (contract1, contract2) -> contract1.getDaysToNextRepeat() - contract2.getDaysToNextRepeat();
     }

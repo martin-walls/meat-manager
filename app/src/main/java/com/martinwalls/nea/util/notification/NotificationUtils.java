@@ -12,6 +12,17 @@ public class NotificationUtils {
 
     private NotificationUtils() {}
 
+    /**
+     * Sends a notification with the specified data.
+     *
+     * @param channelId      id of the notification channel
+     * @param title          text to be displayed as the notification title
+     * @param text           body text of the notification
+     * @param iconId         resource id for the notification icon
+     * @param pendingIntent  intent to launch on notification click
+     * @param notificationId id of the notification
+     * @param groupKey       key for the notification group
+     */
     public static void sendNotification(Context context, String channelId,
                                         String title, String text, @DrawableRes int iconId,
                                         PendingIntent pendingIntent, int notificationId, String groupKey) {
@@ -21,7 +32,6 @@ public class NotificationUtils {
                 .setContentTitle(title)
                 .setContentText(text)
                 .setGroup(groupKey)
-                .setGroupSummary(true)
                 .setAutoCancel(true);
 
         if (pendingIntent != null) {

@@ -23,8 +23,15 @@ import com.martinwalls.nea.util.EasyPreferences;
 
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Request code for fetching data from the API.
+     */
     public static final int REQUEST_EXCHANGE_API_SERVICE = 1;
 
+    /**
+     * Stores references to each page of the app, to enable easy switching
+     * between them.
+     */
     private enum Page {
         DASHBOARD(new DashboardFragment(), R.id.nav_dashboard),
         STOCK(new StockFragment(), R.id.nav_stock),
@@ -40,17 +47,27 @@ public class MainActivity extends AppCompatActivity {
             this.navItem = navItem;
         }
 
+        /**
+         * Returns the Fragment for this page.
+         */
         public Fragment getFragment() {
             return fragment;
         }
 
+        /**
+         * Returns the ID of the navigation drawer item for this page.
+         */
         public int getNavItem() {
             return navItem;
         }
 
+        /**
+         * Parses a page from its name. This should be the same as the String
+         * returned by {@link #name()}.
+         */
         public static Page getPageFromName(String name) {
             for (Page page : values()) {
-                if (page.name().equals(name)) {
+                if (page.name().equalsIgnoreCase(name)) {
                     return page;
                 }
             }
@@ -79,16 +96,6 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.fragment_holder, currentPage.getFragment())
                     .commit();
         }
-
-//        if (savedInstanceState == null) {
-//            // open dashboard screen at start
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .add(R.id.fragment_holder, Page.DASHBOARD.getFragment())
-//                    .commit();
-//            currentPage = Page.DASHBOARD;
-//            findViewById(R.id.nav_dashboard).setActivated(true);
-//        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -171,6 +178,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Switches the Fragment currently open to the one the user has navigated
+     * to. Closes the navigation drawer. The previous Fragment is added to
+     * history so it can be navigated back to.
+     */
     private void replaceFragment(Page newPage) {
         // don't replace fragment if same page
         if (currentPage != newPage) {

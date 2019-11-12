@@ -7,16 +7,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class StockItem implements Serializable {
+
+    /**
+     * Stores the different quality values that can be associated with a
+     * {@link StockItem}.
+     */
     public enum Quality implements Serializable {
         Good,
         Pet_Food,
         Waste;
 
-        // replace underscore with space for display on screen
+
+        /**
+         * Gets a display version of the quality's name.
+         */
         public String getDisplayName() {
+            // replace underscore with space for display on screen
             return name().replace("_", " ");
         }
 
+        /**
+         * Parses a {@link Quality} from its name. This should be the same
+         * as the String returned by {@link #getDisplayName()} or {@link #name()}.
+         */
         public static Quality parseQuality(String name) {
             for (Quality q : values()) {
                 if (q.getDisplayName().equalsIgnoreCase(name)) {
@@ -28,6 +41,9 @@ public class StockItem implements Serializable {
             return null;
         }
 
+        /**
+         * Gets a list of the display name for each quality.
+         */
         public static List<String> getQualityStrings() {
             return Arrays.stream(values()).map(Quality::getDisplayName).collect(Collectors.toList());
         }
@@ -172,10 +188,17 @@ public class StockItem implements Serializable {
         this.quality = quality;
     }
 
+    /**
+     * {@link Comparator} to sort stock alphabetically.
+     */
     public static Comparator<StockItem> comparatorAlpha() {
         return (stock1, stock2) -> stock1.getProduct().getProductName().compareTo(stock2.getProduct().getProductName());
     }
 
+    /**
+     * {@link Comparator} to sort stock by amount, either ascending or
+     * descending as specified by {@code asc}.
+     */
     public static Comparator<StockItem> comparatorAmount(boolean asc) {
         return (stock1, stock2) -> {
             // to prevent rounding errors due to doubles
@@ -189,6 +212,9 @@ public class StockItem implements Serializable {
         };
     }
 
+    /**
+     * {@link Comparator} to sort stock alphabetically by location.
+     */
     public static Comparator<StockItem> comparatorLocation() {
         return (stock1, stock2) -> {
             if (stock1.getLocationName().equals(stock2.getLocationName())) {

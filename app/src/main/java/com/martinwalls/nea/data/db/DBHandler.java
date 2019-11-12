@@ -114,6 +114,9 @@ public class DBHandler extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * Initialises the database. Creates all tables in the database.
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         //region create table queries
@@ -240,6 +243,10 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     //region product
+
+    /**
+     * Queries the database for a {@link Product} with the specified ID.
+     */
     public Product getProduct(int productId) {
         Product productResult = new Product();
         String query = "SELECT * FROM " + ProductsTable.TABLE_NAME
@@ -256,6 +263,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return productResult;
     }
 
+    /**
+     * Gets all products in the database.
+     */
     public List<Product> getAllProducts() {
         List<Product> productResultList = new ArrayList<>();
         String query = "SELECT * FROM " + ProductsTable.TABLE_NAME;
@@ -273,6 +283,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return productResultList;
     }
 
+    /**
+     * Queries the database for all products that are used in orders or
+     * contracts. Returns a list of {@link ProductQuantity} objects that
+     * also store how much of each product is required.
+     */
     public List<ProductQuantity> getAllProductsRequired() {
         List<ProductQuantity> productQuantityResultList = new ArrayList<>();
         // not completed orders
@@ -330,6 +345,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return productQuantityResultList;
     }
 
+    /**
+     * Stores a {@link Product} in the database.
+     */
     public boolean addProduct(Product product) {
         ContentValues values = new ContentValues();
         values.put(ProductsTable.NAME, product.getProductName());
@@ -341,6 +359,10 @@ public class DBHandler extends SQLiteOpenHelper {
         return newRowId != -1;
     }
 
+    /**
+     * Queries the database for any usages of the {@link Product} with this ID
+     * in stock, contracts or orders. It is safe to delete if no usages are found.
+     */
     public boolean isProductSafeToDelete(int productId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String stockQuery = "SELECT * FROM " + StockTable.TABLE_NAME
@@ -364,6 +386,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return safeToDelete;
     }
 
+    /**
+     * Removes the {@link Product} with this ID from the database if it exists.
+     */
     public boolean deleteProduct(int productId) {
         SQLiteDatabase db = this.getWritableDatabase();
         int deletedRows = db.delete(ProductsTable.TABLE_NAME,
@@ -374,6 +399,10 @@ public class DBHandler extends SQLiteOpenHelper {
     //endregion product
 
     //region meat types
+
+    /**
+     * Gets all meat types in the database.
+     */
     public List<String> getAllMeatTypes() {
         List<String> meatTypeResultList = new ArrayList<>();
         String query = "SELECT * FROM " + MeatTypesTable.TABLE_NAME;
@@ -387,6 +416,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return meatTypeResultList;
     }
 
+    /**
+     * Stores a meat type in the database.
+     */
     public boolean addMeatType(String meatType) {
         ContentValues values = new ContentValues();
         values.put(MeatTypesTable.MEAT_TYPE, meatType);
@@ -397,6 +429,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return newRowId != -1;
     }
 
+    /**
+     * Removes this meat type from the database.
+     */
     public boolean deleteMeatType(String meatType) {
         SQLiteDatabase db = this.getWritableDatabase();
         boolean success;
@@ -412,6 +447,10 @@ public class DBHandler extends SQLiteOpenHelper {
     //endregion meat types
 
     //region stock
+
+    /**
+     * Queries the database for a {@link StockItem} with the specified ID.
+     */
     public StockItem getStockItem(int stockId) {
         StockItem stockResult = new StockItem();
         final String ALIAS_LOCATION = "Location";
@@ -479,6 +518,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return stockResult;
     }
 
+    /**
+     * Gets all stock items in the database.
+     */
     public List<StockItem> getAllStock() {
         List<StockItem> stockResultList = new ArrayList<>();
         final String ALIAS_LOCATION = "Location";
@@ -547,6 +589,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return stockResultList;
     }
 
+    /**
+     * Queries the database for all stock items in the given location.
+     */
     public List<StockItem> getAllStockFromLocation(int locationId) {
         List<StockItem> stockResultList = new ArrayList<>();
         final String ALIAS_LOCATION = "Location";
@@ -616,6 +661,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return stockResultList;
     }
 
+    /**
+     * Stores a {@link StockItem} in the database.
+     */
     public int addStockItem(StockItem stockItem) {
         ContentValues values = new ContentValues();
         values.put(StockTable.PRODUCT_ID, stockItem.getProduct().getProductId());
@@ -636,6 +684,10 @@ public class DBHandler extends SQLiteOpenHelper {
         return (int) newRowId;
     }
 
+    /**
+     * Updates the values of the {@link StockItem} in the database with the
+     * values from the given object.
+     */
     public boolean updateStockItem(StockItem stockItem) {
         ContentValues values = new ContentValues();
         values.put(StockTable.PRODUCT_ID, stockItem.getProduct().getProductId());
@@ -657,6 +709,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return rowsAffected == 1;
     }
 
+    /**
+     * Removes the {@link StockItem} with this ID from the database if it exists.
+     */
     public boolean deleteStockItem(int stockId) {
         SQLiteDatabase db = this.getWritableDatabase();
         int deletedRows = db.delete(StockTable.TABLE_NAME,
@@ -667,6 +722,10 @@ public class DBHandler extends SQLiteOpenHelper {
     //endregion stock
 
     //region location
+
+    /**
+     * Queries the database for a {@link Location} with the specified ID.
+     */
     public Location getLocation(int locationId) {
         Location locationResult = new Location();
         String query = "SELECT * FROM " + LocationsTable.TABLE_NAME
@@ -691,6 +750,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return locationResult;
     }
 
+    /**
+     * Gets all locations in the database.
+     */
     public List<Location> getAllLocations() {
         List<Location> locationResultList = new ArrayList<>();
         String query = "SELECT * FROM " + LocationsTable.TABLE_NAME;
@@ -720,6 +782,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return locationResultList;
     }
 
+    /**
+     * Gets all locations of this type in the database.
+     */
     public List<Location> getAllLocations(Location.LocationType locationType) {
         if (locationType == null) {
             return getAllLocations();
@@ -748,6 +813,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return locationResultList;
     }
 
+    /**
+     * Stores a {@link Location} in the database.
+     */
     public boolean addLocation(Location location) {
         ContentValues values = new ContentValues();
         values.put(LocationsTable.NAME, location.getLocationName());
@@ -766,6 +834,10 @@ public class DBHandler extends SQLiteOpenHelper {
         return newRowId != -1;
     }
 
+    /**
+     * Updates the values of the {@link Location} in the database with the
+     * values from the given object.
+     */
     public boolean updateLocation(Location location) {
         ContentValues values = new ContentValues();
         values.put(LocationsTable.NAME, location.getLocationName());
@@ -784,6 +856,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return rowsAffected == 1;
     }
 
+    /**
+     * Queries the databases for any usages of the {@link Location} with this
+     * ID in stock, orders or contracts. It is safe to delete if no usages
+     * are found.
+     */
     public boolean isLocationSafeToDelete(int locationId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String stockQuery = "SELECT * FROM " + StockTable.TABLE_NAME
@@ -810,6 +887,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return safeToDelete;
     }
 
+    /**
+     * Removes the {@link Location} with this ID from the database if it exists.
+     */
     public boolean deleteLocation(int locationId) {
         SQLiteDatabase db = this.getWritableDatabase();
         int deletedRows = db.delete(LocationsTable.TABLE_NAME,
@@ -820,6 +900,10 @@ public class DBHandler extends SQLiteOpenHelper {
     //endregion location
 
     //region order
+
+    /**
+     * Queries the database for a {@link Order} with the specified ID.
+     */
     public Order getOrder(int orderId) {
         Order orderResult = new Order();
         String query = "SELECT " + OrdersTable.TABLE_NAME + ".*," + ProductsTable.TABLE_NAME + ".*,"
@@ -866,6 +950,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return orderResult;
     }
 
+    /**
+     * Queries the database for all completed / not completed orders.
+     *
+     * @param completed Whether to return completed or not completed orders.
+     */
     public List<Order> getAllOrders(boolean completed) {
         List<Order> orderResultList = new ArrayList<>();
         String query = "SELECT " + OrdersTable.TABLE_NAME + ".*," + ProductsTable.TABLE_NAME + ".*,"
@@ -917,14 +1006,23 @@ public class DBHandler extends SQLiteOpenHelper {
         return orderResultList;
     }
 
+    /**
+     * Gets all orders in the database that are not completed.
+     */
     public List<Order> getAllOrdersNotCompleted() {
         return getAllOrders(false);
     }
 
+    /**
+     * Gets all orders in the database that are completed.
+     */
     public List<Order> getAllOrdersCompleted() {
         return getAllOrders(true);
     }
 
+    /**
+     * Stores an {@link Order} in the database.
+     */
     public int addOrder(Order order) {
         ContentValues values = new ContentValues();
         values.put(OrdersTable.DEST_ID, order.getDestId());
@@ -947,6 +1045,10 @@ public class DBHandler extends SQLiteOpenHelper {
         return (int) newRowId;
     }
 
+    /**
+     * Updates the values of the {@link Order} in the database with the values
+     * from the given object.
+     */
     public boolean updateOrder(Order order) {
         ContentValues values = new ContentValues();
         values.put(OrdersTable.DEST_ID, order.getDestId());
@@ -973,6 +1075,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return rowsAffected == 1;
     }
 
+    /**
+     * Removes the {@link Order} with this ID from the database if it exists.
+     */
     public boolean deleteOrder(int orderId) {
         SQLiteDatabase db = this.getWritableDatabase();
         int deletedRows = db.delete(OrdersTable.TABLE_NAME,
@@ -985,6 +1090,10 @@ public class DBHandler extends SQLiteOpenHelper {
     //endregion order
 
     //region contract
+
+    /**
+     * Queries the database for a {@link Contract} with the specified ID.
+     */
     public Contract getContract(int contractId) {
         Contract contractResult = new Contract();
         String query = "SELECT " + ContractsTable.TABLE_NAME + ".*," + ProductsTable.TABLE_NAME + ".*,"
@@ -1037,6 +1146,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return contractResult;
     }
 
+    /**
+     * Gets all contracts in the database.
+     */
     public List<Contract> getAllContracts() {
         List<Contract> contractResultList = new ArrayList<>();
         String query = "SELECT " + ContractsTable.TABLE_NAME + ".*," + ProductsTable.TABLE_NAME + ".*,"
@@ -1092,6 +1204,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return contractResultList;
     }
 
+    /**
+     * Stores a {@link Contract} in the database.
+     */
     public int addContract(Contract contract) {
         ContentValues values = new ContentValues();
         values.put(ContractsTable.DEST_ID, contract.getDestId());
@@ -1116,6 +1231,10 @@ public class DBHandler extends SQLiteOpenHelper {
         return (int) newRowId;
     }
 
+    /**
+     * Updates the values of the {@link Contract} in the database with the
+     * values from the given object.
+     */
     public boolean updateContract(Contract contract) {
         ContentValues values = new ContentValues();
         values.put(ContractsTable.DEST_ID, contract.getDestId());
@@ -1144,6 +1263,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return rowsAffected == 1;
     }
 
+    /**
+     * Removes the {@link Contract} with this ID from the database if it exists.
+     */
     public boolean deleteContract(int contractId) {
         SQLiteDatabase db = this.getWritableDatabase();
         int deletedRows = db.delete(ContractsTable.TABLE_NAME,

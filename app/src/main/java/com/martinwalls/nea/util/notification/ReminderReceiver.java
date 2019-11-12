@@ -35,6 +35,7 @@ public class ReminderReceiver extends BroadcastReceiver {
             }
         }
 
+        // schedule next reminder for next day
         ReminderUtils.scheduleReminderAtDefaultTime(context);
     }
 
@@ -64,6 +65,10 @@ public class ReminderReceiver extends BroadcastReceiver {
                 pendingIntent, notificationId, NotificationUtils.GROUP_CONTRACT_REMINDER);
     }
 
+    /**
+     * Gets a string representation of all the products connected to a
+     * contract, comma separated, to display in the body of the notification.
+     */
     private String getProductListDisplay(List<ProductQuantity> productList) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < productList.size(); i++) {

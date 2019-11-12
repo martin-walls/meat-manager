@@ -4,11 +4,19 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 public class Location implements Serializable {
+
+    /**
+     * Stores the different types of {@link Location}.
+     */
     public enum LocationType implements Serializable {
         Storage,
         Supplier,
         Destination;
 
+        /**
+         * Parses a {@link LocationType} from its name. This should be the same
+         * as the String returned by {@link #name()}.
+         */
         public static LocationType parseLocationType(String name) {
             for (LocationType type : values()) {
                 if (type.name().equalsIgnoreCase(name)) {
@@ -18,6 +26,10 @@ public class Location implements Serializable {
             return null;
         }
 
+        /**
+         * Returns an array of the String names of each {@link LocationType},
+         * as returned by {@link #name()}.
+         */
         public static String[] getLocationTypeStrings() {
             String[] names = new String[values().length];
             for (int i = 0; i < values().length; i++) {
@@ -121,6 +133,9 @@ public class Location implements Serializable {
         this.email = email;
     }
 
+    /**
+     * {@link Comparator} to sort locations alphabetically.
+     */
     public static Comparator<Location> comparatorAlpha() {
         return (location1, location2) -> location1.getLocationName().compareTo(location2.getLocationName());
     }

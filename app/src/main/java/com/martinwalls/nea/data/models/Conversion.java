@@ -72,6 +72,9 @@ public class Conversion {
         this.secondaryValue = secondaryValue;
     }
 
+    /**
+     * Calculates how many days ago the conversion was added.
+     */
     public int getDaysAgo() {
         LocalDate conversionDate = LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.systemDefault())
                 .toLocalDate();
@@ -80,6 +83,9 @@ public class Conversion {
         return (int) ChronoUnit.DAYS.between(conversionDate, today);
     }
 
+    /**
+     * {@link Comparator} to sort conversions by creation time.
+     */
     public static Comparator<Conversion> comparatorTime() {
         return (conv1, conv2) -> (int) (conv2.getTimestamp() - conv1.getTimestamp());
     }

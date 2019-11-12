@@ -66,10 +66,16 @@ public class CacheHelper {
         return cache.exists();
     }
 
+    /**
+     * Gets the path of the app's cache folder.
+     */
     private static String getCacheDir(Context context) {
         return context.getCacheDir().getPath();
     }
 
+    /**
+     * Gets the cache file named {@code key} as a {@link File} object.
+     */
     private static File getCacheFile(Context context, String key) {
         try {
             key = URLEncoder.encode(key, "UTF-8");

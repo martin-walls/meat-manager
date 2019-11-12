@@ -13,6 +13,9 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Runs in the background to load exchange rate data from the API.
+ */
 public class ApiIntentService extends IntentService {
 
     public static final String EXTRA_PENDING_RESULT = "pending_result";
@@ -29,6 +32,7 @@ public class ApiIntentService extends IntentService {
         System.loadLibrary("native-lib");
     }
 
+    // URL of the API
     private final String REQUEST_URL = "http://data.fixer.io/api/";
 
     private final String[] DEFAULT_FAV_CURRENCIES = {"GBP", "EUR", "USD"};

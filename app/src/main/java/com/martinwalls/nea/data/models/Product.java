@@ -46,10 +46,16 @@ public class Product implements Serializable {
         this.meatType = meatType;
     }
 
+    /**
+     * {@link Comparator} to sort products alphabetically.
+     */
     public static Comparator<Product> comparatorAlpha() {
         return (product1, product2) -> product1.getProductName().compareTo(product2.getProductName());
     }
 
+    /**
+     * {@link Comparator} to sort products alphabetically by meat type.
+     */
     public static Comparator<Product> comparatorMeatType() {
         return (product1, product2) -> {
             if (product1.getMeatType().equals(product2.getMeatType())) {

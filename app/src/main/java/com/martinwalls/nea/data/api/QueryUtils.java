@@ -142,6 +142,9 @@ public class QueryUtils {
         return timestamp;
     }
 
+    /**
+     * Converts a URL from a String to a {@link URL} object.
+     */
     private static URL createUrl(String urlString) {
         URL url = null;
         try {
@@ -152,6 +155,11 @@ public class QueryUtils {
         return url;
     }
 
+    /**
+     * Makes a HTTP request to the specified URL and gets the JSON response.
+     *
+     * @return The JSON response from the request.
+     */
     private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
 
@@ -187,6 +195,9 @@ public class QueryUtils {
         return jsonResponse;
     }
 
+    /**
+     * Reads a String from the {@link InputStream}.
+     */
     private static String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder builder = new StringBuilder();
         if (inputStream != null) {

@@ -58,6 +58,9 @@ public class Currency {
         return isFavourite;
     }
 
+    /**
+     * {@link Comparator} to sort currencies alphabetically by their code.
+     */
     public static Comparator<Currency> comparatorCode() {
         return (currency1, currency2) -> currency1.getCode().compareTo(currency2.getCode());
     }
