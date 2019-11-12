@@ -24,7 +24,7 @@ public final class Utils {
     }
 
     /**
-     * Get the current setting for kg/lbs and convert the kg value to lbs if appropriate.
+     * Gets the current setting for kg/lbs and converts the kg value to lbs if appropriate.
      */
     public static double convertToCurrentMassUnit(Context context, double kgs) {
         if (MassUnit.getMassUnit(context) == MassUnit.LBS) {
@@ -35,7 +35,7 @@ public final class Utils {
     }
 
     /**
-     * Get the kg value of a mass that is stored in the current mass unit.
+     * Gets the kg value of a mass that is stored in the current mass unit.
      */
     public static double getKgsFromCurrentMassUnit(Context context, double mass) {
         if (MassUnit.getMassUnit(context) == MassUnit.LBS) {
