@@ -24,6 +24,7 @@ public class ApiIntentService extends IntentService {
     private static final String CACHE_KEY_RATES = "rates_cache";
     private static final String CACHE_KEY_TIMESTAMP = "last_cache_timestamp";
 
+    // load native code to get API key
     static {
         System.loadLibrary("native-lib");
     }
@@ -36,6 +37,7 @@ public class ApiIntentService extends IntentService {
         super(TAG);
     }
 
+    // method to get the API key stored in native code
     private native String getApiAccessKey();
 
     @Override
@@ -51,26 +53,29 @@ public class ApiIntentService extends IntentService {
         }
 
         String jsonResponse;
+        // if last cache from less than 1 hr ago
         if (timeDiff < 60 * 60) {
             jsonResponse = CacheHelper.retrieve(getApplicationContext(), CACHE_KEY_RATES);
         } else {
+            // make new API request as cache is > 1 hr old
             Uri baseUri = Uri.parse(REQUEST_URL);
             Uri.Builder builder = baseUri.buildUpon();
 
             builder.appendPath("latest");
             builder.appendQueryParameter("access_key", getDecodedAccessKey());
 
-
             jsonResponse = QueryUtils.fetchJsonResponse(builder.toString());
         }
+        
         HashMap<String, Double> rates = QueryUtils.extractExchangeRates(jsonResponse);
 
+        // save API response to cache
         CacheHelper.save(getApplicationContext(), CACHE_KEY_RATES, jsonResponse);
 
         long timestamp = QueryUtils.extractTimestamp(jsonResponse);
         CacheHelper.save(getApplicationContext(), CACHE_KEY_TIMESTAMP, String.valueOf(timestamp));
 
-
+        // save list of currencies to db
         ExchangeDBHandler dbHandler = new ExchangeDBHandler(this);
 
         if (dbHandler.getCurrencyCount() == 0) {
@@ -82,6 +87,7 @@ public class ApiIntentService extends IntentService {
 
             List<Currency> currencyList = QueryUtils.fetchCurrencies(builder.toString());
 
+            // set default favourited currencies
             for (Currency currency : currencyList) {
                 if (Arrays.asList(DEFAULT_FAV_CURRENCIES).contains(currency.getCode())) {
                     currency.setFavourite(true);
@@ -92,7 +98,6 @@ public class ApiIntentService extends IntentService {
 
             dbHandler.addAllCurrencies(currencyList);
         }
-
 
         Intent result = new Intent();
         result.putExtra(EXTRA_RESULT, rates);
@@ -105,6 +110,7 @@ public class ApiIntentService extends IntentService {
     }
 
     private String getDecodedAccessKey() {
+        // decode the access key from base 64
         String base64Key = getApiAccessKey();
         return new String(Base64.getDecoder().decode(base64Key));
     }
