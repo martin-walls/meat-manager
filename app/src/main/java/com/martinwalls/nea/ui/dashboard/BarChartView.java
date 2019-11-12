@@ -123,6 +123,7 @@ public class BarChartView extends View {
         reqBarFillPaint.setColor(reqBarColor);
 
         //////////////////////
+        // todo finish implementing req bar when more held than required
         greenReqBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         int greenColor = Utils.getColorFromTheme(context, R.attr.dashboardGreen);
