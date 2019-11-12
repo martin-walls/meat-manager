@@ -220,6 +220,11 @@ public class BarChartView extends View {
             // get which bar was selected
             prevSelectedIndex = selectedIndex;
             selectedIndex = (int) y / (int) barWidth;
+            
+            // hide tooltip if same bar pressed again
+            if (selectedIndex == prevSelectedIndex) {
+                selectedIndex = -1;
+            }
 
             // reset tooltip alpha values
             tooltipAlpha = 0;
