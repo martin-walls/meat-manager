@@ -21,11 +21,10 @@ public class App extends Application {
         // start on default page so clear saved position
         prefs.setString(R.string.pref_last_opened_page, null);
 
+        // make sure the notification channel exists so the app can send notifications
         createNotificationChannel();
 
-
-//        ReminderUtils.scheduleReminder(this, calendarNow.get(Calendar.HOUR_OF_DAY), calendarNow.get(Calendar.MINUTE));
-
+        // if notifications are enabled in settings
         if (prefs.getBoolean(R.string.pref_enable_notifications, false)) {
             ReminderUtils.scheduleReminderAtDefaultTime(this);
         }
