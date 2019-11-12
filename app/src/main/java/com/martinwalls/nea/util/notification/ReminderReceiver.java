@@ -15,6 +15,11 @@ import java.util.List;
 
 public class ReminderReceiver extends BroadcastReceiver {
 
+    /**
+     * Shows a reminder for each contract that is upcoming. Checks for each
+     * contract whether the number of days it is away is the same as the
+     * chosen reminder time. Schedules the next reminder for the next day.
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -26,28 +31,37 @@ public class ReminderReceiver extends BroadcastReceiver {
         for (Contract contract : contractList) {
             int reminderDaysBefore = contract.getReminder();
             if (contract.getDaysToNextRepeat() == reminderDaysBefore) {
-                String title = context.getResources().getQuantityString(R.plurals.contract_alert_upcoming_days,
-                        reminderDaysBefore, reminderDaysBefore);
-
-                String text = getProductListDisplay(contract.getProductList());
-
-                int notificationId = contract.getContractId();
-
-                Intent onClickIntent = new Intent(context, ContractDetailActivity.class);
-                onClickIntent.putExtra(ContractDetailActivity.EXTRA_CONTRACT_ID, contract.getContractId());
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                stackBuilder.addNextIntentWithParentStack(onClickIntent);
-
-                PendingIntent pendingIntent =
-                        stackBuilder.getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                NotificationUtils.sendNotification(context, context.getString(R.string.channel_reminder_id),
-                        title, text, R.drawable.ic_alert,
-                        pendingIntent, notificationId, NotificationUtils.GROUP_CONTRACT_REMINDER);
+                showNotificationForContract(context, contract);
             }
         }
 
         ReminderUtils.scheduleReminderAtDefaultTime(context);
+    }
+
+    /**
+     * Shows a notification for a contract, showing how many days in advance
+     * it is, and which products it is for.
+     */
+    private void showNotificationForContract(Context context, Contract contract) {
+        int reminderDaysBefore = contract.getReminder();
+        String title = context.getResources().getQuantityString(R.plurals.contract_alert_upcoming_days,
+                reminderDaysBefore, reminderDaysBefore);
+
+        String text = getProductListDisplay(contract.getProductList());
+
+        int notificationId = contract.getContractId();
+
+        Intent onClickIntent = new Intent(context, ContractDetailActivity.class);
+        onClickIntent.putExtra(ContractDetailActivity.EXTRA_CONTRACT_ID, contract.getContractId());
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addNextIntentWithParentStack(onClickIntent);
+
+        PendingIntent pendingIntent =
+                stackBuilder.getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationUtils.sendNotification(context, context.getString(R.string.channel_reminder_id),
+                title, text, R.drawable.ic_alert,
+                pendingIntent, notificationId, NotificationUtils.GROUP_CONTRACT_REMINDER);
     }
 
     private String getProductListDisplay(List<ProductQuantity> productList) {

@@ -15,16 +15,23 @@ public final class Utils {
     // Utils shouldn't be instantiated
     private Utils() {}
 
-    public static double convertToLbs(double kgs) {
+    /**
+     * Converts a value from kgs to lbs.
+     */
+    private static double convertToLbs(double kgs) {
         return kgs / lbsToKgs;
     }
 
-    public static double convertToKgs(double lbs) {
+    /**
+     * Converts a value from lbs to kgs.
+     */
+    private static double convertToKgs(double lbs) {
         return lbs * lbsToKgs;
     }
 
     /**
-     * Gets the current setting for kg/lbs and converts the kg value to lbs if appropriate.
+     * Gets the current setting for kg/lbs and converts the kg value to lbs if
+     * appropriate.
      */
     public static double convertToCurrentMassUnit(Context context, double kgs) {
         if (MassUnit.getMassUnit(context) == MassUnit.LBS) {

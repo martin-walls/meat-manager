@@ -22,7 +22,7 @@ public class App extends Application {
         prefs.setString(R.string.pref_last_opened_page, null);
 
         // make sure the notification channel exists so the app can send notifications
-        createNotificationChannel();
+        createNotificationChannels();
 
         // if notifications are enabled in settings
         if (prefs.getBoolean(R.string.pref_enable_notifications, false)) {
@@ -30,8 +30,14 @@ public class App extends Application {
         }
     }
 
-    private void createNotificationChannel() {
+    /**
+     * Create the required notification channels for the app. This allows the
+     * app to send notifications, as the system will block notifications
+     * without a channel.
+     */
+    private void createNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // create "Reminders" channel
             String name = getString(R.string.channel_reminder_name);
             int importance = NotificationManager.IMPORTANCE_HIGH;
             String channelId = getString(R.string.channel_reminder_id);

@@ -6,11 +6,21 @@ import android.content.res.Resources;
 import androidx.annotation.StringRes;
 import androidx.preference.PreferenceManager;
 
+/**
+ * Helper class for accessing SharedPreferences more easily. Forces the use
+ * of String resources as keys rather than plain String values to make
+ * sure the same keys are used throughout the app, and to avoid errors from
+ * mistyping a key.
+ */
 public final class EasyPreferences {
 
     private final SharedPreferences prefs;
     private final Resources res;
 
+    /**
+     * Creates an {@link EasyPreferences} object. This is used instead of
+     * the constructor to create an instance.
+     */
     public static EasyPreferences createForDefaultPreferences(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         Resources resources = context.getResources();
@@ -22,6 +32,11 @@ public final class EasyPreferences {
         this.res = res;
     }
 
+    /**
+     * Gets the string value of the key at the specified resource value.
+     *
+     * @param key String resource id of the key
+     */
     private String key(int key) {
         return res.getString(key);
     }
@@ -50,15 +65,19 @@ public final class EasyPreferences {
         prefs.edit().putInt(key(keyId), value).apply();
     }
 
-    public int getIntFromString(@StringRes int keyId, int defaultValue) {
-        try {
-            return Integer.parseInt(prefs.getString(key(keyId), String.valueOf(defaultValue)));
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            return defaultValue;
-        }
+    /**
+     * Gets an int stored as a String value, for example stored from
+     * a Preference that stores strings.
+     *
+     * @throws NumberFormatException if the string value cannot be converted to an int
+     */
+    public int getIntFromString(@StringRes int keyId, int defaultValue) throws NumberFormatException {
+        return Integer.parseInt(prefs.getString(key(keyId), String.valueOf(defaultValue)));
     }
 
+    /**
+     * Stores an int value as a String.
+     */
     public void setIntToString(@StringRes int keyId, int value) {
         prefs.edit().putString(key(keyId), String.valueOf(value)).apply();
     }

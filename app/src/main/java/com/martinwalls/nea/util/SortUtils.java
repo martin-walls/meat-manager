@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SortUtils {
+    // constants to store sort modes throughout app
     public static final int SORT_NAME = 0;
     public static final int SORT_MEAT_TYPE = 1;
     public static final int SORT_AMOUNT_ASC = 2;
@@ -16,6 +17,8 @@ public class SortUtils {
     /**
      * Merge sort algorithm (recursive). Takes a list of objects
      * that implement {@link Comparable}.
+     *
+     * @param list a list of objects that must implement {@link Comparable}
      */
     public static <T extends Comparable<T>> List<T> mergeSort(@NonNull List<T> list) {
         return mergeSort(list, (o1, o2) -> o1.compareTo(o2));

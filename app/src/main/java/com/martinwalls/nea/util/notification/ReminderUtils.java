@@ -13,12 +13,18 @@ import java.util.Calendar;
 
 public class ReminderUtils {
 
+    // default times for reminder
     public static final int DEFAULT_REMINDER_HR = 9;
     public static final int DEFAULT_REMINDER_MIN = 0;
 
     private static final int REQUEST_CODE_REMINDER = 1;
 
-    public static void scheduleReminder(Context context, int hour, int minute) {
+    /**
+     * Schedules {@link ReminderReceiver} to be run when the given hour and minute
+     * next occurs. Sets {@link BootReceiver} to be enabled so the the reminder
+     * still runs if the device is restarted;
+     */
+    private static void scheduleReminder(Context context, int hour, int minute) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
@@ -35,9 +41,14 @@ public class ReminderUtils {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.setExact(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
 
+        // make sure alarm still runs if device is restarted
         setBootReceiverEnabled(context, true);
     }
 
+    /**
+     * Schedules {@link ReminderReceiver} to run at the time chosen by the
+     * user in settings.
+     */
     public static void scheduleReminderAtDefaultTime(Context context) {
         EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(context);
         int hour = prefs.getInt(R.string.pref_reminder_time_hr, DEFAULT_REMINDER_HR);
@@ -45,6 +56,10 @@ public class ReminderUtils {
         scheduleReminder(context, hour, min);
     }
 
+    /**
+     * Cancels the set reminder if it has been scheduled, meaning {@link ReminderReceiver}
+     * will not be run. Disables {@link BootReceiver} to avoid battery drain.
+     */
     public static void cancelReminder(Context context) {
         Intent intent = new Intent(context, ReminderReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE_REMINDER,
@@ -56,6 +71,9 @@ public class ReminderUtils {
         setBootReceiverEnabled(context, false);
     }
 
+    /**
+     * Enables / disables {@link BootReceiver} to be run at boot or not.
+     */
     private static void setBootReceiverEnabled(Context context, boolean enabled) {
         ComponentName receiver = new ComponentName(context, BootReceiver.class);
         PackageManager packageManager = context.getPackageManager();
