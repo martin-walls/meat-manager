@@ -49,7 +49,7 @@ public class ContractDetailActivity extends AppCompatActivity
         productsRecyclerView.setAdapter(productsAdapter);
         productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        fillData();
+        fillFields();
     }
 
     @Override
@@ -123,7 +123,7 @@ public class ContractDetailActivity extends AppCompatActivity
     /**
      * Initialises fields with data from the {@link Contract} being shown.
      */
-    private void fillData() {
+    private void fillFields() {
         TextView destination = findViewById(R.id.destination);
         destination.setText(contract.getDestName());
 

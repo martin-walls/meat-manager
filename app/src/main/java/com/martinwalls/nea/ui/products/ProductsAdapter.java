@@ -58,6 +58,10 @@ public class ProductsAdapter extends BaseAdapter<ProductsAdapter.ViewHolder> {
         return productList.size();
     }
 
+    /**
+     * Removes the product at the specified position if it is safe to do so.
+     * Shows a {@link Snackbar} to allow the user to undo the action.
+     */
     @Override
     public void deleteItem(int position) {
         DBHandler dbHandler = new DBHandler(parentActivity);
@@ -77,6 +81,11 @@ public class ProductsAdapter extends BaseAdapter<ProductsAdapter.ViewHolder> {
         }
     }
 
+    /**
+     * Shows a {@link Snackbar} allowing the user to undo deleting a product.
+     * Deletes the product from the database when the snackbar times out or
+     * is dismissed.
+     */
     private void showUndoSnackbar() {
         View view = parentActivity.findViewById(R.id.root_layout);
         Snackbar snackbar = Snackbar.make(view, R.string.snackbar_item_deleted, Snackbar.LENGTH_LONG);
@@ -94,6 +103,10 @@ public class ProductsAdapter extends BaseAdapter<ProductsAdapter.ViewHolder> {
         snackbar.show();
     }
 
+    /**
+     * Adds the recently deleted product back to its previous position in the
+     * list.
+     */
     private void undoDelete() {
         productList.add(recentlyDeletedItemPosition, recentlyDeletedItem);
         notifyItemInserted(recentlyDeletedItemPosition);

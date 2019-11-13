@@ -54,7 +54,7 @@ public class OrderDetailActivity extends AppCompatActivity
             order = dbHandler.getOrder(orderId);
         }
 
-        fillData();
+        fillFields();
     }
 
     @Override
@@ -111,12 +111,19 @@ public class OrderDetailActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Shows a {@link ConfirmDeleteDialog} asking the user to confirm the
+     * delete action.
+     */
     private void showConfirmDeleteDialog() {
         DialogFragment dialog = new ConfirmDeleteDialog();
         dialog.show(getSupportFragmentManager(), "confirm_delete");
     }
 
-    private void fillData() {
+    /**
+     * Initialises fields with data from the {@link Order} being shown.
+     */
+    private void fillFields() {
         ProductsAddedAdapter productsAdapter = new ProductsAddedAdapter(order.getProductList());
         RecyclerView productsRecyclerView = findViewById(R.id.recycler_view_products);
         productsRecyclerView.setAdapter(productsAdapter);

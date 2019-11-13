@@ -278,12 +278,21 @@ public class EditOrderActivity extends InputFormActivity
         }
     }
 
+    /**
+     * Removes the product added to the order at the specified position.
+     */
     @Override
     public void onProductAddedDelete(int position) {
         productsAddedList.remove(position);
         productsAddedAdapter.notifyItemRemoved(position);
     }
 
+    /**
+     * Fills the product and mass input fields with the values stored in the
+     * product added at the specified position. This allows the user to edit
+     * the product again if they want to change which product it is or how much
+     * of it they want to add to the order.
+     */
     @Override
     public void onProductAddedEdit(int position) {
         ProductQuantity productAdded = productsAddedList.get(position);
@@ -307,6 +316,11 @@ public class EditOrderActivity extends InputFormActivity
         selectedProductId = productAdded.getProduct().getProductId();
     }
 
+    /**
+     * This is called when the {@link DatePickerDialog} returns, when the user
+     * has chosen a date for the order. Stores the chosen date and shows a
+     * {@link TimePickerDialog} so the user can set a time for the order.
+     */
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         // (month + 1) adjusts for DatePicker returning month in range 0-11, LocalDate uses 1-12
@@ -316,14 +330,25 @@ public class EditOrderActivity extends InputFormActivity
         timePickerDialog.show();
     }
 
+    /**
+     * This is called then the {@link TimePickerDialog} returns, when the user
+     * has chosen a time for the order. Stores the chosen time, and combines
+     * this with the chosen date to set the date and time for the order.
+     */
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Calendar now = Calendar.getInstance();
-        //noinspection MagicConstant
-        if (selectedDate.getYear() == now.get(Calendar.YEAR) && selectedDate.getMonthValue() == now.get(Calendar.MONTH)
-                && selectedDate.getDayOfMonth() == now.get(Calendar.DAY_OF_MONTH)
-                && (hourOfDay < now.get(Calendar.HOUR_OF_DAY)
-                || (hourOfDay == now.get(Calendar.HOUR_OF_DAY) && minute <= now.get(Calendar.MINUTE) + 10))) {
+        now.add(Calendar.MINUTE, 10);
+        Calendar orderDateTime = Calendar.getInstance();
+        orderDateTime.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1, selectedDate.getDayOfMonth(),
+                hourOfDay, minute);
+        if (
+//                selectedDate.getYear() == now.get(Calendar.YEAR) && selectedDate.getMonthValue() == now.get(Calendar.MONTH)
+//                && selectedDate.getDayOfMonth() == now.get(Calendar.DAY_OF_MONTH)
+//                && (hourOfDay < now.get(Calendar.HOUR_OF_DAY)
+//                || (hourOfDay == now.get(Calendar.HOUR_OF_DAY) && minute <= now.get(Calendar.MINUTE) + 10))
+                orderDateTime.before(now) //testme
+        ) {
             Toast.makeText(this, R.string.input_error_time_must_be_future, Toast.LENGTH_SHORT)
                     .show();
 
@@ -359,11 +384,20 @@ public class EditOrderActivity extends InputFormActivity
         }
     }
 
+    /**
+     * Shows a {@link ConfirmCancelDialog} asking the user to confirm the
+     * cancel action.
+     */
     private void showConfirmCancelDialog() {
         DialogFragment dialog = new ConfirmCancelDialog();
         dialog.show(getSupportFragmentManager(), "confirm_cancel");
     }
 
+    /**
+     * Gets the product and mass currently entered into the input fields
+     * and adds a {@link ProductQuantity} with these values to the contract.
+     * Clears the input fields so another product can be added.
+     */
     private void addProductToProductsAddedList() {
         ProductQuantity product = getProductFromInputsAndClear();
         if (product != null) {
@@ -372,6 +406,11 @@ public class EditOrderActivity extends InputFormActivity
         }
     }
 
+    /**
+     * Sets listeners on input fields to detect when the user has made any
+     * changes, determining whether or not to show call {@link #showConfirmCancelDialog()}
+     * when the user wants to go back.
+     */
     private void setTextChangedListeners() {
         TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
         editTextProduct.addTextChangedListener(new SimpleTextWatcher() {
@@ -417,6 +456,10 @@ public class EditOrderActivity extends InputFormActivity
         checkboxCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> hasChanged = true);
     }
 
+    /**
+     * Gets the product and mass currently entered into the input fields and
+     * returns this as a {@link ProductQuantity} object. Clears the input fields.
+     */
     private ProductQuantity getProductFromInputsAndClear() {
         hideKeyboard();
 
@@ -467,6 +510,9 @@ public class EditOrderActivity extends InputFormActivity
         }
     }
 
+    /**
+     * Initialises input fields with data from the {@link Order} being edited.
+     */
     private void fillFields() {
         productsAddedList.clear();
 
@@ -487,6 +533,13 @@ public class EditOrderActivity extends InputFormActivity
 
     }
 
+    /**
+     * Stores the {@link Order} in the database if it is valid.
+     * First checks each input field to check it is valid. If a field is invalid,
+     * an appropriate message is shown to help the user correct the error. If all
+     * the fields have valid data, either adds a new order or edits the existing
+     * one depending on the edit mode of this activity.
+     */
     private boolean addOrderToDb() {
         boolean isValid = true;
         Order newOrder = new Order();
@@ -563,18 +616,4 @@ public class EditOrderActivity extends InputFormActivity
         }
         return false;
     }
-
-//    private boolean areAllFieldsEmpty() {
-//        TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
-//        TextInputEditText editTextMass = findViewById(R.id.edit_text_quantity_mass);
-//        TextInputEditText editTextNumBoxes = findViewById(R.id.edit_text_quantity_boxes);
-//        TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
-//        TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
-//
-//        return TextUtils.isEmpty(editTextProduct.getText())
-//                && TextUtils.isEmpty(editTextMass.getText())
-//                && TextUtils.isEmpty(editTextNumBoxes.getText())
-//                && TextUtils.isEmpty(editTextDest.getText())
-//                && TextUtils.isEmpty(editTextDate.getText());
-//    }
 }

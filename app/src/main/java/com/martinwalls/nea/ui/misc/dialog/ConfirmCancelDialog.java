@@ -49,9 +49,27 @@ public class ConfirmCancelDialog extends DialogFragment {
         }
     }
 
+    /**
+     * Interface to handle clicks on dialog buttons.
+     */
     public interface ConfirmCancelListener {
+        /**
+         * This is called when the user confirms the cancel action from the
+         * dialog. Typically this should be implemented to close the calling
+         * activity / fragment to go back to the previous page.
+         */
         void onConfirmCancelYesAction();
         // doesn't need to be implemented if NO btn should just cancel dialog
+
+        /**
+         * This is called when the user stops the cancel action from the dialog.
+         * Typically this should be implemented to resume what the user was
+         * doing before. {@link ConfirmCancelDialog} handles closing the
+         * dialog so this doesn't need to be implemented.
+         *
+         * <p>If this should just close the dialog without any additional
+         * actions, this doesn't need to be implemented.
+         */
         default void onConfirmCancelNoAction() {}
     }
 }

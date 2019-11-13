@@ -15,6 +15,11 @@ public class RecyclerViewDivider extends RecyclerView.ItemDecoration {
         divider = context.getDrawable(drawableId);
     }
 
+    /**
+     * Draws the divider at the bottom of each RecyclerView item. The
+     * divider takes its intrinsic height, that is the height defined in its
+     * drawable resource.
+     */
     @Override
     public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         int left = parent.getPaddingLeft();

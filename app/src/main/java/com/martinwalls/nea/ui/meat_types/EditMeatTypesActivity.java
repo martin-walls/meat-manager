@@ -85,6 +85,10 @@ public class EditMeatTypesActivity extends AppCompatActivity
         loadMeatTypes();
     }
 
+    /**
+     * Gets all meat types from the database. Reloads the layout to show the
+     * updated data.
+     */
     private void loadMeatTypes() {
         meatTypesList.clear();
         meatTypesList.addAll(SortUtils.mergeSort(dbHandler.getAllMeatTypes()));

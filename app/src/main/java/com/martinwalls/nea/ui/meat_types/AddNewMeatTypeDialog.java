@@ -47,15 +47,7 @@ public class AddNewMeatTypeDialog extends DialogFragment {
             }
         });
 
-        buttonCancel.setOnClickListener(v -> {
-            dismiss();
-        });
-
-
-//        dialog -> {
-//            DialogFragment addNewProductDialog = new AddNewProductDialog();
-//            addNewProductDialog.show(getFragmentManager(), "add_new_product");
-//        });
+        buttonCancel.setOnClickListener(v -> dismiss());
 
         return builder.create();
     }
@@ -71,13 +63,26 @@ public class AddNewMeatTypeDialog extends DialogFragment {
         }
     }
 
+    /**
+     * Checks whether {@code meatType} already exists as a meat type in the
+     * database.
+     */
     private boolean isNewMeatTypeAlreadyAdded(String meatType) {
         DBHandler dbHandler = new DBHandler(getContext());
         List<String> meatTypes = dbHandler.getAllMeatTypes();
         return meatTypes.contains(meatType);
     }
 
+    /**
+     * Interface to handle done action of the dialog.
+     */
     public interface AddNewMeatTypeListener {
+        /**
+         * This is called when the user confirms adding a meat type from the
+         * dialog. {@link AddNewMeatTypeDialog} handles error checking so
+         * this should be implemented to store the meat type, the implementation
+         * doesn't need to validate it again.
+         */
         void onAddNewMeatTypeDoneAction(String meatType);
     }
 }

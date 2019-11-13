@@ -97,6 +97,10 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
      * Interface to handle clicks on search items.
      */
     public interface SearchItemAdapterListener {
+        /**
+         * Called when a search item is clicked. This should be implemented
+         * to close the search view and store the selected search item.
+         */
         void onSearchItemSelected(SearchItem item, String searchItemType);
     }
 }

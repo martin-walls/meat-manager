@@ -84,11 +84,21 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         return orderList.size();
     }
 
+    /**
+     * Sets whether the adapter is showing current orders or the order history,
+     * which is used when formatting colours of the date dividers for past dates.
+     */
     public void setCurrentView(boolean isCurrentView) {
         this.isCurrentView = isCurrentView;
     }
 
+    /**
+     * Interface to handle clicks on order items.
+     */
     public interface OrdersAdapterListener {
+        /**
+         * This is called when an order in the list is clicked.
+         */
         void onOrderClicked(Order order);
     }
 }

@@ -55,6 +55,10 @@ public class MeatTypesAdapter extends BaseAdapter<MeatTypesAdapter.ViewHolder> {
         return meatTypesList.size();
     }
 
+    /**
+     * Deletes the meat type at the specified position. Shows a {@link Snackbar}
+     * so the user can undo the action.
+     */
     @Override
     public void deleteItem(int position) {
         recentlyDeletedItem = meatTypesList.get(position);
@@ -74,6 +78,11 @@ public class MeatTypesAdapter extends BaseAdapter<MeatTypesAdapter.ViewHolder> {
         }
     }
 
+    /**
+     * Shows a {@link Snackbar} allowing the user to undo deleting a meat type.
+     * Deletes the meat type from the database when the Snackbar times out or
+     * is dismissed.
+     */
     private void showUndoSnackbar() {
         View view = parentActivity.findViewById(R.id.root_layout);
         Snackbar snackbar = Snackbar.make(view, R.string.snackbar_item_deleted, Snackbar.LENGTH_LONG);
@@ -81,6 +90,10 @@ public class MeatTypesAdapter extends BaseAdapter<MeatTypesAdapter.ViewHolder> {
         snackbar.show();
     }
 
+    /**
+     * Adds the recently deleted meat type back to its previous position in the
+     * list.
+     */
     private void undoDelete() {
         meatTypesList.add(recentlyDeletedItemPosition, recentlyDeletedItem);
         notifyItemInserted(recentlyDeletedItemPosition);

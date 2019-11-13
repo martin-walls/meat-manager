@@ -45,7 +45,10 @@ public class ConfirmDeleteDialog extends DialogFragment {
             listener.onConfirmDelete();
             dismiss();
         });
-        btnCancel.setOnClickListener(v -> dismiss());
+        btnCancel.setOnClickListener(v -> {
+            listener.onConfirmDeleteCancel();
+            dismiss();
+        });
 
         builder.setView(dialogView);
 
@@ -63,7 +66,24 @@ public class ConfirmDeleteDialog extends DialogFragment {
         }
     }
 
+    /**
+     * Interface to handle clicks on dialog buttons.
+     */
     public interface ConfirmDeleteListener {
+        /**
+         * This is called when the user confirms the delete action from the
+         * dialog. This should be implemented to perform the delete action.
+         */
         void onConfirmDelete();
+
+        /**
+         * This is called when the user cancels the delete action from the
+         * dialog. Typically this should be resume what the user was previously
+         * doing.
+         *
+         * <p>If this should just close the dialog without any additional
+         * actions, this doesn't need to be implemented.
+         */
+        default void onConfirmDeleteCancel() {}
     }
 }

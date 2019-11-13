@@ -90,10 +90,6 @@ public class EditLocationActivity extends AppCompatActivity
         }
     }
 
-    /**
-     * Called when the user confirms the cancel action from {@link ConfirmCancelDialog}.
-     * Ends the Activity.
-     */
     @Override
     public void onConfirmCancelYesAction() {
         finish();

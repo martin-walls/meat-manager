@@ -71,6 +71,10 @@ public class LocationsMenuAdapter extends RecyclerView.Adapter<LocationsMenuAdap
      * Interface to handle clicks on menu items.
      */
     public interface LocationsMenuAdapterListener {
+        /**
+         * This is called when the menu item at the specified position is
+         * clicked. This should be implemented to filter stock by location.
+         */
         void onLocationItemClicked(Location location, int position);
     }
 }

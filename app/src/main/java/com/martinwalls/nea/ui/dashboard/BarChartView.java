@@ -334,7 +334,7 @@ public class BarChartView extends View {
         }
     }
 
-    //todo doc
+    //doc needed
     private void drawGreenReqBar(Canvas c, BarChartEntry data, int pos) {
         if (data.getAmountRequired() <= data.getAmount()) {
             float length = getBarLength(data.getAmountRequired());

@@ -375,10 +375,6 @@ public class EditContractActivity extends InputFormActivity
         setSelectedRepeatInterval(interval);
     }
 
-    /**
-     * Called when the user confirms the cancel action from {@link ConfirmCancelDialog}.
-     * Ends the Activity.
-     */
     @Override
     public void onConfirmCancelYesAction() {
         finish();

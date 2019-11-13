@@ -121,6 +121,12 @@ public class AddNewProductDialog extends DialogFragment {
      * Interface to handle done action from dialog.
      */
     public interface AddNewProductListener {
+        /**
+         * This is called when the user confirms adding a product from the
+         * dialog. {@link AddNewProductDialog} handles error checking so the
+         * implementation should store the new product, but doesn't need to
+         * perform any additional validation.
+         */
         void onAddNewProductDoneAction(Product newProduct);
     }
 }

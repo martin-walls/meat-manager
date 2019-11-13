@@ -14,6 +14,9 @@ import com.martinwalls.nea.R;
 
 public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
 
+    /**
+     * The color to show in the 'swiped' area.
+     */
     private final ColorDrawable background;
 
     private BaseAdapter adapter;
@@ -39,6 +42,12 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
         return false;
     }
 
+    /**
+     * When the item is swiped to the left or right, draws a solid colour
+     * background and a delete icon in the area 'behind' the item that is now
+     * revealed. The background colour is defined by the {@code ColorDrawable}
+     * {@link #background}, and the icon is defined by {@link #deleteIcon}.
+     */
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                             float dX, float dY, int actionState, boolean isCurrentlyActive) {

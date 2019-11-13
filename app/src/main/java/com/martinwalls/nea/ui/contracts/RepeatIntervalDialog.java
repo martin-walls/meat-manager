@@ -188,7 +188,18 @@ public class RepeatIntervalDialog extends DialogFragment {
      * Interface for when the user selects a repeat interval from the dialog.
      */
     public interface RepeatIntervalDialogListener {
+        /**
+         * This is called when the radio button with specified {@code id} is
+         * clicked in the {@link RepeatIntervalDialog}. This should be
+         * implemented to store the corresponding repeat interval.
+         */
         void onRadioBtnClicked(int id);
+
+        /**
+         * This is called when the user enters a custom interval in the
+         * {@link RepeatIntervalDialog}. This should be implemented to store
+         * this repeat interval.
+         */
         void onCustomIntervalSelected(Interval interval);
     }
 }

@@ -33,6 +33,10 @@ public class OrdersFragment extends Fragment
     private OrdersAdapter ordersAdapter;
     private List<Order> orderList = new ArrayList<>();
 
+    /**
+     * Stores whether the layout is currently showing current orders ({@code true})
+     * or the order history ({@code false}).
+     */
     private boolean isCurrentView = true;
 
     @Override
@@ -107,6 +111,10 @@ public class OrdersFragment extends Fragment
         }
     }
 
+    /**
+     * This is called when an order item is clicked in the list. Opens the
+     * detail page for that order.
+     */
     @Override
     public void onOrderClicked(Order order) {
         Intent detailIntent = new Intent(getContext(), OrderDetailActivity.class);
@@ -114,6 +122,10 @@ public class OrdersFragment extends Fragment
         startActivity(detailIntent);
     }
 
+    /**
+     * Sets the title for the fragment, depending on whether the layout is
+     * showing current orders or the order history.
+     */
     private void setTitle() {
         if (isCurrentView) {
             getActivity().setTitle(R.string.orders_title);
@@ -122,6 +134,11 @@ public class OrdersFragment extends Fragment
         }
     }
 
+    /**
+     * Gets either all completed or not completed orders in the database,
+     * depending on whether the layout is showing current orders or the order
+     * history. Sorts the orders and updates the layout to show the updated data.
+     */
     private void loadOrders() {
         orderList.clear();
         // sort by date

@@ -64,7 +64,10 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
         return locationList.size();
     }
 
-    //doc needed
+    /**
+     * Deletes the {@link Location} at the specified position if it is safe
+     * to do so. Shows a {@link Snackbar} so the user can undo the action.
+     */
     @Override
     public void deleteItem(int position) {
         DBHandler dbHandler = new DBHandler(parentActivity);
@@ -84,6 +87,11 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
         }
     }
 
+    /**
+     * Shows a {@link Snackbar} allowing the user to undo deleting a location.
+     * Deletes the location from the database when the Snackbar times out or
+     * is dismissed.
+     */
     private void showUndoSnackbar() {
         View view = parentActivity.findViewById(R.id.root_layout);
         Snackbar snackbar = Snackbar.make(view, R.string.snackbar_item_deleted, Snackbar.LENGTH_LONG);
@@ -101,12 +109,22 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
         snackbar.show();
     }
 
+    /**
+     * Adds the recently delete location back to its previous position in the
+     * list.
+     */
     private void undoDelete() {
         locationList.add(recentlyDeletedItemPosition, recentlyDeletedItem);
         notifyItemInserted(recentlyDeletedItemPosition);
     }
 
+    /**
+     * Interface to handle clicks on location items.
+     */
     public interface LocationsAdapterListener {
+        /**
+         * This is called when a location in the list is clicked.
+         */
         void onLocationClicked(Location location);
     }
 }

@@ -80,6 +80,9 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
      * Interface to handle clicks on stock items.
      */
     public interface StockItemAdapterListener {
+        /**
+         * This is called when a stock item is clicked.
+         */
         void onStockItemClicked(StockItem stockItem);
     }
 }
