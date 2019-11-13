@@ -128,6 +128,10 @@ public class EditProductsActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Gets all products in the database, sorts them and updates the
+     * layout to show the update data.
+     */
     private void loadProducts() {
         int sortBy = prefs.getInt(R.string.pref_products_sort_by, SortUtils.SORT_MEAT_TYPE);
         productList.clear();
