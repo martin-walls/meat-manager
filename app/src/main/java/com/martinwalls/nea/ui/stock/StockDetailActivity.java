@@ -111,6 +111,9 @@ public class StockDetailActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Initialises fields with data from the {@link StockItem} being shown.
+     */
     private void fillData() {
         TextView productName = findViewById(R.id.product_name);
         productName.setText(stockItem.getProduct().getProductName());
@@ -153,6 +156,10 @@ public class StockDetailActivity extends AppCompatActivity
         quality.setText(stockItem.getQuality().getDisplayName());
     }
 
+    /**
+     * Shows a {@link ConfirmDeleteDialog} asking the user to confirm the
+     * delete action.
+     */
     private void showConfirmDeleteDialog() {
         DialogFragment dialog = new ConfirmDeleteDialog();
         Bundle args = new Bundle();

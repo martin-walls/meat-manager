@@ -167,12 +167,19 @@ public class StockFragment extends Fragment
         startActivity(detailIntent);
     }
 
+    /**
+     * Stores which property to sort stock by, then reloads the data.
+     */
     private void setSortMode(int sortMode) {
         prefs.setInt(R.string.pref_stock_sort_by, sortMode);
         getActivity().invalidateOptionsMenu();
         loadStock();
     }
 
+    /**
+     * Gets all stock items from the database, sorts them and reloads the
+     * layout to show the updated data.
+     */
     private void loadStock() {
         stockList.clear();
         List<StockItem> stock = dbHandler.getAllStock();

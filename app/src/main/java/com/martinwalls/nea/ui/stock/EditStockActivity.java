@@ -272,11 +272,19 @@ public class EditStockActivity extends InputFormActivity
         }
     }
 
+    /**
+     * Called when the user confirms the cancel action from {@link ConfirmCancelDialog}.
+     * Ends the Activity.
+     */
     @Override
     public void onConfirmCancelYesAction() {
         finish();
     }
 
+    /**
+     * Shows a {@link ConfirmCancelDialog} asking the user to confirm the 
+     * cancel action.
+     */
     private void showConfirmCancelDialog() {
         DialogFragment dialog = new ConfirmCancelDialog();
         dialog.show(getSupportFragmentManager(), "confirm_cancel");
@@ -310,6 +318,11 @@ public class EditStockActivity extends InputFormActivity
         }
     }
 
+    /**
+     * Sets listeners on input fields to detect when the user has made any
+     * changes, determining whether or not to show call {@link #showConfirmCancelDialog()}
+     * when the user wants to go back.
+     */
     private void setTextChangedListeners() {
         TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
         editTextProduct.addTextChangedListener(new SimpleTextWatcher() {
@@ -368,6 +381,9 @@ public class EditStockActivity extends InputFormActivity
         });
     }
 
+    /**
+     * Initialises input fields with data from the {@link StockItem} being edited.
+     */
     private void fillFields() {
         TextView textProduct = findViewById(R.id.text_product);
         textProduct.setText(stockToEdit.getProduct().getProductName());
@@ -398,6 +414,14 @@ public class EditStockActivity extends InputFormActivity
         selectedDestId = stockToEdit.getDestId();
     }
 
+    /**
+     * Stores the {@link StockItem} in the database if it is valid.
+     * First checks each input field to check it is valid. If a field is
+     * invalid, an appropriate error message is shown to help the user 
+     * correct the error. If all the fields have valid data, either adds a new
+     * stock item or edits the existing one depending on the edit mode of this
+     * activity.
+     */
     private boolean addStockToDb() {
         boolean isValid = true;
         StockItem newStockItem = new StockItem();
