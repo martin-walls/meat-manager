@@ -90,16 +90,27 @@ public class EditLocationActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Called when the user confirms the cancel action from {@link ConfirmCancelDialog}.
+     * Ends the Activity.
+     */
     @Override
     public void onConfirmCancelYesAction() {
         finish();
     }
 
+    /**
+     * Shows a {@link ConfirmCancelDialog} asking the user to confirm
+     * the cancel action.
+     */
     private void showConfirmCancelDialog() {
         DialogFragment dialog = new ConfirmCancelDialog();
         dialog.show(getSupportFragmentManager(), "confirm_cancel");
     }
 
+    /**
+     * Initialises input fields with data from the {@link Location} being edited.
+     */
     private void fillFields() {
         TextInputEditText editTextName = findViewById(R.id.edit_text_location_name);
         editTextName.setText(location.getLocationName());
@@ -126,6 +137,11 @@ public class EditLocationActivity extends AppCompatActivity
         editTextPhone.setText(location.getPhone());
     }
 
+    /**
+     * Checks whether the user has edited any of the input fields, which
+     * determines whether to show a {@link ConfirmCancelDialog} when the
+     * user wants to go back.
+     */
     private boolean haveFieldsChanged() {
         TextInputEditText editTextName = findViewById(R.id.edit_text_location_name);
         TextInputEditText editTextAddr1= findViewById(R.id.edit_text_addr_1);
@@ -146,6 +162,13 @@ public class EditLocationActivity extends AppCompatActivity
                 || !TextUtils.equals(editTextPhone.getText(), location.getPhone());
     }
 
+    /**
+     * Stores the {@link Location} in the database if it is valid.
+     * First checks each input field to check it is valid. It a field is
+     * invalid, an appropriate error message is shown to help the user correct
+     * the error. If all fields have valid data, edits the existing location
+     * in the database to the new values.
+     */
     private boolean updateLocationInDb() {
         boolean isValid = true;
 
