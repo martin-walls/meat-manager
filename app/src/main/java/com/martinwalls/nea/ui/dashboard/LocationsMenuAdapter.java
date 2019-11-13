@@ -67,6 +67,9 @@ public class LocationsMenuAdapter extends RecyclerView.Adapter<LocationsMenuAdap
         return locationsList.size();
     }
 
+    /**
+     * Interface to handle clicks on menu items.
+     */
     public interface LocationsMenuAdapterListener {
         void onLocationItemClicked(Location location, int position);
     }

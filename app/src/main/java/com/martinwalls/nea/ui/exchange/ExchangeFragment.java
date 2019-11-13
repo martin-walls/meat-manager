@@ -145,7 +145,6 @@ public class ExchangeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        fetchRatesFromApi();
     }
 
     @Override
@@ -175,6 +174,9 @@ public class ExchangeFragment extends Fragment {
         }
     }
 
+    /**
+     * Checks whether the device has an active Internet connection.
+     */
     private boolean checkInternetConnection() {
         ConnectivityManager cm =
                 (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -185,6 +187,10 @@ public class ExchangeFragment extends Fragment {
         return cm.getActiveNetwork() != null;
     }
 
+    /**
+     * Runs {@link ApiIntentService} to fetch the latest exchange rates from
+     * the API.
+     */
     private void fetchRatesFromApi() {
         PendingIntent pendingResult = getActivity().createPendingResult(
                 MainActivity.REQUEST_EXCHANGE_API_SERVICE, new Intent(), 0);
@@ -193,6 +199,10 @@ public class ExchangeFragment extends Fragment {
         getActivity().startService(intent);
     }
 
+    /**
+     * Fetches latest exchange rates from the API, making sure there is an
+     * active Internet connection beforehand.
+     */
     private void checkConnectionAndFetchRates() {
         if (checkInternetConnection()) {
             fetchRatesFromApi();
@@ -204,6 +214,10 @@ public class ExchangeFragment extends Fragment {
         }
     }
 
+    /**
+     * Called when {@link ApiIntentService} returns the exchange rates. Updates
+     * the layout to show the updated rates.
+     */
     public void onRatesFetched(Intent data) {
         rates = (HashMap<String, Double>) data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
         updateRates();
@@ -217,6 +231,10 @@ public class ExchangeFragment extends Fragment {
 //        Toast.makeText(getContext(), "fetched", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Gets all favourited currencies from the database, as these are the ones
+     * that should be shown on the exchange screen.
+     */
     private String[] fetchCurrenciesToShow() {
         List<Currency> currencies = SortUtils.mergeSort(dbHandler.getFavCurrencies(),
                 (currency1, currency2) -> currency1.getCode().compareTo(currency2.getCode()));
@@ -228,6 +246,10 @@ public class ExchangeFragment extends Fragment {
         return currencyCodes;
     }
 
+    /**
+     * Initialises the currency pickers to show all the favourited currencies
+     * in the database.
+     */
     private void initCurrencyPickers() {
         String[] currencies = fetchCurrenciesToShow();
         if (currencies.length == 0) {
@@ -267,6 +289,9 @@ public class ExchangeFragment extends Fragment {
         setSecondaryCurrency(currencies[currencyPickerRight.getValue()]);
     }
 
+    /**
+     * Sets the primary (left) currency to the specified currency.
+     */
     private void setPrimaryCurrency(String currency) {
         primaryCurrency = currency;
         primaryCurrencyText.setText(currency);
@@ -274,6 +299,9 @@ public class ExchangeFragment extends Fragment {
         updateRates();
     }
 
+    /**
+     * Sets the secondary (right) currency to the specified currency.
+     */
     private void setSecondaryCurrency(String currency) {
         secondaryCurrency = currency;
         secondaryCurrencyText.setText(currency);
@@ -281,6 +309,10 @@ public class ExchangeFragment extends Fragment {
         updateRates();
     }
 
+    /**
+     * Calculates the exchange rate for {@code currency} relative to the
+     * currency {@code base}.
+     */
     private double getRate(String currency, String base) {
         if (rates != null && rates.keySet().contains(currency) && rates.keySet().contains(base)) {
             return (rates.get(currency) / rates.get(base)) * primaryCurrencyValue;
@@ -288,11 +320,17 @@ public class ExchangeFragment extends Fragment {
         return 0;
     }
 
+    /**
+     * Updates the displayed rates.
+     */
     private void updateRates() {
         secondaryCurrencyValue = getRate(secondaryCurrency, primaryCurrency);
         secondaryCurrencyValueText.setText(getString(R.string.exchange_rate, secondaryCurrencyValue));
     }
 
+    /**
+     * Swaps the primary and secondary currencies.
+     */
     private void swapCurrencies() {
         String primaryTemp = primaryCurrency;
         setPrimaryCurrency(secondaryCurrency);
@@ -303,6 +341,9 @@ public class ExchangeFragment extends Fragment {
         currencyPickerRight.setValue(leftValue);
     }
 
+    /**
+     * Adds a new conversion to the history.
+     */
     private void addConversionToHistory() {
         Conversion newConversion = new Conversion();
         newConversion.setTimestamp(System.currentTimeMillis() / 1000);
@@ -314,6 +355,9 @@ public class ExchangeFragment extends Fragment {
         loadConversionHistory();
     }
 
+    /**
+     * Gets the conversion history from the database.
+     */
     private void loadConversionHistory() {
         conversionList.clear();
         conversionList.addAll(SortUtils.mergeSort(dbHandler.getAllConversions(), Conversion.comparatorTime()));

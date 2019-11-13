@@ -102,6 +102,11 @@ public class BarChartView extends View {
         init(context);
     }
 
+    /**
+     * Initialises variables for drawing the view. Gets colour values and
+     * creates {@link Paint} objects, to avoid doing so in {@link #onDraw} as
+     * that would be less efficient.
+     */
     private void init(Context context) {
         this.context = context;
 
@@ -173,15 +178,21 @@ public class BarChartView extends View {
         decimalFormat = new DecimalFormat("#.##");
     }
 
+    /**
+     * Sets a custom height for the View, so it can scroll to show all bars.
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        // set custom height of view, from number of bars shown (plus padding),
-        // this allows the view to extend below the screen so it can scroll
+        // get height from number of bars shown, this allows the view to extend
+        // below the screen so it can scroll
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = Utils.convertDpToPixelSize(barWidthDp * dataSet.size() + getPaddingTop(), context);
         setMeasuredDimension(width, height);
     }
 
+    /**
+     * Draws the bar chart for the given data.
+     */
     @Override
     public void onDraw(Canvas c) {
         super.onDraw(c);
@@ -189,7 +200,6 @@ public class BarChartView extends View {
         for (int pos = 0; pos < dataSet.size(); pos++) {
             BarChartEntry entry = dataSet.get(pos);
 
-            //todo show green req bar if there is more stock than needed
 
             // draw bar for amount of stock required
             drawReqBar(c, entry, pos);
@@ -197,6 +207,7 @@ public class BarChartView extends View {
             // draw bar for amount of stock held
             drawAmountBar(c, entry, pos);
 
+            //todo show green req bar if there is more stock than needed
             ///////////////////////////////////////////
             drawGreenReqBar(c, entry, pos);
 
@@ -214,6 +225,10 @@ public class BarChartView extends View {
         }
     }
 
+    /**
+     * Handles clicks on the View, to show tooltips when the user clicks
+     * on a bar.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -237,11 +252,18 @@ public class BarChartView extends View {
         return true;
     }
 
+    /**
+     * Initialises the selected bar to none selected.
+     */
     private void resetSelectedItem() {
         selectedIndex = -1;
         prevSelectedIndex = -1;
     }
 
+    /**
+     * Sets the data set to draw the graph for. Redraws the graph with
+     * the updated data.
+     */
     public void setData(List<BarChartEntry> newDataSet) {
         if (newDataSet.size() == 0) {
             return;
@@ -264,34 +286,55 @@ public class BarChartView extends View {
         invalidate();
     }
 
+    /**
+     * Calculates whether the required amount bar should be shown for this data.
+     */
     private boolean isReqBarShown(BarChartEntry data) {
         return data.getAmountRequired() > data.getAmount();
     }
 
     // bar drawing methods
+
+    /**
+     * Calculates the y-value of the top edge of the bar at position {@code pos}.
+     */
     private float getBarTop(int pos) {
         return getPaddingTop() + barWidth * pos + (barSpacing / 2f);
     }
 
+    /**
+     * Calculates the y-value of the bottom edge of the bar at position {@code pos}.
+     */
     private float getBarBottom(int pos) {
         return getPaddingTop() + barWidth * (pos + 1) - (barSpacing / 2f);
     }
 
+    /**
+     * Calculates the pixel length of the bar.
+     */
     private float getBarLength(float value) {
         return value / xMax * getWidth();
     }
 
+    /**
+     * Draws a bar with the specified bounds and {@link Paint}.
+     */
     private void drawBar(Canvas c, float left, float top, float right, float bottom, Paint paint) {
         c.drawRoundRect(left, top, right, bottom, barCornerRadius, barCornerRadius, paint);
     }
 
+    /**
+     * Draws a required amount bar for {@code data} at position {@code pos} if
+     * it should be shown.
+     */
     private void drawReqBar(Canvas c, BarChartEntry data, int pos) {
-        if (data.getAmountRequired() > data.getAmount()) {
+        if (isReqBarShown(data)) {
             float length = getBarLength(data.getAmountRequired());
             drawBar(c, 0, getBarTop(pos), length, getBarBottom(pos), reqBarFillPaint);
         }
     }
 
+    //todo doc
     private void drawGreenReqBar(Canvas c, BarChartEntry data, int pos) {
         if (data.getAmountRequired() <= data.getAmount()) {
             float length = getBarLength(data.getAmountRequired());
@@ -299,12 +342,19 @@ public class BarChartView extends View {
         }
     }
 
+    /**
+     * Draws an amount bar for {@code data} at position {@code pos}.
+     */
     private void drawAmountBar(Canvas c, BarChartEntry data, int pos) {
         float length = getBarLength(data.getAmount());
         drawBar(c, 0, getBarTop(pos), length, getBarBottom(pos), amountBarFillPaint);
     }
 
     // label drawing methods
+
+    /**
+     * Calculates the pixel width of a bar label including its margin.
+     */
     private float getLabelTextWidth(boolean isInside) {
         if (isInside) {
             return labelTextBounds.width() + labelMarginInside * 2f;
@@ -313,7 +363,9 @@ public class BarChartView extends View {
         }
     }
 
-    // different positions the label can be in
+    /**
+     * Stores the different positions a label can be in, relative to its bar.
+     */
     private enum LabelPos {
         INSIDE_NORMAL,
         INSIDE_REQ,
@@ -321,6 +373,9 @@ public class BarChartView extends View {
         OUTSIDE_NO_REQ
     }
 
+    /**
+     * Calculates the {@link LabelPos} for the label shown for {@code data}.
+     */
     private LabelPos getLabelPos(BarChartEntry data) {
         String label = data.getName().toUpperCase();
         barOuterLabelPaint.getTextBounds(label, 0, label.length(), labelTextBounds);
@@ -346,6 +401,9 @@ public class BarChartView extends View {
         }
     }
 
+    /**
+     * Calculates the x-position of the label to be shown for {@code data}.
+     */
     private float getLabelX(BarChartEntry data) {
         String label = data.getName().toUpperCase();
         barOuterLabelPaint.getTextBounds(label, 0, label.length(), labelTextBounds);
@@ -365,10 +423,16 @@ public class BarChartView extends View {
         return 0;
     }
 
+    /**
+     * Calculates the y-position of the label for the bar at position {@code pos}.
+     */
     private float getLabelY(int pos) {
         return (getBarTop(pos) + getBarBottom(pos) + labelTextBounds.height()) / 2f;
     }
 
+    /**
+     * Draws the label for {@code data} at position {@code pos}.
+     */
     private void drawLabelText(Canvas c, BarChartEntry data, int pos) {
         String label = data.getName().toUpperCase();
 
@@ -386,23 +450,44 @@ public class BarChartView extends View {
     }
 
     // tooltip drawing methods
+
+    /**
+     * Calculates the width of a tooltip with text bounds stored in
+     * {@link #tooltipTextBounds}.
+     */
     private float getTooltipWidth() {
         return tooltipTextBounds.width() + tooltipPadding * 2f;
     }
 
+    /**
+     * Calculates the width of a tooltip including its margin.
+     *
+     * @see #getTooltipWidth()
+     */
     private float getTooltipWidthWithMargin() {
         return getTooltipWidth() + tooltipMargin * 2f;
     }
 
+    /**
+     * Calculates the width of a required tooltip with text bounds stored in
+     * {@link #reqTooltipTextBounds}.
+     */
     private float getReqTooltipWidth() {
         return reqTooltipTextBounds.width() + tooltipPadding * 2f;
     }
 
+    /**
+     * Calculates the width of a required tooltip including its margin.
+     *
+     * @see #getReqTooltipWidth()
+     */
     private float getReqTooltipWidthWithMargin() {
         return getReqTooltipWidth() + tooltipMargin * 2f;
     }
 
-    // different positions the tooltip can be in
+    /**
+     * Stores the different positions a tooltip can be in relative to its bar.
+     */
     private enum TooltipPos {
         INSIDE_NORMAL,
         INSIDE_REQ,
@@ -412,6 +497,10 @@ public class BarChartView extends View {
         OUTSIDE_NO_REQ_LABEL_OUT
     }
 
+    /**
+     * Calculates the {@link TooltipPos} for the tooltip shown for {@code data},
+     * with the bar label in position {@code labelPos}.
+     */
     private TooltipPos getTooltipPos(BarChartEntry data, LabelPos labelPos) {
         if (( // enough space inside amount bar for tooltip
                 labelPos == LabelPos.INSIDE_NORMAL
@@ -441,6 +530,10 @@ public class BarChartView extends View {
         }
     }
 
+    /**
+     * Calculates the x-value of the left edge of the tooltip for {@code data},
+     * with the bar label in position {@code labelPos}.
+     */
     private float getTooltipLeft(BarChartEntry data, LabelPos labelPos) {
         float barLength = getBarLength(data.getAmount());
         float reqBarLength = getBarLength(data.getAmountRequired());
@@ -462,18 +555,31 @@ public class BarChartView extends View {
         return 0;
     }
 
+    /**
+     * Calculates the x-value of the right edge of the tooltip with its left
+     * edge at {@code left}.
+     */
     private float getTooltipRight(float left) {
         return left + getTooltipWidth();
     }
 
+    /**
+     * Calculates the y-value of the top edge of the tooltip.
+     */
     private float getTooltipTop(int pos) {
         return (getBarTop(pos) + getBarBottom(pos) - tooltipTextBounds.height()) / 2f - tooltipPadding;
     }
 
+    /**
+     * Calculates the y-value of the bottom edge of the tooltip.
+     */
     private float getTooltipBottom(int pos) {
         return (getBarTop(pos) + getBarBottom(pos) + tooltipTextBounds.height()) / 2f + tooltipPadding;
     }
 
+    /**
+     * Draws a tooltip with the specified bounds, text, and {@link Paint}s.
+     */
     private void drawTooltip(Canvas c,
                              float left, float top, float right, float bottom, Paint fillPaint,
                              String text, float textX, float textY, Paint textPaint) {
@@ -485,6 +591,9 @@ public class BarChartView extends View {
         c.drawText(text, textX, textY, textPaint);
     }
 
+    /**
+     * Draws a tooltip to show amount of stock for {@code data} at position {@code pos}.
+     */
     private float drawAmountTooltip(Canvas c, BarChartEntry data, int pos) {
 
         MassUnit massUnit = MassUnit.getMassUnit(context);
@@ -507,6 +616,9 @@ public class BarChartView extends View {
         return right;
     }
 
+    /**
+     * Calculates the x-value of the left edge of the required tooltip.
+     */
     private float getReqTooltipLeft(BarChartEntry data, LabelPos labelPos, float normalTooltipRight) {
         TooltipPos tooltipPos = getTooltipPos(data, labelPos);
 
@@ -522,6 +634,20 @@ public class BarChartView extends View {
         }
     }
 
+    /**
+     * Calculates the x-value of the right edge of the required tooltip with its
+     * left edge at {@code left}.
+     */
+    private float getReqTooltipRight(float left) {
+        return left + getReqTooltipWidth();
+    }
+
+    /**
+     * Draws a tooltip to show amount of stock required for {@code data} at
+     * position {@code pos}.
+     *
+     * @param normalTooltipRight X-value of the right edge of the amount tooltip.
+     */
     private void drawReqTooltip(Canvas c, BarChartEntry data, int pos, float normalTooltipRight) {
         MassUnit massUnit = MassUnit.getMassUnit(context);
         String text = context.getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
@@ -530,7 +656,7 @@ public class BarChartView extends View {
 
         float left = getReqTooltipLeft(data, getLabelPos(data), normalTooltipRight);
         float top = getTooltipTop(pos);
-        float right = getTooltipRight(left);
+        float right = getReqTooltipRight(left);
         float bottom = getTooltipBottom(pos);
 
         float textX = left + tooltipPadding;
@@ -539,6 +665,9 @@ public class BarChartView extends View {
         drawTooltip(c, left, top, right, bottom, reqTooltipFillPaint, text, textX, textY, reqTooltipTextPaint);
     }
 
+    /**
+     * Draws all tooltips that should be shown for {@code data} at position {@code pos}.
+     */
     private void drawTooltips(Canvas c, BarChartEntry data, int pos) {
         amountTooltipFillPaint.setAlpha(tooltipAlpha);
         amountTooltipTextPaint.setAlpha(tooltipAlpha);
@@ -551,6 +680,10 @@ public class BarChartView extends View {
         }
     }
 
+    /**
+     * Draws all tooltips that should be shown for the previously selected
+     * bar, these fade out as the alpha value is decreased.
+     */
     private void drawPreviousTooltips(Canvas c, BarChartEntry data, int pos) {
         amountTooltipFillPaint.setAlpha(prevTooltipAlpha);
         amountTooltipTextPaint.setAlpha(prevTooltipAlpha);
@@ -563,6 +696,9 @@ public class BarChartView extends View {
         }
     }
 
+    /**
+     * Changes the alpha values for tooltips so the fade in and out.
+     */
     private void updateTooltipAlpha() {
         if (tooltipAlpha < 255 || prevTooltipAlpha > 0) {
             postInvalidateDelayed(tooltipAlphaDelay);

@@ -121,12 +121,19 @@ public class DashboardFragment extends Fragment
         loadData();
     }
 
+    /**
+     * Sets which property to sort stock by, then reloads the data.
+     */
     private void setSortMode(int sortMode) {
         prefs.setInt(R.string.pref_dashboard_sort_by, sortMode);
         getActivity().invalidateOptionsMenu();
         loadData();
     }
 
+    /**
+     * Gets all stock from the database, sorts it and updates the bar chart
+     * to show the updated data.
+     */
     private void loadData() {
         List<BarChartEntry> entries = new ArrayList<>();
 

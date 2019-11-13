@@ -172,10 +172,21 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
         };
     }
 
+    /**
+     * Returns the number of favourite currencies.
+     */
     int getFavCurrencyCount() {
         return favCurrencyList.size();
     }
 
+    /**
+     * Handles clicks on the favourite button for the currency at {@code position}.
+     * Toggles the favourite status of the currency and displays it in the
+     * according list(s).
+     *
+     * <p>Calls {@link CurrencyAdapterListener#onCurrencyFavStateChange} to notify
+     * the activity of the state change.
+     */
     private void onStarClicked(int position, boolean isFavList) {
         if (isFavList) {
             favCurrencyList.get(position).toggleFavourite();
@@ -196,7 +207,15 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    /**
+     * Interface to update the favourite state of a currency when the user
+     * favourites / unfavourites it.
+     */
     public interface CurrencyAdapterListener {
+        /**
+         * Called when a currency changes its favourite state. Should be
+         * implemented to store the new value.
+         */
         void onCurrencyFavStateChange(Currency currency);
     }
 }
