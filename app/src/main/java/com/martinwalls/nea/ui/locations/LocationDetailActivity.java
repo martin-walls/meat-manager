@@ -120,8 +120,9 @@ public class LocationDetailActivity extends AppCompatActivity {
         }
     }
 
+    //doc needed
     private void fillData() {
-
+        //todo move stuff here
     }
 
     private void deleteLocation() {

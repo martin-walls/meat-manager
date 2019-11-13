@@ -93,6 +93,7 @@ public class NewLocationActivity extends AppCompatActivity
         }
     }
 
+    //doc needed
     @Override
     public void onConfirmCancelYesAction() {
         finish();

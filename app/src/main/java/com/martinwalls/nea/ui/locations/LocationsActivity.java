@@ -80,6 +80,9 @@ public class LocationsActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Opens the detail screen for a location when it is clicked.
+     */
     @Override
     public void onLocationClicked(Location location) {
         Intent detailsIntent = new Intent(this, LocationDetailActivity.class);
@@ -87,6 +90,9 @@ public class LocationsActivity extends AppCompatActivity
         startActivity(detailsIntent);
     }
 
+    /**
+     * Gets all locations from the database and updates the layout.
+     */
     private void loadLocations() {
         locationList.clear();
         locationList.addAll(SortUtils.mergeSort(dbHandler.getAllLocations(), Location.comparatorAlpha()));

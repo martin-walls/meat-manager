@@ -64,6 +64,7 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
         return locationList.size();
     }
 
+    //doc needed
     @Override
     public void deleteItem(int position) {
         DBHandler dbHandler = new DBHandler(parentActivity);
