@@ -30,6 +30,11 @@ public class SettingsActivity extends AppCompatActivity {
         setDarkTheme();
     }
 
+    /**
+     * Sets the app theme, to be called when the activity starts so the theme
+     * changes when the user changes the dark theme preference.
+     */
+    //todo could be replaced with setOnPreferenceChangedListener to listen for the preference value to change??
     private void setDarkTheme() {
         EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
         DarkTheme.setDarkTheme(prefs.getIntFromString(R.string.pref_dark_theme, DarkTheme.MODE_NIGHT_AUTO));
@@ -129,6 +134,11 @@ public class SettingsActivity extends AppCompatActivity {
             return findPreference(getString(keyId));
         }
 
+        /**
+         * Enable or disable notifications when the user changes the 
+         * preference. Either schedules reminders to be active or cancels
+         * any active reminders.
+         */
         private void setNotificationsEnabled(boolean enabled) {
             if (enabled) {
                 ReminderUtils.scheduleReminderAtDefaultTime(getContext());
@@ -137,10 +147,18 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
 
+        /**
+         * Sets the summary text for the reminder time preference.
+         */
         private void setReminderTimeSummary(int hour, int min) {
             reminderTimePref.setSummary(getString(R.string.settings_reminder_time_summary, hour, min));
         }
 
+        /**
+         * Listener to change the reminder time when a time is chosen by the
+         * user in the {@link TimePickerDialog}. Makes sure the next reminder 
+         * is scheduled for the new time (if notifications are enabled).
+         */
         private TimePickerDialog.OnTimeSetListener listener = (view, hourOfDay, minute) -> {
             prefs.setInt(R.string.pref_reminder_time_hr, hourOfDay);
             prefs.setInt(R.string.pref_reminder_time_min, minute);
@@ -152,6 +170,10 @@ public class SettingsActivity extends AppCompatActivity {
             }
         };
 
+        /**
+         * Shows a {@link TimePickerDialog} so the user can choose a time
+         * for reminders.
+         */
         private void showReminderTimeDialog() {
             int hour = prefs.getInt(R.string.pref_reminder_time_hr, 9);
             int min = prefs.getInt(R.string.pref_reminder_time_min, 0);
