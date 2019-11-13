@@ -124,10 +124,6 @@ public class ContractDetailActivity extends AppCompatActivity
      * Initialises fields with data from the {@link Contract} being shown.
      */
     private void fillData() {
-        if (contract == null) {
-            return;
-        }
-
         TextView destination = findViewById(R.id.destination);
         destination.setText(contract.getDestName());
 
