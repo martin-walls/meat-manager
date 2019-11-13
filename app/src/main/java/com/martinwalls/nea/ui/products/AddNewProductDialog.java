@@ -108,11 +108,18 @@ public class AddNewProductDialog extends DialogFragment {
         }
     }
 
+    /**
+     * Checks whether the given String is a valid meat type, that is
+     * one that is is the database.
+     */
     private boolean isMeatTypeValid(String meatType) {
         List<String> meatTypes = dbHandler.getAllMeatTypes();
         return meatTypes.contains(meatType);
     }
 
+    /**
+     * Interface to handle done action from dialog.
+     */
     public interface AddNewProductListener {
         void onAddNewProductDoneAction(Product newProduct);
     }
