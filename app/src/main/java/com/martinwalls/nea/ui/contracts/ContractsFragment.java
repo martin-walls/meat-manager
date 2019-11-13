@@ -93,6 +93,10 @@ public class ContractsFragment extends Fragment
         }
     }
 
+    /**
+     * This is called when a contract item is clicked in the list. Opens the
+     * detail page for that contract.
+     */
     @Override
     public void onContractClicked(Contract contract) {
         Intent detailIntent = new Intent(getContext(), ContractDetailActivity.class);
@@ -100,6 +104,10 @@ public class ContractsFragment extends Fragment
         startActivity(detailIntent);
     }
 
+    /**
+     * Gets all contracts in the database, sorts them and updates the view to
+     * show them.
+     */
     private void loadContracts() {
         contractList.clear();
         contractList.addAll(SortUtils.mergeSort(dbHandler.getAllContracts(), Contract.comparatorDate()));

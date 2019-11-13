@@ -30,6 +30,10 @@ public class RepeatIntervalDialog extends DialogFragment {
     private LinearLayout radioGroup;
     private LinearLayout customInterval;
 
+    /**
+     * Flag to store whether the user entered number is "1" or not, for use
+     * when displaying string that need to have the correct plural form.
+     */
     private boolean isOne = true;
 
     @Override
@@ -167,6 +171,9 @@ public class RepeatIntervalDialog extends DialogFragment {
         }
     }
 
+    /**
+     * Called when the user clicks one of the radio buttons with id {@code id}.
+     */
     private void onRadioBtnClicked(int id) {
         if (id == OPTION_CUSTOM) {
             radioGroup.setVisibility(View.GONE);
@@ -177,6 +184,9 @@ public class RepeatIntervalDialog extends DialogFragment {
         }
     }
 
+    /**
+     * Interface for when the user selects a repeat interval from the dialog.
+     */
     public interface RepeatIntervalDialogListener {
         void onRadioBtnClicked(int id);
         void onCustomIntervalSelected(Interval interval);

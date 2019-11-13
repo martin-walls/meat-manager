@@ -94,6 +94,11 @@ public class ContractDetailActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Deletes the {@link Contract} being edited from the database. This is 
+     * called when the user confirms the delete action from the 
+     * {@link ConfirmDeleteDialog}.
+     */
     @Override
     public void onConfirmDelete() {
         boolean success = dbHandler.deleteContract(contract.getContractId());
@@ -106,12 +111,23 @@ public class ContractDetailActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Shows a {@link ConfirmDeleteDialog} asking the user to confirm the 
+     * delete action.
+     */
     private void showConfirmDeleteDialog() {
         DialogFragment dialog = new ConfirmDeleteDialog();
         dialog.show(getSupportFragmentManager(), "confirm_delete");
     }
 
+    /**
+     * Initialises fields with data from the {@link Contract} being shown.
+     */
     private void fillData() {
+        if (contract == null) {
+            return;
+        }
+
         TextView destination = findViewById(R.id.destination);
         destination.setText(contract.getDestName());
 

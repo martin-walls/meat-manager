@@ -105,6 +105,9 @@ public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.View
         return contractList.size();
     }
 
+    /**
+     * Interface to handle clicks on contract items.
+     */
     public interface ContractsAdapterListener {
         void onContractClicked(Contract contract);
     }

@@ -346,6 +346,10 @@ public class EditContractActivity extends InputFormActivity
         selectedProductId = productAdded.getProduct().getProductId();
     }
 
+    /**
+     * This is called when a radio button is clicked in the {@link RepeatIntervalDialog}.
+     * Sets the contract's repeat interval to the chosen value.
+     */
     @Override
     public void onRadioBtnClicked(int id) {
         switch (id) {
@@ -361,14 +365,32 @@ public class EditContractActivity extends InputFormActivity
         }
     }
 
+    /**
+     * Called when the user enters a custom repeat interval in the
+     * {@link RepeatIntervalDialog}. Sets the contract's repeat interval to 
+     * this chosen value.
+     */
     @Override
     public void onCustomIntervalSelected(Interval interval) {
         setSelectedRepeatInterval(interval);
     }
 
+    /**
+     * Called when the user confirms the cancel action from {@link ConfirmCancelDialog}.
+     * Ends the Activity.
+     */
     @Override
     public void onConfirmCancelYesAction() {
         finish();
+    }
+    
+    /**
+     * Shows a {@link ConfirmCancelDialog} asking the user to confirm
+     * the cancel action.
+     */
+    private void showConfirmCancelDialog() {
+        DialogFragment dialog = new ConfirmCancelDialog();
+        dialog.show(getSupportFragmentManager(), "confirm_cancel");
     }
 
     @Override
@@ -387,11 +409,11 @@ public class EditContractActivity extends InputFormActivity
         }
     }
 
-    private void showConfirmCancelDialog() {
-        DialogFragment dialog = new ConfirmCancelDialog();
-        dialog.show(getSupportFragmentManager(), "confirm_cancel");
-    }
-
+    /**
+     * Gets the product and mass currently entered into the input fields
+     * and adds a {@link ProductQuantity} with these values to the contract.
+     * Clears the input fields so another product can be added.
+     */
     private void addProductToProductsAddedList() {
         ProductQuantity product = getProductFromInputsAndClear();
         if (product != null) {
@@ -400,6 +422,11 @@ public class EditContractActivity extends InputFormActivity
         }
     }
 
+    /**
+     * Sets listeners on input fields to detect when the user has made any
+     * changes, determining whether or not to show call {@link #showConfirmCancelDialog()}
+     * when the user wants to go back.
+     */
     private void setTextChangedListeners() {
         TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
         editTextProduct.addTextChangedListener(new SimpleTextWatcher() {
@@ -465,6 +492,10 @@ public class EditContractActivity extends InputFormActivity
         });
     }
 
+    /**
+     * Gets the product and mass currently entered into the input fields and
+     * returns this as a {@link ProductQuantity} object. Clears the input fields.
+     */
     private ProductQuantity getProductFromInputsAndClear() {
         hideKeyboard();
 
@@ -515,6 +546,9 @@ public class EditContractActivity extends InputFormActivity
         }
     }
 
+    /**
+     * Initialises input fields with data from the {@link Contract} being edited.
+     */
     private void fillFields() {
         productsAddedList.clear();
 
@@ -542,6 +576,9 @@ public class EditContractActivity extends InputFormActivity
         selectedDestId = contractToEdit.getDestId();
     }
 
+    /**
+     * Stores the repeat interval the user has entered.
+     */
     private void setSelectedRepeatInterval(Interval interval) {
         // repeat on input is hidden until repeat interval is set
         LinearLayout inputRepeatOn = findViewById(R.id.input_repeat_on);
@@ -590,6 +627,14 @@ public class EditContractActivity extends InputFormActivity
         }
     }
 
+    /**
+     * Stores the {@link Contract} in the database if it is valid.
+     * First checks each input field to check it is valid. If a field is
+     * invalid, an appropriate error message is shown to help the user 
+     * correct the error. If all the fields have valid data, either adds a new
+     * contract or edits the existing one depending on the edit mode of this
+     * activity.
+     */
     private boolean addContractToDb() {
         boolean isValid = true;
         Contract newContract = new Contract();
