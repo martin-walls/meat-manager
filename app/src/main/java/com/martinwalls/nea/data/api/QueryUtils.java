@@ -1,9 +1,6 @@
 package com.martinwalls.nea.data.api;
 
 import android.util.Log;
-import com.martinwalls.nea.data.models.Currency;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,34 +10,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
 public class QueryUtils {
 
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
     private QueryUtils() {}
-
-    /**
-     * Retrieves the current exchange data from the API at the specified URL.
-     *
-     * @param urlString the URL to query
-     */
-    static HashMap<String, Double> fetchExchangeData(String urlString) {
-        URL url = createUrl(urlString);
-
-        String jsonResponse = null;
-        try {
-            jsonResponse = makeHttpRequest(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return extractExchangeRates(jsonResponse);
-    }
 
     /**
      * Fetches the raw JSON response from the API at the specified URL.
@@ -58,88 +33,6 @@ public class QueryUtils {
         }
 
         return jsonResponse;
-    }
-
-    /**
-     * Parses the JSON response and extracts the current exchange
-     * rates from it.
-     *
-     * @param  json the JSON string to parse
-     * @return      a HashMap of (Currency, Rate) pairs
-     */
-    static HashMap<String, Double> extractExchangeRates(String json) {
-        HashMap<String, Double> rates = new HashMap<>();
-
-        try {
-            JSONObject jsonObject = new JSONObject(json);
-            JSONObject ratesObject = jsonObject.getJSONObject("rates");
-
-            Iterator<String> keys = ratesObject.keys();
-
-            while (keys.hasNext()) {
-                String key = keys.next();
-                Double value = ratesObject.getDouble(key);
-                rates.put(key, value);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return rates;
-    }
-
-    /**
-     * Queries the API at {@code urlString} and parses the response 
-     * to get a list of the supported currencies.
-     *
-     * @param  urlString the URL to query
-     * @return           a List of Currency objects
-     */
-    // todo refactor this to an API specific class, this class shouldn't be 
-    //  so closely tied to its implementation
-    static List<Currency> fetchCurrencies(String urlString) {
-        URL url = createUrl(urlString);
-
-        String jsonResponse = null;
-        try {
-            jsonResponse = makeHttpRequest(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // extract data
-        List<Currency> currencies = new ArrayList<>();
-        try {
-            JSONObject jsonObject = new JSONObject(jsonResponse);
-            JSONObject symbolsObject = jsonObject.getJSONObject("symbols");
-            Iterator<String> keys = symbolsObject.keys();
-
-            while (keys.hasNext()) {
-                String currencyCode = keys.next();
-                String fullName = symbolsObject.getString(currencyCode);
-                currencies.add(new Currency(currencyCode, fullName));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return currencies;
-    }
-
-    /**
-     * Parses the JSON response to extract the timestamp of the response.
-     *
-     * @param json the JSON string to parse
-     */
-    static long extractTimestamp(String json) {
-        long timestamp = 0;
-        try {
-            JSONObject jsonObject = new JSONObject(json);
-            timestamp = jsonObject.getLong("timestamp");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return timestamp;
     }
 
     /**

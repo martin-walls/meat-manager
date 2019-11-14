@@ -847,12 +847,8 @@ public class DBHandler extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
             String locationTypeString = cursor.getString(
                     cursor.getColumnIndexOrThrow(LocationsTable.TYPE));
-            //todo is this the same as parseLocation method of LocationType?
-            for (Location.LocationType type : Location.LocationType.values()) {
-                if (type.name().equalsIgnoreCase(locationTypeString)) {
-                    location.setLocationType(type);
-                }
-            }
+            location.setLocationType(
+                    Location.LocationType.parseLocationType(locationTypeString));
             location.setAddrLine1(
                     cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.ADDR_1)));
             location.setAddrLine2(
