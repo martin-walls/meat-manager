@@ -89,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             currentPage = Page.getPageFromName(
-                    preferences.getString(R.string.pref_last_opened_page, Page.DASHBOARD.name()));
+                    preferences.getString(
+                            R.string.pref_last_opened_page, Page.DASHBOARD.name()));
 
             getSupportFragmentManager()
                     .beginTransaction()
@@ -103,7 +104,8 @@ public class MainActivity extends AppCompatActivity {
         // setup nav drawer
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.setDrawerSlideAnimationEnabled(false);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -171,7 +173,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_EXCHANGE_API_SERVICE) {
-            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_holder);
+            Fragment fragment = getSupportFragmentManager()
+                    .findFragmentById(R.id.fragment_holder);
             if (fragment instanceof ExchangeFragment) {
                 ((ExchangeFragment) fragment).onRatesFetched(data);
             }

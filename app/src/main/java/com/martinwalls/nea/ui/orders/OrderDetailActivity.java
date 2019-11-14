@@ -79,7 +79,8 @@ public class OrderDetailActivity extends AppCompatActivity
                 return true;
             case R.id.action_edit:
                 Intent editIntent = new Intent(this, EditOrderActivity.class);
-                editIntent.putExtra(EditOrderActivity.EXTRA_EDIT_TYPE, EditOrderActivity.EDIT_TYPE_EDIT);
+                editIntent.putExtra(EditOrderActivity.EXTRA_EDIT_TYPE,
+                        EditOrderActivity.EDIT_TYPE_EDIT);
                 editIntent.putExtra(EditOrderActivity.EXTRA_ORDER_ID, order.getOrderId());
                 startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
                 return true;
@@ -124,7 +125,8 @@ public class OrderDetailActivity extends AppCompatActivity
      * Initialises fields with data from the {@link Order} being shown.
      */
     private void fillFields() {
-        ProductsAddedAdapter productsAdapter = new ProductsAddedAdapter(order.getProductList());
+        ProductsAddedAdapter productsAdapter =
+                new ProductsAddedAdapter(order.getProductList());
         RecyclerView productsRecyclerView = findViewById(R.id.recycler_view_products);
         productsRecyclerView.setAdapter(productsAdapter);
         productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -127,7 +127,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
     public int getItemViewType(int position) {
         if (position == 0 && favCurrencyList.size() == 0) {
             return VIEW_SECTION_NO_FAV;
-        } else if (position == favCurrencyList.size() - 1 && currencyListFiltered.size() == 0) {
+        } else if (position == favCurrencyList.size() - 1
+                && currencyListFiltered.size() == 0) {
             return VIEW_SECTION_NO_RESULTS;
         } else if (position == 0 || position == favCurrencyList.size()) {
             return VIEW_SECTION;
@@ -151,8 +152,10 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
                     filteredList = currencyList;
                 } else {
                     for (Currency currency : currencyList) {
-                        if (currency.getCode().toLowerCase().contains(charSequence.toString().toLowerCase())
-                                || currency.getName().toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                        if (currency.getCode().toLowerCase()
+                                .contains(charSequence.toString().toLowerCase())
+                                || currency.getName().toLowerCase()
+                                .contains(charSequence.toString().toLowerCase())) {
                             filteredList.add(currency);
                         }
                     }
@@ -203,7 +206,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
         }
         List<Currency> tempFavCurrencyList = new ArrayList<>(favCurrencyList);
         favCurrencyList.clear();
-        favCurrencyList.addAll(SortUtils.mergeSort(tempFavCurrencyList, Currency.comparatorCode()));
+        favCurrencyList.addAll(
+                SortUtils.mergeSort(tempFavCurrencyList, Currency.comparatorCode()));
         notifyDataSetChanged();
     }
 

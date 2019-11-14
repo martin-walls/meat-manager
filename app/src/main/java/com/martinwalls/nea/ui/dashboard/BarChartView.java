@@ -111,14 +111,22 @@ public class BarChartView extends View {
         this.context = context;
 
         // get colours from theme attrs
-        int amountBarColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphAmountBarColor);
-        int reqBarColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphReqBarColor);
-        int barOuterTextColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphBarOuterTextColor);
-        int barInnerTextColor = Utils.getColorFromTheme(context, R.attr.dashboardGraphBarInnerTextColor);
-        int amountTooltipFillColor = Utils.getColorFromTheme(context, R.attr.dashboardAmountTooltipColor);
-        int amountTooltipTextColor = Utils.getColorFromTheme(context, R.attr.dashboardAmountTooltipTextColor);
-        int reqTooltipFillColor = Utils.getColorFromTheme(context, R.attr.dashboardReqTooltipColor);
-        int reqTooltipTextColor = Utils.getColorFromTheme(context, R.attr.dashboardReqTooltipTextColor);
+        int amountBarColor = Utils.getColorFromTheme(context,
+                R.attr.dashboardGraphAmountBarColor);
+        int reqBarColor = Utils.getColorFromTheme(context,
+                R.attr.dashboardGraphReqBarColor);
+        int barOuterTextColor = Utils.getColorFromTheme(context,
+                R.attr.dashboardGraphBarOuterTextColor);
+        int barInnerTextColor = Utils.getColorFromTheme(context,
+                R.attr.dashboardGraphBarInnerTextColor);
+        int amountTooltipFillColor = Utils.getColorFromTheme(context,
+                R.attr.dashboardAmountTooltipColor);
+        int amountTooltipTextColor = Utils.getColorFromTheme(context,
+                R.attr.dashboardAmountTooltipTextColor);
+        int reqTooltipFillColor = Utils.getColorFromTheme(context,
+                R.attr.dashboardReqTooltipColor);
+        int reqTooltipTextColor = Utils.getColorFromTheme(context,
+                R.attr.dashboardReqTooltipTextColor);
 
         // bar paints
         amountBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -186,7 +194,8 @@ public class BarChartView extends View {
         // get height from number of bars shown, this allows the view to extend
         // below the screen so it can scroll
         int width = MeasureSpec.getSize(widthMeasureSpec);
-        int height = Utils.convertDpToPixelSize(barWidthDp * dataSet.size() + getPaddingTop(), context);
+        int height = Utils.convertDpToPixelSize(
+                barWidthDp * dataSet.size() + getPaddingTop(), context);
         setMeasuredDimension(width, height);
     }
 
@@ -319,7 +328,9 @@ public class BarChartView extends View {
     /**
      * Draws a bar with the specified bounds and {@link Paint}.
      */
-    private void drawBar(Canvas c, float left, float top, float right, float bottom, Paint paint) {
+    private void drawBar(Canvas c,
+                         float left, float top, float right, float bottom,
+                         Paint paint) {
         c.drawRoundRect(left, top, right, bottom, barCornerRadius, barCornerRadius, paint);
     }
 
@@ -504,13 +515,15 @@ public class BarChartView extends View {
     private TooltipPos getTooltipPos(BarChartEntry data, LabelPos labelPos) {
         if (( // enough space inside amount bar for tooltip
                 labelPos == LabelPos.INSIDE_NORMAL
-                        && getTooltipWidthWithMargin() < getBarLength(data.getAmount()) - getLabelTextWidth(true))
+                        && getTooltipWidthWithMargin()
+                        < getBarLength(data.getAmount()) - getLabelTextWidth(true))
                 || (labelPos != LabelPos.INSIDE_NORMAL
                         && getTooltipWidthWithMargin() < getBarLength(data.getAmount()))) {
             return TooltipPos.INSIDE_NORMAL;
         } else if ( // tooltip can't fit outside req bar (if shown)
                 isReqBarShown(data)
-                && getTooltipWidthWithMargin() > getWidth() - getBarLength(data.getAmountRequired())) {
+                && getTooltipWidthWithMargin()
+                        > getWidth() - getBarLength(data.getAmountRequired())) {
             return TooltipPos.INSIDE_REQ;
         } else if (// not enough space inside amount bar for tooltip
                 // and not shown inside required bar
@@ -542,7 +555,8 @@ public class BarChartView extends View {
             case INSIDE_NORMAL:
                 return barLength - getTooltipWidth() - tooltipMargin;
             case INSIDE_REQ:
-                return reqBarLength - (getReqTooltipWidth() + tooltipMargin) - (getTooltipWidth() + tooltipMargin);
+                return reqBarLength - (getReqTooltipWidth() + tooltipMargin)
+                        - (getTooltipWidth() + tooltipMargin);
             case OUTSIDE_REQ_LABEL_IN:
                 return reqBarLength + tooltipMargin;
             case OUTSIDE_NO_REQ_LABEL_IN:
@@ -567,14 +581,16 @@ public class BarChartView extends View {
      * Calculates the y-value of the top edge of the tooltip.
      */
     private float getTooltipTop(int pos) {
-        return (getBarTop(pos) + getBarBottom(pos) - tooltipTextBounds.height()) / 2f - tooltipPadding;
+        return (getBarTop(pos) + getBarBottom(pos)
+                - tooltipTextBounds.height()) / 2f - tooltipPadding;
     }
 
     /**
      * Calculates the y-value of the bottom edge of the tooltip.
      */
     private float getTooltipBottom(int pos) {
-        return (getBarTop(pos) + getBarBottom(pos) + tooltipTextBounds.height()) / 2f + tooltipPadding;
+        return (getBarTop(pos) + getBarBottom(pos) + tooltipTextBounds.height()) / 2f
+                + tooltipPadding;
     }
 
     /**
@@ -598,10 +614,13 @@ public class BarChartView extends View {
 
         MassUnit massUnit = MassUnit.getMassUnit(context);
 
-        String tooltipText = context.getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
-                decimalFormat.format(Utils.convertToCurrentMassUnit(context, data.getAmount())));
+        String tooltipText = context.getString(
+                massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
+                decimalFormat.format(
+                        Utils.convertToCurrentMassUnit(context, data.getAmount())));
 
-        amountTooltipTextPaint.getTextBounds(tooltipText, 0, tooltipText.length(), tooltipTextBounds);
+        amountTooltipTextPaint.getTextBounds(
+                tooltipText, 0, tooltipText.length(), tooltipTextBounds);
 
         float left = getTooltipLeft(data, getLabelPos(data));
         float top = getTooltipTop(pos);
@@ -611,7 +630,9 @@ public class BarChartView extends View {
         float textX = left + tooltipPadding;
         float textY = getLabelY(pos);
 
-        drawTooltip(c, left, top, right, bottom, amountTooltipFillPaint, tooltipText, textX, textY, amountTooltipTextPaint);
+        drawTooltip(c,
+                left, top, right, bottom, amountTooltipFillPaint,
+                tooltipText, textX, textY, amountTooltipTextPaint);
 
         return right;
     }
@@ -619,7 +640,8 @@ public class BarChartView extends View {
     /**
      * Calculates the x-value of the left edge of the required tooltip.
      */
-    private float getReqTooltipLeft(BarChartEntry data, LabelPos labelPos, float normalTooltipRight) {
+    private float getReqTooltipLeft(BarChartEntry data, LabelPos labelPos,
+                                    float normalTooltipRight) {
         TooltipPos tooltipPos = getTooltipPos(data, labelPos);
 
         float barLength = getBarLength(data.getAmount());
@@ -648,10 +670,13 @@ public class BarChartView extends View {
      *
      * @param normalTooltipRight X-value of the right edge of the amount tooltip.
      */
-    private void drawReqTooltip(Canvas c, BarChartEntry data, int pos, float normalTooltipRight) {
+    private void drawReqTooltip(Canvas c, BarChartEntry data, int pos,
+                                float normalTooltipRight) {
         MassUnit massUnit = MassUnit.getMassUnit(context);
-        String text = context.getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
-                decimalFormat.format(Utils.convertToCurrentMassUnit(context, data.getAmountRequired())));
+        String text = context.getString(
+                massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
+                decimalFormat.format(
+                        Utils.convertToCurrentMassUnit(context, data.getAmountRequired())));
         reqTooltipTextPaint.getTextBounds(text, 0, text.length(), reqTooltipTextBounds);
 
         float left = getReqTooltipLeft(data, getLabelPos(data), normalTooltipRight);
@@ -662,7 +687,9 @@ public class BarChartView extends View {
         float textX = left + tooltipPadding;
         float textY = getLabelY(pos);
 
-        drawTooltip(c, left, top, right, bottom, reqTooltipFillPaint, text, textX, textY, reqTooltipTextPaint);
+        drawTooltip(c,
+                left, top, right, bottom, reqTooltipFillPaint,
+                text, textX, textY, reqTooltipTextPaint);
     }
 
     /**

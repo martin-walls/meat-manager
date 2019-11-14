@@ -10,7 +10,8 @@ import com.martinwalls.nea.data.models.Conversion;
 
 import java.util.List;
 
-public class ExchangeHistoryAdapter extends RecyclerView.Adapter<ExchangeHistoryAdapter.ViewHolder> {
+public class ExchangeHistoryAdapter
+        extends RecyclerView.Adapter<ExchangeHistoryAdapter.ViewHolder> {
 
     private List<Conversion> conversionList;
 
@@ -43,10 +44,12 @@ public class ExchangeHistoryAdapter extends RecyclerView.Adapter<ExchangeHistory
         Conversion conversion = conversionList.get(position);
         viewHolder.primaryCurrencyText.setText(viewHolder.primaryCurrencyText.getContext()
                 .getString(R.string.exchange_rate_history,
-                        conversion.getPrimaryValue(), conversion.getPrimaryCurrency().getCode()));
+                        conversion.getPrimaryValue(),
+                        conversion.getPrimaryCurrency().getCode()));
         viewHolder.secondaryCurrencyText.setText(viewHolder.secondaryCurrencyText.getContext()
                 .getString(R.string.exchange_rate_history,
-                        conversion.getSecondaryValue(), conversion.getSecondaryCurrency().getCode()));
+                        conversion.getSecondaryValue(),
+                        conversion.getSecondaryCurrency().getCode()));
 
         if (position == 0) {
             viewHolder.dayDividerText.setVisibility(View.VISIBLE);
@@ -64,9 +67,10 @@ public class ExchangeHistoryAdapter extends RecyclerView.Adapter<ExchangeHistory
                 viewHolder.dayDividerText.setText(viewHolder.dayDividerText.getContext()
                         .getString(R.string.exchange_history_today));
             } else {
-                viewHolder.dayDividerText.setText(viewHolder.dayDividerText.getContext().getResources()
-                        .getQuantityString(R.plurals.exchange_history_days_ago,
-                                (int) conversion.getDaysAgo(), conversion.getDaysAgo()));
+                viewHolder.dayDividerText.setText(
+                        viewHolder.dayDividerText.getContext().getResources()
+                                .getQuantityString(R.plurals.exchange_history_days_ago,
+                                        conversion.getDaysAgo(), conversion.getDaysAgo()));
             }
         }
     }

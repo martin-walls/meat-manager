@@ -76,18 +76,23 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
     /**
      * Gets all conversions in the database.
      */
-    public List<Conversion> getAllConversions() { //todo only get conversions from the last week or so (check objectives)
+    //todo only get conversions from the last week or so (check objectives)
+    public List<Conversion> getAllConversions() {
         List<Conversion> conversionsResultList = new ArrayList<>();
         String query = "SELECT * FROM " + ConversionsTable.TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         while (cursor.moveToNext()) {
             Conversion conversion = new Conversion();
-            conversion.setConversionId(cursor.getInt(cursor.getColumnIndexOrThrow(ConversionsTable.ID)));
-            conversion.setTimestamp(cursor.getInt(cursor.getColumnIndexOrThrow(ConversionsTable.TIMESTAMP)));
+            conversion.setConversionId(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(ConversionsTable.ID)));
+            conversion.setTimestamp(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(ConversionsTable.TIMESTAMP)));
             conversion.setPrimaryCurrency(getCurrency(cursor.getString(
                             cursor.getColumnIndexOrThrow(ConversionsTable.PRIMARY_CURRENCY))));
-            conversion.setPrimaryValue(cursor.getDouble(cursor.getColumnIndexOrThrow(ConversionsTable.PRIMARY_VALUE)));
+            conversion.setPrimaryValue(
+                    cursor.getDouble(
+                            cursor.getColumnIndexOrThrow(ConversionsTable.PRIMARY_VALUE)));
             conversion.setSecondaryCurrency(getCurrency(cursor.getString(
                     cursor.getColumnIndexOrThrow(ConversionsTable.SECONDARY_CURRENCY))));
             conversion.setSecondaryValue(cursor.getDouble(
@@ -104,9 +109,11 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
      */
     public boolean addConversion(Conversion conversion) {
         ContentValues values = new ContentValues();
-        values.put(ConversionsTable.PRIMARY_CURRENCY, conversion.getPrimaryCurrency().getCode());
+        values.put(ConversionsTable.PRIMARY_CURRENCY,
+                conversion.getPrimaryCurrency().getCode());
         values.put(ConversionsTable.PRIMARY_VALUE, conversion.getPrimaryValue());
-        values.put(ConversionsTable.SECONDARY_CURRENCY, conversion.getSecondaryCurrency().getCode());
+        values.put(ConversionsTable.SECONDARY_CURRENCY,
+                conversion.getSecondaryCurrency().getCode());
         values.put(ConversionsTable.SECONDARY_VALUE, conversion.getSecondaryValue());
         values.put(ConversionsTable.TIMESTAMP, conversion.getTimestamp());
 
@@ -126,9 +133,15 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, new String[]{currencyCode});
         if (cursor.moveToFirst()) {
-            currencyResult.setCode(cursor.getString(cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_CODE)));
-            currencyResult.setName(cursor.getString(cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_NAME)));
-            currencyResult.setFavourite(cursor.getInt(cursor.getColumnIndexOrThrow(CurrenciesTable.FAVOURITE)) == 1);
+            currencyResult.setCode(
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_CODE)));
+            currencyResult.setName(
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_NAME)));
+            currencyResult.setFavourite(
+                    cursor.getInt(
+                            cursor.getColumnIndexOrThrow(CurrenciesTable.FAVOURITE)) == 1);
         }
         cursor.close();
         db.close();
@@ -145,9 +158,15 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         while (cursor.moveToNext()) {
             Currency currency = new Currency();
-            currency.setCode(cursor.getString(cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_CODE)));
-            currency.setName(cursor.getString(cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_NAME)));
-            currency.setFavourite(cursor.getInt(cursor.getColumnIndexOrThrow(CurrenciesTable.FAVOURITE)) == 1);
+            currency.setCode(
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_CODE)));
+            currency.setName(
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_NAME)));
+            currency.setFavourite(
+                    cursor.getInt(
+                            cursor.getColumnIndexOrThrow(CurrenciesTable.FAVOURITE)) == 1);
             currencyResultList.add(currency);
         }
         cursor.close();
@@ -166,9 +185,15 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         while (cursor.moveToNext()) {
             Currency currency = new Currency();
-            currency.setCode(cursor.getString(cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_CODE)));
-            currency.setName(cursor.getString(cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_NAME)));
-            currency.setFavourite(cursor.getInt(cursor.getColumnIndexOrThrow(CurrenciesTable.FAVOURITE)) == 1);
+            currency.setCode(
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_CODE)));
+            currency.setName(
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(CurrenciesTable.CURRENCY_NAME)));
+            currency.setFavourite(
+                    cursor.getInt(
+                            cursor.getColumnIndexOrThrow(CurrenciesTable.FAVOURITE)) == 1);
             currencyResultList.add(currency);
         }
         cursor.close();

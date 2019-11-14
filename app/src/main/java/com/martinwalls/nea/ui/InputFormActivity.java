@@ -71,7 +71,8 @@ public abstract class InputFormActivity extends AppCompatActivity
      */
     protected void setAddNewView(@IdRes int id) {
         addNewView = findViewById(id);
-        addNewView.setOnClickListener(v -> addNewItemFromSearch(addNewView.getSearchItemType()));
+        addNewView.setOnClickListener(v ->
+                addNewItemFromSearch(addNewView.getSearchItemType()));
     }
 
     /**
@@ -159,7 +160,8 @@ public abstract class InputFormActivity extends AppCompatActivity
      * Hides the soft keyboard if it is showing.
      */
     protected void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager imm =
+                (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (imm != null) {
             imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
         }
@@ -175,7 +177,8 @@ public abstract class InputFormActivity extends AppCompatActivity
      *         the text entered.
      * </ul>
      */
-    protected void setListeners(String name, TextInputLayout inputLayout, TextInputEditText editText) {
+    protected void setListeners(String name,
+                                TextInputLayout inputLayout, TextInputEditText editText) {
         inputLayout.setEndIconVisible(false);
 
         editText.setOnFocusChangeListener((v, hasFocus) -> {
@@ -209,7 +212,8 @@ public abstract class InputFormActivity extends AppCompatActivity
      */
     @CallSuper
     protected void openSearch(String inputName) {
-        Transition moveTransition = TransitionInflater.from(this).inflateTransition(R.transition.search_open);
+        Transition moveTransition = TransitionInflater.from(this)
+                .inflateTransition(R.transition.search_open);
         TransitionManager.beginDelayedTransition(rootView, moveTransition);
         for (int view : viewsToHide.values()) {
             if (view != viewsToHide.get(inputName)) {
@@ -247,7 +251,8 @@ public abstract class InputFormActivity extends AppCompatActivity
      */
     @CallSuper
     protected void cancelSearch() {
-        Transition closeTransition = TransitionInflater.from(this).inflateTransition(R.transition.search_close);
+        Transition closeTransition = TransitionInflater.from(this)
+                .inflateTransition(R.transition.search_close);
         TransitionManager.beginDelayedTransition(rootView, closeTransition);
         for (int view : viewsToHide.values()) {
             View viewToShow = findViewById(view);

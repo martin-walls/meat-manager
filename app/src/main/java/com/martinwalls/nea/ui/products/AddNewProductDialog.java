@@ -47,7 +47,8 @@ public class AddNewProductDialog extends DialogFragment {
 
         List<String> meatTypesList = SortUtils.mergeSort(dbHandler.getAllMeatTypes());
         ArrayAdapter<String> autocompleteAdapter =
-                new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, meatTypesList);
+                new ArrayAdapter<>(getContext(),
+                        android.R.layout.simple_list_item_1, meatTypesList);
         editTextMeatType.setAdapter(autocompleteAdapter);
         editTextMeatType.setThreshold(0);
 

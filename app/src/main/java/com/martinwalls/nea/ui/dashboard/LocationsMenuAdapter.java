@@ -12,7 +12,8 @@ import com.martinwalls.nea.data.models.Location;
 import java.util.List;
 
 //todo finish dashboard locations menu
-public class LocationsMenuAdapter extends RecyclerView.Adapter<LocationsMenuAdapter.ViewHolder> {
+public class LocationsMenuAdapter
+        extends RecyclerView.Adapter<LocationsMenuAdapter.ViewHolder> {
 
     private LocationsMenuAdapterListener listener;
 
@@ -27,8 +28,8 @@ public class LocationsMenuAdapter extends RecyclerView.Adapter<LocationsMenuAdap
 
             locationName.setOnClickListener(
                     v -> {
-//                        v.setSelected(true);
-                        listener.onLocationItemClicked(locationsList.get(getAdapterPosition()), getAdapterPosition());
+                        listener.onLocationItemClicked(
+                                locationsList.get(getAdapterPosition()), getAdapterPosition());
                     });
         }
     }

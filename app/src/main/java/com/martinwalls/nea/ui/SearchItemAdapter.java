@@ -29,11 +29,13 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
             itemName = (TextView) view;
 
             itemName.setOnClickListener(
-                    v -> listener.onSearchItemSelected(itemListFiltered.get(getAdapterPosition()), searchItemType));
+                    v -> listener.onSearchItemSelected(
+                            itemListFiltered.get(getAdapterPosition()), searchItemType));
         }
     }
 
-    public SearchItemAdapter(List<SearchItem> itemList, String searchItemType, SearchItemAdapterListener listener) {
+    public SearchItemAdapter(List<SearchItem> itemList, String searchItemType,
+                             SearchItemAdapterListener listener) {
         this.itemList = itemList;
         this.itemListFiltered = itemList;
         this.searchItemType = searchItemType;
@@ -69,7 +71,8 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
                 } else {
                     List<SearchItem> filteredList = new ArrayList<>();
                     for (SearchItem item : itemList) {
-                        if (item.getName().toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                        if (item.getName().toLowerCase()
+                                .contains(charSequence.toString().toLowerCase())) {
                             filteredList.add(item);
                         }
                     }

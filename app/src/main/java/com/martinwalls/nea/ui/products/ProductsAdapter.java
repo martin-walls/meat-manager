@@ -65,7 +65,8 @@ public class ProductsAdapter extends BaseAdapter<ProductsAdapter.ViewHolder> {
     @Override
     public void deleteItem(int position) {
         DBHandler dbHandler = new DBHandler(parentActivity);
-        boolean safeToDelete = dbHandler.isProductSafeToDelete(productList.get(position).getProductId());
+        boolean safeToDelete = dbHandler.isProductSafeToDelete(
+                productList.get(position).getProductId());
         if (safeToDelete) {
             recentlyDeletedItem = productList.get(position);
             recentlyDeletedItemPosition = position;
@@ -88,7 +89,8 @@ public class ProductsAdapter extends BaseAdapter<ProductsAdapter.ViewHolder> {
      */
     private void showUndoSnackbar() {
         View view = parentActivity.findViewById(R.id.root_layout);
-        Snackbar snackbar = Snackbar.make(view, R.string.snackbar_item_deleted, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(view,
+                R.string.snackbar_item_deleted, Snackbar.LENGTH_LONG);
         snackbar.setAction(R.string.action_undo, v -> undoDelete());
         snackbar.addCallback(new Snackbar.Callback() {
             @Override

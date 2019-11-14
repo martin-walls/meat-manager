@@ -71,7 +71,8 @@ public final class EasyPreferences {
      *
      * @throws NumberFormatException if the string value cannot be converted to an int
      */
-    public int getIntFromString(@StringRes int keyId, int defaultValue) throws NumberFormatException {
+    public int getIntFromString(@StringRes int keyId, int defaultValue)
+            throws NumberFormatException {
         return Integer.parseInt(prefs.getString(key(keyId), String.valueOf(defaultValue)));
     }
 
@@ -102,11 +103,13 @@ public final class EasyPreferences {
         prefs.edit().clear().apply();
     }
 
-    public void addOnPreferenceChangedListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+    public void addOnPreferenceChangedListener(
+            SharedPreferences.OnSharedPreferenceChangeListener listener) {
         prefs.registerOnSharedPreferenceChangeListener(listener);
     }
 
-    public void removeOnPreferenceChangedListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+    public void removeOnPreferenceChangedListener(
+            SharedPreferences.OnSharedPreferenceChangeListener listener) {
         prefs.unregisterOnSharedPreferenceChangeListener(listener);
     }
 }

@@ -109,7 +109,9 @@ public class EditContractActivity extends InputFormActivity
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(editType == EDIT_TYPE_NEW ? R.string.contract_new_title : R.string.contract_edit_title);
+            actionBar.setTitle(editType == EDIT_TYPE_NEW
+                    ? R.string.contract_new_title
+                    : R.string.contract_edit_title);
         }
 
 
@@ -128,7 +130,8 @@ public class EditContractActivity extends InputFormActivity
 
         setCurrentSearchType(INPUT_PRODUCT);
 
-        setSearchItemAdapter(new SearchItemAdapter(getSearchItemList(), getCurrentSearchType(), this));
+        setSearchItemAdapter(new SearchItemAdapter(
+                getSearchItemList(), getCurrentSearchType(), this));
         TextView emptyView = findViewById(R.id.no_results);
         CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
         recyclerView.setEmptyView(emptyView);
@@ -137,7 +140,8 @@ public class EditContractActivity extends InputFormActivity
         setSearchResultsLayout(R.id.search_results_layout);
 
         if (MassUnit.getMassUnit(this) == MassUnit.LBS) {
-            TextInputLayout inputLayoutQuantityMass = findViewById(R.id.input_layout_quantity_mass);
+            TextInputLayout inputLayoutQuantityMass =
+                    findViewById(R.id.input_layout_quantity_mass);
             inputLayoutQuantityMass.setHint(getString(R.string.contracts_input_quantity_lbs));
         }
 
@@ -158,24 +162,31 @@ public class EditContractActivity extends InputFormActivity
         addProductBtn = findViewById(R.id.add_product);
         addProductBtn.setOnClickListener(v -> addProductToProductsAddedList());
 
-        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
+        TextInputEditText editTextRepeatInterval =
+                findViewById(R.id.edit_text_repeat_interval);
         editTextRepeatInterval.setOnClickListener(v -> {
             DialogFragment dialog = new RepeatIntervalDialog();
             Bundle args = new Bundle();
             if (selectedRepeatInterval != null) {
                 if (selectedRepeatInterval.getValue() == 1
                         && selectedRepeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
-                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_WEEK);
+                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                            RepeatIntervalDialog.OPTION_WEEK);
                 } else if (selectedRepeatInterval.getValue() == 2
                         && selectedRepeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
-                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_TWO_WEEK);
+                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                            RepeatIntervalDialog.OPTION_TWO_WEEK);
                 } else if (selectedRepeatInterval.getValue() == 1
                         && selectedRepeatInterval.getUnit() == Interval.TimeUnit.MONTH) {
-                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_MONTH);
+                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                            RepeatIntervalDialog.OPTION_MONTH);
                 } else {
-                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED, RepeatIntervalDialog.OPTION_CUSTOM);
-                    args.putInt(RepeatIntervalDialog.EXTRA_TIME_VALUE, selectedRepeatInterval.getValue());
-                    args.putString(RepeatIntervalDialog.EXTRA_TIME_UNIT, selectedRepeatInterval.getUnit().name());
+                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                            RepeatIntervalDialog.OPTION_CUSTOM);
+                    args.putInt(RepeatIntervalDialog.EXTRA_TIME_VALUE,
+                            selectedRepeatInterval.getValue());
+                    args.putString(RepeatIntervalDialog.EXTRA_TIME_UNIT,
+                            selectedRepeatInterval.getUnit().name());
                 }
             }
             dialog.setArguments(args);
@@ -184,7 +195,8 @@ public class EditContractActivity extends InputFormActivity
 
         Spinner repeatOnSpn = findViewById(R.id.spn_repeat_on);
         repeatOnSpnAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-        repeatOnSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        repeatOnSpnAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
         repeatOnSpnAdapter.addAll(getResources().getStringArray(R.array.weekdays));
         repeatOnSpnAdapter.notifyDataSetChanged();
         repeatOnSpn.setAdapter(repeatOnSpnAdapter);
@@ -202,7 +214,8 @@ public class EditContractActivity extends InputFormActivity
                 }
                 if (!TextUtils.isEmpty(s)) {
                     txtReminderDaysBefore.setText(getResources().getQuantityString(
-                            R.plurals.contracts_reminder_days_before, Integer.parseInt(s.toString())));
+                            R.plurals.contracts_reminder_days_before,
+                            Integer.parseInt(s.toString())));
                 }
             }
         });
@@ -248,7 +261,8 @@ public class EditContractActivity extends InputFormActivity
                     finish();
                 } else {
                     Toast.makeText(this,
-                            getString(R.string.db_error_insert, "contract"), Toast.LENGTH_SHORT).show();
+                            getString(R.string.db_error_insert, "contract"),
+                            Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.action_cancel:
@@ -277,14 +291,18 @@ public class EditContractActivity extends InputFormActivity
         super.loadSearchItems(searchType);
         switch (searchType) {
             case INPUT_PRODUCT:
-                for (Product product : SortUtils.mergeSort(dbHandler.getAllProducts(), Product.comparatorAlpha())) {
-                    addSearchItemToList(new SearchItem(product.getProductName(), product.getProductId()));
+                for (Product product : SortUtils.mergeSort(
+                        dbHandler.getAllProducts(), Product.comparatorAlpha())) {
+                    addSearchItemToList(
+                            new SearchItem(product.getProductName(), product.getProductId()));
                 }
                 break;
             case INPUT_DESTINATION:
-                for (Location location : SortUtils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Destination),
+                for (Location location : SortUtils.mergeSort(
+                        dbHandler.getAllLocations(Location.LocationType.Destination),
                         Location.comparatorAlpha())) {
-                    addSearchItemToList(new SearchItem(location.getLocationName(), location.getLocationId()));
+                    addSearchItemToList(new SearchItem(
+                            location.getLocationName(), location.getLocationId()));
                 }
                 break;
         }
@@ -333,10 +351,12 @@ public class EditContractActivity extends InputFormActivity
         editTextProduct.setText(productAdded.getProduct().getProductName());
 
         TextInputEditText editTextQuantityMass = findViewById(R.id.edit_text_quantity_mass);
-        editTextQuantityMass.setText(Utils.getMassDisplayValue(this, productAdded.getQuantityMass(), 4));
+        editTextQuantityMass.setText(
+                Utils.getMassDisplayValue(this, productAdded.getQuantityMass(), 4));
 
         if (productAdded.getQuantityBoxes() != -1) {
-            TextInputEditText editTextQuantityBoxes = findViewById(R.id.edit_text_quantity_boxes);
+            TextInputEditText editTextQuantityBoxes =
+                    findViewById(R.id.edit_text_quantity_boxes);
             editTextQuantityBoxes.setText(String.valueOf(productAdded.getQuantityBoxes()));
         }
 
@@ -467,7 +487,8 @@ public class EditContractActivity extends InputFormActivity
         Spinner spinnerRepeatOn = findViewById(R.id.spn_repeat_on);
         spinnerRepeatOn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
                 if (!isSpinnerInitialised) {
                     isSpinnerInitialised = true;
                     return;
@@ -512,7 +533,8 @@ public class EditContractActivity extends InputFormActivity
             inputLayoutProduct.setError(null);
         }
         for (ProductQuantity productQuantity : productsAddedList) {
-            if (productQuantity.getProduct().getProductName().equals(editTextProduct.getText().toString())) {
+            if (productQuantity.getProduct().getProductName()
+                    .equals(editTextProduct.getText().toString())) {
                 inputLayoutProduct.setError(getString(R.string.input_error_duplicate));
                 isValid = false;
                 break;
@@ -526,8 +548,10 @@ public class EditContractActivity extends InputFormActivity
         }
 
         if (isValid) {
-            ProductQuantity productQuantity = new ProductQuantity(dbHandler.getProduct(selectedProductId),
-                    Utils.getKgsFromCurrentMassUnit(this, Double.parseDouble(editTextMass.getText().toString())),
+            ProductQuantity productQuantity = new ProductQuantity(
+                    dbHandler.getProduct(selectedProductId),
+                    Utils.getKgsFromCurrentMassUnit(this,
+                            Double.parseDouble(editTextMass.getText().toString())),
                     TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1 :
                             Integer.parseInt(editTextNumBoxes.getText().toString()));
             editTextProduct.setText("");
@@ -581,12 +605,15 @@ public class EditContractActivity extends InputFormActivity
         inputRepeatOn.setVisibility(View.VISIBLE);
 
         selectedRepeatInterval = interval;
-        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
+        TextInputEditText editTextRepeatInterval =
+                findViewById(R.id.edit_text_repeat_interval);
         if (interval.getValue() == 1) {
-            editTextRepeatInterval.setText(getString(R.string.contracts_repeat_interval_display_one,
+            editTextRepeatInterval.setText(getString(
+                    R.string.contracts_repeat_interval_display_one,
                     interval.getUnit().name().toLowerCase()));
         } else {
-            editTextRepeatInterval.setText(getString(R.string.contracts_repeat_interval_display_multiple,
+            editTextRepeatInterval.setText(getString(
+                    R.string.contracts_repeat_interval_display_multiple,
                     interval.getValue(), interval.getUnit().name().toLowerCase()));
         }
         if (!isWeek && interval.getUnit() == Interval.TimeUnit.WEEK) {
@@ -646,8 +673,10 @@ public class EditContractActivity extends InputFormActivity
         TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
         TextInputLayout inputLayoutDest = findViewById(R.id.input_layout_destination);
 
-        TextInputEditText editTextRepeatInterval = findViewById(R.id.edit_text_repeat_interval);
-        TextInputLayout inputLayoutRepeatInterval = findViewById(R.id.input_layout_repeat_interval);
+        TextInputEditText editTextRepeatInterval =
+                findViewById(R.id.edit_text_repeat_interval);
+        TextInputLayout inputLayoutRepeatInterval =
+                findViewById(R.id.input_layout_repeat_interval);
 
         Spinner repeatOnSpn = findViewById(R.id.spn_repeat_on);
 
@@ -680,7 +709,8 @@ public class EditContractActivity extends InputFormActivity
 
         if (isValid) {
             if (!TextUtils.isEmpty(editTextProduct.getText())) {
-                productsAddedList.add(new ProductQuantity(dbHandler.getProduct(selectedProductId),
+                productsAddedList.add(new ProductQuantity(
+                        dbHandler.getProduct(selectedProductId),
                         Utils.getKgsFromCurrentMassUnit(this,
                                 Double.parseDouble(editTextMass.getText().toString())),
                         TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1
@@ -696,7 +726,8 @@ public class EditContractActivity extends InputFormActivity
                     || editTextReminder.getText().toString().equals("0")) {
                 newContract.setReminder(-1);
             } else {
-                newContract.setReminder(Integer.parseInt(editTextReminder.getText().toString()));
+                newContract.setReminder(
+                        Integer.parseInt(editTextReminder.getText().toString()));
             }
 
             if (editType == EDIT_TYPE_NEW) {
@@ -707,7 +738,8 @@ public class EditContractActivity extends InputFormActivity
             } else {
                 newContract.setContractId(contractToEdit.getContractId());
                 boolean success = dbHandler.updateContract(newContract);
-                UndoStack.getInstance().push(new EditContractAction(contractToEdit, newContract));
+                UndoStack.getInstance().push(
+                        new EditContractAction(contractToEdit, newContract));
                 return success;
             }
         }

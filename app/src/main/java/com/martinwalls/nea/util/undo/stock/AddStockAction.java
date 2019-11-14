@@ -21,8 +21,8 @@ public class AddStockAction extends UndoableAction {
 
     @Override
     public void showUndoMessage(Context context) {
-        showUndoSnackbar(context,
-                context.getString(R.string.undo_add_stock_success, stockItem.getProduct().getProductName()));
+        showUndoSnackbar(context, context.getString(
+                R.string.undo_add_stock_success, stockItem.getProduct().getProductName()));
     }
 
     @Override
@@ -35,7 +35,7 @@ public class AddStockAction extends UndoableAction {
 
     @Override
     public void showRedoMessage(Context context) {
-        showRedoSnackbar(context,
-                context.getString(R.string.redo_add_stock_success, stockItem.getProduct().getProductName()));
+        showRedoSnackbar(context, context.getString(
+                R.string.redo_add_stock_success, stockItem.getProduct().getProductName()));
     }
 }

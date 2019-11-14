@@ -45,7 +45,9 @@ public class StockItem implements Serializable {
          * Gets a list of the display name for each quality.
          */
         public static List<String> getQualityStrings() {
-            return Arrays.stream(values()).map(Quality::getDisplayName).collect(Collectors.toList());
+            return Arrays.stream(values())
+                    .map(Quality::getDisplayName)
+                    .collect(Collectors.toList());
         }
     }
 
@@ -66,7 +68,8 @@ public class StockItem implements Serializable {
     public StockItem() {}
 
     // db "not null" fields
-    public StockItem(Product product, int locationId, int supplierId, double mass, Quality quality) {
+    public StockItem(Product product, int locationId, int supplierId,
+                     double mass, Quality quality) {
         this.product = product;
         this.locationId = locationId;
         this.supplierId = supplierId;
@@ -192,7 +195,9 @@ public class StockItem implements Serializable {
      * {@link Comparator} to sort stock alphabetically.
      */
     public static Comparator<StockItem> comparatorAlpha() {
-        return (stock1, stock2) -> stock1.getProduct().getProductName().compareTo(stock2.getProduct().getProductName());
+        return (stock1, stock2) ->
+                stock1.getProduct().getProductName()
+                        .compareTo(stock2.getProduct().getProductName());
     }
 
     /**
@@ -218,7 +223,8 @@ public class StockItem implements Serializable {
     public static Comparator<StockItem> comparatorLocation() {
         return (stock1, stock2) -> {
             if (stock1.getLocationName().equals(stock2.getLocationName())) {
-                return stock1.getProduct().getProductName().compareTo(stock2.getProduct().getProductName());
+                return stock1.getProduct().getProductName()
+                        .compareTo(stock2.getProduct().getProductName());
             } else {
                 return stock1.getLocationName().compareTo(stock2.getLocationName());
             }

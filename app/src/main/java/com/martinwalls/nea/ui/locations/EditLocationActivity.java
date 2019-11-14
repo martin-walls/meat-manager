@@ -44,7 +44,9 @@ public class EditLocationActivity extends AppCompatActivity
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(getString(R.string.location_edit_title, location.getLocationType().name().toLowerCase()));
+            actionBar.setTitle(getString(
+                    R.string.location_edit_title,
+                    location.getLocationType().name().toLowerCase()));
         }
 
         // hide location type spinner, this can't be edited
@@ -192,7 +194,10 @@ public class EditLocationActivity extends AppCompatActivity
         if (TextUtils.isEmpty(editTextName.getText())) {
             inputLayoutName.setError(getString(R.string.input_error_blank));
             isValid = false;
-        } else if (dbHandler.getAllLocations().stream().map(Location::getLocationName).collect(Collectors.toList())
+        } else if (dbHandler.getAllLocations()
+                .stream()
+                .map(Location::getLocationName)
+                .collect(Collectors.toList())
                 .contains(editTextName.getText().toString())
                 && !TextUtils.equals(editTextName.getText(), location.getLocationName())) {
             inputLayoutName.setError(getString(R.string.input_error_duplicate));
@@ -230,12 +235,24 @@ public class EditLocationActivity extends AppCompatActivity
         if (isValid) {
             location.setLocationName(editTextName.getText().toString());
             location.setAddrLine1(editTextAddr1.getText().toString());
-            location.setAddrLine2(editTextAddr2.getText() == null ? "" : editTextAddr2.getText().toString());
-            location.setCity(editTextCity.getText() == null ? "" : editTextCity.getText().toString());
+            location.setAddrLine2(
+                    editTextAddr2.getText() == null
+                            ? ""
+                            : editTextAddr2.getText().toString());
+            location.setCity(
+                    editTextCity.getText() == null
+                            ? ""
+                            : editTextCity.getText().toString());
             location.setPostcode(editTextPostcode.getText().toString());
             location.setCountry(editTextCountry.getText().toString());
-            location.setEmail(editTextEmail.getText() == null ? "" : editTextEmail.getText().toString());
-            location.setPhone(editTextPhone.getText() == null ? "" : editTextPhone.getText().toString());
+            location.setEmail(
+                    editTextEmail.getText() == null
+                            ? ""
+                            : editTextEmail.getText().toString());
+            location.setPhone(
+                    editTextPhone.getText() == null
+                            ? ""
+                            : editTextPhone.getText().toString());
 
             return dbHandler.updateLocation(location);
         }

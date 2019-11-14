@@ -50,7 +50,8 @@ public class RepeatIntervalDialog extends DialogFragment {
             selectedOption = args.getInt(EXTRA_SELECTED);
             if (selectedOption == OPTION_CUSTOM) {
                 selectedCustomInterval.setValue(args.getInt(EXTRA_TIME_VALUE));
-                selectedCustomInterval.setUnit(Interval.TimeUnit.parseTimeUnit(args.getString(EXTRA_TIME_UNIT)));
+                selectedCustomInterval.setUnit(
+                        Interval.TimeUnit.parseTimeUnit(args.getString(EXTRA_TIME_UNIT)));
             }
         }
 
@@ -84,19 +85,24 @@ public class RepeatIntervalDialog extends DialogFragment {
                     radioCustomSelected.setVisibility(View.VISIBLE);
                     radioCustomSelected.setChecked(true);
                     if (selectedCustomInterval.getValue() == 1) {
-                        radioCustomSelected.setText(getString(R.string.contracts_repeat_interval_display_one,
-                                selectedCustomInterval.getUnit().name().toLowerCase()));
+                        radioCustomSelected.setText(
+                                getString(R.string.contracts_repeat_interval_display_one,
+                                        selectedCustomInterval.getUnit()
+                                                .name().toLowerCase()));
                     } else {
-                        radioCustomSelected.setText(getString(R.string.contracts_repeat_interval_display_multiple,
-                                selectedCustomInterval.getValue(),
-                                selectedCustomInterval.getUnit().name().toLowerCase()));
+                        radioCustomSelected.setText(
+                                getString(R.string.contracts_repeat_interval_display_multiple,
+                                        selectedCustomInterval.getValue(),
+                                        selectedCustomInterval.getUnit()
+                                                .name().toLowerCase()));
                     }
                 }
                 break;
         }
 
         Spinner timePeriodSpn = dialogView.findViewById(R.id.spn_time_period);
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter =
+                new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item);
 //                ArrayAdapter.createFromResource(getContext(),
 //                R.array.time_periods, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

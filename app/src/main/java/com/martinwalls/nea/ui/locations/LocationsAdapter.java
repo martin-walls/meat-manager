@@ -35,11 +35,13 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
             locationType = view.findViewById(R.id.info_secondary);
 
             RelativeLayout itemRootLayout = view.findViewById(R.id.item_root_layout);
-            itemRootLayout.setOnClickListener(v -> listener.onLocationClicked(locationList.get(getAdapterPosition())));
+            itemRootLayout.setOnClickListener(v ->
+                    listener.onLocationClicked(locationList.get(getAdapterPosition())));
         }
     }
 
-    LocationsAdapter(List<Location> locationList, LocationsAdapterListener listener, Activity parentActivity) {
+    LocationsAdapter(List<Location> locationList, LocationsAdapterListener listener,
+                     Activity parentActivity) {
         this.locationList = locationList;
         this.listener = listener;
         this.parentActivity = parentActivity;
@@ -71,7 +73,8 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
     @Override
     public void deleteItem(int position) {
         DBHandler dbHandler = new DBHandler(parentActivity);
-        boolean safeToDelete = dbHandler.isLocationSafeToDelete(locationList.get(position).getLocationId());
+        boolean safeToDelete = dbHandler.isLocationSafeToDelete(
+                locationList.get(position).getLocationId());
         if (safeToDelete) {
             recentlyDeletedItem = locationList.get(position);
             recentlyDeletedItemPosition = position;
@@ -94,7 +97,8 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
      */
     private void showUndoSnackbar() {
         View view = parentActivity.findViewById(R.id.root_layout);
-        Snackbar snackbar = Snackbar.make(view, R.string.snackbar_item_deleted, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(view,
+                R.string.snackbar_item_deleted, Snackbar.LENGTH_LONG);
         snackbar.setAction(R.string.action_undo, v -> undoDelete());
         snackbar.addCallback(new Snackbar.Callback() {
             @Override

@@ -85,7 +85,8 @@ public class MeatTypesAdapter extends BaseAdapter<MeatTypesAdapter.ViewHolder> {
      */
     private void showUndoSnackbar() {
         View view = parentActivity.findViewById(R.id.root_layout);
-        Snackbar snackbar = Snackbar.make(view, R.string.snackbar_item_deleted, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(view,
+                R.string.snackbar_item_deleted, Snackbar.LENGTH_LONG);
         snackbar.setAction(R.string.action_undo, v -> undoDelete());
         snackbar.show();
     }

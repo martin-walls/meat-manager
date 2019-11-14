@@ -27,7 +27,8 @@ public class AddNewTextView extends AppCompatTextView {
     public AddNewTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AddNewTextView, defStyleAttr, 0);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AddNewTextView,
+                defStyleAttr, 0);
         searchItemType = a.getString(R.styleable.AddNewTextView_searchItemType);
         a.recycle();
     }

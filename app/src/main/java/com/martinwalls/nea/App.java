@@ -16,7 +16,8 @@ public class App extends Application {
 
         // load theme on startup
         EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
-        DarkTheme.setDarkTheme(prefs.getIntFromString(R.string.pref_dark_theme, DarkTheme.MODE_NIGHT_AUTO));
+        DarkTheme.setDarkTheme(
+                prefs.getIntFromString(R.string.pref_dark_theme, DarkTheme.MODE_NIGHT_AUTO));
 
         // start on default page so clear saved position
         prefs.setString(R.string.pref_last_opened_page, null);
@@ -43,7 +44,8 @@ public class App extends Application {
             String channelId = getString(R.string.channel_reminder_id);
             NotificationChannel channel = new NotificationChannel(channelId, name, importance);
 
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            NotificationManager notificationManager =
+                    getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }

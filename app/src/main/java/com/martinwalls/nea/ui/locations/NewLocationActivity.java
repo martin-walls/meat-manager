@@ -41,14 +41,16 @@ public class NewLocationActivity extends AppCompatActivity
             locationType = extras.getString(EXTRA_LOCATION_TYPE, locationType);
         }
 
-        getSupportActionBar().setTitle(getString(R.string.locations_add_new_title, locationType.toLowerCase()));
+        getSupportActionBar().setTitle(
+                getString(R.string.locations_add_new_title, locationType.toLowerCase()));
 
         dbHandler = new DBHandler(this);
 
         // location type spinner
         Spinner locationTypeSpn = findViewById(R.id.spn_location_type);
         locationTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-        locationTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationTypeAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
         locationTypeAdapter.addAll(Location.LocationType.getLocationTypeStrings());
         locationTypeAdapter.notifyDataSetChanged();
         locationTypeSpn.setAdapter(locationTypeAdapter);
@@ -139,7 +141,10 @@ public class NewLocationActivity extends AppCompatActivity
         if (TextUtils.isEmpty(editTextName.getText())) {
             inputLayoutName.setError(getString(R.string.input_error_blank));
             isValid = false;
-        } else if (dbHandler.getAllLocations().stream().map(Location::getLocationName).collect(Collectors.toList())
+        } else if (dbHandler.getAllLocations()
+                .stream()
+                .map(Location::getLocationName)
+                .collect(Collectors.toList())
                 .contains(editTextName.getText().toString())) {
             inputLayoutName.setError(getString(R.string.input_error_duplicate));
             isValid = false;
@@ -175,14 +180,27 @@ public class NewLocationActivity extends AppCompatActivity
 
         if (isValid) {
             newLocation.setLocationName(editTextName.getText().toString());
-            newLocation.setLocationType(Location.LocationType.values()[locationTypeSpn.getSelectedItemPosition()]);
+            newLocation.setLocationType(
+                    Location.LocationType.values()[locationTypeSpn.getSelectedItemPosition()]);
             newLocation.setAddrLine1(editTextAddr1.getText().toString());
-            newLocation.setAddrLine2(editTextAddr2.getText() == null ? "" : editTextAddr2.getText().toString());
-            newLocation.setCity(editTextCity.getText() == null ? "" : editTextCity.getText().toString());
+            newLocation.setAddrLine2(
+                    editTextAddr2.getText() == null
+                            ? ""
+                            : editTextAddr2.getText().toString());
+            newLocation.setCity(
+                    editTextCity.getText() == null
+                            ? ""
+                            : editTextCity.getText().toString());
             newLocation.setPostcode(editTextPostcode.getText().toString());
             newLocation.setCountry(editTextCountry.getText().toString());
-            newLocation.setEmail(editTextEmail.getText() == null ? "" : editTextEmail.getText().toString());
-            newLocation.setPhone(editTextPhone.getText() == null ? "" : editTextPhone.getText().toString());
+            newLocation.setEmail(
+                    editTextEmail.getText() == null
+                            ? ""
+                            : editTextEmail.getText().toString());
+            newLocation.setPhone(
+                    editTextPhone.getText() == null
+                            ? ""
+                            : editTextPhone.getText().toString());
 
             return dbHandler.addLocation(newLocation);
         }

@@ -61,7 +61,8 @@ public class StockFragment extends Fragment
         recyclerView.setAdapter(stockAdapter);
         loadStock();
 
-        RecyclerViewDivider recyclerViewDivider = new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
+        RecyclerViewDivider recyclerViewDivider =
+                new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
         recyclerView.addItemDecoration(recyclerViewDivider);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -191,10 +192,12 @@ public class StockFragment extends Fragment
                 stockList.addAll(SortUtils.mergeSort(stock, StockItem.comparatorLocation()));
                 break;
             case SortUtils.SORT_AMOUNT_DESC:
-                stockList.addAll(SortUtils.mergeSort(stock, StockItem.comparatorAmount(false)));
+                stockList.addAll(SortUtils.mergeSort(
+                        stock, StockItem.comparatorAmount(false)));
                 break;
             case SortUtils.SORT_AMOUNT_ASC:
-                stockList.addAll(SortUtils.mergeSort(stock, StockItem.comparatorAmount(true)));
+                stockList.addAll(SortUtils.mergeSort(
+                        stock, StockItem.comparatorAmount(true)));
                 break;
         }
         stockAdapter.notifyDataSetChanged();

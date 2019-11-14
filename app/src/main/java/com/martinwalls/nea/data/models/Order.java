@@ -18,7 +18,8 @@ public class Order implements Serializable {
     public Order() {
     }
 
-    public Order(int orderId, int destId, String destName, LocalDateTime orderDate, boolean isCompleted) {
+    public Order(int orderId, int destId, String destName,
+                 LocalDateTime orderDate, boolean isCompleted) {
         this.orderId = orderId;
         this.destId = destId;
         this.destName = destName;

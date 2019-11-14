@@ -50,10 +50,12 @@ public abstract class UndoableAction {
             Snackbar snackbar = Snackbar.make(view, text, Snackbar.LENGTH_SHORT);
             switch (mode) {
                 case UNDO:
-                    snackbar.setAction(R.string.action_redo, v -> UndoStack.getInstance().redo(context));
+                    snackbar.setAction(R.string.action_redo, v ->
+                            UndoStack.getInstance().redo(context));
                     break;
                 case REDO:
-                    snackbar.setAction(R.string.action_undo, v -> UndoStack.getInstance().undo(context));
+                    snackbar.setAction(R.string.action_undo, v ->
+                            UndoStack.getInstance().undo(context));
                     break;
             }
             snackbar.show();

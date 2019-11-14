@@ -40,7 +40,8 @@ public class OrdersFragment extends Fragment
     private boolean isCurrentView = true;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         setTitle();
         View fragmentView = inflater.inflate(R.layout.fragment_orders, container, false);
@@ -55,7 +56,8 @@ public class OrdersFragment extends Fragment
         recyclerView.setAdapter(ordersAdapter);
         loadOrders();
 
-        RecyclerViewDivider recyclerViewDivider = new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
+        RecyclerViewDivider recyclerViewDivider =
+                new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
         recyclerView.addItemDecoration(recyclerViewDivider);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -63,7 +65,8 @@ public class OrdersFragment extends Fragment
         FloatingActionButton fab = fragmentView.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             Intent newOrderIntent = new Intent(getContext(), EditOrderActivity.class);
-            newOrderIntent.putExtra(EditOrderActivity.EXTRA_EDIT_TYPE, EditOrderActivity.EDIT_TYPE_NEW);
+            newOrderIntent.putExtra(EditOrderActivity.EXTRA_EDIT_TYPE,
+                    EditOrderActivity.EDIT_TYPE_NEW);
             startActivity(newOrderIntent);
         });
 
@@ -143,9 +146,11 @@ public class OrdersFragment extends Fragment
         orderList.clear();
         // sort by date
         if (isCurrentView) {
-            orderList.addAll(SortUtils.mergeSort(dbHandler.getAllOrdersNotCompleted(), Order.comparatorDate()));
+            orderList.addAll(SortUtils.mergeSort(
+                    dbHandler.getAllOrdersNotCompleted(), Order.comparatorDate()));
         } else {
-            orderList.addAll(SortUtils.mergeSort(dbHandler.getAllOrdersCompleted(), Order.comparatorDate()));
+            orderList.addAll(SortUtils.mergeSort(
+                    dbHandler.getAllOrdersCompleted(), Order.comparatorDate()));
         }
         ordersAdapter.setCurrentView(isCurrentView);
         ordersAdapter.notifyDataSetChanged();

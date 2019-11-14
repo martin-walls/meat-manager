@@ -137,6 +137,7 @@ public class Location implements Serializable {
      * {@link Comparator} to sort locations alphabetically.
      */
     public static Comparator<Location> comparatorAlpha() {
-        return (location1, location2) -> location1.getLocationName().compareTo(location2.getLocationName());
+        return (location1, location2) ->
+                location1.getLocationName().compareTo(location2.getLocationName());
     }
 }

@@ -47,12 +47,14 @@ public class LocationsActivity extends AppCompatActivity
         recyclerView.setAdapter(locationsAdapter);
         loadLocations();
 
-        RecyclerViewDivider recyclerViewDivider = new RecyclerViewDivider(this, R.drawable.divider_thin);
+        RecyclerViewDivider recyclerViewDivider =
+                new RecyclerViewDivider(this, R.drawable.divider_thin);
         recyclerView.addItemDecoration(recyclerViewDivider);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(locationsAdapter, this));
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
+                new SwipeToDeleteCallback(locationsAdapter, this));
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -86,7 +88,8 @@ public class LocationsActivity extends AppCompatActivity
     @Override
     public void onLocationClicked(Location location) {
         Intent detailsIntent = new Intent(this, LocationDetailActivity.class);
-        detailsIntent.putExtra(LocationDetailActivity.EXTRA_LOCATION_ID, location.getLocationId());
+        detailsIntent.putExtra(LocationDetailActivity.EXTRA_LOCATION_ID,
+                location.getLocationId());
         startActivity(detailsIntent);
     }
 
@@ -95,7 +98,8 @@ public class LocationsActivity extends AppCompatActivity
      */
     private void loadLocations() {
         locationList.clear();
-        locationList.addAll(SortUtils.mergeSort(dbHandler.getAllLocations(), Location.comparatorAlpha()));
+        locationList.addAll(SortUtils.mergeSort(dbHandler.getAllLocations(),
+                Location.comparatorAlpha()));
         locationsAdapter.notifyDataSetChanged();
     }
 }

@@ -69,8 +69,6 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.FadeTransition">
-        <!--<item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>-->
-
         <item name="android:windowActivityTransitions">true</item>
 
         <item name="android:windowEnterAnimation">@android:anim/fade_in</item>

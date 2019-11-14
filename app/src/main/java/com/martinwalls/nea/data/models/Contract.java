@@ -181,6 +181,7 @@ public class Contract implements Serializable {
      * {@link Comparator} to sort contracts by date.
      */
     public static Comparator<Contract> comparatorDate() {
-        return (contract1, contract2) -> contract1.getDaysToNextRepeat() - contract2.getDaysToNextRepeat();
+        return (contract1, contract2) ->
+                contract1.getDaysToNextRepeat() - contract2.getDaysToNextRepeat();
     }
 }

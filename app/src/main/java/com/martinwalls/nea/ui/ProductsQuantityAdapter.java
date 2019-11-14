@@ -12,7 +12,8 @@ import com.martinwalls.nea.util.Utils;
 
 import java.util.List;
 
-public class ProductsQuantityAdapter extends RecyclerView.Adapter<ProductsQuantityAdapter.ViewHolder> {
+public class ProductsQuantityAdapter
+        extends RecyclerView.Adapter<ProductsQuantityAdapter.ViewHolder> {
 
     private List<ProductQuantity> productList;
 
@@ -45,11 +46,13 @@ public class ProductsQuantityAdapter extends RecyclerView.Adapter<ProductsQuanti
         MassUnit massUnit = MassUnit.getMassUnit(holder.mass.getContext());
         holder.mass.setText(holder.mass.getContext()
                 .getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
-                        Utils.getMassDisplayValue(holder.mass.getContext(), productQuantity.getQuantityMass(), 3)));
+                        Utils.getMassDisplayValue(holder.mass.getContext(),
+                                productQuantity.getQuantityMass(), 3)));
         if (productQuantity.getQuantityBoxes() >= 0) {
             holder.numBoxes.setText(holder.numBoxes.getContext().getResources()
                     .getQuantityString(R.plurals.amount_boxes,
-                            productQuantity.getQuantityBoxes(), productQuantity.getQuantityBoxes()));
+                            productQuantity.getQuantityBoxes(),
+                            productQuantity.getQuantityBoxes()));
         } else {
             holder.numBoxes.setVisibility(View.GONE);
         }

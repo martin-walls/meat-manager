@@ -51,7 +51,8 @@ public class ApiIntentService extends IntentService {
         // if cache doesn't exists, API request will be made
         long timeDiff = 0;
         if (CacheHelper.doesCacheExist(getApplicationContext(), CACHE_KEY_TIMESTAMP)) {
-            long lastTimestamp = Long.parseLong(CacheHelper.retrieve(getApplicationContext(), CACHE_KEY_TIMESTAMP));
+            long lastTimestamp = Long.parseLong(
+                    CacheHelper.retrieve(getApplicationContext(), CACHE_KEY_TIMESTAMP));
             long timestampNow = System.currentTimeMillis() / 1000;
             timeDiff = (timestampNow - lastTimestamp);
         }
@@ -77,7 +78,8 @@ public class ApiIntentService extends IntentService {
         CacheHelper.save(getApplicationContext(), CACHE_KEY_RATES, jsonResponse);
 
         long timestamp = QueryUtils.extractTimestamp(jsonResponse);
-        CacheHelper.save(getApplicationContext(), CACHE_KEY_TIMESTAMP, String.valueOf(timestamp));
+        CacheHelper.save(getApplicationContext(),
+                CACHE_KEY_TIMESTAMP, String.valueOf(timestamp));
 
         // save list of currencies to db
         ExchangeDBHandler dbHandler = new ExchangeDBHandler(this);

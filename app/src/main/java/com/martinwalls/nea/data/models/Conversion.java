@@ -76,7 +76,8 @@ public class Conversion {
      * Calculates how many days ago the conversion was added.
      */
     public int getDaysAgo() {
-        LocalDate conversionDate = LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.systemDefault())
+        LocalDate conversionDate = LocalDateTime.ofInstant(
+                Instant.ofEpochSecond(timestamp), ZoneId.systemDefault())
                 .toLocalDate();
         LocalDate today = LocalDate.now();
 

@@ -96,9 +96,11 @@ public class ExchangeFragment extends Fragment {
         /*
         SharedPreferences sharedPref = getContext().getSharedPreferences(
                 getString(R.string.pref_exchange_file_key), Context.MODE_PRIVATE);
-        String lastCurrencyLeft = sharedPref.getString(getString(R.string.pref_exchange_currency_primary),
+        String lastCurrencyLeft
+        = sharedPref.getString(getString(R.string.pref_exchange_currency_primary),
                 currencyPickerLeft.getDisplayedValues()[0]);
-        String lastCurrencyRight = sharedPref.getString(getString(R.string.pref_exchange_currency_secondary),
+        String lastCurrencyRight
+        = sharedPref.getString(getString(R.string.pref_exchange_currency_secondary),
                 currencyPickerRight.getDisplayedValues()[1]);
 
         currencyPickerLeft.setValue(currenciesList.indexOf(lastCurrencyLeft));
@@ -114,7 +116,8 @@ public class ExchangeFragment extends Fragment {
         loadConversionHistory();
 
         TextView emptyView = fragmentView.findViewById(R.id.no_exchange_history);
-        CustomRecyclerView conversionHistoryView = fragmentView.findViewById(R.id.exchange_history);
+        CustomRecyclerView conversionHistoryView =
+                fragmentView.findViewById(R.id.exchange_history);
         conversionHistoryView.setAdapter(exchangeHistoryAdapter);
         conversionHistoryView.setEmptyView(emptyView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -156,7 +159,8 @@ public class ExchangeFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_favourites:
-                Intent favouritesIntent = new Intent(getContext(), ChooseCurrenciesActivity.class);
+                Intent favouritesIntent = new Intent(getContext(),
+                        ChooseCurrenciesActivity.class);
                 startActivityForResult(favouritesIntent, REQUEST_REFRESH_ON_DONE);
                 return true;
             case R.id.action_refresh:
@@ -178,8 +182,8 @@ public class ExchangeFragment extends Fragment {
      * Checks whether the device has an active Internet connection.
      */
     private boolean checkInternetConnection() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo network = cm.getActiveNetworkInfo(); //deprecated
 
 //        return network != null && network.isConnectedOrConnecting();
@@ -194,7 +198,8 @@ public class ExchangeFragment extends Fragment {
     private void fetchRatesFromApi() {
         PendingIntent pendingResult = getActivity().createPendingResult(
                 MainActivity.REQUEST_EXCHANGE_API_SERVICE, new Intent(), 0);
-        Intent intent = new Intent(getContext().getApplicationContext(), ApiIntentService.class);
+        Intent intent = new Intent(getContext().getApplicationContext(),
+                ApiIntentService.class);
         intent.putExtra(ApiIntentService.EXTRA_PENDING_RESULT, pendingResult);
         getActivity().startService(intent);
     }
@@ -219,7 +224,9 @@ public class ExchangeFragment extends Fragment {
      * the layout to show the updated rates.
      */
     public void onRatesFetched(Intent data) {
-        rates = (HashMap<String, Double>) data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
+        //noinspection unchecked
+        rates = (HashMap<String, Double>)
+                data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
         updateRates();
 
         initCurrencyPickers();
@@ -227,7 +234,8 @@ public class ExchangeFragment extends Fragment {
         ratesLayout.setVisibility(View.VISIBLE);
         emptyView.setVisibility(View.GONE);
 
-//        long timestamp = Long.parseLong(CacheHelper.retrieve(getContext(), "last_cache_timestamp"));
+//        long timestamp = Long.parseLong(
+//        CacheHelper.retrieve(getContext(), "last_cache_timestamp"));
 //        Toast.makeText(getContext(), "fetched", Toast.LENGTH_SHORT).show();
     }
 
@@ -257,8 +265,10 @@ public class ExchangeFragment extends Fragment {
         }
 
         // load last selected currencies
-        String primaryCurrencyValue = prefs.getString(R.string.pref_exchange_currency_primary, "");
-        String secondaryCurrencyValue = prefs.getString(R.string.pref_exchange_currency_secondary, "");
+        String primaryCurrencyValue = prefs.getString(
+                R.string.pref_exchange_currency_primary, "");
+        String secondaryCurrencyValue = prefs.getString(
+                R.string.pref_exchange_currency_secondary, "");
 
         currencyPickerLeft.setMinValue(0);
         currencyPickerLeft.setMaxValue(currencies.length - 1);
@@ -314,7 +324,9 @@ public class ExchangeFragment extends Fragment {
      * currency {@code base}.
      */
     private double getRate(String currency, String base) {
-        if (rates != null && rates.keySet().contains(currency) && rates.keySet().contains(base)) {
+        if (rates != null
+                && rates.keySet().contains(currency)
+                && rates.keySet().contains(base)) {
             return (rates.get(currency) / rates.get(base)) * primaryCurrencyValue;
         }
         return 0;
@@ -325,7 +337,8 @@ public class ExchangeFragment extends Fragment {
      */
     private void updateRates() {
         secondaryCurrencyValue = getRate(secondaryCurrency, primaryCurrency);
-        secondaryCurrencyValueText.setText(getString(R.string.exchange_rate, secondaryCurrencyValue));
+        secondaryCurrencyValueText.setText(
+                getString(R.string.exchange_rate, secondaryCurrencyValue));
     }
 
     /**
@@ -360,7 +373,8 @@ public class ExchangeFragment extends Fragment {
      */
     private void loadConversionHistory() {
         conversionList.clear();
-        conversionList.addAll(SortUtils.mergeSort(dbHandler.getAllConversions(), Conversion.comparatorTime()));
+        conversionList.addAll(SortUtils.mergeSort(
+                dbHandler.getAllConversions(), Conversion.comparatorTime()));
         exchangeHistoryAdapter.notifyDataSetChanged();
     }
 }

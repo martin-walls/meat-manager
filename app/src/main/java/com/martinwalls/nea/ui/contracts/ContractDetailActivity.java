@@ -44,7 +44,8 @@ public class ContractDetailActivity extends AppCompatActivity
             contract = dbHandler.getContract(contractId);
         }
 
-        ProductsAddedAdapter productsAdapter = new ProductsAddedAdapter(contract.getProductList());
+        ProductsAddedAdapter productsAdapter =
+                new ProductsAddedAdapter(contract.getProductList());
         RecyclerView productsRecyclerView = findViewById(R.id.recycler_view_products);
         productsRecyclerView.setAdapter(productsAdapter);
         productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -74,8 +75,10 @@ public class ContractDetailActivity extends AppCompatActivity
                 return true;
             case R.id.action_edit:
                 Intent editIntent = new Intent(this, EditContractActivity.class);
-                editIntent.putExtra(EditContractActivity.EXTRA_EDIT_TYPE, EditContractActivity.EDIT_TYPE_EDIT);
-                editIntent.putExtra(EditContractActivity.EXTRA_CONTRACT_ID, contract.getContractId());
+                editIntent.putExtra(EditContractActivity.EXTRA_EDIT_TYPE,
+                        EditContractActivity.EDIT_TYPE_EDIT);
+                editIntent.putExtra(EditContractActivity.EXTRA_CONTRACT_ID,
+                        contract.getContractId());
                 startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
                 return true;
             case android.R.id.home:
@@ -103,11 +106,13 @@ public class ContractDetailActivity extends AppCompatActivity
     public void onConfirmDelete() {
         boolean success = dbHandler.deleteContract(contract.getContractId());
         if (success) {
-            Toast.makeText(this, R.string.db_delete_contract_success, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.db_delete_contract_success, Toast.LENGTH_SHORT)
+                    .show();
             UndoStack.getInstance().push(new DeleteContractAction(contract));
             finish();
         } else {
-            Toast.makeText(this, R.string.db_delete_contract_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.db_delete_contract_error, Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 
@@ -132,7 +137,8 @@ public class ContractDetailActivity extends AppCompatActivity
         String repeatOnStr;
         Interval repeatInterval = contract.getRepeatInterval();
         if (repeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
-            repeatOnStr = getResources().getStringArray(R.array.weekdays)[contract.getRepeatOn() - 1];
+            repeatOnStr = getResources()
+                    .getStringArray(R.array.weekdays)[contract.getRepeatOn() - 1];
         } else {
             repeatOnStr = "day " + contract.getRepeatOn();
         }
@@ -141,7 +147,8 @@ public class ContractDetailActivity extends AppCompatActivity
                     repeatInterval.getUnit().name().toLowerCase(), repeatOnStr);
         } else {
             repeatStr = getString(R.string.contracts_repeat_display_multiple,
-                    repeatInterval.getValue(), repeatInterval.getUnit().name().toLowerCase(), repeatOnStr);
+                    repeatInterval.getValue(),
+                    repeatInterval.getUnit().name().toLowerCase(), repeatOnStr);
         }
         repeat.setText(repeatStr);
 
@@ -155,15 +162,17 @@ public class ContractDetailActivity extends AppCompatActivity
                 nextRepeat.setText(R.string.contracts_next_repeat_tomorrow);
                 break;
             default:
-                nextRepeat.setText(getString(R.string.contracts_next_repeat_on, contract.getDaysToNextRepeat()));
+                nextRepeat.setText(getString(R.string.contracts_next_repeat_on,
+                        contract.getDaysToNextRepeat()));
                 break;
         }
 
         TextView reminder = findViewById(R.id.reminder);
         int reminderDaysBefore = contract.getReminder();
         if (reminderDaysBefore > 0) {
-            reminder.setText(getResources().getQuantityString(R.plurals.contract_reminder_display,
-                    reminderDaysBefore, reminderDaysBefore));
+            reminder.setText(getResources()
+                    .getQuantityString(R.plurals.contract_reminder_display,
+                            reminderDaysBefore, reminderDaysBefore));
         } else {
             reminder.setText(R.string.contract_reminder_display_off);
         }

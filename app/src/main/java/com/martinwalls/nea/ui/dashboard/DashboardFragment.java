@@ -51,8 +51,8 @@ public class DashboardFragment extends Fragment
         prefs = EasyPreferences.createForDefaultPreferences(getContext());
 
         locationsRecyclerView = fragmentView.findViewById(R.id.recycler_view_locations);
-        LocationsMenuAdapter locationsAdapter =
-                new LocationsMenuAdapter(dbHandler.getAllLocations(Location.LocationType.Storage), this);
+        LocationsMenuAdapter locationsAdapter = new LocationsMenuAdapter(
+                dbHandler.getAllLocations(Location.LocationType.Storage), this);
         locationsRecyclerView.setAdapter(locationsAdapter);
 
         if (filterLocation == null || !TextUtils.isEmpty(filterLocation.getLocationName())) {
@@ -80,13 +80,16 @@ public class DashboardFragment extends Fragment
         super.onPrepareOptionsMenu(menu);
         switch (prefs.getInt(R.string.pref_dashboard_sort_by, SORT_BY_DEFAULT)) {
             case SortUtils.SORT_NAME:
-                menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_name).setChecked(true);
+                menu.findItem(R.id.action_sort_by).getSubMenu()
+                        .findItem(R.id.action_sort_by_name).setChecked(true);
                 break;
             case SortUtils.SORT_AMOUNT_DESC:
-                menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_amount_desc).setChecked(true);
+                menu.findItem(R.id.action_sort_by).getSubMenu()
+                        .findItem(R.id.action_sort_by_amount_desc).setChecked(true);
                 break;
             case SortUtils.SORT_AMOUNT_ASC:
-                menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_amount_asc).setChecked(true);
+                menu.findItem(R.id.action_sort_by).getSubMenu()
+                        .findItem(R.id.action_sort_by_amount_asc).setChecked(true);
                 break;
         }
     }
@@ -111,10 +114,12 @@ public class DashboardFragment extends Fragment
 
     @Override
     public void onLocationItemClicked(Location location, int position) {
-        locationsRecyclerView.getLayoutManager().findViewByPosition(position).setSelected(true);
+        locationsRecyclerView.getLayoutManager()
+                .findViewByPosition(position).setSelected(true);
         for (int i = 0; i < locationsRecyclerView.getAdapter().getItemCount(); i++) {
             if (i != position) {
-                locationsRecyclerView.getLayoutManager().findViewByPosition(i).setSelected(false);
+                locationsRecyclerView.getLayoutManager()
+                        .findViewByPosition(i).setSelected(false);
             }
         }
         filterLocation = location;
@@ -139,18 +144,22 @@ public class DashboardFragment extends Fragment
 
         List<StockItem> stockList;
         if (filterLocation == null || TextUtils.isEmpty(filterLocation.getLocationName())) {
-            stockList = SortUtils.mergeSort(dbHandler.getAllStock(), StockItem.comparatorAlpha());
+            stockList = SortUtils.mergeSort(
+                    dbHandler.getAllStock(), StockItem.comparatorAlpha());
         } else {
-            stockList = SortUtils.mergeSort(dbHandler.getAllStockFromLocation(filterLocation.getLocationId()),
+            stockList = SortUtils.mergeSort(
+                    dbHandler.getAllStockFromLocation(filterLocation.getLocationId()),
                     StockItem.comparatorAlpha());
         }
 
         for (int i = 1; i < stockList.size(); i++) {
             StockItem lastStockItem = stockList.get(i - 1);
             StockItem thisStockItem = stockList.get(i);
-            if (lastStockItem.getProduct().getProductId() == thisStockItem.getProduct().getProductId()) {
+            if (lastStockItem.getProduct().getProductId()
+                    == thisStockItem.getProduct().getProductId()) {
                 lastStockItem.setMass(lastStockItem.getMass() + thisStockItem.getMass());
-                lastStockItem.setNumBoxes(lastStockItem.getNumBoxes() + thisStockItem.getNumBoxes());
+                lastStockItem.setNumBoxes(
+                        lastStockItem.getNumBoxes() + thisStockItem.getNumBoxes());
                 stockList.remove(i);
                 i--;
             }

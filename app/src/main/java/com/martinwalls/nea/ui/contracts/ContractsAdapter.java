@@ -33,7 +33,8 @@ public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.View
             dateDivider = view.findViewById(R.id.date_divider);
 
             LinearLayout contractLayout = view.findViewById(R.id.contract_info);
-            contractLayout.setOnClickListener(v -> listener.onContractClicked(contractList.get(getAdapterPosition())));
+            contractLayout.setOnClickListener(v ->
+                    listener.onContractClicked(contractList.get(getAdapterPosition())));
         }
     }
 
@@ -71,17 +72,21 @@ public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.View
         } else {
             repeatStr = holder.contractRepeat.getContext().getResources().getString(
                     R.string.contracts_repeat_display_multiple,
-                    repeatInterval.getValue(), repeatInterval.getUnit().name().toLowerCase(), repeatOnStr);
+                    repeatInterval.getValue(),
+                    repeatInterval.getUnit().name().toLowerCase(), repeatOnStr);
         }
         holder.contractRepeat.setText(repeatStr);
-        ProductsQuantityAdapter adapter = new ProductsQuantityAdapter(contract.getProductList());
+        ProductsQuantityAdapter adapter =
+                new ProductsQuantityAdapter(contract.getProductList());
         holder.recyclerView.setAdapter(adapter);
-        holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.recyclerView.getContext()));
+        holder.recyclerView.setLayoutManager(
+                new LinearLayoutManager(holder.recyclerView.getContext()));
         // allow click events to pass to parent layout
         holder.recyclerView.suppressLayout(true);
 
         int daysToNextRepeat = contract.getDaysToNextRepeat();
-        if (position == 0 || contractList.get(position - 1).getDaysToNextRepeat() != daysToNextRepeat) {
+        if (position == 0
+                || contractList.get(position - 1).getDaysToNextRepeat() != daysToNextRepeat) {
             switch (daysToNextRepeat) {
                 case 0:
                     holder.dateDivider.setText(R.string.contracts_divider_today);
@@ -91,7 +96,8 @@ public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.View
                     break;
                 default:
                     holder.dateDivider.setText(holder.dateDivider.getContext().getString(
-                            R.string.contracts_divider_days_until, contract.getDaysToNextRepeat()));
+                            R.string.contracts_divider_days_until,
+                            contract.getDaysToNextRepeat()));
                     break;
             }
             holder.dateDivider.setVisibility(View.VISIBLE);

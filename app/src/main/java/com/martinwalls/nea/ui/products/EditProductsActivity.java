@@ -53,12 +53,14 @@ public class EditProductsActivity extends AppCompatActivity
         recyclerView.setAdapter(productsAdapter);
         loadProducts();
 
-        RecyclerViewDivider recyclerViewDivider = new RecyclerViewDivider(this, R.drawable.divider_thin);
+        RecyclerViewDivider recyclerViewDivider =
+                new RecyclerViewDivider(this, R.drawable.divider_thin);
         recyclerView.addItemDecoration(recyclerViewDivider);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(productsAdapter, this));
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
+                new SwipeToDeleteCallback(productsAdapter, this));
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -89,10 +91,12 @@ public class EditProductsActivity extends AppCompatActivity
         super.onPrepareOptionsMenu(menu);
         switch (prefs.getInt(R.string.pref_products_sort_by, SortUtils.SORT_MEAT_TYPE)) {
             case SortUtils.SORT_MEAT_TYPE:
-                menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_meat_type).setChecked(true);
+                menu.findItem(R.id.action_sort_by).getSubMenu()
+                        .findItem(R.id.action_sort_by_meat_type).setChecked(true);
                 break;
             case SortUtils.SORT_NAME:
-                menu.findItem(R.id.action_sort_by).getSubMenu().findItem(R.id.action_sort_by_name).setChecked(true);
+                menu.findItem(R.id.action_sort_by).getSubMenu()
+                        .findItem(R.id.action_sort_by_name).setChecked(true);
                 break;
         }
         return true;
@@ -136,9 +140,12 @@ public class EditProductsActivity extends AppCompatActivity
         int sortBy = prefs.getInt(R.string.pref_products_sort_by, SortUtils.SORT_MEAT_TYPE);
         productList.clear();
         productList.addAll(SortUtils.mergeSort(dbHandler.getAllProducts(),
-                sortBy == SortUtils.SORT_NAME ? Product.comparatorAlpha() : Product.comparatorMeatType()));
+                sortBy == SortUtils.SORT_NAME
+                        ? Product.comparatorAlpha()
+                        : Product.comparatorMeatType()));
         productsAdapter.notifyDataSetChanged();
     }
 
-    //todo not urgent: be able to edit products ? -- may not be needed, can just delete and re-add
+    //todo not urgent: be able to edit products ?
+    // -- may not be needed, can just delete and re-add
 }

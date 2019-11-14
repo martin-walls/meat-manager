@@ -46,12 +46,14 @@ public class EditMeatTypesActivity extends AppCompatActivity
         recyclerView.setAdapter(meatTypesAdapter);
         loadMeatTypes();
 
-        RecyclerViewDivider recyclerViewDivider = new RecyclerViewDivider(this, R.drawable.divider_thin);
+        RecyclerViewDivider recyclerViewDivider =
+                new RecyclerViewDivider(this, R.drawable.divider_thin);
         recyclerView.addItemDecoration(recyclerViewDivider);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(meatTypesAdapter, this));
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
+                new SwipeToDeleteCallback(meatTypesAdapter, this));
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         FloatingActionButton fab = findViewById(R.id.fab);

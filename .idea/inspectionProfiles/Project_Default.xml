@@ -34,5 +34,8 @@
       <option name="ACCESS_JAVADOC_REQUIRED_FOR" value="public" />
       <option name="REQUIRED_TAGS" value="" />
     </inspection_tool>
+    <inspection_tool class="LongLine" enabled="true" level="WARNING" enabled_by_default="false">
+      <scope name="Project Files" level="WARNING" enabled="true" />
+    </inspection_tool>
   </profile>
 </component>

@@ -34,10 +34,12 @@ public class SettingsActivity extends AppCompatActivity {
      * Sets the app theme, to be called when the activity starts so the theme
      * changes when the user changes the dark theme preference.
      */
-    //todo could be replaced with setOnPreferenceChangedListener to listen for the preference value to change??
+    //todo could be replaced with setOnPreferenceChangedListener to
+    // listen for the preference value to change??
     private void setDarkTheme() {
         EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
-        DarkTheme.setDarkTheme(prefs.getIntFromString(R.string.pref_dark_theme, DarkTheme.MODE_NIGHT_AUTO));
+        DarkTheme.setDarkTheme(
+                prefs.getIntFromString(R.string.pref_dark_theme, DarkTheme.MODE_NIGHT_AUTO));
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
@@ -63,7 +65,8 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
             });
 
-            Preference enableNotificationsPref = findPreference(R.string.pref_enable_notifications);
+            Preference enableNotificationsPref =
+                    findPreference(R.string.pref_enable_notifications);
             enableNotificationsPref.setOnPreferenceChangeListener((preference, newValue) -> {
                 setNotificationsEnabled((boolean) newValue);
                 return true;
@@ -76,12 +79,15 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
             });
 
-            int hour = prefs.getInt(R.string.pref_reminder_time_hr, ReminderUtils.DEFAULT_REMINDER_HR);
-            int min = prefs.getInt(R.string.pref_reminder_time_min, ReminderUtils.DEFAULT_REMINDER_MIN);
+            int hour = prefs.getInt(R.string.pref_reminder_time_hr,
+                    ReminderUtils.DEFAULT_REMINDER_HR);
+            int min = prefs.getInt(R.string.pref_reminder_time_min,
+                    ReminderUtils.DEFAULT_REMINDER_MIN);
             setReminderTimeSummary(hour, min);
 
 
-            /* todo remove backup options, auto backup to drive is enabled by default on newer android versions
+            /* todo remove backup options, auto backup to drive is enabled by
+                default on newer android versions
             backupDbPref = findPreference(R.string.pref_backup_db);
             restoreDbPref = findPreference(R.string.pref_restore_db);
 
@@ -112,7 +118,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         /*
         @Override
-        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        public void onRequestPermissionsResult(int requestCode, String[] permissions,
+        int[] grantResults) {
             if (requestCode == PERMISSIONS_REQUEST_STORAGE_FOR_BACKUP
                     || requestCode == PERMISSIONS_REQUEST_STORAGE_FOR_RESTORE) {
                 if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -124,7 +131,8 @@ public class SettingsActivity extends AppCompatActivity {
                         importDB();
                     }
                 } else {
-                    Toast.makeText(getContext(), R.string.perm_error_storage_denied, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.perm_error_storage_denied,
+                    Toast.LENGTH_SHORT).show();
                 }
             }
         }*/
@@ -151,7 +159,8 @@ public class SettingsActivity extends AppCompatActivity {
          * Sets the summary text for the reminder time preference.
          */
         private void setReminderTimeSummary(int hour, int min) {
-            reminderTimePref.setSummary(getString(R.string.settings_reminder_time_summary, hour, min));
+            reminderTimePref.setSummary(
+                    getString(R.string.settings_reminder_time_summary, hour, min));
         }
 
         /**
@@ -183,20 +192,24 @@ public class SettingsActivity extends AppCompatActivity {
         }
 /*
         private boolean isExternalStoragePermissionGranted() {
-            return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            return ActivityCompat.checkSelfPermission(getContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED;
         }
 
         private void requestExternalStoragePermission(int requestCode) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestCode);
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+            requestCode);
         }
 
         private void exportDb() {
             String outputPath = DBHandler.exportDbToFile();
             if (outputPath.equals("")) {
-                Toast.makeText(getContext(), R.string.db_backup_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.db_backup_error, Toast.LENGTH_SHORT)
+                .show();
             } else {
-                Toast.makeText(getContext(), getString(R.string.db_backup_success, outputPath), Toast.LENGTH_SHORT)
+                Toast.makeText(getContext(), getString(R.string.db_backup_success,
+                outputPath), Toast.LENGTH_SHORT)
                         .show();
             }
         }
@@ -204,9 +217,11 @@ public class SettingsActivity extends AppCompatActivity {
         private void importDB() {
             boolean success = DBHandler.importDbFromFile();
             if (success) {
-                Toast.makeText(getContext(), R.string.db_import_success, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.db_import_success, Toast.LENGTH_SHORT)
+                .show();
             } else {
-                Toast.makeText(getContext(), R.string.db_import_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.db_import_error, Toast.LENGTH_SHORT)
+                .show();
             }
         }*/
     }

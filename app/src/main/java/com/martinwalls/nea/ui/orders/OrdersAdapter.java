@@ -37,7 +37,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             recyclerView = view.findViewById(R.id.recycler_view);
 
             LinearLayout orderInfo = view.findViewById(R.id.order_info);
-            orderInfo.setOnClickListener(v -> listener.onOrderClicked(orderList.get(getAdapterPosition())));
+            orderInfo.setOnClickListener(v ->
+                    listener.onOrderClicked(orderList.get(getAdapterPosition())));
         }
     }
 
@@ -59,12 +60,16 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         holder.orderDest.setText(order.getDestName());
         ProductsQuantityAdapter adapter = new ProductsQuantityAdapter(order.getProductList());
         holder.recyclerView.setAdapter(adapter);
-        holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.recyclerView.getContext()));
+        holder.recyclerView.setLayoutManager(
+                new LinearLayoutManager(holder.recyclerView.getContext()));
         // allow click events to be passed to parent layout
         holder.recyclerView.suppressLayout(true);
 
-        if (position == 0 || orderList.get(position - 1).getOrderDate().isBefore(order.getOrderDate())) {
-            holder.dateDivider.setText(order.getOrderDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+        if (position == 0
+                || orderList.get(position - 1)
+                .getOrderDate().isBefore(order.getOrderDate())) {
+            holder.dateDivider.setText(
+                    order.getOrderDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
             holder.dateDivider.setVisibility(View.VISIBLE);
         } else {
             holder.dateDivider.setVisibility(View.GONE);
@@ -72,10 +77,12 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
 
         // show past dates in red
         if (isCurrentView && order.getOrderDate().isBefore(LocalDateTime.now())) {
-            holder.dateDivider.setTextColor(holder.dateDivider.getContext().getColor(R.color.error_red));
+            holder.dateDivider.setTextColor(holder.dateDivider.getContext()
+                    .getColor(R.color.error_red));
         } else {
             holder.dateDivider.setTextColor(
-                    Utils.getColorFromTheme(holder.dateDivider.getContext(), R.attr.textColorEmphasis));
+                    Utils.getColorFromTheme(
+                            holder.dateDivider.getContext(), R.attr.textColorEmphasis));
         }
     }
 

@@ -49,14 +49,16 @@ public class ContractsFragment extends Fragment
         recyclerView.setAdapter(contractsAdapter);
         loadContracts();
 
-        RecyclerViewDivider recyclerViewDivider = new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
+        RecyclerViewDivider recyclerViewDivider =
+                new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
         recyclerView.addItemDecoration(recyclerViewDivider);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         FloatingActionButton fab = fragmentView.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             Intent newContractIntent = new Intent(getContext(), EditContractActivity.class);
-            newContractIntent.putExtra(EditContractActivity.EXTRA_EDIT_TYPE, EditContractActivity.EDIT_TYPE_NEW);
+            newContractIntent.putExtra(EditContractActivity.EXTRA_EDIT_TYPE,
+                    EditContractActivity.EDIT_TYPE_NEW);
             startActivity(newContractIntent);
         });
 
@@ -100,7 +102,8 @@ public class ContractsFragment extends Fragment
     @Override
     public void onContractClicked(Contract contract) {
         Intent detailIntent = new Intent(getContext(), ContractDetailActivity.class);
-        detailIntent.putExtra(ContractDetailActivity.EXTRA_CONTRACT_ID, contract.getContractId());
+        detailIntent.putExtra(ContractDetailActivity.EXTRA_CONTRACT_ID,
+                contract.getContractId());
         startActivity(detailIntent);
     }
 
@@ -110,7 +113,8 @@ public class ContractsFragment extends Fragment
      */
     private void loadContracts() {
         contractList.clear();
-        contractList.addAll(SortUtils.mergeSort(dbHandler.getAllContracts(), Contract.comparatorDate()));
+        contractList.addAll(SortUtils.mergeSort(dbHandler.getAllContracts(),
+                Contract.comparatorDate()));
         contractsAdapter.notifyDataSetChanged();
     }
 }

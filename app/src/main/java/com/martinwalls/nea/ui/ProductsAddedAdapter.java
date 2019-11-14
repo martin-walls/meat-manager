@@ -13,7 +13,8 @@ import com.martinwalls.nea.util.Utils;
 
 import java.util.List;
 
-public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdapter.ViewHolder> {
+public class ProductsAddedAdapter
+        extends RecyclerView.Adapter<ProductsAddedAdapter.ViewHolder> {
 
     private List<ProductQuantity> productList;
     private ProductsAddedAdapterListener listener;
@@ -33,8 +34,10 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
             deleteBtn = view.findViewById(R.id.btn_delete);
             editBtn = view.findViewById(R.id.btn_edit);
 
-            deleteBtn.setOnClickListener(v -> listener.onProductAddedDelete(getAdapterPosition()));
-            editBtn.setOnClickListener(v -> listener.onProductAddedEdit(getAdapterPosition()));
+            deleteBtn.setOnClickListener(v ->
+                    listener.onProductAddedDelete(getAdapterPosition()));
+            editBtn.setOnClickListener(v ->
+                    listener.onProductAddedEdit(getAdapterPosition()));
         }
     }
 
@@ -47,7 +50,8 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
         showDeleteBtn = false;
     }
 
-    public ProductsAddedAdapter(List<ProductQuantity> productList, ProductsAddedAdapterListener listener) {
+    public ProductsAddedAdapter(List<ProductQuantity> productList,
+                                ProductsAddedAdapterListener listener) {
         this.productList = productList;
         this.listener = listener;
     }
@@ -55,7 +59,8 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
     /**
      * Constructor to set which buttons should be showing.
      */
-    public ProductsAddedAdapter(List<ProductQuantity> productList, ProductsAddedAdapterListener listener,
+    public ProductsAddedAdapter(List<ProductQuantity> productList,
+                                ProductsAddedAdapterListener listener,
                                 boolean showEditBtn, boolean showDeleteBtn) {
         this.productList = productList;
         this.listener = listener;
@@ -77,13 +82,15 @@ public class ProductsAddedAdapter extends RecyclerView.Adapter<ProductsAddedAdap
         MassUnit massUnit = MassUnit.getMassUnit(holder.mass.getContext());
         holder.mass.setText(holder.mass.getContext()
                 .getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
-                        Utils.getMassDisplayValue(holder.mass.getContext(), productQuantity.getQuantityMass(), 3)));
+                        Utils.getMassDisplayValue(holder.mass.getContext(),
+                                productQuantity.getQuantityMass(), 3)));
         if (productQuantity.getQuantityBoxes() < 0) {
             holder.numBoxes.setVisibility(View.GONE);
         } else {
             holder.numBoxes.setText(holder.numBoxes.getContext().getResources()
                     .getQuantityString(R.plurals.amount_boxes,
-                            productQuantity.getQuantityBoxes(), productQuantity.getQuantityBoxes()));
+                            productQuantity.getQuantityBoxes(),
+                            productQuantity.getQuantityBoxes()));
         }
         if (!showDeleteBtn) {
             holder.deleteBtn.setVisibility(View.GONE);

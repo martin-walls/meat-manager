@@ -8,7 +8,8 @@ import androidx.core.app.NotificationManagerCompat;
 
 public class NotificationUtils {
 
-    public static final String GROUP_CONTRACT_REMINDER = "com.martinwalls.nea.CONTRACT_REMINDER";
+    public static final String GROUP_CONTRACT_REMINDER =
+            "com.martinwalls.nea.CONTRACT_REMINDER";
 
     private NotificationUtils() {}
 
@@ -25,7 +26,8 @@ public class NotificationUtils {
      */
     public static void sendNotification(Context context, String channelId,
                                         String title, String text, @DrawableRes int iconId,
-                                        PendingIntent pendingIntent, int notificationId, String groupKey) {
+                                        PendingIntent pendingIntent,
+                                        int notificationId, String groupKey) {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(iconId)
@@ -38,7 +40,8 @@ public class NotificationUtils {
             builder.setContentIntent(pendingIntent);
         }
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        NotificationManagerCompat notificationManager =
+                NotificationManagerCompat.from(context);
         notificationManager.notify(notificationId, builder.build());
     }
 

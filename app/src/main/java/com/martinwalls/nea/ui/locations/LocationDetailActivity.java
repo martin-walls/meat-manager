@@ -66,7 +66,8 @@ public class LocationDetailActivity extends AppCompatActivity {
                 return true;
             case R.id.action_edit:
                 Intent editIntent = new Intent(this, EditLocationActivity.class);
-                editIntent.putExtra(EditLocationActivity.EXTRA_LOCATION_ID, location.getLocationId());
+                editIntent.putExtra(EditLocationActivity.EXTRA_LOCATION_ID,
+                        location.getLocationId());
                 startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
                 return true;
             case android.R.id.home:
@@ -135,9 +136,11 @@ public class LocationDetailActivity extends AppCompatActivity {
         if (dbHandler.isLocationSafeToDelete(location.getLocationId())) {
             boolean success = dbHandler.deleteLocation(location.getLocationId());
             if (success) {
-                Toast.makeText(this, R.string.location_delete_success, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.location_delete_success, Toast.LENGTH_SHORT)
+                        .show();
             } else {
-                Toast.makeText(this, R.string.location_delete_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.location_delete_error, Toast.LENGTH_SHORT)
+                        .show();
             }
         } else {
             Toast.makeText(this, R.string.location_delete_error, Toast.LENGTH_SHORT).show();

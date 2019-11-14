@@ -77,7 +77,8 @@ public class StockDetailActivity extends AppCompatActivity
                 return true;
             case R.id.action_edit:
                 Intent editIntent = new Intent(this, EditStockActivity.class);
-                editIntent.putExtra(EditStockActivity.EXTRA_EDIT_TYPE, EditStockActivity.EDIT_TYPE_EDIT);
+                editIntent.putExtra(EditStockActivity.EXTRA_EDIT_TYPE,
+                        EditStockActivity.EDIT_TYPE_EDIT);
                 editIntent.putExtra(EditStockActivity.EXTRA_STOCK_ID, stockItem.getStockId());
                 startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
                 return true;
@@ -101,12 +102,17 @@ public class StockDetailActivity extends AppCompatActivity
     public void onConfirmDelete() {
         boolean success = dbHandler.deleteStockItem(stockItem.getStockId());
         if (success) {
-            Toast.makeText(this, getString(R.string.db_delete_stock_success,
-                    stockItem.getProduct().getProductName(), stockItem.getLocationName()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    getString(R.string.db_delete_stock_success,
+                            stockItem.getProduct().getProductName(),
+                            stockItem.getLocationName()),
+                    Toast.LENGTH_SHORT).show();
             UndoStack.getInstance().push(new DeleteStockAction(stockItem));
             finish();
         } else {
-            Toast.makeText(this, getString(R.string.db_error_delete, stockItem.getProduct().getProductName()),
+            Toast.makeText(this,
+                    getString(R.string.db_error_delete,
+                            stockItem.getProduct().getProductName()),
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -123,11 +129,15 @@ public class StockDetailActivity extends AppCompatActivity
 
         TextView quantityMass = findViewById(R.id.edit_text_quantity_mass);
         MassUnit massUnit = MassUnit.getMassUnit(this);
-//        quantityMass.setText(getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
+//        quantityMass.setText(getString(
+//        massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
 //                new DecimalFormat(DECIMAL_FORMAT_PATTERN).format(
 //                        Utils.convertToCurrentMassUnit(this, stockItem.getMass()))));
 
-        quantityMass.setText(getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
+        quantityMass.setText(getString(
+                massUnit == MassUnit.KG
+                        ? R.string.amount_kg
+                        : R.string.amount_lbs,
                 Utils.getMassDisplayValue(this, stockItem.getMass(), 3)));
 
         TextView quantityBoxes = findViewById(R.id.edit_text_quantity_boxes);
@@ -163,7 +173,8 @@ public class StockDetailActivity extends AppCompatActivity
     private void showConfirmDeleteDialog() {
         DialogFragment dialog = new ConfirmDeleteDialog();
         Bundle args = new Bundle();
-        args.putString(ConfirmDeleteDialog.EXTRA_NAME, stockItem.getProduct().getProductName());
+        args.putString(ConfirmDeleteDialog.EXTRA_NAME,
+                stockItem.getProduct().getProductName());
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), "confirm_delete");
     }

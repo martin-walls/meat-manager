@@ -25,7 +25,8 @@ public class AddNewMeatTypeDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View dialogView = inflater.inflate(R.layout.dialog_add_new_meat_type, null);
-        TextInputLayout inputLayoutMeatType = dialogView.findViewById(R.id.input_layout_meat_type);
+        TextInputLayout inputLayoutMeatType =
+                dialogView.findViewById(R.id.input_layout_meat_type);
         TextInputEditText editTextMeatType = dialogView.findViewById(R.id.edit_text_meat_type);
 
         builder.setView(dialogView);

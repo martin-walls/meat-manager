@@ -45,7 +45,8 @@ public class ReminderReceiver extends BroadcastReceiver {
      */
     private void showNotificationForContract(Context context, Contract contract) {
         int reminderDaysBefore = contract.getReminder();
-        String title = context.getResources().getQuantityString(R.plurals.contract_alert_upcoming_days,
+        String title = context.getResources().getQuantityString(
+                R.plurals.contract_alert_upcoming_days,
                 reminderDaysBefore, reminderDaysBefore);
 
         String text = getProductListDisplay(contract.getProductList());
@@ -53,14 +54,17 @@ public class ReminderReceiver extends BroadcastReceiver {
         int notificationId = contract.getContractId();
 
         Intent onClickIntent = new Intent(context, ContractDetailActivity.class);
-        onClickIntent.putExtra(ContractDetailActivity.EXTRA_CONTRACT_ID, contract.getContractId());
+        onClickIntent.putExtra(ContractDetailActivity.EXTRA_CONTRACT_ID,
+                contract.getContractId());
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntentWithParentStack(onClickIntent);
 
         PendingIntent pendingIntent =
-                stackBuilder.getPendingIntent(notificationId, PendingIntent.FLAG_UPDATE_CURRENT);
+                stackBuilder.getPendingIntent(notificationId,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationUtils.sendNotification(context, context.getString(R.string.channel_reminder_id),
+        NotificationUtils.sendNotification(context,
+                context.getString(R.string.channel_reminder_id),
                 title, text, R.drawable.ic_alert,
                 pendingIntent, notificationId, NotificationUtils.GROUP_CONTRACT_REMINDER);
     }

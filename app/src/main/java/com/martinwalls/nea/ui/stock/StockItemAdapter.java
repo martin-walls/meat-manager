@@ -35,7 +35,8 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
             itemNumBoxes = view.findViewById(R.id.num_boxes);
 
             LinearLayout itemLayout = view.findViewById(R.id.stock_item_layout);
-            itemLayout.setOnClickListener(v -> listener.onStockItemClicked(itemList.get(getAdapterPosition())));
+            itemLayout.setOnClickListener(v ->
+                    listener.onStockItemClicked(itemList.get(getAdapterPosition())));
         }
     }
 
@@ -56,15 +57,18 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         StockItem item = itemList.get(position);
         holder.itemName.setText(item.getProduct().getProductName());
         holder.itemLocation.setText(holder.itemLocation.getContext()
-                .getString(R.string.stock_location_tag, item.getLocationName(), item.getSupplierName()));
+                .getString(R.string.stock_location_tag,
+                        item.getLocationName(), item.getSupplierName()));
         MassUnit massUnit = MassUnit.getMassUnit(holder.itemMass.getContext());
         holder.itemMass.setText(holder.itemMass.getContext()
                 .getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
-                        Utils.getMassDisplayValue(holder.itemMass.getContext(), item.getMass(), 3)));
+                        Utils.getMassDisplayValue(
+                                holder.itemMass.getContext(), item.getMass(), 3)));
         // hide num boxes text if not specified
         if (item.getNumBoxes() >= 0) {
             holder.itemNumBoxes.setText(holder.itemNumBoxes.getContext().getResources()
-                    .getQuantityString(R.plurals.amount_boxes, item.getNumBoxes(), item.getNumBoxes()));
+                    .getQuantityString(R.plurals.amount_boxes,
+                            item.getNumBoxes(), item.getNumBoxes()));
             holder.itemNumBoxes.setVisibility(View.VISIBLE);
         } else {
             holder.itemNumBoxes.setVisibility(View.GONE);

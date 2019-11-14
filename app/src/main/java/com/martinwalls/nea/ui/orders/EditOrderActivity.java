@@ -106,7 +106,9 @@ public class EditOrderActivity extends InputFormActivity
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(editType == EDIT_TYPE_NEW ? R.string.orders_new_title : R.string.order_edit_title);
+            actionBar.setTitle(editType == EDIT_TYPE_NEW
+                    ? R.string.orders_new_title
+                    : R.string.order_edit_title);
         }
 
         addViewToHide(INPUT_PRODUCT, R.id.input_layout_product);
@@ -125,7 +127,8 @@ public class EditOrderActivity extends InputFormActivity
 
         setCurrentSearchType(INPUT_PRODUCT);
 
-        setSearchItemAdapter(new SearchItemAdapter(getSearchItemList(), getCurrentSearchType(), this));
+        setSearchItemAdapter(
+                new SearchItemAdapter(getSearchItemList(), getCurrentSearchType(), this));
         TextView emptyView = findViewById(R.id.no_results);
         CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
         recyclerView.setEmptyView(emptyView);
@@ -134,7 +137,8 @@ public class EditOrderActivity extends InputFormActivity
         setSearchResultsLayout(R.id.search_results_layout);
 
         if (MassUnit.getMassUnit(this) == MassUnit.LBS) {
-            TextInputLayout inputLayoutQuantityMass = findViewById(R.id.input_layout_quantity_mass);
+            TextInputLayout inputLayoutQuantityMass =
+                    findViewById(R.id.input_layout_quantity_mass);
             inputLayoutQuantityMass.setHint(getString(R.string.orders_input_quantity_lbs));
         }
 
@@ -150,7 +154,8 @@ public class EditOrderActivity extends InputFormActivity
                 new ProductsAddedAdapter(productsAddedList, this,
                         //todo edit button for new product as well as edit
                         editType == EDIT_TYPE_EDIT, true);
-        RecyclerView productsAddedRecyclerView = findViewById(R.id.products_added_recycler_view);
+        RecyclerView productsAddedRecyclerView =
+                findViewById(R.id.products_added_recycler_view);
         productsAddedRecyclerView.setAdapter(productsAddedAdapter);
         productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -161,7 +166,8 @@ public class EditOrderActivity extends InputFormActivity
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, day);
+            DatePickerDialog datePickerDialog =
+                    new DatePickerDialog(this, this, year, month, day);
             datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
             datePickerDialog.show();
         });
@@ -209,7 +215,8 @@ public class EditOrderActivity extends InputFormActivity
                     finish();
                 } else {
                     Toast.makeText(this,
-                            getString(R.string.db_error_insert, "order"), Toast.LENGTH_SHORT).show();
+                            getString(R.string.db_error_insert, "order"), Toast.LENGTH_SHORT)
+                            .show();
                 }
                 return true;
             case R.id.action_cancel:
@@ -238,14 +245,18 @@ public class EditOrderActivity extends InputFormActivity
         super.loadSearchItems(searchType);
         switch (searchType) {
             case INPUT_PRODUCT:
-                for (Product product : SortUtils.mergeSort(dbHandler.getAllProducts(), Product.comparatorAlpha())) {
-                    addSearchItemToList(new SearchItem(product.getProductName(), product.getProductId()));
+                for (Product product : SortUtils.mergeSort(
+                        dbHandler.getAllProducts(), Product.comparatorAlpha())) {
+                    addSearchItemToList(
+                            new SearchItem(product.getProductName(), product.getProductId()));
                 }
                 break;
             case INPUT_DESTINATION:
-                for (Location location : SortUtils.mergeSort(dbHandler.getAllLocations(Location.LocationType.Destination),
+                for (Location location : SortUtils.mergeSort(
+                        dbHandler.getAllLocations(Location.LocationType.Destination),
                         Location.comparatorAlpha())) {
-                    addSearchItemToList(new SearchItem(location.getLocationName(), location.getLocationId()));
+                    addSearchItemToList(new SearchItem(
+                            location.getLocationName(), location.getLocationId()));
                 }
                 break;
         }
@@ -303,10 +314,12 @@ public class EditOrderActivity extends InputFormActivity
         editTextProduct.setText(productAdded.getProduct().getProductName());
 
         TextInputEditText editTextQuantityMass = findViewById(R.id.edit_text_quantity_mass);
-        editTextQuantityMass.setText(Utils.getMassDisplayValue(this, productAdded.getQuantityMass(), 4));
+        editTextQuantityMass.setText(
+                Utils.getMassDisplayValue(this, productAdded.getQuantityMass(), 4));
 
         if (productAdded.getQuantityBoxes() != -1) {
-            TextInputEditText editTextQuantityBoxes = findViewById(R.id.edit_text_quantity_boxes);
+            TextInputEditText editTextQuantityBoxes =
+                    findViewById(R.id.edit_text_quantity_boxes);
             editTextQuantityBoxes.setText(String.valueOf(productAdded.getQuantityBoxes()));
         }
 
@@ -323,7 +336,8 @@ public class EditOrderActivity extends InputFormActivity
      */
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        // (month + 1) adjusts for DatePicker returning month in range 0-11, LocalDate uses 1-12
+        // (month + 1) adjusts for DatePicker returning month in range 0-11,
+        // LocalDate uses 1-12
         selectedDate = LocalDate.of(year, month + 1, day);
         TimePickerDialog timePickerDialog =
                 new TimePickerDialog(this, this, 12, 0, true);
@@ -340,13 +354,18 @@ public class EditOrderActivity extends InputFormActivity
         Calendar now = Calendar.getInstance();
         now.add(Calendar.MINUTE, 10);
         Calendar orderDateTime = Calendar.getInstance();
-        orderDateTime.set(selectedDate.getYear(), selectedDate.getMonthValue() - 1, selectedDate.getDayOfMonth(),
+        orderDateTime.set(
+                selectedDate.getYear(),
+                selectedDate.getMonthValue() - 1,
+                selectedDate.getDayOfMonth(),
                 hourOfDay, minute);
         if (
-//                selectedDate.getYear() == now.get(Calendar.YEAR) && selectedDate.getMonthValue() == now.get(Calendar.MONTH)
+//                selectedDate.getYear() == now.get(Calendar.YEAR)
+//                && selectedDate.getMonthValue() == now.get(Calendar.MONTH)
 //                && selectedDate.getDayOfMonth() == now.get(Calendar.DAY_OF_MONTH)
 //                && (hourOfDay < now.get(Calendar.HOUR_OF_DAY)
-//                || (hourOfDay == now.get(Calendar.HOUR_OF_DAY) && minute <= now.get(Calendar.MINUTE) + 10))
+//                || (hourOfDay == now.get(Calendar.HOUR_OF_DAY)
+//                && minute <= now.get(Calendar.MINUTE) + 10))
                 orderDateTime.before(now) //testme
         ) {
             Toast.makeText(this, R.string.input_error_time_must_be_future, Toast.LENGTH_SHORT)
@@ -357,7 +376,8 @@ public class EditOrderActivity extends InputFormActivity
             timePickerDialog.show();
         } else {
             selectedDateTime = LocalDateTime.of(selectedDate, LocalTime.of(hourOfDay, minute));
-            String formatDate = selectedDateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+            String formatDate = selectedDateTime.format(
+                    DateTimeFormatter.ofPattern(DATE_FORMAT));
             TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
             editTextDate.setText(formatDate);
         }
@@ -453,7 +473,8 @@ public class EditOrderActivity extends InputFormActivity
         });
 
         CheckBox checkboxCompleted = findViewById(R.id.checkbox_completed);
-        checkboxCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> hasChanged = true);
+        checkboxCompleted.setOnCheckedChangeListener(
+                (buttonView, isChecked) -> hasChanged = true);
     }
 
     /**
@@ -480,7 +501,8 @@ public class EditOrderActivity extends InputFormActivity
             inputLayoutProduct.setError(null);
         }
         for (ProductQuantity productQuantity : productsAddedList) {
-            if (productQuantity.getProduct().getProductName().equals(editTextProduct.getText().toString())) {
+            if (productQuantity.getProduct().getProductName()
+                    .equals(editTextProduct.getText().toString())) {
                 inputLayoutProduct.setError(getString(R.string.input_error_duplicate));
                 isValid = false;
                 break;
@@ -494,8 +516,10 @@ public class EditOrderActivity extends InputFormActivity
         }
 
         if (isValid) {
-            ProductQuantity productQuantity = new ProductQuantity(dbHandler.getProduct(selectedProductId),
-                    Utils.getKgsFromCurrentMassUnit(this, Double.parseDouble(editTextMass.getText().toString())),
+            ProductQuantity productQuantity = new ProductQuantity(
+                    dbHandler.getProduct(selectedProductId),
+                    Utils.getKgsFromCurrentMassUnit(this,
+                            Double.parseDouble(editTextMass.getText().toString())),
                     TextUtils.isEmpty(editTextNumBoxes.getText()) ? -1 :
                             Integer.parseInt(editTextNumBoxes.getText().toString()));
             editTextProduct.setText("");
@@ -523,7 +547,8 @@ public class EditOrderActivity extends InputFormActivity
         editTextDest.setText(orderToEdit.getDestName());
 
         TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
-        editTextDate.setText(orderToEdit.getOrderDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+        editTextDate.setText(
+                orderToEdit.getOrderDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
 
         CheckBox checkBoxCompleted = findViewById(R.id.checkbox_completed);
         checkBoxCompleted.setChecked(orderToEdit.isCompleted());
