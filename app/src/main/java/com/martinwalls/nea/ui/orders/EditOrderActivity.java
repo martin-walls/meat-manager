@@ -359,15 +359,7 @@ public class EditOrderActivity extends InputFormActivity
                 selectedDate.getMonthValue() - 1,
                 selectedDate.getDayOfMonth(),
                 hourOfDay, minute);
-        if (
-//                selectedDate.getYear() == now.get(Calendar.YEAR)
-//                && selectedDate.getMonthValue() == now.get(Calendar.MONTH)
-//                && selectedDate.getDayOfMonth() == now.get(Calendar.DAY_OF_MONTH)
-//                && (hourOfDay < now.get(Calendar.HOUR_OF_DAY)
-//                || (hourOfDay == now.get(Calendar.HOUR_OF_DAY)
-//                && minute <= now.get(Calendar.MINUTE) + 10))
-                orderDateTime.before(now) //testme
-        ) {
+        if (orderDateTime.before(now)) {
             Toast.makeText(this, R.string.input_error_time_must_be_future, Toast.LENGTH_SHORT)
                     .show();
 

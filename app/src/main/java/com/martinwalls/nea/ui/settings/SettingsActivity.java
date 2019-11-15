@@ -85,59 +85,15 @@ public class SettingsActivity extends AppCompatActivity {
                     ReminderUtils.DEFAULT_REMINDER_MIN);
             setReminderTimeSummary(hour, min);
 
-
-            /* todo remove backup options, auto backup to drive is enabled by
-                default on newer android versions
-            backupDbPref = findPreference(R.string.pref_backup_db);
-            restoreDbPref = findPreference(R.string.pref_restore_db);
-
-            if (!isExternalStoragePermissionGranted()) {
-                backupDbPref.setSummary(R.string.settings_perm_req_storage);
-                restoreDbPref.setSummary(R.string.settings_perm_req_storage);
-            }
-
-            backupDbPref.setOnPreferenceClickListener(preference -> {
-                if (!isExternalStoragePermissionGranted()) {
-                    requestExternalStoragePermission(PERMISSIONS_REQUEST_STORAGE_FOR_BACKUP);
-                } else {
-                    exportDb();
-                }
-                return true; // click handled
-            });
-
-            restoreDbPref.setOnPreferenceClickListener(preference -> {
-                if (!isExternalStoragePermissionGranted()) {
-                    requestExternalStoragePermission(PERMISSIONS_REQUEST_STORAGE_FOR_RESTORE);
-                } else {
-                    importDB();
-                }
-                return true;
-            });
-            */
         }
 
-        /*
-        @Override
-        public void onRequestPermissionsResult(int requestCode, String[] permissions,
-        int[] grantResults) {
-            if (requestCode == PERMISSIONS_REQUEST_STORAGE_FOR_BACKUP
-                    || requestCode == PERMISSIONS_REQUEST_STORAGE_FOR_RESTORE) {
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    backupDbPref.setSummary("");
-                    restoreDbPref.setSummary("");
-                    if (requestCode == PERMISSIONS_REQUEST_STORAGE_FOR_BACKUP) {
-                        exportDb();
-                    } else {
-                        importDB();
-                    }
-                } else {
-                    Toast.makeText(getContext(), R.string.perm_error_storage_denied,
-                    Toast.LENGTH_SHORT).show();
-                }
-            }
-        }*/
-
         // allow use of resource id in parameter rather than string value
+
+        /**
+         * Finds the {@link Preference} with the given key.
+         *
+         * @see #findPreference(CharSequence)
+         */
         <T extends Preference> T findPreference(@StringRes int keyId) {
             return findPreference(getString(keyId));
         }
@@ -190,39 +146,5 @@ public class SettingsActivity extends AppCompatActivity {
                     new TimePickerDialog(getContext(), listener, hour, min, true);
             timePickerDialog.show();
         }
-/*
-        private boolean isExternalStoragePermissionGranted() {
-            return ActivityCompat.checkSelfPermission(getContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED;
-        }
-
-        private void requestExternalStoragePermission(int requestCode) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-            requestCode);
-        }
-
-        private void exportDb() {
-            String outputPath = DBHandler.exportDbToFile();
-            if (outputPath.equals("")) {
-                Toast.makeText(getContext(), R.string.db_backup_error, Toast.LENGTH_SHORT)
-                .show();
-            } else {
-                Toast.makeText(getContext(), getString(R.string.db_backup_success,
-                outputPath), Toast.LENGTH_SHORT)
-                        .show();
-            }
-        }
-
-        private void importDB() {
-            boolean success = DBHandler.importDbFromFile();
-            if (success) {
-                Toast.makeText(getContext(), R.string.db_import_success, Toast.LENGTH_SHORT)
-                .show();
-            } else {
-                Toast.makeText(getContext(), R.string.db_import_error, Toast.LENGTH_SHORT)
-                .show();
-            }
-        }*/
     }
 }

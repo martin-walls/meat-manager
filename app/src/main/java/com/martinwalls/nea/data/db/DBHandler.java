@@ -6,22 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Environment;
-import android.util.Log;
-import com.martinwalls.nea.BuildConfig;
-import com.martinwalls.nea.data.models.Contract;
-import com.martinwalls.nea.data.models.Interval;
-import com.martinwalls.nea.data.models.Location;
-import com.martinwalls.nea.data.models.Order;
-import com.martinwalls.nea.data.models.Product;
-import com.martinwalls.nea.data.models.ProductQuantity;
-import com.martinwalls.nea.data.models.StockItem;
+import com.martinwalls.nea.data.models.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -32,8 +18,6 @@ import java.util.List;
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "stockDB.db";
     private static final int DATABASE_VERSION = 7;
-
-    private static final String BACKUP_DIR = "/nea/db_backup/";
 
     //region db constants
     private final class ProductsTable {
@@ -207,7 +191,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + ContractsTable.REPEAT_INTERVAL + " INTEGER NOT NULL, "
                 + ContractsTable.REPEAT_INTERVAL_UNIT + " TEXT NOT NULL, "
                 + ContractsTable.REPEAT_ON + " INTEGER, "
-                + ContractsTable.START_DATE + " INTEGER NOT NULL, " //doc put into ER diagram
+                + ContractsTable.START_DATE + " INTEGER NOT NULL, "
                 + ContractsTable.REMINDER + " INTEGER NOT NULL, "
                 + "FOREIGN KEY (" + ContractsTable.DEST_ID + ") REFERENCES "
                     + LocationsTable.TABLE_NAME + "(" + LocationsTable.ID + ") "
@@ -250,9 +234,9 @@ public class DBHandler extends SQLiteOpenHelper {
     public Product getProduct(int productId) {
         Product productResult = new Product();
         String query = "SELECT * FROM " + ProductsTable.TABLE_NAME
-                + " WHERE " + ProductsTable.ID + " = " + productId;
+                + " WHERE " + ProductsTable.ID + "=?";
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[]{productId + ""});
         if (cursor.moveToFirst()) {
             productResult.setProductId(productId);
             productResult.setProductName(
@@ -800,9 +784,9 @@ public class DBHandler extends SQLiteOpenHelper {
     public Location getLocation(int locationId) {
         Location locationResult = new Location();
         String query = "SELECT * FROM " + LocationsTable.TABLE_NAME
-                + " WHERE " + LocationsTable.ID + " = " + locationId;
+                + " WHERE " + LocationsTable.ID + "=?";
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[]{locationId + ""});
         if (cursor.moveToFirst()) {
             locationResult.setLocationId(locationId);
             locationResult.setLocationName(
@@ -1023,9 +1007,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 + " INNER JOIN " + LocationsTable.TABLE_NAME + " ON "
                 + OrdersTable.TABLE_NAME + "." + OrdersTable.DEST_ID
                 + "=" + LocationsTable.TABLE_NAME + "." + LocationsTable.ID
-                + " WHERE " + OrdersTable.TABLE_NAME + "." + OrdersTable.ID + "=" + orderId;
+                + " WHERE " + OrdersTable.TABLE_NAME + "." + OrdersTable.ID + "=?";
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[]{orderId + ""});
         boolean gotOrderData = false;
         while (cursor.moveToNext()) {
             // only query data about an order once to be more efficient
@@ -1246,10 +1230,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 + " INNER JOIN " + LocationsTable.TABLE_NAME + " ON "
                 + ContractsTable.TABLE_NAME + "." + ContractsTable.DEST_ID
                 + "=" + LocationsTable.TABLE_NAME + "." + LocationsTable.ID
-                + " WHERE " + ContractsTable.TABLE_NAME + "." + ContractsTable.ID
-                + "=" + contractId;
+                + " WHERE " + ContractsTable.TABLE_NAME + "." + ContractsTable.ID + "=?";
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[]{contractId + ""});
         boolean gotContractData = false;
         while (cursor.moveToNext()) {
             // only query contract data once
@@ -1450,86 +1433,4 @@ public class DBHandler extends SQLiteOpenHelper {
         return deletedRows == 1;
     }
     //endregion contract
-
-    //todo fix for android 10
-    // ---- or just remove, auto backup to drive is enabled in newer android versions
-    //region import/export
-    public static String exportDbToFile(String outputPath) {
-        File sdDir = Environment.getExternalStorageDirectory();
-        File dataDir = Environment.getDataDirectory();
-        FileChannel source;
-        FileChannel destination;
-
-        String currentDbPath = "/data/" + BuildConfig.APPLICATION_ID
-                + "/databases/" + DATABASE_NAME;
-
-        File currentDb = new File(dataDir, currentDbPath);
-        File outputFolder = new File(sdDir + outputPath);
-
-        boolean dirExists = outputFolder.exists();
-        if (!dirExists) {
-            dirExists = outputFolder.mkdirs();
-        }
-
-        if (dirExists) {
-            File outputDb = new File(outputFolder, DATABASE_NAME);
-            try {
-                source = new FileInputStream(currentDb).getChannel();
-                destination = new FileOutputStream(outputDb).getChannel();
-
-                destination.transferFrom(source, 0, source.size());
-
-                source.close();
-                destination.close();
-                return outputFolder.getPath();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Log.e(DBHandler.class.getSimpleName(),
-                    "Error creating dir \"" + outputFolder.getPath() + "\"");
-        }
-        return "";
-    }
-
-    public static String exportDbToFile() {
-        return exportDbToFile(BACKUP_DIR);
-    }
-
-    public static boolean importDbFromFile(String dbPath) {
-        File sdDir = Environment.getExternalStorageDirectory();
-        File dataDir = Environment.getDataDirectory();
-        FileChannel source;
-        FileChannel destination;
-
-        String currentDbPath = "/data/" + BuildConfig.APPLICATION_ID
-                + "/databases/" + DATABASE_NAME;
-
-        File currentDb = new File(dataDir, currentDbPath);
-        File backupDb = new File(sdDir, dbPath);
-
-        if (!backupDb.exists()) {
-            return false;
-        }
-
-        try {
-            source = new FileInputStream(backupDb).getChannel();
-
-            if (currentDb.delete()) {
-                destination = new FileOutputStream(currentDb).getChannel();
-                destination.transferFrom(source, 0, source.size());
-                source.close();
-                destination.close();
-                return true;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public static boolean importDbFromFile() {
-        return importDbFromFile(BACKUP_DIR + DATABASE_NAME);
-    }
-    //endregion import/export
 }
