@@ -176,7 +176,7 @@ public class EditOrderActivity extends InputFormActivity
         addProductBtn.setOnClickListener(v -> addProductToProductsAddedList());
 
         if (editType == EDIT_TYPE_NEW) {
-            findViewById(R.id.checkbox_completed).setVisibility(View.GONE);
+            findViewById(R.id.row_completed).setVisibility(View.GONE);
             findViewById(R.id.product_btn_done).setVisibility(View.GONE);
         } else {
             findViewById(R.id.product_inputs).setVisibility(View.GONE);
