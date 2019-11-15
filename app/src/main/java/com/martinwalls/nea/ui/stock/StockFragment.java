@@ -18,7 +18,7 @@ import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.StockItem;
 import com.martinwalls.nea.ui.locations.LocationsActivity;
-import com.martinwalls.nea.ui.meat_types.EditMeatTypesActivity;
+import com.martinwalls.nea.ui.meatTypes.EditMeatTypesActivity;
 import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.ui.misc.RecyclerViewDivider;
 import com.martinwalls.nea.ui.products.EditProductsActivity;

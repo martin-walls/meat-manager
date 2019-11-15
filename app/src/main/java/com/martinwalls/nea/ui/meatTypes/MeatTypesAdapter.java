@@ -1,4 +1,4 @@
-package com.martinwalls.nea.ui.meat_types;
+package com.martinwalls.nea.ui.meatTypes;
 
 import android.app.Activity;
 import android.view.LayoutInflater;

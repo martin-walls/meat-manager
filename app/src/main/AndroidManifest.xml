@@ -67,7 +67,7 @@
         <activity android:name=".ui.products.EditProductsActivity"
             android:parentActivityName=".ui.MainActivity" />
 
-        <activity android:name=".ui.meat_types.EditMeatTypesActivity"
+        <activity android:name=".ui.meatTypes.EditMeatTypesActivity"
             android:parentActivityName=".ui.MainActivity" />
 
         <activity android:name=".ui.locations.LocationsActivity"

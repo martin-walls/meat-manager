@@ -1,4 +1,4 @@
-package com.martinwalls.nea.ui.meat_types;
+package com.martinwalls.nea.ui.meatTypes;
 
 import android.os.Bundle;
 import android.view.MenuItem;
