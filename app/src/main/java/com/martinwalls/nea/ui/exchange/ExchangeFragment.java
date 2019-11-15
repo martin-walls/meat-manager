@@ -14,11 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.NumberPicker;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -91,27 +87,9 @@ public class ExchangeFragment extends Fragment {
         currencyPickerLeft = fragmentView.findViewById(R.id.currency_picker_left);
         currencyPickerRight = fragmentView.findViewById(R.id.currency_picker_right);
 
-//        initCurrencyPickers();
-
-        /*
-        SharedPreferences sharedPref = getContext().getSharedPreferences(
-                getString(R.string.pref_exchange_file_key), Context.MODE_PRIVATE);
-        String lastCurrencyLeft
-        = sharedPref.getString(getString(R.string.pref_exchange_currency_primary),
-                currencyPickerLeft.getDisplayedValues()[0]);
-        String lastCurrencyRight
-        = sharedPref.getString(getString(R.string.pref_exchange_currency_secondary),
-                currencyPickerRight.getDisplayedValues()[1]);
-
-        currencyPickerLeft.setValue(currenciesList.indexOf(lastCurrencyLeft));
-        currencyPickerRight.setValue(currenciesList.indexOf(lastCurrencyRight));
-        */
-
         ImageButton swapBtn = fragmentView.findViewById(R.id.swap_currencies);
         swapBtn.setOnClickListener(v -> swapCurrencies());
 
-//        List<Conversion> conversionList = SortUtils.mergeSort(dbHandler.getAllConversions(),
-//                (conv1, conv2) -> (int) (conv2.getTimestamp() - conv1.getTimestamp()));
         exchangeHistoryAdapter = new ExchangeHistoryAdapter(conversionList);
         loadConversionHistory();
 
@@ -224,6 +202,13 @@ public class ExchangeFragment extends Fragment {
      * the layout to show the updated rates.
      */
     public void onRatesFetched(Intent data) {
+        boolean success = data.getBooleanExtra(ApiIntentService.EXTRA_SUCCESS, false);
+
+        if (!success) {
+            Toast.makeText(getContext(), R.string.api_error, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         //noinspection unchecked
         rates = (HashMap<String, Double>)
                 data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);

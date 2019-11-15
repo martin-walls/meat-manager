@@ -79,4 +79,24 @@ public class JsonParser {
 
         return rates;
     }
+
+    /**
+     * Returns the {@link RequestStatus} of the JSON request.
+     */
+    static RequestStatus getRequestStatus(String json) {
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            boolean success = jsonObject.getBoolean("success");
+            if (success) {
+                return RequestStatus.OK;
+            } else {
+                JSONObject errorObject = jsonObject.getJSONObject("error");
+                int errorCode = errorObject.getInt("code");
+                return RequestStatus.getStatusByCode(errorCode);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return RequestStatus.UnknownError;
+    }
 }

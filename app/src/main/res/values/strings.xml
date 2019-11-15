@@ -272,6 +272,7 @@
         No internet connection available.
         \nPlease connect to WiFi or mobile data and try again.
     </string>
+    <string name="api_error">Error fetching data.</string>
 
     <!-- 5 significant figures -->
     <string name="exchange_rate">%.5G</string>

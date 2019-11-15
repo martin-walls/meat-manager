@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
+import androidx.annotation.Nullable;
 import com.martinwalls.nea.data.cache.CacheHelper;
 import com.martinwalls.nea.data.db.ExchangeDBHandler;
 import com.martinwalls.nea.data.models.Currency;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ApiIntentService extends IntentService {
 
     public static final String EXTRA_PENDING_RESULT = "pending_result";
+    public static final String EXTRA_SUCCESS = "success";
     public static final String EXTRA_RESULT = "result";
     public static final int RESULT_CODE = 0;
 
@@ -59,7 +61,20 @@ public class ApiIntentService extends IntentService {
             // make new API request as cache is > 1 hr old
             jsonResponse = fetchExchangeJsonFromApi();
         }
-        
+
+        RequestStatus status = JsonParser.getRequestStatus(jsonResponse);
+        // if request error, return
+        if (!status.isSuccess()) {
+            Intent result = new Intent();
+            result.putExtra(EXTRA_SUCCESS, false);
+            try {
+                reply.send(this, RESULT_CODE, result);
+            } catch (PendingIntent.CanceledException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
         HashMap<String, Double> rates = JsonParser.parseExchangeRates(jsonResponse);
 
         // save API response to cache
@@ -75,19 +90,22 @@ public class ApiIntentService extends IntentService {
 
             List<Currency> currencyList = fetchCurrencies();
 
-            // set default favourited currencies
-            for (Currency currency : currencyList) {
-                if (Arrays.asList(DEFAULT_FAV_CURRENCIES).contains(currency.getCode())) {
-                    currency.setFavourite(true);
-                } else {
-                    currency.setFavourite(false);
+            if (currencyList != null) {
+                // set default favourited currencies
+                for (Currency currency : currencyList) {
+                    if (Arrays.asList(DEFAULT_FAV_CURRENCIES).contains(currency.getCode())) {
+                        currency.setFavourite(true);
+                    } else {
+                        currency.setFavourite(false);
+                    }
                 }
-            }
 
-            dbHandler.addAllCurrencies(currencyList);
+                dbHandler.addAllCurrencies(currencyList);
+            }
         }
 
         Intent result = new Intent();
+        result.putExtra(EXTRA_SUCCESS, true);
         result.putExtra(EXTRA_RESULT, rates);
 
         try {
@@ -135,8 +153,10 @@ public class ApiIntentService extends IntentService {
     }
 
     /**
-     * Fetches the supported currencies from the API.
+     * Fetches the supported currencies from the API. Returns {@code null} if
+     * there is an error with the API request.
      */
+    @Nullable
     private List<Currency> fetchCurrencies() {
         Uri baseUri = Uri.parse(REQUEST_URL);
         Uri.Builder builder = baseUri.buildUpon();
@@ -146,6 +166,11 @@ public class ApiIntentService extends IntentService {
 
         String jsonResponse = QueryUtils.fetchJsonResponse(builder.toString());
 
-        return JsonParser.parseCurrencies(jsonResponse);
+        RequestStatus status = JsonParser.getRequestStatus(jsonResponse);
+        if (status.isSuccess()) {
+            return JsonParser.parseCurrencies(jsonResponse);
+        } else {
+            return null;
+        }
     }
 }
