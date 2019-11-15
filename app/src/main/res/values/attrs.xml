@@ -17,15 +17,20 @@
     <attr name="menuPopupOverlay" format="reference" />
 
     <attr name="dashboardGraphAmountBarColor" format="reference" />
-    <attr name="dashboardGraphReqBarColor" format="reference" />
+    <attr name="dashboardGraphMoreReqBarColor" format="reference" />
+    <attr name="dashboardGraphLessReqBarColor" format="reference" />
+
     <attr name="dashboardGraphBarInnerTextColor" format="reference" />
     <attr name="dashboardGraphBarOuterTextColor" format="reference" />
+
     <attr name="dashboardAmountTooltipColor" format="reference" />
     <attr name="dashboardAmountTooltipTextColor" format="reference" />
-    <attr name="dashboardReqTooltipColor" format="reference" />
-    <attr name="dashboardReqTooltipTextColor" format="reference" />
 
-    <attr name="dashboardGreen" format="reference|color" />
+    <attr name="dashboardMoreReqTooltipColor" format="reference" />
+    <attr name="dashboardMoreReqTooltipTextColor" format="reference" />
+
+    <attr name="dashboardLessReqTooltipColor" format="reference" />
+    <attr name="dashboardLessReqTooltipTextColor" format="reference" />
 
     <declare-styleable name="AddNewTextView">
         <attr name="searchItemType" format="string" />

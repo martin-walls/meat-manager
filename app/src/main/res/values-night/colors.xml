@@ -13,7 +13,7 @@
     <!--<color name="selected_item">#424242</color>-->
 
     <color name="dashboard_graph_bar">#5EA4E2</color>
-    <color name="dashboard_graph_bar_req">#D35454</color>
+    <color name="dashboard_graph_bar_more_req">#D35454</color>
     <color name="dashboard_tooltip">#bbdefb</color>
-    <color name="dashboard_tooltip_req">#C62828</color>
+    <color name="dashboard_tooltip_more_req">#C62828</color>
 </resources>

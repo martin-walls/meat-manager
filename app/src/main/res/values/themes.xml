@@ -53,11 +53,13 @@
         <item name="dashboardGraphBarInnerTextColor">?textColorPrimary</item>
         <item name="dashboardGraphBarOuterTextColor">?textColorPrimary</item>
 
-        <item name="dashboardGraphReqBarColor">@color/dashboard_graph_bar_req</item>
-        <item name="dashboardReqTooltipColor">@color/dashboard_tooltip_req</item>
-        <item name="dashboardReqTooltipTextColor">@color/white</item>
+        <item name="dashboardGraphMoreReqBarColor">@color/dashboard_graph_bar_more_req</item>
+        <item name="dashboardMoreReqTooltipColor">@color/dashboard_tooltip_more_req</item>
+        <item name="dashboardMoreReqTooltipTextColor">@color/white</item>
 
-        <item name="dashboardGreen">#66BB6A</item>
+        <item name="dashboardGraphLessReqBarColor">@color/dashboard_graph_bar_less_req</item>
+        <item name="dashboardLessReqTooltipColor">@color/dashboard_tooltip_less_req</item>
+        <item name="dashboardLessReqTooltipTextColor">@color/white</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

@@ -32,8 +32,8 @@ public class BarChartView extends View {
     // colour of bar to show amount of stock held
     private Paint amountBarFillPaint;
     // colour of required bar
-    private Paint reqBarFillPaint;
-    private Paint greenReqBarFillPaint;
+    private Paint moreReqBarFillPaint;
+    private Paint lessReqBarFillPaint;
 
     // text colour outside bar
     private Paint barOuterLabelPaint;
@@ -46,9 +46,12 @@ public class BarChartView extends View {
     private Paint amountTooltipTextPaint;
 
     // colour of tooltip for required bar
-    private Paint reqTooltipFillPaint;
+    private Paint moreReqTooltipFillPaint;
     // text colour in required tooltip
-    private Paint reqTooltipTextPaint;
+    private Paint moreReqTooltipTextPaint;
+
+    private Paint lessReqTooltipFillPaint;
+    private Paint lessReqTooltipTextPaint;
 
     // thickness of each bar, in dp
     private final int barWidthDp = 48;
@@ -114,33 +117,37 @@ public class BarChartView extends View {
         int amountBarColor = Utils.getColorFromTheme(context,
                 R.attr.dashboardGraphAmountBarColor);
         int reqBarColor = Utils.getColorFromTheme(context,
-                R.attr.dashboardGraphReqBarColor);
+                R.attr.dashboardGraphMoreReqBarColor);
+        int lessReqBarColor = Utils.getColorFromTheme(context,
+                R.attr.dashboardGraphLessReqBarColor);
+
         int barOuterTextColor = Utils.getColorFromTheme(context,
                 R.attr.dashboardGraphBarOuterTextColor);
         int barInnerTextColor = Utils.getColorFromTheme(context,
                 R.attr.dashboardGraphBarInnerTextColor);
+
         int amountTooltipFillColor = Utils.getColorFromTheme(context,
                 R.attr.dashboardAmountTooltipColor);
         int amountTooltipTextColor = Utils.getColorFromTheme(context,
                 R.attr.dashboardAmountTooltipTextColor);
         int reqTooltipFillColor = Utils.getColorFromTheme(context,
-                R.attr.dashboardReqTooltipColor);
+                R.attr.dashboardMoreReqTooltipColor);
         int reqTooltipTextColor = Utils.getColorFromTheme(context,
-                R.attr.dashboardReqTooltipTextColor);
+                R.attr.dashboardMoreReqTooltipTextColor);
+        int lessReqTooltipFillColor = Utils.getColorFromTheme(context,
+                R.attr.dashboardLessReqTooltipColor);
+        int lessReqTooltipTextColor = Utils.getColorFromTheme(context,
+                R.attr.dashboardLessReqTooltipTextColor);
 
         // bar paints
         amountBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         amountBarFillPaint.setColor(amountBarColor);
 
-        reqBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        reqBarFillPaint.setColor(reqBarColor);
+        moreReqBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        moreReqBarFillPaint.setColor(reqBarColor);
 
-        //////////////////////
-        // todo finish implementing req bar when more held than required
-        greenReqBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-        int greenColor = Utils.getColorFromTheme(context, R.attr.dashboardGreen);
-        greenReqBarFillPaint.setColor(greenColor);
+        lessReqBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        lessReqBarFillPaint.setColor(lessReqBarColor);
 
         // label paints
         barOuterLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -162,13 +169,21 @@ public class BarChartView extends View {
         amountTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         amountTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
-        reqTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        reqTooltipFillPaint.setColor(reqTooltipFillColor);
+        moreReqTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        moreReqTooltipFillPaint.setColor(reqTooltipFillColor);
 
-        reqTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        reqTooltipTextPaint.setColor(reqTooltipTextColor);
-        reqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        reqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+        moreReqTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        moreReqTooltipTextPaint.setColor(reqTooltipTextColor);
+        moreReqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        moreReqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+
+        lessReqTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        lessReqTooltipFillPaint.setColor(lessReqTooltipFillColor);
+
+        lessReqTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        lessReqTooltipTextPaint.setColor(lessReqTooltipTextColor);
+        lessReqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        lessReqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
 
         // spacing and size values
         barWidth = Utils.convertDpToPixelSize(barWidthDp, context);
@@ -210,15 +225,14 @@ public class BarChartView extends View {
             BarChartEntry entry = dataSet.get(pos);
 
 
-            // draw bar for amount of stock required
-            drawReqBar(c, entry, pos);
+            // draw bar for amount of stock required if more than amount held
+            drawMoreReqBar(c, entry, pos);
 
             // draw bar for amount of stock held
             drawAmountBar(c, entry, pos);
 
-            //todo show green req bar if there is more stock than needed
-            ///////////////////////////////////////////
-            drawGreenReqBar(c, entry, pos);
+            // draw bar for amount of stock required if less than amount held
+            drawLessReqBar(c, entry, pos);
 
             // draw bar label
             drawLabelText(c, entry, pos);
@@ -296,14 +310,23 @@ public class BarChartView extends View {
     }
 
     /**
-     * Calculates whether the required amount bar should be shown for this data.
+     * Calculates whether the required amount bar should be shown for this data
+     * and is more than the amount of stock held.
      */
-    private boolean isReqBarShown(BarChartEntry data) {
+    private boolean isMoreReqBarShown(BarChartEntry data) {
         return data.getAmountRequired() > data.getAmount();
     }
 
-    // bar drawing methods
+    /**
+     * Calculates whether the required amount bar should be shown for this data
+     * and is less than the amount of stock held.
+     */
+    private boolean isLessReqBarShown(BarChartEntry data) {
+        return data.getAmountRequired() > 0
+                && data.getAmountRequired() < data.getAmount();
+    }
 
+    //region bars
     /**
      * Calculates the y-value of the top edge of the bar at position {@code pos}.
      */
@@ -335,21 +358,24 @@ public class BarChartView extends View {
     }
 
     /**
-     * Draws a required amount bar for {@code data} at position {@code pos} if
-     * it should be shown.
+     * Draws a required amount bar for {@code data} at position {@code pos}
+     * outside the amount bar, if there is less stock than required.
      */
-    private void drawReqBar(Canvas c, BarChartEntry data, int pos) {
-        if (isReqBarShown(data)) {
+    private void drawMoreReqBar(Canvas c, BarChartEntry data, int pos) {
+        if (isMoreReqBarShown(data)) {
             float length = getBarLength(data.getAmountRequired());
-            drawBar(c, 0, getBarTop(pos), length, getBarBottom(pos), reqBarFillPaint);
+            drawBar(c, 0, getBarTop(pos), length, getBarBottom(pos), moreReqBarFillPaint);
         }
     }
 
-    //doc needed
-    private void drawGreenReqBar(Canvas c, BarChartEntry data, int pos) {
+    /**
+     * Draws a required amount bar for {@code data} at position {@code pos}
+     * inside the amount bar, if there is more stock than required.
+     */
+    private void drawLessReqBar(Canvas c, BarChartEntry data, int pos) {
         if (data.getAmountRequired() <= data.getAmount()) {
             float length = getBarLength(data.getAmountRequired());
-            drawBar(c, 0, getBarTop(pos), length, getBarBottom(pos), greenReqBarFillPaint);
+            drawBar(c, 0, getBarTop(pos), length, getBarBottom(pos), lessReqBarFillPaint);
         }
     }
 
@@ -360,9 +386,9 @@ public class BarChartView extends View {
         float length = getBarLength(data.getAmount());
         drawBar(c, 0, getBarTop(pos), length, getBarBottom(pos), amountBarFillPaint);
     }
+    //endregion bars
 
-    // label drawing methods
-
+    //region label
     /**
      * Calculates the pixel width of a bar label including its margin.
      */
@@ -459,9 +485,9 @@ public class BarChartView extends View {
             c.drawText(label, labelX, labelY, barOuterLabelPaint);
         }
     }
+    //endregion label
 
-    // tooltip drawing methods
-
+    //region tooltips
     /**
      * Calculates the width of a tooltip with text bounds stored in
      * {@link #tooltipTextBounds}.
@@ -501,7 +527,7 @@ public class BarChartView extends View {
      */
     private enum TooltipPos {
         INSIDE_NORMAL,
-        INSIDE_REQ,
+        INSIDE_MORE_REQ,
         OUTSIDE_REQ_LABEL_IN,
         OUTSIDE_REQ_LABEL_OUT,
         OUTSIDE_NO_REQ_LABEL_IN,
@@ -521,21 +547,21 @@ public class BarChartView extends View {
                         && getTooltipWidthWithMargin() < getBarLength(data.getAmount()))) {
             return TooltipPos.INSIDE_NORMAL;
         } else if ( // tooltip can't fit outside req bar (if shown)
-                isReqBarShown(data)
+                isMoreReqBarShown(data)
                 && getTooltipWidthWithMargin()
                         > getWidth() - getBarLength(data.getAmountRequired())) {
-            return TooltipPos.INSIDE_REQ;
+            return TooltipPos.INSIDE_MORE_REQ;
         } else if (// not enough space inside amount bar for tooltip
                 // and not shown inside required bar
                 // and bar label is shown inside
                 labelPos == LabelPos.INSIDE_NORMAL) {
-            if (isReqBarShown(data)) {
+            if (isMoreReqBarShown(data)) {
                 return TooltipPos.OUTSIDE_REQ_LABEL_IN;
             } else {
                 return TooltipPos.OUTSIDE_NO_REQ_LABEL_IN;
             }
         } else { // not shown inside amount or required bars, and bar label is outside
-            if (isReqBarShown(data)) {
+            if (isMoreReqBarShown(data)) {
                 return TooltipPos.OUTSIDE_REQ_LABEL_OUT;
             } else {
                 return TooltipPos.OUTSIDE_NO_REQ_LABEL_OUT;
@@ -554,7 +580,7 @@ public class BarChartView extends View {
         switch (getTooltipPos(data, labelPos)) {
             case INSIDE_NORMAL:
                 return barLength - getTooltipWidth() - tooltipMargin;
-            case INSIDE_REQ:
+            case INSIDE_MORE_REQ:
                 return reqBarLength - (getReqTooltipWidth() + tooltipMargin)
                         - (getTooltipWidth() + tooltipMargin);
             case OUTSIDE_REQ_LABEL_IN:
@@ -639,21 +665,59 @@ public class BarChartView extends View {
 
     /**
      * Calculates the x-value of the left edge of the required tooltip.
+     * <p>Depending on space, this may be:
+     * <ul>
+     *     <li>To the right of the amount tooltip
+     *     <li>Inside the more required bar, if shown
+     *     <li>Inside the amount bar with the amount tooltip
+     *     <li>Outside the bar when the amount tooltip is inside the bar
      */
     private float getReqTooltipLeft(BarChartEntry data, LabelPos labelPos,
                                     float normalTooltipRight) {
-        TooltipPos tooltipPos = getTooltipPos(data, labelPos);
+        TooltipPos amountTooltipPos = getTooltipPos(data, labelPos);
 
         float barLength = getBarLength(data.getAmount());
-        float reqBarLength = getBarLength(data.getAmountRequired());
 
-        if (getReqTooltipWidthWithMargin() < reqBarLength - barLength) {
-            return reqBarLength - getReqTooltipWidth() - tooltipMargin;
-        } else if (tooltipPos == TooltipPos.INSIDE_NORMAL) {
-            return reqBarLength + tooltipMargin;
-        } else {
+        if (isMoreReqBarShown(data)) {
+            float reqBarLength = getBarLength(data.getAmountRequired());
+
+            // if required tooltip fits inside more required bar
+            if (getReqTooltipWidthWithMargin() < reqBarLength - barLength) {
+                return reqBarLength - getReqTooltipWidth() - tooltipMargin;
+            } else if (amountTooltipPos == TooltipPos.INSIDE_NORMAL) {
+                return reqBarLength + tooltipMargin;
+            } else {
+                return normalTooltipRight + tooltipMargin;
+            }
+        } else if (isLessReqBarShown(data)) {
+            // if amount tooltip is inside amount bar
+            if (amountTooltipPos == TooltipPos.INSIDE_NORMAL) {
+                // if bar label is inside amount bar
+                if (labelPos == LabelPos.INSIDE_NORMAL) {
+                    // if required tooltip fits inside amount bar with label and amount tooltip
+                    if (getReqTooltipWidthWithMargin()
+                            < barLength - getTooltipWidthWithMargin()
+                                - getLabelTextWidth(true)) {
+                        return normalTooltipRight - getTooltipWidth()
+                                - getReqTooltipWidthWithMargin();
+                    } else /* tooltip doesn't fit inside */ {
+                        return barLength + tooltipMargin;
+                    }
+                } else /* label outside */ {
+                    // if required tooltip fits inside amount bar with amount tooltip
+                    if (getReqTooltipWidthWithMargin()
+                            < barLength - getTooltipWidthWithMargin()) {
+                        return normalTooltipRight - getTooltipWidth()
+                                - getReqTooltipWidthWithMargin();
+                    } else /* tooltip doesn't fit inside */ {
+                        return barLength + getLabelTextWidth(false) + tooltipMargin;
+                    }
+                }
+            }
+            // if none of the above conditions have matched
             return normalTooltipRight + tooltipMargin;
         }
+        return 0;
     }
 
     /**
@@ -677,7 +741,7 @@ public class BarChartView extends View {
                 massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
                 decimalFormat.format(
                         Utils.convertToCurrentMassUnit(context, data.getAmountRequired())));
-        reqTooltipTextPaint.getTextBounds(text, 0, text.length(), reqTooltipTextBounds);
+        moreReqTooltipTextPaint.getTextBounds(text, 0, text.length(), reqTooltipTextBounds);
 
         float left = getReqTooltipLeft(data, getLabelPos(data), normalTooltipRight);
         float top = getTooltipTop(pos);
@@ -687,9 +751,15 @@ public class BarChartView extends View {
         float textX = left + tooltipPadding;
         float textY = getLabelY(pos);
 
-        drawTooltip(c,
-                left, top, right, bottom, reqTooltipFillPaint,
-                text, textX, textY, reqTooltipTextPaint);
+        if (isMoreReqBarShown(data)) {
+            drawTooltip(c,
+                    left, top, right, bottom, moreReqTooltipFillPaint,
+                    text, textX, textY, moreReqTooltipTextPaint);
+        } else if (isLessReqBarShown(data)) {
+            drawTooltip(c,
+                    left, top, right, bottom, lessReqTooltipFillPaint,
+                    text, textX, textY, lessReqTooltipTextPaint);
+        }
     }
 
     /**
@@ -700,9 +770,13 @@ public class BarChartView extends View {
         amountTooltipTextPaint.setAlpha(tooltipAlpha);
         float normalTooltipRight = drawAmountTooltip(c, data, pos);
 
-        if (isReqBarShown(data)) {
-            reqTooltipFillPaint.setAlpha(tooltipAlpha);
-            reqTooltipTextPaint.setAlpha(tooltipAlpha);
+        if (isMoreReqBarShown(data)) {
+            moreReqTooltipFillPaint.setAlpha(tooltipAlpha);
+            moreReqTooltipTextPaint.setAlpha(tooltipAlpha);
+            drawReqTooltip(c, data, pos, normalTooltipRight);
+        } else if (isLessReqBarShown(data)) {
+            lessReqTooltipFillPaint.setAlpha(tooltipAlpha);
+            lessReqTooltipTextPaint.setAlpha(tooltipAlpha);
             drawReqTooltip(c, data, pos, normalTooltipRight);
         }
     }
@@ -716,9 +790,13 @@ public class BarChartView extends View {
         amountTooltipTextPaint.setAlpha(prevTooltipAlpha);
         float normalTooltipRight = drawAmountTooltip(c, data, pos);
 
-        if (isReqBarShown(data)) {
-            reqTooltipFillPaint.setAlpha(prevTooltipAlpha);
-            reqTooltipTextPaint.setAlpha(prevTooltipAlpha);
+        if (isMoreReqBarShown(data)) {
+            moreReqTooltipFillPaint.setAlpha(prevTooltipAlpha);
+            moreReqTooltipTextPaint.setAlpha(prevTooltipAlpha);
+            drawReqTooltip(c, data, pos, normalTooltipRight);
+        } else if (isLessReqBarShown(data)) {
+            lessReqTooltipFillPaint.setAlpha(prevTooltipAlpha);
+            lessReqTooltipTextPaint.setAlpha(prevTooltipAlpha);
             drawReqTooltip(c, data, pos, normalTooltipRight);
         }
     }
@@ -745,4 +823,5 @@ public class BarChartView extends View {
             }
         }
     }
+    //endregion tooltips
 }
