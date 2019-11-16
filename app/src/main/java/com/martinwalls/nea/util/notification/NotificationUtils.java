@@ -10,6 +10,8 @@ public class NotificationUtils {
 
     public static final String GROUP_CONTRACT_REMINDER =
             "com.martinwalls.nea.CONTRACT_REMINDER";
+    public static final String GROUP_ORDER_REMINDER =
+            "com.martinwalls.nea.ORDER_REMINDER";
 
     private NotificationUtils() {}
 

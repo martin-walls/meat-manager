@@ -187,6 +187,8 @@
     <string name="order_edit_title">Edit order</string>
     <string name="order_details_title">Order details</string>
 
+    <string name="order_alert_upcoming_tomorrow">Upcoming order tomorrow</string>
+
     <!-- Contracts page -->
     <string name="contracts_title">Contracts</string>
     <string name="contracts_empty">No contracts to show</string>

@@ -8,8 +8,10 @@ import androidx.core.app.TaskStackBuilder;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Contract;
+import com.martinwalls.nea.data.models.Order;
 import com.martinwalls.nea.data.models.ProductQuantity;
 import com.martinwalls.nea.ui.contracts.ContractDetailActivity;
+import com.martinwalls.nea.ui.orders.OrderDetailActivity;
 
 import java.util.List;
 
@@ -27,11 +29,23 @@ public class ReminderReceiver extends BroadcastReceiver {
 
         List<Contract> contractList = dbHandler.getAllContracts();
 
+        int notificationId = 1;
+
         // show a notification for each upcoming contract
         for (Contract contract : contractList) {
             int reminderDaysBefore = contract.getReminder();
             if (contract.getDaysToNextRepeat() == reminderDaysBefore) {
-                showNotificationForContract(context, contract);
+                showNotificationForContract(context, contract, notificationId);
+                notificationId++;
+            }
+        }
+
+        List<Order> orderList = dbHandler.getAllOrdersNotCompleted();
+
+        for (Order order : orderList) {
+            if (order.getDaysToOrderDate() == 1) {
+                showNotificationForOrder(context, order, notificationId);
+                notificationId++;
             }
         }
 
@@ -43,15 +57,13 @@ public class ReminderReceiver extends BroadcastReceiver {
      * Shows a notification for a contract, showing how many days in advance
      * it is, and which products it is for.
      */
-    private void showNotificationForContract(Context context, Contract contract) {
+    private void showNotificationForContract(Context context, Contract contract, int id) {
         int reminderDaysBefore = contract.getReminder();
         String title = context.getResources().getQuantityString(
                 R.plurals.contract_alert_upcoming_days,
                 reminderDaysBefore, reminderDaysBefore);
 
         String text = getProductListDisplay(contract.getProductList());
-
-        int notificationId = contract.getContractId();
 
         Intent onClickIntent = new Intent(context, ContractDetailActivity.class);
         onClickIntent.putExtra(ContractDetailActivity.EXTRA_CONTRACT_ID,
@@ -60,18 +72,35 @@ public class ReminderReceiver extends BroadcastReceiver {
         stackBuilder.addNextIntentWithParentStack(onClickIntent);
 
         PendingIntent pendingIntent =
-                stackBuilder.getPendingIntent(notificationId,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
+                stackBuilder.getPendingIntent(id, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationUtils.sendNotification(context,
                 context.getString(R.string.channel_reminder_id),
                 title, text, R.drawable.ic_alert,
-                pendingIntent, notificationId, NotificationUtils.GROUP_CONTRACT_REMINDER);
+                pendingIntent, id, NotificationUtils.GROUP_CONTRACT_REMINDER);
+    }
+
+    private void showNotificationForOrder(Context context, Order order, int id) {
+        String title = context.getString(R.string.order_alert_upcoming_tomorrow);
+        String text = getProductListDisplay(order.getProductList());
+
+        Intent onClickIntent = new Intent(context, OrderDetailActivity.class);
+        onClickIntent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, order.getOrderId());
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addNextIntentWithParentStack(onClickIntent);
+
+        PendingIntent pendingIntent
+                = stackBuilder.getPendingIntent(id, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationUtils.sendNotification(context,
+                context.getString(R.string.channel_reminder_id),
+                title, text, R.drawable.ic_alert,
+                pendingIntent, id, NotificationUtils.GROUP_ORDER_REMINDER);
     }
 
     /**
      * Gets a string representation of all the products connected to a
-     * contract, comma separated, to display in the body of the notification.
+     * contract/order, comma separated, to display in the body of the notification.
      */
     private String getProductListDisplay(List<ProductQuantity> productList) {
         StringBuilder builder = new StringBuilder();

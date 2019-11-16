@@ -113,6 +113,25 @@ public class BarChartView extends View {
     private void init(Context context) {
         this.context = context;
 
+        initPaints();
+
+        // spacing and size values
+        barWidth = Utils.convertDpToPixelSize(barWidthDp, context);
+        // spacing is 1/10 of bar thickness
+        barSpacing = barWidth * 0.1f;
+        barCornerRadius = Utils.convertDpToPixelSize(8, context);
+
+        labelMarginInside = Utils.convertDpToPixelSize(12, context);
+        labelMarginOutside = Utils.convertDpToPixelSize(8, context);
+
+        tooltipMargin = Utils.convertDpToPixelSize(8, context);
+        tooltipPadding = Utils.convertDpToPixelSize(8, context);
+
+        // round to 2 d.p.
+        decimalFormat = new DecimalFormat("#.##");
+    }
+
+    private void initPaints() {
         // get colours from theme attrs
         int amountBarColor = Utils.getColorFromTheme(context,
                 R.attr.dashboardGraphAmountBarColor);
@@ -184,21 +203,6 @@ public class BarChartView extends View {
         lessReqTooltipTextPaint.setColor(lessReqTooltipTextColor);
         lessReqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         lessReqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
-
-        // spacing and size values
-        barWidth = Utils.convertDpToPixelSize(barWidthDp, context);
-        // spacing is 1/10 of bar thickness
-        barSpacing = barWidth * 0.1f;
-        barCornerRadius = Utils.convertDpToPixelSize(8, context);
-
-        labelMarginInside = Utils.convertDpToPixelSize(12, context);
-        labelMarginOutside = Utils.convertDpToPixelSize(8, context);
-
-        tooltipMargin = Utils.convertDpToPixelSize(8, context);
-        tooltipPadding = Utils.convertDpToPixelSize(8, context);
-
-        // round to 2 d.p.
-        decimalFormat = new DecimalFormat("#.##");
     }
 
     /**
@@ -223,7 +227,6 @@ public class BarChartView extends View {
 
         for (int pos = 0; pos < dataSet.size(); pos++) {
             BarChartEntry entry = dataSet.get(pos);
-
 
             // draw bar for amount of stock required if more than amount held
             drawMoreReqBar(c, entry, pos);

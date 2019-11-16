@@ -1,7 +1,9 @@
 package com.martinwalls.nea.data.models;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -86,6 +88,12 @@ public class Order implements Serializable {
 
     public void addProduct(Product product, double quantityMass, int quantityBoxes) {
         productList.add(new ProductQuantity(product, quantityMass, quantityBoxes));
+    }
+
+    public int getDaysToOrderDate() {
+        LocalDate today = LocalDate.now();
+        Period period = Period.between(today, orderDate.toLocalDate());
+        return period.getDays();
     }
 
     /**
