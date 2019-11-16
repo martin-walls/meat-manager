@@ -309,6 +309,7 @@ public class BarChartView extends View {
         dataSet.clear();
         dataSet.addAll(newDataSet);
         resetSelectedItem();
+        requestLayout();
         invalidate();
     }
 
