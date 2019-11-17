@@ -24,7 +24,6 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
     private ExchangeDBHandler dbHandler;
 
     private CurrencyAdapter currencyAdapter;
-    private List<Currency> currencyList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +34,7 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
 
         dbHandler = new ExchangeDBHandler(this);
 
-        currencyList = SortUtils.mergeSort(dbHandler.getCurrencies(),
+        List<Currency> currencyList = SortUtils.mergeSort(dbHandler.getCurrencies(),
                 (currency1, currency2) -> currency1.getCode().compareTo(currency2.getCode()));
 
         currencyAdapter = new CurrencyAdapter(currencyList, this);

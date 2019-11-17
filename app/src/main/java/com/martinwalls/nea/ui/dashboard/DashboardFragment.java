@@ -96,7 +96,6 @@ public class DashboardFragment extends Fragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //todo add sort by location
         switch (item.getItemId()) {
             case R.id.action_sort_by_name:
                 setSortMode(SortUtils.SORT_NAME);

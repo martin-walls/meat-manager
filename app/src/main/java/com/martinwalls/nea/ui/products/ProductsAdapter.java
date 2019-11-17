@@ -8,10 +8,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
-import com.martinwalls.nea.ui.BaseAdapter;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Product;
+import com.martinwalls.nea.ui.BaseAdapter;
 
 import java.util.List;
 

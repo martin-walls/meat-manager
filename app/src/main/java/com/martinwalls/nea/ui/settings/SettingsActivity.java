@@ -34,8 +34,6 @@ public class SettingsActivity extends AppCompatActivity {
      * Sets the app theme, to be called when the activity starts so the theme
      * changes when the user changes the dark theme preference.
      */
-    //todo could be replaced with setOnPreferenceChangedListener to
-    // listen for the preference value to change??
     private void setDarkTheme() {
         EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
         DarkTheme.setDarkTheme(
@@ -43,14 +41,9 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
-        private final int PERMISSIONS_REQUEST_STORAGE_FOR_BACKUP = 1;
-        private final int PERMISSIONS_REQUEST_STORAGE_FOR_RESTORE = 2;
-
         private EasyPreferences prefs;
 
         private Preference reminderTimePref;
-        private Preference backupDbPref;
-        private Preference restoreDbPref;
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {

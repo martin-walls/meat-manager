@@ -5,22 +5,32 @@
 
     <item
         android:id="@+id/action_sort_by"
-        android:title="@string/action_sort_by"
         android:icon="@drawable/ic_sort"
+        android:title="@string/action_sort_by"
         app:showAsAction="ifRoom"
         >
         <menu>
-            <group android:id="@+id/group_sort_by"
-                android:checkableBehavior="single">
+            <group
+                android:id="@+id/group_sort_by"
+                android:checkableBehavior="single"
+                >
 
-                <item android:id="@+id/action_sort_by_name"
+                <item
+                    android:id="@+id/action_sort_by_name"
                     android:title="@string/action_sort_by_name"
                     />
 
-                <item android:id="@+id/action_sort_by_meat_type"
+                <item
+                    android:id="@+id/action_sort_by_meat_type"
                     android:title="@string/action_sort_by_meat_type"
                     />
             </group>
         </menu>
     </item>
+
+    <item
+        android:id="@+id/action_add_meat_type"
+        android:title="@string/action_add_meat_type"
+        app:showAsAction="never"
+        />
 </menu>

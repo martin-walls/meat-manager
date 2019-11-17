@@ -39,6 +39,8 @@ public class ExchangeFragment extends Fragment {
 
     private static final int REQUEST_REFRESH_ON_DONE = 1;
 
+    private static final int HISTORY_WEEKS_TO_SHOW = 2;
+
     private ExchangeDBHandler dbHandler;
     private EasyPreferences prefs;
 
@@ -359,7 +361,8 @@ public class ExchangeFragment extends Fragment {
     private void loadConversionHistory() {
         conversionList.clear();
         conversionList.addAll(SortUtils.mergeSort(
-                dbHandler.getAllConversions(), Conversion.comparatorTime()));
+                dbHandler.getAllConversionsFromLastWeeks(HISTORY_WEEKS_TO_SHOW),
+                Conversion.comparatorTime()));
         exchangeHistoryAdapter.notifyDataSetChanged();
     }
 }

@@ -27,6 +27,10 @@ public final class EasyPreferences {
         return new EasyPreferences(preferences, resources);
     }
 
+    /**
+     * Private constructor as this should only be created via the factory
+     * method and not instantiated.
+     */
     private EasyPreferences(SharedPreferences prefs, Resources res) {
         this.prefs = prefs;
         this.res = res;
@@ -103,6 +107,7 @@ public final class EasyPreferences {
         prefs.edit().clear().apply();
     }
 
+    //doc remove
     public void addOnPreferenceChangedListener(
             SharedPreferences.OnSharedPreferenceChangeListener listener) {
         prefs.registerOnSharedPreferenceChangeListener(listener);

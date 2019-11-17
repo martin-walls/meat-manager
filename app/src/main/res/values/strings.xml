@@ -25,6 +25,7 @@
     <string name="action_edit_locations">Edit locations</string>
     <string name="action_edit_meat_types">Edit meat types</string>
     <string name="action_edit_products">Edit products</string>
+    <string name="action_add_meat_type">Add new meat type</string>
     <string name="action_sort_by">Sort by</string>
     <string name="action_sort_by_name">Sort by name</string>
     <string name="action_sort_by_meat_type">Sort by meat type</string>
@@ -140,6 +141,9 @@
     <!-- Edit meat types page -->
     <string name="meat_types_empty">No meat types to show</string>
     <string name="meat_types_title">Meat Types</string>
+
+    <string name="add_meat_type_success">Success adding %s</string>
+    <string name="add_meat_type_error">Error adding %s</string>
 
     <!-- Edit products page -->
     <string name="products_empty">No products to show</string>
@@ -275,6 +279,8 @@
         \nPlease connect to WiFi or mobile data and try again.
     </string>
     <string name="api_error">Error fetching data.</string>
+
+    <string name="exchange_last_updated">Last updated at %02d:%02d</string>
 
     <!-- 5 significant figures -->
     <string name="exchange_rate">%.5G</string>

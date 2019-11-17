@@ -14,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Product;
+import com.martinwalls.nea.ui.meatTypes.AddNewMeatTypeDialog;
 import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.ui.misc.RecyclerViewDivider;
 import com.martinwalls.nea.ui.misc.SwipeToDeleteCallback;
@@ -24,7 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EditProductsActivity extends AppCompatActivity
-        implements AddNewProductDialog.AddNewProductListener {
+        implements AddNewProductDialog.AddNewProductListener,
+        AddNewMeatTypeDialog.AddNewMeatTypeListener {
 
     private DBHandler dbHandler;
     private EasyPreferences prefs;
@@ -82,7 +84,7 @@ public class EditProductsActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_edit_products, menu);
-        //todo add search option
+
         return true;
     }
 
@@ -115,6 +117,10 @@ public class EditProductsActivity extends AppCompatActivity
                 invalidateOptionsMenu();
                 loadProducts();
                 return true;
+            case R.id.action_add_meat_type:
+                DialogFragment addNewMeatTypeDialog = new AddNewMeatTypeDialog();
+                addNewMeatTypeDialog.show(getSupportFragmentManager(), "add_new_meat_type");
+                return true;
             case android.R.id.home:
                 super.onBackPressed();
                 return true;
@@ -132,6 +138,18 @@ public class EditProductsActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onAddNewMeatTypeDoneAction(String meatType) {
+        boolean success = dbHandler.addMeatType(meatType);
+        if (success) {
+            Toast.makeText(this, getString(R.string.add_meat_type_success, meatType),
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, getString(R.string.add_meat_type_error, meatType),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
     /**
      * Gets all products in the database, sorts them and updates the
      * layout to show the update data.
@@ -145,7 +163,4 @@ public class EditProductsActivity extends AppCompatActivity
                         : Product.comparatorMeatType()));
         productsAdapter.notifyDataSetChanged();
     }
-
-    //todo not urgent: be able to edit products ?
-    // -- may not be needed, can just delete and re-add
 }

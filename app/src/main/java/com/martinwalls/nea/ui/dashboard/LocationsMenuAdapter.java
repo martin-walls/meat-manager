@@ -11,7 +11,6 @@ import com.martinwalls.nea.data.models.Location;
 
 import java.util.List;
 
-//todo finish dashboard locations menu
 public class LocationsMenuAdapter
         extends RecyclerView.Adapter<LocationsMenuAdapter.ViewHolder> {
 
@@ -38,8 +37,6 @@ public class LocationsMenuAdapter
         this.locationsList = locationsList;
         this.listener = listener;
 
-//        Location allLocations = new Location();
-//        allLocations.setLocationName(DashboardFragment.FILTER_LOCATIONS_ALL_NAME);
         this.locationsList.add(0, new Location());
     }
 

@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.martinwalls.nea.data.models.Conversion;
 import com.martinwalls.nea.data.models.Currency;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,14 +76,21 @@ public class ExchangeDBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Gets all conversions in the database.
+     * Gets all conversions in the database from the last {@code numWeeks} weeks.
+     *
+     * @param numWeeks the number of weeks of conversions to get.
      */
-    //todo only get conversions from the last week or so (check objectives)
-    public List<Conversion> getAllConversions() {
+    public List<Conversion> getAllConversionsFromLastWeeks(int numWeeks) {
+        long startTimestamp = LocalDate.now()
+                .minusWeeks(numWeeks)
+                .atStartOfDay(ZoneId.systemDefault())
+                .toEpochSecond();
+
         List<Conversion> conversionsResultList = new ArrayList<>();
-        String query = "SELECT * FROM " + ConversionsTable.TABLE_NAME;
+        String query = "SELECT * FROM " + ConversionsTable.TABLE_NAME
+                + " WHERE " + ConversionsTable.TIMESTAMP + ">?";
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[]{startTimestamp + ""});
         while (cursor.moveToNext()) {
             Conversion conversion = new Conversion();
             conversion.setConversionId(

@@ -10,18 +10,23 @@
         app:showAsAction="ifRoom"
         >
         <menu>
-            <group android:id="@+id/group_sort_by"
-                android:checkableBehavior="single">
+            <group
+                android:id="@+id/group_sort_by"
+                android:checkableBehavior="single"
+                >
 
-                <item android:id="@+id/action_sort_by_name"
+                <item
+                    android:id="@+id/action_sort_by_name"
                     android:title="@string/action_sort_by_name"
                     />
 
-                <item android:id="@+id/action_sort_by_amount_desc"
+                <item
+                    android:id="@+id/action_sort_by_amount_desc"
                     android:title="@string/action_sort_by_amount_desc"
                     />
 
-                <item android:id="@+id/action_sort_by_amount_asc"
+                <item
+                    android:id="@+id/action_sort_by_amount_asc"
                     android:title="@string/action_sort_by_amount_asc"
                     />
             </group>

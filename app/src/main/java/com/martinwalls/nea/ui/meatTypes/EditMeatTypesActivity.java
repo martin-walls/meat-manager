@@ -3,6 +3,7 @@ package com.martinwalls.nea.ui.meatTypes;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -83,7 +84,14 @@ public class EditMeatTypesActivity extends AppCompatActivity
 
     @Override
     public void onAddNewMeatTypeDoneAction(String meatType) {
-        dbHandler.addMeatType(meatType);
+        boolean success = dbHandler.addMeatType(meatType);
+        if (success) {
+            Toast.makeText(this, getString(R.string.add_meat_type_success, meatType),
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, getString(R.string.add_meat_type_error, meatType),
+                    Toast.LENGTH_SHORT).show();
+        }
         loadMeatTypes();
     }
 
