@@ -2,12 +2,7 @@ package com.martinwalls.nea.ui.dashboard;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
@@ -18,8 +13,10 @@ import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Location;
 import com.martinwalls.nea.data.models.ProductQuantity;
 import com.martinwalls.nea.data.models.StockItem;
+import com.martinwalls.nea.ui.misc.RecyclerViewMargin;
 import com.martinwalls.nea.util.EasyPreferences;
 import com.martinwalls.nea.util.SortUtils;
+import com.martinwalls.nea.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +34,7 @@ public class DashboardFragment extends Fragment
     private ScrollView graphLayout;
 
     private RecyclerView locationsRecyclerView;
+    private LocationsMenuAdapter locationsAdapter;
 
     private Location filterLocation;
 
@@ -51,9 +49,13 @@ public class DashboardFragment extends Fragment
         prefs = EasyPreferences.createForDefaultPreferences(getContext());
 
         locationsRecyclerView = fragmentView.findViewById(R.id.recycler_view_locations);
-        LocationsMenuAdapter locationsAdapter = new LocationsMenuAdapter(
+        locationsAdapter = new LocationsMenuAdapter(
                 dbHandler.getAllLocations(Location.LocationType.Storage), this);
         locationsRecyclerView.setAdapter(locationsAdapter);
+
+        RecyclerViewMargin margins = new RecyclerViewMargin(
+                Utils.convertDpToPixelSize(16, getContext()), RecyclerViewMargin.HORIZONTAL);
+        locationsRecyclerView.addItemDecoration(margins);
 
         if (filterLocation == null || !TextUtils.isEmpty(filterLocation.getLocationName())) {
             filterLocation = new Location();
@@ -112,15 +114,7 @@ public class DashboardFragment extends Fragment
     }
 
     @Override
-    public void onLocationItemClicked(Location location, int position) {
-        locationsRecyclerView.getLayoutManager()
-                .findViewByPosition(position).setSelected(true);
-        for (int i = 0; i < locationsRecyclerView.getAdapter().getItemCount(); i++) {
-            if (i != position) {
-                locationsRecyclerView.getLayoutManager()
-                        .findViewByPosition(i).setSelected(false);
-            }
-        }
+    public void onLocationItemClicked(Location location) {
         filterLocation = location;
         loadData();
     }

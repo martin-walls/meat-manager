@@ -4,15 +4,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import androidx.annotation.NonNull;
@@ -30,6 +24,7 @@ import com.martinwalls.nea.util.EasyPreferences;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.SortUtils;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -55,6 +50,8 @@ public class ExchangeFragment extends Fragment {
     private NumberPicker currencyPickerLeft;
     private NumberPicker currencyPickerRight;
 
+    private TextView lastUpdateTime;
+
     private String primaryCurrency;
     private double primaryCurrencyValue = 1;
     private String secondaryCurrency;
@@ -79,6 +76,8 @@ public class ExchangeFragment extends Fragment {
         emptyView = fragmentView.findViewById(R.id.empty);
         ratesLayout.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
+
+        lastUpdateTime = fragmentView.findViewById(R.id.last_update_time);
 
         checkConnectionAndFetchRates();
 
@@ -164,10 +163,6 @@ public class ExchangeFragment extends Fragment {
     private boolean checkInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager) getContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo network = cm.getActiveNetworkInfo(); //deprecated
-
-//        return network != null && network.isConnectedOrConnecting();
-
         return cm.getActiveNetwork() != null;
     }
 
@@ -221,9 +216,10 @@ public class ExchangeFragment extends Fragment {
         ratesLayout.setVisibility(View.VISIBLE);
         emptyView.setVisibility(View.GONE);
 
-//        long timestamp = Long.parseLong(
-//        CacheHelper.retrieve(getContext(), "last_cache_timestamp"));
-//        Toast.makeText(getContext(), "fetched", Toast.LENGTH_SHORT).show();
+        LocalTime now = LocalTime.now();
+
+        lastUpdateTime.setText(getString(R.string.exchange_last_updated,
+                now.getHour(), now.getMinute()));
     }
 
     /**

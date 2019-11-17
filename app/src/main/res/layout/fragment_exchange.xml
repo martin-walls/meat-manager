@@ -140,6 +140,7 @@
             />
 
         <TextView
+            android:id="@+id/last_update_time"
             style="@style/TextNormal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

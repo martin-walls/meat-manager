@@ -18,6 +18,8 @@ public class LocationsMenuAdapter
 
     private List<Location> locationsList;
 
+    private int selectedItemPos = 0;
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView locationName;
 
@@ -27,8 +29,9 @@ public class LocationsMenuAdapter
 
             locationName.setOnClickListener(
                     v -> {
+                        setSelectedItem(getAdapterPosition());
                         listener.onLocationItemClicked(
-                                locationsList.get(getAdapterPosition()), getAdapterPosition());
+                                locationsList.get(getAdapterPosition()));
                     });
         }
     }
@@ -55,8 +58,18 @@ public class LocationsMenuAdapter
         } else {
             holder.locationName.setText(R.string.dashboard_filter_locations_all);
         }
-        if (position == 0) {
+//        if (position == 0) {
+//            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) holder.locationName.getLayoutParams();
+//            layoutParams.setMarginStart(Utils.convertDpToPixelSize(24, holder.locationName.getContext()));
+//        } else if (position == locationsList.size() - 1) {
+//            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) holder.locationName.getLayoutParams();
+//            layoutParams.setMarginEnd(Utils.convertDpToPixelSize(24, holder.locationName.getContext()));
+//        }
+
+        if (position == selectedItemPos) {
             holder.locationName.setSelected(true);
+        } else {
+            holder.locationName.setSelected(false);
         }
     }
 
@@ -66,13 +79,30 @@ public class LocationsMenuAdapter
     }
 
     /**
+     * Sets the menu item at position {@code newSelectedItemPos} to be
+     * selected, and deselects the previously selected item.
+     */
+    private void setSelectedItem(int newSelectedItemPos) {
+        int prevSelectedItemPos = selectedItemPos;
+        if (newSelectedItemPos < 0) {
+            selectedItemPos = 0;
+        } else if (newSelectedItemPos >= locationsList.size()) {
+            selectedItemPos = locationsList.size() - 1;
+        } else {
+            selectedItemPos = newSelectedItemPos;
+        }
+        notifyItemChanged(prevSelectedItemPos);
+        notifyItemChanged(newSelectedItemPos);
+    }
+
+    /**
      * Interface to handle clicks on menu items.
      */
     public interface LocationsMenuAdapterListener {
         /**
-         * This is called when the menu item at the specified position is
-         * clicked. This should be implemented to filter stock by location.
+         * This is called when a menu item is clicked. This should be
+         * implemented to filter stock by location.
          */
-        void onLocationItemClicked(Location location, int position);
+        void onLocationItemClicked(Location location);
     }
 }
