@@ -3,6 +3,8 @@ package com.martinwalls.nea.ui.stock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,11 +13,14 @@ import com.martinwalls.nea.data.models.StockItem;
 import com.martinwalls.nea.util.MassUnit;
 import com.martinwalls.nea.util.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.ViewHolder> {
+public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.ViewHolder>
+        implements Filterable {
 
-    private List<StockItem> itemList;
+    private List<StockItem> stockItemList;
+    private List<StockItem> stockItemListFiltered;
     private StockItemAdapterListener listener;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -33,12 +38,14 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
             LinearLayout itemLayout = view.findViewById(R.id.stock_item_layout);
             itemLayout.setOnClickListener(v ->
-                    listener.onStockItemClicked(itemList.get(getAdapterPosition())));
+                    listener.onStockItemClicked(
+                            stockItemListFiltered.get(getAdapterPosition())));
         }
     }
 
-    StockItemAdapter(List<StockItem> itemList, StockItemAdapterListener listener) {
-        this.itemList = itemList;
+    StockItemAdapter(List<StockItem> stockItemList, StockItemAdapterListener listener) {
+        this.stockItemList = stockItemList;
+        this.stockItemListFiltered = stockItemList;
         this.listener = listener;
     }
 
@@ -51,7 +58,7 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        StockItem item = itemList.get(position);
+        StockItem item = stockItemListFiltered.get(position);
         holder.itemName.setText(item.getProduct().getProductName());
         holder.itemLocation.setText(holder.itemLocation.getContext()
                 .getString(R.string.stock_location_tag,
@@ -74,7 +81,37 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return stockItemListFiltered.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence filterText) {
+                List<StockItem> filteredList = new ArrayList<>();
+                if (filterText.length() == 0) {
+                    filteredList = stockItemList;
+                } else {
+                    for (StockItem stockItem : stockItemList) {
+                        if (stockItem.getProduct().getProductName().toLowerCase()
+                                .contains(filterText.toString().toLowerCase())) {
+                            filteredList.add(stockItem);
+                        }
+                    }
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence filterText, FilterResults results) {
+                //noinspection unchecked
+                stockItemListFiltered = (List<StockItem>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     /**

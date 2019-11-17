@@ -146,16 +146,16 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
     public Filter getFilter() {
         return new Filter() {
             @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
+            protected FilterResults performFiltering(CharSequence filterText) {
                 List<Currency> filteredList = new ArrayList<>();
-                if (charSequence.length() == 0) {
+                if (filterText.length() == 0) {
                     filteredList = currencyList;
                 } else {
                     for (Currency currency : currencyList) {
                         if (currency.getCode().toLowerCase()
-                                .contains(charSequence.toString().toLowerCase())
+                                .contains(filterText.toString().toLowerCase())
                                 || currency.getName().toLowerCase()
-                                .contains(charSequence.toString().toLowerCase())) {
+                                .contains(filterText.toString().toLowerCase())) {
                             filteredList.add(currency);
                         }
                     }
@@ -167,7 +167,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
             }
 
             @Override
-            protected void publishResults(CharSequence charSequence, FilterResults results) {
+            protected void publishResults(CharSequence filterText, FilterResults results) {
                 //noinspection unchecked
                 currencyListFiltered = (List<Currency>) results.values;
                 notifyDataSetChanged();
