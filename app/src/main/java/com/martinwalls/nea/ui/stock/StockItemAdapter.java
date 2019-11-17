@@ -15,9 +15,6 @@ import java.util.List;
 
 public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.ViewHolder> {
 
-    // todo use Utils.roundToDp method instead?
-    private final String DECIMAL_FORMAT_PATTERN = "#.0##";
-
     private List<StockItem> itemList;
     private StockItemAdapterListener listener;
 

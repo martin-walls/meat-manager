@@ -34,8 +34,6 @@ public class EditProductsActivity extends AppCompatActivity
     private ProductsAdapter productsAdapter;
     private List<Product> productList = new ArrayList<>();
 
-    //todo allow user to add meat type without going to separate screen
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

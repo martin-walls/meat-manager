@@ -152,7 +152,6 @@ public class EditOrderActivity extends InputFormActivity
 
         productsAddedAdapter =
                 new ProductsAddedAdapter(productsAddedList, this,
-                        //todo edit button for new product as well as edit
                         editType == EDIT_TYPE_EDIT, true);
         RecyclerView productsAddedRecyclerView =
                 findViewById(R.id.products_added_recycler_view);
@@ -409,12 +408,18 @@ public class EditOrderActivity extends InputFormActivity
      * Gets the product and mass currently entered into the input fields
      * and adds a {@link ProductQuantity} with these values to the contract.
      * Clears the input fields so another product can be added.
+     * <p>If the input fields are hidden, shows them
+     * (edit mode {@link #EDIT_TYPE_EDIT} only).
      */
     private void addProductToProductsAddedList() {
-        ProductQuantity product = getProductFromInputsAndClear();
-        if (product != null) {
-            productsAddedList.add(product);
-            productsAddedAdapter.notifyItemInserted(productsAddedList.size());
+        if (findViewById(R.id.product_inputs).getVisibility() == View.GONE) {
+            findViewById(R.id.product_inputs).setVisibility(View.VISIBLE);
+        } else {
+            ProductQuantity product = getProductFromInputsAndClear();
+            if (product != null) {
+                productsAddedList.add(product);
+                productsAddedAdapter.notifyItemInserted(productsAddedList.size());
+            }
         }
     }
 
