@@ -56,14 +56,14 @@
         >
 
         <TextView
+            style="@style/DetailsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/DetailsText"
-            android:text="@string/orders_input_completed"
             android:paddingStart="64dp"
-            android:paddingEnd="16dp"
             android:paddingTop="16dp"
+            android:paddingEnd="16dp"
             android:paddingBottom="16dp"
+            android:text="@string/orders_input_completed"
             />
 
         <CheckBox
@@ -74,5 +74,34 @@
             />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/current_stock"
+        style="@style/DetailsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:drawableEnd="@drawable/ic_expand"
+        android:drawablePadding="16dp"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
+        android:textColor="?textColorPrimary"
+        tools:text="Current stock: 1456 kg in 3 locations"
+        android:clickable="true"
+        android:background="?selectableItemBackground"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_stock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:visibility="gone"
+        tools:itemCount="2"
+        tools:listitem="@layout/item_stock_in_location"
+        tools:visibility="visible"
+        />
 
 </LinearLayout>

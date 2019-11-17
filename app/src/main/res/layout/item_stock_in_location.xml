@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?android:windowBackground"
+    android:orientation="horizontal"
+    android:paddingStart="36dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:paddingEnd="48dp"
+    >
+
+    <TextView
+        android:id="@+id/location"
+        style="@style/TextNormal"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        tools:text="UK1535"
+        android:ellipsize="end"
+        android:maxLines="1"
+        />
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        />
+
+    <LinearLayout
+        android:id="@+id/amount"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/mass"
+            style="@style/ItemAmountPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            tools:text="1900.00 kg"
+            />
+
+        <TextView
+            android:id="@+id/num_boxes"
+            style="@style/ItemAmountSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            tools:text="100 boxes"
+            />
+    </LinearLayout>
+
+</LinearLayout>

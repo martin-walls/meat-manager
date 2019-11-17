@@ -87,6 +87,7 @@ public class ProductsAddedAdapter
         if (productQuantity.getQuantityBoxes() < 0) {
             holder.numBoxes.setVisibility(View.GONE);
         } else {
+            holder.numBoxes.setVisibility(View.VISIBLE);
             holder.numBoxes.setText(holder.numBoxes.getContext().getResources()
                     .getQuantityString(R.plurals.amount_boxes,
                             productQuantity.getQuantityBoxes(),

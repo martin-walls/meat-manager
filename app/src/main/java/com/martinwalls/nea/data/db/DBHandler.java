@@ -281,8 +281,7 @@ public class DBHandler extends SQLiteOpenHelper {
         List<ProductQuantity> productQuantityResultList = new ArrayList<>();
         // not completed orders
         String orderProductsQuery = "SELECT "
-                + OrderProductsTable.TABLE_NAME + "."
-                    + OrderProductsTable.PRODUCT_ID + ","
+                + OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.PRODUCT_ID + ","
                 + OrderProductsTable.QUANTITY_MASS + ","
                 + OrderProductsTable.QUANTITY_BOXES + ","
                 + ProductsTable.NAME + ","
@@ -628,7 +627,8 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Queries the database for all stock items in the given location.
+     * Queries the database for all stock items in the {@link Location} with
+     * the given ID.
      */
     public List<StockItem> getAllStockFromLocation(int locationId) {
         List<StockItem> stockResultList = new ArrayList<>();
@@ -715,6 +715,99 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return stockResultList;
     }
+
+    /**
+     * Queries the database for all stock items for products connected to the
+     * {@link Order} with the given ID.
+     */
+    public List<StockItem> getAllStockForOrder(int orderId) {
+        List<StockItem> stockResultList = new ArrayList<>();
+        final String ALIAS_LOCATION = "Location";
+        final String ALIAS_SUPPLIER = "Supplier";
+        final String ALIAS_SUPPLIER_ID = "SupplierId";
+        final String ALIAS_SUPPLIER_NAME = "SupplierName";
+        final String ALIAS_DEST = "Dest";
+        final String ALIAS_DEST_ID = "DestId";
+        final String ALIAS_DEST_NAME = "DestName";
+        String query = "SELECT "
+                + StockTable.ID + ","
+                + StockTable.TABLE_NAME + "." + StockTable.PRODUCT_ID + ","
+                + ALIAS_LOCATION + "." + LocationsTable.ID + ","
+                + ALIAS_LOCATION + "." + LocationsTable.NAME + ","
+                + ALIAS_SUPPLIER + "." + LocationsTable.ID + " AS " + ALIAS_SUPPLIER_ID + ","
+                + ALIAS_SUPPLIER + "." + LocationsTable.NAME
+                    + " AS " + ALIAS_SUPPLIER_NAME + ","
+                + ALIAS_DEST + "." + LocationsTable.ID + " AS " + ALIAS_DEST_ID + ","
+                + ALIAS_DEST + "." + LocationsTable.NAME + " AS " + ALIAS_DEST_NAME + ","
+                + StockTable.MASS + ","
+                + StockTable.NUM_BOXES + ","
+                + StockTable.QUALITY + ","
+                + ProductsTable.TABLE_NAME + "." + ProductsTable.NAME + ","
+                + ProductsTable.TABLE_NAME + "." + ProductsTable.MEAT_TYPE
+                + " FROM " + StockTable.TABLE_NAME
+                + " INNER JOIN " + ProductsTable.TABLE_NAME + " ON "
+                + StockTable.TABLE_NAME + "." + StockTable.PRODUCT_ID
+                + "=" + ProductsTable.TABLE_NAME + "." + ProductsTable.ID
+                + " INNER JOIN " + OrderProductsTable.TABLE_NAME + " ON "
+                + ProductsTable.TABLE_NAME + "." + ProductsTable.ID
+                + "=" + OrderProductsTable.TABLE_NAME + "." + OrderProductsTable.PRODUCT_ID
+                + " INNER JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_LOCATION + " ON "
+                + StockTable.TABLE_NAME + "." + StockTable.LOCATION_ID
+                + "=" + ALIAS_LOCATION + "." + LocationsTable.ID
+                + " INNER JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_SUPPLIER + " ON "
+                + StockTable.TABLE_NAME + "." + StockTable.SUPPLIER_ID
+                + "=" + ALIAS_SUPPLIER + "." + LocationsTable.ID
+                + " LEFT JOIN " + LocationsTable.TABLE_NAME + " AS " + ALIAS_DEST + " ON "
+                + StockTable.TABLE_NAME + "." + StockTable.DEST_ID
+                + "=" + ALIAS_DEST + "." + LocationsTable.ID
+                + " WHERE " + OrderProductsTable.ORDER_ID + "=?";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, new String[]{orderId + ""});
+        while (cursor.moveToNext()) {
+            StockItem stockItem = new StockItem();
+            // get product data from inner join
+            Product stockProduct = new Product();
+            stockProduct.setProductId(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.PRODUCT_ID)));
+            stockProduct.setProductName(
+                    cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.NAME)));
+            stockProduct.setMeatType(
+                    cursor.getString(cursor.getColumnIndexOrThrow(ProductsTable.MEAT_TYPE)));
+            stockItem.setProduct(stockProduct);
+            stockItem.setStockId(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.ID)));
+            stockItem.setLocationId(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(LocationsTable.ID)));
+            stockItem.setLocationName(
+                    cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
+            stockItem.setSupplierId(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_SUPPLIER_ID)));
+            stockItem.setSupplierName(
+                    cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_SUPPLIER_NAME)));
+            if (!cursor.isNull(cursor.getColumnIndexOrThrow(ALIAS_DEST_ID))) {
+                stockItem.setDestId(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_DEST_ID)));
+            } else {
+                stockItem.setDestId(-1);
+            }
+            stockItem.setDestName(
+                    cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_DEST_NAME)));
+            stockItem.setMass(
+                    cursor.getDouble(cursor.getColumnIndexOrThrow(StockTable.MASS)));
+            if (!cursor.isNull(cursor.getColumnIndexOrThrow(StockTable.NUM_BOXES))) {
+                stockItem.setNumBoxes(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.NUM_BOXES)));
+            } else {
+                stockItem.setNumBoxes(-1);
+            }
+            stockItem.setQuality(StockItem.Quality.parseQuality(cursor.getString(
+                    cursor.getColumnIndexOrThrow(StockTable.QUALITY))));
+            stockResultList.add(stockItem);
+        }
+        cursor.close();
+        db.close();
+        return stockResultList;
+    }//todo similar method for contracts
 
     /**
      * Stores a {@link StockItem} in the database.

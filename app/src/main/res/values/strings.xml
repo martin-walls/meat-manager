@@ -135,7 +135,6 @@
     <string name="stock_details_destination">Destination:</string>
     <string name="stock_details_quality">Quality:</string>
 
-    <!--<string name="stock_location_tag">&#8226; %s</string>-->
     <string name="stock_location_tag">%s &#8226; %s</string>
 
     <!-- Edit meat types page -->
@@ -190,6 +189,16 @@
     <string name="orders_new_title">Add new order</string>
     <string name="order_edit_title">Edit order</string>
     <string name="order_details_title">Order details</string>
+
+    <plurals name="order_current_stock_kg">
+        <item quantity="one">Current stock: %s kg in one location</item>
+        <item quantity="other">Current stock: %s kg in %d locations</item>
+    </plurals>
+
+    <plurals name="order_current_stock_lbs">
+        <item quantity="one">Current stock: %d lbs in one location</item>
+        <item quantity="other">Current stock: %d lbs in %d locations</item>
+    </plurals>
 
     <string name="order_alert_upcoming_tomorrow">Upcoming order tomorrow</string>
 

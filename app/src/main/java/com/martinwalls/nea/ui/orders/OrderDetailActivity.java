@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,13 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Order;
+import com.martinwalls.nea.data.models.StockItem;
 import com.martinwalls.nea.ui.ProductsAddedAdapter;
+import com.martinwalls.nea.ui.RelatedStockAdapter;
 import com.martinwalls.nea.ui.misc.dialog.ConfirmDeleteDialog;
+import com.martinwalls.nea.util.MassUnit;
+import com.martinwalls.nea.util.Utils;
 import com.martinwalls.nea.util.undo.UndoStack;
 import com.martinwalls.nea.util.undo.orders.DeleteOrderAction;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class OrderDetailActivity extends AppCompatActivity
         implements ConfirmDeleteDialog.ConfirmDeleteListener {
@@ -53,6 +59,48 @@ public class OrderDetailActivity extends AppCompatActivity
             int orderId = extras.getInt(EXTRA_ORDER_ID);
             order = dbHandler.getOrder(orderId);
         }
+
+        ProductsAddedAdapter productsAdapter =
+                new ProductsAddedAdapter(order.getProductList());
+        RecyclerView productsRecyclerView = findViewById(R.id.recycler_view_products);
+        productsRecyclerView.setAdapter(productsAdapter);
+        productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //todo into separate method
+        List<StockItem> stockForOrder = dbHandler.getAllStockForOrder(order.getOrderId());
+        double totalMass = 0;
+        for (StockItem stockItem : stockForOrder) {
+            totalMass += stockItem.getMass();
+        }
+
+        TextView currentStockToggle = findViewById(R.id.current_stock);
+
+        MassUnit massUnit = MassUnit.getMassUnit(this);
+        currentStockToggle.setText(getResources().getQuantityString(
+                massUnit == MassUnit.KG
+                        ? R.plurals.order_current_stock_kg
+                        : R.plurals.order_current_stock_lbs,
+                stockForOrder.size(), //todo count distinct locations, this includes same location with different supplier
+                Utils.getMassDisplayValue(this, totalMass, 3), stockForOrder.size()));
+
+
+        RelatedStockAdapter stockAdapter =
+                new RelatedStockAdapter(stockForOrder);
+        RecyclerView stockRecyclerView = findViewById(R.id.recycler_view_stock);
+        stockRecyclerView.setAdapter(stockAdapter);
+        stockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        currentStockToggle.setOnClickListener(v -> {
+            if (stockRecyclerView.getVisibility() == View.VISIBLE) {
+                stockRecyclerView.setVisibility(View.GONE);
+                currentStockToggle.setCompoundDrawablesWithIntrinsicBounds(
+                        0, 0, R.drawable.ic_expand, 0);
+            } else {
+                stockRecyclerView.setVisibility(View.VISIBLE);
+                currentStockToggle.setCompoundDrawablesWithIntrinsicBounds(
+                        0, 0, R.drawable.ic_collapse, 0);
+            }
+        });
 
         fillFields();
     }
@@ -125,12 +173,6 @@ public class OrderDetailActivity extends AppCompatActivity
      * Initialises fields with data from the {@link Order} being shown.
      */
     private void fillFields() {
-        ProductsAddedAdapter productsAdapter =
-                new ProductsAddedAdapter(order.getProductList());
-        RecyclerView productsRecyclerView = findViewById(R.id.recycler_view_products);
-        productsRecyclerView.setAdapter(productsAdapter);
-        productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         TextView destination = findViewById(R.id.destination);
         destination.setText(order.getDestName());
 
