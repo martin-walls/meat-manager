@@ -9,7 +9,7 @@
 
     <include
         android:id="@+id/date_divider"
-        layout="@layout/item_date_divider"
+        layout="@layout/item_section_divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"

@@ -27,6 +27,7 @@ import com.martinwalls.nea.util.undo.orders.DeleteOrderAction;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDetailActivity extends AppCompatActivity
@@ -69,8 +70,12 @@ public class OrderDetailActivity extends AppCompatActivity
         //todo into separate method
         List<StockItem> stockForOrder = dbHandler.getAllStockForOrder(order.getOrderId());
         double totalMass = 0;
+        List<Integer> uniqueLocations = new ArrayList<>();
         for (StockItem stockItem : stockForOrder) {
             totalMass += stockItem.getMass();
+            if (!uniqueLocations.contains(stockItem.getLocationId())) {
+                uniqueLocations.add(stockItem.getLocationId());
+            }
         }
 
         TextView currentStockToggle = findViewById(R.id.current_stock);
@@ -80,8 +85,8 @@ public class OrderDetailActivity extends AppCompatActivity
                 massUnit == MassUnit.KG
                         ? R.plurals.order_current_stock_kg
                         : R.plurals.order_current_stock_lbs,
-                stockForOrder.size(), //todo count distinct locations, this includes same location with different supplier
-                Utils.getMassDisplayValue(this, totalMass, 3), stockForOrder.size()));
+                uniqueLocations.size(), //todo count distinct locations, this includes same location with different supplier
+                Utils.getMassDisplayValue(this, totalMass, 3), uniqueLocations.size()));
 
 
         RelatedStockAdapter stockAdapter =

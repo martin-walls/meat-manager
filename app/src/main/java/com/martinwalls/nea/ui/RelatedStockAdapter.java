@@ -45,7 +45,8 @@ public class RelatedStockAdapter extends RecyclerView.Adapter<RelatedStockAdapte
         StockItem stockItem = stockItemList.get(position);
         holder.location.setText(holder.location.getContext()
                 .getString(R.string.stock_location_tag,
-                        stockItem.getLocationName(), stockItem.getSupplierName()));
+                        stockItem.getLocationName(), stockItem.getSupplierName())
+                + stockItem.getProduct().getProductName());
         MassUnit massUnit = MassUnit.getMassUnit(holder.mass.getContext());
         holder.mass.setText(holder.mass.getContext()
                 .getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,

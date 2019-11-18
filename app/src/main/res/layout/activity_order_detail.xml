@@ -75,12 +75,26 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:srcCompat="@drawable/divider_thin"
+        />
+
+    <include
+        layout="@layout/item_section_divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
     <TextView
         android:id="@+id/current_stock"
         style="@style/DetailsText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
         android:drawableEnd="@drawable/ic_expand"
         android:drawablePadding="16dp"
         android:paddingStart="24dp"
@@ -89,8 +103,6 @@
         android:paddingBottom="16dp"
         android:textColor="?textColorPrimary"
         tools:text="Current stock: 1456 kg in 3 locations"
-        android:clickable="true"
-        android:background="?selectableItemBackground"
         />
 
     <androidx.recyclerview.widget.RecyclerView
