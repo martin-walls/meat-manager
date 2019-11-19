@@ -20,7 +20,7 @@
         android:paddingEnd="24dp"
         android:paddingBottom="16dp"
         android:textColor="?textColorPrimary"
-        tools:text="Current stock: 1456 kg in 3 locations"
+        tools:text="Product: 1456 kg in 3 locations"
         />
 
     <LinearLayout

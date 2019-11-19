@@ -71,8 +71,8 @@ public class OrderDetailActivity extends AppCompatActivity
 
         initStockForOrder();
 
-        TextView stockSectionTitle = findViewById(R.id.stock_section_title);
-        stockSectionTitle.setText(R.string.order_current_stock);
+        TextView stockSectionTitle = findViewById(R.id.related_stock_title);
+        stockSectionTitle.setText(R.string.related_stock_title);
 
         fillFields();
     }
@@ -188,10 +188,11 @@ public class OrderDetailActivity extends AppCompatActivity
             }
         }
 
-        RelatedStockAdapter stockAdapter = new RelatedStockAdapter(relatedStockList, this);
-        RecyclerView stockRecyclerView = findViewById(R.id.recycler_view_stock);
-        stockRecyclerView.setAdapter(stockAdapter);
-        stockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RelatedStockAdapter relatedStockAdapter
+                = new RelatedStockAdapter(relatedStockList, this);
+        RecyclerView relatedStockRecyclerView = findViewById(R.id.recycler_view_related_stock);
+        relatedStockRecyclerView.setAdapter(relatedStockAdapter);
+        relatedStockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     /**

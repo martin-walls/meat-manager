@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
     android:orientation="vertical"
     tools:context=".ui.contracts.ContractDetailActivity"
     >
@@ -16,6 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:overScrollMode="never"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         tools:itemCount="2"
         tools:listitem="@layout/item_product_options"
         />
@@ -28,9 +28,9 @@
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_destination"
         android:drawablePadding="16dp"
-        android:paddingStart="8dp"
+        android:paddingStart="24dp"
         android:paddingTop="16dp"
-        android:paddingEnd="8dp"
+        android:paddingEnd="24dp"
         android:paddingBottom="16dp"
         tools:text="Destination"
         />
@@ -43,9 +43,9 @@
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_repeat"
         android:drawablePadding="16dp"
-        android:paddingStart="8dp"
+        android:paddingStart="24dp"
         android:paddingTop="16dp"
-        android:paddingEnd="8dp"
+        android:paddingEnd="24dp"
         android:paddingBottom="16dp"
         tools:text="Repeats every week on Monday"
         />
@@ -58,9 +58,9 @@
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_date"
         android:drawablePadding="16dp"
-        android:paddingStart="8dp"
+        android:paddingStart="24dp"
         android:paddingTop="16dp"
-        android:paddingEnd="8dp"
+        android:paddingEnd="24dp"
         android:paddingBottom="16dp"
         tools:text="Next repeat is in 3 days"
         />
@@ -73,11 +73,34 @@
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_alert_outline"
         android:drawablePadding="16dp"
-        android:paddingStart="8dp"
+        android:paddingStart="24dp"
         android:paddingTop="16dp"
-        android:paddingEnd="8dp"
+        android:paddingEnd="24dp"
         android:paddingBottom="16dp"
         tools:text="Reminder 2 days in advance"
+        />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:srcCompat="@drawable/divider_thin"
+        />
+
+    <include
+        android:id="@+id/related_stock_title"
+        layout="@layout/item_section_divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_related_stock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        tools:itemCount="1"
+        tools:listitem="@layout/item_current_stock_in_location"
         />
 
 </LinearLayout>

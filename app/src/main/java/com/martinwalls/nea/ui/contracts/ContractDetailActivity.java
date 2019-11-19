@@ -12,15 +12,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
-import com.martinwalls.nea.data.models.Contract;
-import com.martinwalls.nea.data.models.Interval;
+import com.martinwalls.nea.data.models.*;
 import com.martinwalls.nea.ui.ProductsAddedAdapter;
+import com.martinwalls.nea.ui.RelatedStockAdapter;
 import com.martinwalls.nea.ui.misc.dialog.ConfirmDeleteDialog;
-import com.martinwalls.nea.util.undo.contracts.DeleteContractAction;
+import com.martinwalls.nea.ui.stock.StockDetailActivity;
+import com.martinwalls.nea.util.SortUtils;
 import com.martinwalls.nea.util.undo.UndoStack;
+import com.martinwalls.nea.util.undo.contracts.DeleteContractAction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContractDetailActivity extends AppCompatActivity
-        implements ConfirmDeleteDialog.ConfirmDeleteListener {
+        implements ConfirmDeleteDialog.ConfirmDeleteListener,
+        RelatedStockAdapter.RelatedStockListener {
 
     public static final String EXTRA_CONTRACT_ID = "contract_id";
 
@@ -49,6 +55,11 @@ public class ContractDetailActivity extends AppCompatActivity
         RecyclerView productsRecyclerView = findViewById(R.id.recycler_view_products);
         productsRecyclerView.setAdapter(productsAdapter);
         productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        initStockForContract();
+
+        TextView relatedStockTitle = findViewById(R.id.related_stock_title);
+        relatedStockTitle.setText(R.string.related_stock_title);
 
         fillFields();
     }
@@ -116,6 +127,13 @@ public class ContractDetailActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onStockItemClicked(int stockId) {
+        Intent stockDetailIntent = new Intent(this, StockDetailActivity.class);
+        stockDetailIntent.putExtra(StockDetailActivity.EXTRA_STOCK_ID, stockId);
+        startActivity(stockDetailIntent);
+    }
+
     /**
      * Shows a {@link ConfirmDeleteDialog} asking the user to confirm the 
      * delete action.
@@ -123,6 +141,53 @@ public class ContractDetailActivity extends AppCompatActivity
     private void showConfirmDeleteDialog() {
         DialogFragment dialog = new ConfirmDeleteDialog();
         dialog.show(getSupportFragmentManager(), "confirm_delete");
+    }
+
+    /**
+     * Initialises list of related stock for the {@link Contract} being shown.
+     */
+    private void initStockForContract() {
+        List<StockItem> stockForContract = SortUtils.mergeSort(
+                dbHandler.getAllStockForContract(contract.getContractId()),
+                StockItem.comparatorLocation());
+
+        // get list of related stock by product, with child stock items for each location
+        List<RelatedStock> relatedStockList = new ArrayList<>();
+        int thisProductId;
+        int lastProductId = -1;
+        for (StockItem stockItem : stockForContract) {
+            thisProductId = stockItem.getProduct().getProductId();
+            if (relatedStockList.size() == 0 || thisProductId != lastProductId) {
+                RelatedStock relatedStock = new RelatedStock();
+                relatedStock.setProduct(stockItem.getProduct());
+                relatedStock.addStockItem(stockItem);
+                relatedStockList.add(relatedStock);
+            } else {
+                relatedStockList.get(relatedStockList.size() - 1).addStockItem(stockItem);
+            }
+            lastProductId = thisProductId;
+        }
+
+        // show items for products that have no stock
+        for (ProductQuantity productQuantity : contract.getProductList()) {
+            boolean hasRelatedStock = false;
+            for (RelatedStock relatedStock : relatedStockList) {
+                if (relatedStock.getProduct().getProductId()
+                        == productQuantity.getProduct().getProductId()) {
+                    hasRelatedStock = true;
+                    break;
+                }
+            }
+            if (!hasRelatedStock) {
+                relatedStockList.add(new RelatedStock(productQuantity.getProduct()));
+            }
+        }
+
+        RelatedStockAdapter relatedStockAdapter
+                = new RelatedStockAdapter(relatedStockList, this);
+        RecyclerView relatedStockRecyclerView = findViewById(R.id.recycler_view_related_stock);
+        relatedStockRecyclerView.setAdapter(relatedStockAdapter);
+        relatedStockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     /**

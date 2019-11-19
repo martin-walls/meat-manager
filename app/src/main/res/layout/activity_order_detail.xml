@@ -83,31 +83,14 @@
         />
 
     <include
-        android:id="@+id/stock_section_title"
+        android:id="@+id/related_stock_title"
         layout="@layout/item_section_divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
 
-    <!--<TextView-->
-    <!--android:id="@+id/current_stock"-->
-    <!--style="@style/DetailsText"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="?selectableItemBackground"-->
-    <!--android:clickable="true"-->
-    <!--android:drawableEnd="@drawable/ic_expand"-->
-    <!--android:drawablePadding="16dp"-->
-    <!--android:paddingStart="24dp"-->
-    <!--android:paddingTop="16dp"-->
-    <!--android:paddingEnd="24dp"-->
-    <!--android:paddingBottom="16dp"-->
-    <!--android:textColor="?textColorPrimary"-->
-    <!--tools:text="Current stock: 1456 kg in 3 locations"-->
-    <!--/>-->
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_stock"
+        android:id="@+id/recycler_view_related_stock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:overScrollMode="never"

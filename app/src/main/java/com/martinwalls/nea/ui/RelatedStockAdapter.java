@@ -114,7 +114,7 @@ public class RelatedStockAdapter extends RecyclerView.Adapter<RelatedStockAdapte
         MassUnit massUnit = MassUnit.getMassUnit(holder.context);
         if (getItemViewType(position) == VIEW_NONE) {
             holder.title.setText(holder.context.getString(
-                    R.string.order_current_stock_none,
+                    R.string.related_stock_item_none,
                     relatedStock.getProduct().getProductName()));
             return;
         }
@@ -122,8 +122,8 @@ public class RelatedStockAdapter extends RecyclerView.Adapter<RelatedStockAdapte
         // set item title with name of product, total mass and number of locations
         holder.title.setText(holder.context.getResources().getQuantityString(
                 massUnit == MassUnit.KG
-                        ? R.plurals.order_current_stock_kg
-                        : R.plurals.order_current_stock_lbs,
+                        ? R.plurals.related_stock_item_kg
+                        : R.plurals.related_stock_item_lbs,
                 relatedStock.getStockItemList().size(),
                 relatedStock.getProduct().getProductName(),
                 Utils.getMassDisplayValue(
