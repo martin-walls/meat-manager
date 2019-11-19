@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,12 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Order;
+import com.martinwalls.nea.data.models.ProductQuantity;
+import com.martinwalls.nea.data.models.RelatedStock;
 import com.martinwalls.nea.data.models.StockItem;
 import com.martinwalls.nea.ui.ProductsAddedAdapter;
 import com.martinwalls.nea.ui.RelatedStockAdapter;
 import com.martinwalls.nea.ui.misc.dialog.ConfirmDeleteDialog;
-import com.martinwalls.nea.util.MassUnit;
-import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.ui.stock.StockDetailActivity;
+import com.martinwalls.nea.util.SortUtils;
 import com.martinwalls.nea.util.undo.UndoStack;
 import com.martinwalls.nea.util.undo.orders.DeleteOrderAction;
 
@@ -31,7 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDetailActivity extends AppCompatActivity
-        implements ConfirmDeleteDialog.ConfirmDeleteListener {
+        implements ConfirmDeleteDialog.ConfirmDeleteListener,
+        RelatedStockAdapter.RelatedStockListener {
 
     public static final String EXTRA_ORDER_ID = "order_id";
 
@@ -67,45 +69,10 @@ public class OrderDetailActivity extends AppCompatActivity
         productsRecyclerView.setAdapter(productsAdapter);
         productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //todo into separate method
-        List<StockItem> stockForOrder = dbHandler.getAllStockForOrder(order.getOrderId());
-        double totalMass = 0;
-        List<Integer> uniqueLocations = new ArrayList<>();
-        for (StockItem stockItem : stockForOrder) {
-            totalMass += stockItem.getMass();
-            if (!uniqueLocations.contains(stockItem.getLocationId())) {
-                uniqueLocations.add(stockItem.getLocationId());
-            }
-        }
+        initStockForOrder();
 
-        TextView currentStockToggle = findViewById(R.id.current_stock);
-
-        MassUnit massUnit = MassUnit.getMassUnit(this);
-        currentStockToggle.setText(getResources().getQuantityString(
-                massUnit == MassUnit.KG
-                        ? R.plurals.order_current_stock_kg
-                        : R.plurals.order_current_stock_lbs,
-                uniqueLocations.size(), //todo count distinct locations, this includes same location with different supplier
-                Utils.getMassDisplayValue(this, totalMass, 3), uniqueLocations.size()));
-
-
-        RelatedStockAdapter stockAdapter =
-                new RelatedStockAdapter(stockForOrder);
-        RecyclerView stockRecyclerView = findViewById(R.id.recycler_view_stock);
-        stockRecyclerView.setAdapter(stockAdapter);
-        stockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        currentStockToggle.setOnClickListener(v -> {
-            if (stockRecyclerView.getVisibility() == View.VISIBLE) {
-                stockRecyclerView.setVisibility(View.GONE);
-                currentStockToggle.setCompoundDrawablesWithIntrinsicBounds(
-                        0, 0, R.drawable.ic_expand, 0);
-            } else {
-                stockRecyclerView.setVisibility(View.VISIBLE);
-                currentStockToggle.setCompoundDrawablesWithIntrinsicBounds(
-                        0, 0, R.drawable.ic_collapse, 0);
-            }
-        });
+        TextView stockSectionTitle = findViewById(R.id.stock_section_title);
+        stockSectionTitle.setText(R.string.order_current_stock);
 
         fillFields();
     }
@@ -165,6 +132,13 @@ public class OrderDetailActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onStockItemClicked(int stockId) {
+        Intent stockDetailIntent = new Intent(this, StockDetailActivity.class);
+        stockDetailIntent.putExtra(StockDetailActivity.EXTRA_STOCK_ID, stockId);
+        startActivity(stockDetailIntent);
+    }
+
     /**
      * Shows a {@link ConfirmDeleteDialog} asking the user to confirm the
      * delete action.
@@ -172,6 +146,52 @@ public class OrderDetailActivity extends AppCompatActivity
     private void showConfirmDeleteDialog() {
         DialogFragment dialog = new ConfirmDeleteDialog();
         dialog.show(getSupportFragmentManager(), "confirm_delete");
+    }
+
+    /**
+     * Initialises list of related stock for the {@link Order} being shown.
+     */
+    private void initStockForOrder() {
+        List<StockItem> stockForOrder = SortUtils.mergeSort(
+                dbHandler.getAllStockForOrder(order.getOrderId()),
+                StockItem.comparatorLocation());
+
+        // get list of related stock by product, with child stock items for each location
+        List<RelatedStock> relatedStockList = new ArrayList<>();
+        int thisProductId;
+        int lastProductId = -1;
+        for (StockItem stockItem : stockForOrder) {
+            thisProductId = stockItem.getProduct().getProductId();
+            if (relatedStockList.size() == 0 || thisProductId != lastProductId) {
+                RelatedStock relatedStock = new RelatedStock();
+                relatedStock.setProduct(stockItem.getProduct());
+                relatedStock.addStockItem(stockItem);
+                relatedStockList.add(relatedStock);
+            } else {
+                relatedStockList.get(relatedStockList.size() - 1).addStockItem(stockItem);
+            }
+            lastProductId = thisProductId;
+        }
+
+        // show items for products that have no stock
+        for (ProductQuantity productQuantity : order.getProductList()) {
+            boolean hasRelatedStock = false;
+            for (RelatedStock relatedStock : relatedStockList) {
+                if (relatedStock.getProduct().getProductId()
+                        == productQuantity.getProduct().getProductId()) {
+                    hasRelatedStock = true;
+                    break;
+                }
+            }
+            if (!hasRelatedStock) {
+                relatedStockList.add(new RelatedStock(productQuantity.getProduct()));
+            }
+        }
+
+        RelatedStockAdapter stockAdapter = new RelatedStockAdapter(relatedStockList, this);
+        RecyclerView stockRecyclerView = findViewById(R.id.recycler_view_stock);
+        stockRecyclerView.setAdapter(stockAdapter);
+        stockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     /**

@@ -190,15 +190,16 @@
     <string name="order_edit_title">Edit order</string>
     <string name="order_details_title">Order details</string>
 
+    <string name="order_current_stock">Current stock</string>
     <plurals name="order_current_stock_kg">
-        <item quantity="one">Current stock: %s kg in one location</item>
-        <item quantity="other">Current stock: %s kg in %d locations</item>
+        <item quantity="one">%s: %s kg in one location</item>
+        <item quantity="other">%s: %s kg in %d locations</item>
     </plurals>
-
     <plurals name="order_current_stock_lbs">
-        <item quantity="one">Current stock: %d lbs in one location</item>
-        <item quantity="other">Current stock: %d lbs in %d locations</item>
+        <item quantity="one">%s: %d lbs in one location</item>
+        <item quantity="other">%s: %d lbs in %d locations</item>
     </plurals>
+    <string name="order_current_stock_none">%s: no stock</string>
 
     <string name="order_alert_upcoming_tomorrow">Upcoming order tomorrow</string>
 
