@@ -58,14 +58,6 @@ public class LocationsMenuAdapter
         } else {
             holder.locationName.setText(R.string.dashboard_filter_locations_all);
         }
-//        if (position == 0) {
-//            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) holder.locationName.getLayoutParams();
-//            layoutParams.setMarginStart(Utils.convertDpToPixelSize(24, holder.locationName.getContext()));
-//        } else if (position == locationsList.size() - 1) {
-//            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) holder.locationName.getLayoutParams();
-//            layoutParams.setMarginEnd(Utils.convertDpToPixelSize(24, holder.locationName.getContext()));
-//        }
-
         if (position == selectedItemPos) {
             holder.locationName.setSelected(true);
         } else {

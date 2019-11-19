@@ -205,7 +205,7 @@ public class OrderDetailActivity extends AppCompatActivity
         TextView date = findViewById(R.id.date);
         date.setText(order.getOrderDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
 
-        if (order.getOrderDate().isBefore(LocalDateTime.now())) {
+        if (!order.isCompleted() && order.getOrderDate().isBefore(LocalDateTime.now())) {
             date.setTextColor(getColor(R.color.error_red));
         }
 

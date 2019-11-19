@@ -222,6 +222,7 @@
                     android:text="@string/contracts_reminder_hint"
                     />
 
+                <!-- todo make this a Spinner? -->
                 <EditText
                     android:id="@+id/edit_text_reminder"
                     android:layout_width="wrap_content"
