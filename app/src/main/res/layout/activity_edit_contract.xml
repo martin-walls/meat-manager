@@ -222,7 +222,7 @@
                     android:text="@string/contracts_reminder_hint"
                     />
 
-                <!-- todo make this a Spinner? -->
+                <!-- todo make this a Spinner? or add + and - buttons -->
                 <EditText
                     android:id="@+id/edit_text_reminder"
                     android:layout_width="wrap_content"
@@ -232,6 +232,17 @@
                     android:maxLength="2"
                     android:minEms="2"
                     />
+
+                <!--<Spinner-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:id="@+id/spn_reminder"-->
+                    <!--/>-->
+
+                <!--<NumberPicker-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="24dp"-->
+                    <!--/>-->
 
                 <TextView
                     android:id="@+id/reminder_text_days_before"
