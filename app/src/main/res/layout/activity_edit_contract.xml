@@ -24,9 +24,9 @@
             >
 
             <LinearLayout
+                android:id="@+id/product_inputs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/product_inputs"
                 android:orientation="vertical"
                 >
 
@@ -222,7 +222,16 @@
                     android:text="@string/contracts_reminder_hint"
                     />
 
-                <!-- todo make this a Spinner? or add + and - buttons -->
+                <ImageButton
+                    android:id="@+id/btn_reminder_minus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:padding="4dp"
+                    app:srcCompat="@drawable/ic_minus"
+                    />
+
                 <EditText
                     android:id="@+id/edit_text_reminder"
                     android:layout_width="wrap_content"
@@ -233,24 +242,23 @@
                     android:minEms="2"
                     />
 
-                <!--<Spinner-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:id="@+id/spn_reminder"-->
-                    <!--/>-->
-
-                <!--<NumberPicker-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="24dp"-->
-                    <!--/>-->
+                <ImageButton
+                    android:id="@+id/btn_reminder_plus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:padding="4dp"
+                    app:srcCompat="@drawable/ic_add"
+                    />
 
                 <TextView
                     android:id="@+id/reminder_text_days_before"
                     style="@style/InputFormText"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
                     android:gravity="center_vertical"
-                    android:paddingStart="16dp"
                     android:text="@string/contracts_reminder_day_before_one"
                     />
 

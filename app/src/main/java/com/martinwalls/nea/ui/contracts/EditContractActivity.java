@@ -220,9 +220,28 @@ public class EditContractActivity extends InputFormActivity
             }
         });
 
+        ImageButton btnReminderMinus = findViewById(R.id.btn_reminder_minus);
+        btnReminderMinus.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(editTextReminder.getText())) {
+                int currentReminder = Integer.valueOf(editTextReminder.getText().toString());
+                if (currentReminder > 0) {
+                    editTextReminder.setText(String.valueOf(currentReminder - 1));
+                }
+            }
+        });
+
+        ImageButton btnReminderPlus = findViewById(R.id.btn_reminder_plus);
+        btnReminderPlus.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(editTextReminder.getText())) {
+                editTextReminder.setText("1");
+            } else {
+                int currentReminder = Integer.valueOf(editTextReminder.getText().toString());
+                editTextReminder.setText(String.valueOf(currentReminder + 1));
+            }
+        });
+
         if (editType == EDIT_TYPE_NEW) {
             findViewById(R.id.product_btn_done).setVisibility(View.GONE);
-
             editTextReminder.setText("1");
         } else {
             findViewById(R.id.product_inputs).setVisibility(View.GONE);
