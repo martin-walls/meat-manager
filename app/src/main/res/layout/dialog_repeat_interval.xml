@@ -122,6 +122,7 @@
             android:orientation="horizontal"
             >
 
+            <!-- todo + and - buttons -->
             <EditText
                 android:id="@+id/edit_text_number"
                 android:layout_width="wrap_content"

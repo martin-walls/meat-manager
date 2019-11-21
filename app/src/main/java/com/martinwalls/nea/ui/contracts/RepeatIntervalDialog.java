@@ -14,11 +14,18 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.models.Interval;
 
+/**
+ * Dialog that allows the user to choose a repeat interval for a contract.
+ *
+ * @see EditContractActivity
+ */
 public class RepeatIntervalDialog extends DialogFragment {
 
     static final String EXTRA_SELECTED = "selected";
     static final String EXTRA_TIME_VALUE = "timeValue";
     static final String EXTRA_TIME_UNIT = "timeUnit";
+
+    static final String EXTRA_CUSTOM_INTERVAL = "customInterval";
 
     static final int OPTION_WEEK = 1;
     static final int OPTION_TWO_WEEK = 2;
@@ -49,9 +56,8 @@ public class RepeatIntervalDialog extends DialogFragment {
         if (args != null) {
             selectedOption = args.getInt(EXTRA_SELECTED);
             if (selectedOption == OPTION_CUSTOM) {
-                selectedCustomInterval.setValue(args.getInt(EXTRA_TIME_VALUE));
-                selectedCustomInterval.setUnit(
-                        Interval.TimeUnit.parseTimeUnit(args.getString(EXTRA_TIME_UNIT)));
+                selectedCustomInterval =
+                        (Interval) args.getSerializable(EXTRA_CUSTOM_INTERVAL);
             }
         }
 
@@ -192,6 +198,7 @@ public class RepeatIntervalDialog extends DialogFragment {
 
     /**
      * Interface for when the user selects a repeat interval from the dialog.
+     * This must be implemented by the calling Activity/Fragment.
      */
     public interface RepeatIntervalDialogListener {
         /**

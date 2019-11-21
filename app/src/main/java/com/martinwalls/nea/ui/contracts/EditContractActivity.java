@@ -6,15 +6,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-import androidx.appcompat.app.ActionBar;
+import android.widget.*;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,12 +14,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
-import com.martinwalls.nea.data.models.Contract;
-import com.martinwalls.nea.data.models.Interval;
-import com.martinwalls.nea.data.models.Location;
-import com.martinwalls.nea.data.models.Product;
-import com.martinwalls.nea.data.models.ProductQuantity;
-import com.martinwalls.nea.data.models.SearchItem;
+import com.martinwalls.nea.data.models.*;
 import com.martinwalls.nea.ui.InputFormActivity;
 import com.martinwalls.nea.ui.ProductsAddedAdapter;
 import com.martinwalls.nea.ui.SearchItemAdapter;
@@ -61,6 +48,8 @@ public class EditContractActivity extends InputFormActivity
 
     private final int REQUEST_REFRESH_ON_DONE = 1;
 
+    private final int DEFAULT_REMINDER = 1;
+
     private final String INPUT_PRODUCT = "product";
     private final String INPUT_QUANTITY = "quantity";
     private final String INPUT_DESTINATION = "destination";
@@ -78,6 +67,8 @@ public class EditContractActivity extends InputFormActivity
     private RecyclerView productsAddedRecyclerView;
 
     private TextView addProductBtn;
+
+    private EditText editTextReminder;
 
     // store ids/values of selected items
     private int selectedProductId;
@@ -107,142 +98,18 @@ public class EditContractActivity extends InputFormActivity
             }
         }
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(editType == EDIT_TYPE_NEW
-                    ? R.string.contract_new_title
-                    : R.string.contract_edit_title);
-        }
-
-
-        addViewToHide(INPUT_PRODUCT, R.id.input_layout_product);
-        addViewToHide(INPUT_QUANTITY, R.id.input_row_quantity);
-        addViewToHide(INPUT_DESTINATION, R.id.input_layout_destination);
-        addViewToHide(INPUT_REPEAT_INTERVAL, R.id.input_layout_repeat_interval);
-        addViewToHide(INPUT_REPEAT_ON, R.id.input_repeat_on);
-        addViewToHide(INPUT_REMINDER, R.id.input_reminder);
-
-        addViewToHide("add_product_btn", R.id.add_product);
-        addViewToHide("products_added_recycler_view", R.id.products_added_recycler_view);
-
-        setAddNewView(R.id.add_new);
-        setRootView(R.id.root_layout);
+        getSupportActionBar().setTitle(editType == EDIT_TYPE_NEW
+                ? R.string.contract_new_title
+                : R.string.contract_edit_title);
 
         setCurrentSearchType(INPUT_PRODUCT);
 
-        setSearchItemAdapter(new SearchItemAdapter(
-                getSearchItemList(), getCurrentSearchType(), this));
-        TextView emptyView = findViewById(R.id.no_results);
-        CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
-        recyclerView.setEmptyView(emptyView);
-        recyclerView.setAdapter(getSearchItemAdapter());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        setSearchResultsLayout(R.id.search_results_layout);
-
-        if (MassUnit.getMassUnit(this) == MassUnit.LBS) {
-            TextInputLayout inputLayoutQuantityMass =
-                    findViewById(R.id.input_layout_quantity_mass);
-            inputLayoutQuantityMass.setHint(getString(R.string.contracts_input_quantity_lbs));
-        }
-
-        setListeners(INPUT_PRODUCT,
-                findViewById(R.id.input_layout_product),
-                findViewById(R.id.edit_text_product));
-
-        setListeners(INPUT_DESTINATION,
-                findViewById(R.id.input_layout_destination),
-                findViewById(R.id.edit_text_destination));
-
-        productsAddedAdapter = new ProductsAddedAdapter(productsAddedList, this,
-                editType == EDIT_TYPE_EDIT, true);
-        productsAddedRecyclerView = findViewById(R.id.products_added_recycler_view);
-        productsAddedRecyclerView.setAdapter(productsAddedAdapter);
-        productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        addProductBtn = findViewById(R.id.add_product);
-        addProductBtn.setOnClickListener(v -> addProductToProductsAddedList());
-
-        TextInputEditText editTextRepeatInterval =
-                findViewById(R.id.edit_text_repeat_interval);
-        editTextRepeatInterval.setOnClickListener(v -> {
-            DialogFragment dialog = new RepeatIntervalDialog();
-            Bundle args = new Bundle();
-            if (selectedRepeatInterval != null) {
-                if (selectedRepeatInterval.getValue() == 1
-                        && selectedRepeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
-                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
-                            RepeatIntervalDialog.OPTION_WEEK);
-                } else if (selectedRepeatInterval.getValue() == 2
-                        && selectedRepeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
-                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
-                            RepeatIntervalDialog.OPTION_TWO_WEEK);
-                } else if (selectedRepeatInterval.getValue() == 1
-                        && selectedRepeatInterval.getUnit() == Interval.TimeUnit.MONTH) {
-                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
-                            RepeatIntervalDialog.OPTION_MONTH);
-                } else {
-                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
-                            RepeatIntervalDialog.OPTION_CUSTOM);
-                    args.putInt(RepeatIntervalDialog.EXTRA_TIME_VALUE,
-                            selectedRepeatInterval.getValue());
-                    args.putString(RepeatIntervalDialog.EXTRA_TIME_UNIT,
-                            selectedRepeatInterval.getUnit().name());
-                }
-            }
-            dialog.setArguments(args);
-            dialog.show(getSupportFragmentManager(), "repeat_interval");
-        });
-
-        Spinner repeatOnSpn = findViewById(R.id.spn_repeat_on);
-        repeatOnSpnAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-        repeatOnSpnAdapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item);
-        repeatOnSpnAdapter.addAll(getResources().getStringArray(R.array.weekdays));
-        repeatOnSpnAdapter.notifyDataSetChanged();
-        repeatOnSpn.setAdapter(repeatOnSpnAdapter);
-
-        EditText editTextReminder = findViewById(R.id.edit_text_reminder);
-        TextView txtReminderDaysBefore = findViewById(R.id.reminder_text_days_before);
-        TextView hintReminder = findViewById(R.id.text_reminder);
-        editTextReminder.addTextChangedListener(new SimpleTextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (TextUtils.isEmpty(s) || s.toString().equals("0")) {
-                    hintReminder.setText(R.string.contracts_reminder_off_hint);
-                } else {
-                    hintReminder.setText(R.string.contracts_reminder_hint);
-                }
-                if (!TextUtils.isEmpty(s)) {
-                    txtReminderDaysBefore.setText(getResources().getQuantityString(
-                            R.plurals.contracts_reminder_days_before,
-                            Integer.parseInt(s.toString())));
-                }
-            }
-        });
-
-        ImageButton btnReminderMinus = findViewById(R.id.btn_reminder_minus);
-        btnReminderMinus.setOnClickListener(v -> {
-            if (!TextUtils.isEmpty(editTextReminder.getText())) {
-                int currentReminder = Integer.valueOf(editTextReminder.getText().toString());
-                if (currentReminder > 0) {
-                    editTextReminder.setText(String.valueOf(currentReminder - 1));
-                }
-            }
-        });
-
-        ImageButton btnReminderPlus = findViewById(R.id.btn_reminder_plus);
-        btnReminderPlus.setOnClickListener(v -> {
-            if (TextUtils.isEmpty(editTextReminder.getText())) {
-                editTextReminder.setText("1");
-            } else {
-                int currentReminder = Integer.valueOf(editTextReminder.getText().toString());
-                editTextReminder.setText(String.valueOf(currentReminder + 1));
-            }
-        });
+        // initialise views in the layout, including listeners
+        initViews();
 
         if (editType == EDIT_TYPE_NEW) {
             findViewById(R.id.product_btn_done).setVisibility(View.GONE);
-            editTextReminder.setText("1");
+            setReminderInputValue(DEFAULT_REMINDER);
         } else {
             findViewById(R.id.product_inputs).setVisibility(View.GONE);
 
@@ -250,11 +117,13 @@ public class EditContractActivity extends InputFormActivity
 
             ImageButton productBtnDone = findViewById(R.id.product_btn_done);
             productBtnDone.setOnClickListener(v -> {
+                // store product details and hide input views again
                 addProductToProductsAddedList();
                 findViewById(R.id.product_inputs).setVisibility(View.GONE);
             });
         }
 
+        // listen for any changes made by the user
         setTextChangedListeners();
     }
 
@@ -445,6 +314,166 @@ public class EditContractActivity extends InputFormActivity
     }
 
     /**
+     * Initialises all the views in the layout, including any on click listeners
+     * and other behaviour.
+     */
+    private void initViews() {
+        setViewsToHide();
+        setAddNewView(R.id.add_new);
+        setRootView(R.id.root_layout);
+
+        editTextReminder = findViewById(R.id.edit_text_reminder);
+
+        checkMassUnit();
+
+        initSearchLayout();
+        initSearchFieldListeners();
+
+        initProductsAddedView();
+        initRepeatIntervalInput();
+        initRepeatOnInput();
+        initReminderInput();
+    }
+
+    /**
+     * Retrieves the current mass unit set by the user preferences, and updates
+     * the input fields accordingly.
+     */
+    private void checkMassUnit() {
+        if (MassUnit.getMassUnit(this) == MassUnit.LBS) {
+            TextInputLayout inputLayoutQuantityMass =
+                    findViewById(R.id.input_layout_quantity_mass);
+            inputLayoutQuantityMass.setHint(getString(R.string.contracts_input_quantity_lbs));
+        }
+    }
+
+    /**
+     * Sets which views should be hidden when a search view is opened.
+     */
+    private void setViewsToHide() {
+        addViewToHide(INPUT_PRODUCT, R.id.input_layout_product);
+        addViewToHide(INPUT_QUANTITY, R.id.input_row_quantity);
+        addViewToHide(INPUT_DESTINATION, R.id.input_layout_destination);
+        addViewToHide(INPUT_REPEAT_INTERVAL, R.id.input_layout_repeat_interval);
+        addViewToHide(INPUT_REPEAT_ON, R.id.input_repeat_on);
+        addViewToHide(INPUT_REMINDER, R.id.input_reminder);
+
+        addViewToHide("add_product_btn", R.id.add_product);
+        addViewToHide("products_added_recycler_view", R.id.products_added_recycler_view);
+    }
+
+    /**
+     * Initialises the search layout which is shown when the user clicks on a
+     * relevant input field. These are set in {@link #initSearchFieldListeners()}.
+     */
+    private void initSearchLayout() {
+        CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
+        TextView emptyView = findViewById(R.id.no_results);
+        recyclerView.setEmptyView(emptyView);
+        setSearchItemAdapter(new SearchItemAdapter(
+                getSearchItemList(), getCurrentSearchType(), this));
+        recyclerView.setAdapter(getSearchItemAdapter());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setSearchResultsLayout(R.id.search_results_layout);
+    }
+
+    /**
+     * Sets listeners for the input fields that should open the search layout
+     * when clicked. This should include any field that references other objects
+     * in the database that the user should choose from.
+     */
+    private void initSearchFieldListeners() {
+        setListeners(INPUT_PRODUCT,
+                findViewById(R.id.input_layout_product),
+                findViewById(R.id.edit_text_product));
+
+        setListeners(INPUT_DESTINATION,
+                findViewById(R.id.input_layout_destination),
+                findViewById(R.id.edit_text_destination));
+    }
+
+    /**
+     * Initialises the view to show a list of products the user has already
+     * added to the contract, if they add more than one.
+     */
+    private void initProductsAddedView() {
+        productsAddedAdapter = new ProductsAddedAdapter(productsAddedList, this,
+                editType == EDIT_TYPE_EDIT, true);
+        productsAddedRecyclerView = findViewById(R.id.products_added_recycler_view);
+        productsAddedRecyclerView.setAdapter(productsAddedAdapter);
+        productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        addProductBtn = findViewById(R.id.add_product);
+        addProductBtn.setOnClickListener(v -> addProductToProductsAddedList());
+    }
+
+    /**
+     * Initialises the repeat interval input field to open a {@link RepeatIntervalDialog}
+     * when the user clicks it.
+     */
+    private void initRepeatIntervalInput() {
+        // show dialog when user selects repeat interval input field
+        TextInputEditText editTextRepeatInterval =
+                findViewById(R.id.edit_text_repeat_interval);
+        editTextRepeatInterval.setOnClickListener(v -> showRepeatIntervalDialog());
+    }
+
+    /**
+     * Initialises the repeat on input field.
+     */
+    private void initRepeatOnInput() {
+        Spinner repeatOnSpn = findViewById(R.id.spn_repeat_on);
+        repeatOnSpnAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        repeatOnSpnAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
+        repeatOnSpnAdapter.addAll(getResources().getStringArray(R.array.weekdays));
+        repeatOnSpnAdapter.notifyDataSetChanged();
+        repeatOnSpn.setAdapter(repeatOnSpnAdapter);
+
+        // hide input at start
+        findViewById(R.id.input_repeat_on).setVisibility(View.GONE);
+    }
+
+    /**
+     * Initialises the reminder input field, including increment and
+     * decrement buttons.
+     */
+    private void initReminderInput() {
+        TextView txtReminderDaysBefore = findViewById(R.id.reminder_text_days_before);
+        TextView hintReminder = findViewById(R.id.text_reminder);
+        // set correct plural form based on reminder input
+        editTextReminder.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s) || s.toString().equals("0")) {
+                    hintReminder.setText(R.string.contracts_reminder_off_hint);
+                } else {
+                    hintReminder.setText(R.string.contracts_reminder_hint);
+                }
+                if (!TextUtils.isEmpty(s)) {
+                    txtReminderDaysBefore.setText(getResources().getQuantityString(
+                            R.plurals.contracts_reminder_days_before,
+                            Integer.parseInt(s.toString())));
+                }
+            }
+        });
+
+        // set plus and minus buttons
+        ImageButton btnReminderMinus = findViewById(R.id.btn_reminder_minus);
+        btnReminderMinus.setOnClickListener(v -> decrementReminder());
+
+        ImageButton btnReminderPlus = findViewById(R.id.btn_reminder_plus);
+        btnReminderPlus.setOnClickListener(v -> incrementReminder());
+    }
+
+    /**
+     * Sets the reminder input field to the specified value.
+     */
+    private void setReminderInputValue(int value) {
+        editTextReminder.setText(String.valueOf(value));
+    }
+
+    /**
      * Gets the product and mass currently entered into the input fields
      * and adds a {@link ProductQuantity} with these values to the contract.
      * Clears the input fields so another product can be added.
@@ -606,13 +635,45 @@ public class EditContractActivity extends InputFormActivity
         TextView hintReminder = findViewById(R.id.text_reminder);
         int reminderDays = contractToEdit.getReminder();
         if (reminderDays > 0) {
-            editTextReminder.setText(String.valueOf(contractToEdit.getReminder()));
+            setReminderInputValue(contractToEdit.getReminder());
             hintReminder.setText(R.string.contracts_reminder_hint);
         } else {
             hintReminder.setText(R.string.contracts_reminder_off_hint);
         }
 
         selectedDestId = contractToEdit.getDestId();
+    }
+
+    /**
+     * Shows a {@link RepeatIntervalDialog} so the user can select a repeat
+     * interval for this contract.
+     */
+    private void showRepeatIntervalDialog() {
+        DialogFragment dialog = new RepeatIntervalDialog();
+        Bundle args = new Bundle();
+        if (selectedRepeatInterval != null) {
+            if (selectedRepeatInterval.hasValues(1, Interval.TimeUnit.WEEK)) {
+                // 1 week
+                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                        RepeatIntervalDialog.OPTION_WEEK);
+            } else if (selectedRepeatInterval.hasValues(2, Interval.TimeUnit.WEEK)) {
+                // 2 weeks
+                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                        RepeatIntervalDialog.OPTION_TWO_WEEK);
+            } else if (selectedRepeatInterval.hasValues(1, Interval.TimeUnit.MONTH)) {
+                // 1 month
+                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                        RepeatIntervalDialog.OPTION_MONTH);
+            } else {
+                // custom interval
+                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                        RepeatIntervalDialog.OPTION_CUSTOM);
+                args.putSerializable(RepeatIntervalDialog.EXTRA_CUSTOM_INTERVAL,
+                        selectedRepeatInterval);
+            }
+        }
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), "repeat_interval");
     }
 
     /**
@@ -666,6 +727,32 @@ public class EditContractActivity extends InputFormActivity
             }
         } else {
             repeatOnTxt.setText(R.string.contracts_repeat_on_default);
+        }
+    }
+
+    /**
+     * Increments the value in the reminder input field.
+     */
+    private void incrementReminder() {
+        EditText editTextReminder = findViewById(R.id.edit_text_reminder);
+        if (TextUtils.isEmpty(editTextReminder.getText())) {
+            setReminderInputValue(1);
+        } else {
+            int currentReminder = Integer.valueOf(editTextReminder.getText().toString());
+            setReminderInputValue(currentReminder + 1);
+        }
+    }
+
+    /**
+     * Decrements the value in the reminder input field, if it is greater than 0.
+     */
+    private void decrementReminder() {
+        EditText editTextReminder = findViewById(R.id.edit_text_reminder);
+        if (!TextUtils.isEmpty(editTextReminder.getText())) {
+            int currentReminder = Integer.valueOf(editTextReminder.getText().toString());
+            if (currentReminder > 0) {
+                setReminderInputValue(currentReminder - 1);
+            }
         }
     }
 

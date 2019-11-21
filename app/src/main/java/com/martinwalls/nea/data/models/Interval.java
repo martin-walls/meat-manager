@@ -55,4 +55,8 @@ public class Interval implements Serializable {
     public void setUnit(TimeUnit unit) {
         this.unit = unit;
     }
+
+    public boolean hasValues(int value, TimeUnit unit) {
+        return this.value == value && this.unit.equals(unit);
+    }
 }
