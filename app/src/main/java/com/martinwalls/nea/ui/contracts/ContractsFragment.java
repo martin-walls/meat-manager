@@ -41,26 +41,11 @@ public class ContractsFragment extends Fragment
 
         dbHandler = new DBHandler(getContext());
 
-        CustomRecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
-        TextView emptyView = fragmentView.findViewById(R.id.empty);
-        recyclerView.setEmptyView(emptyView);
-
-        contractsAdapter = new ContractsAdapter(contractList, this);
-        recyclerView.setAdapter(contractsAdapter);
+        initContractsList(fragmentView);
         loadContracts();
 
-        RecyclerViewDivider recyclerViewDivider =
-                new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
-        recyclerView.addItemDecoration(recyclerViewDivider);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         FloatingActionButton fab = fragmentView.findViewById(R.id.fab);
-        fab.setOnClickListener(v -> {
-            Intent newContractIntent = new Intent(getContext(), EditContractActivity.class);
-            newContractIntent.putExtra(EditContractActivity.EXTRA_EDIT_TYPE,
-                    EditContractActivity.EDIT_TYPE_NEW);
-            startActivity(newContractIntent);
-        });
+        fab.setOnClickListener(v -> startNewContractActivity());
 
         return fragmentView;
     }
@@ -108,6 +93,24 @@ public class ContractsFragment extends Fragment
     }
 
     /**
+     * Initialises the contracts list. Doesn't load any data, this should be
+     * done by calling {@link #loadContracts()}.
+     */
+    private void initContractsList(View fragmentView) {
+        CustomRecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
+        TextView emptyView = fragmentView.findViewById(R.id.empty);
+        recyclerView.setEmptyView(emptyView);
+
+        contractsAdapter = new ContractsAdapter(contractList, this);
+        recyclerView.setAdapter(contractsAdapter);
+
+        RecyclerViewDivider recyclerViewDivider =
+                new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
+        recyclerView.addItemDecoration(recyclerViewDivider);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    /**
      * Gets all contracts in the database, sorts them and updates the view to
      * show them.
      */
@@ -116,5 +119,15 @@ public class ContractsFragment extends Fragment
         contractList.addAll(SortUtils.mergeSort(dbHandler.getAllContracts(),
                 Contract.comparatorDate()));
         contractsAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Opens {@link EditContractActivity} so the user can add a new contract.
+     */
+    private void startNewContractActivity() {
+        Intent newContractIntent = new Intent(getContext(), EditContractActivity.class);
+        newContractIntent.putExtra(EditContractActivity.EXTRA_EDIT_TYPE,
+                EditContractActivity.EDIT_TYPE_NEW);
+        startActivity(newContractIntent);
     }
 }

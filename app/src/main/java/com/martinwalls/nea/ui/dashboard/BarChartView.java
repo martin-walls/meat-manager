@@ -67,6 +67,9 @@ public class BarChartView extends View {
     private float labelMarginInside;
     private float labelMarginOutside;
 
+    // text size of labels and tooltips (in sp)
+    private final int TEXT_SIZE = 14;
+
     // space around tooltip
     private float tooltipMargin;
     // space between tooltip text and edge of tooltip
@@ -107,8 +110,8 @@ public class BarChartView extends View {
 
     /**
      * Initialises variables for drawing the view. Gets colour values and
-     * creates {@link Paint} objects, to avoid doing so in {@link #onDraw} as
-     * that would be less efficient.
+     * creates {@link Paint} objects, to avoid doing so in {@link #onDraw} to
+     * improve efficiency.
      */
     private void init(Context context) {
         this.context = context;
@@ -131,6 +134,9 @@ public class BarChartView extends View {
         decimalFormat = new DecimalFormat("#.##");
     }
 
+    /**
+     * Initialises all paint objects, getting colour values from theme attributes.
+     */
     private void initPaints() {
         // get colours from theme attrs
         int amountBarColor = Utils.getColorFromTheme(context,
@@ -168,16 +174,18 @@ public class BarChartView extends View {
         lessReqBarFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         lessReqBarFillPaint.setColor(lessReqBarColor);
 
+        int textSize = Utils.convertSpToPixelSize(TEXT_SIZE, context);
+
         // label paints
         barOuterLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         barOuterLabelPaint.setColor(barOuterTextColor);
         barOuterLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        barOuterLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+        barOuterLabelPaint.setTextSize(textSize);
 
         barInnerLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         barInnerLabelPaint.setColor(barInnerTextColor);
         barInnerLabelPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        barInnerLabelPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+        barInnerLabelPaint.setTextSize(textSize);
 
         // tooltip paints
         amountTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -186,7 +194,7 @@ public class BarChartView extends View {
         amountTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         amountTooltipTextPaint.setColor(amountTooltipTextColor);
         amountTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        amountTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+        amountTooltipTextPaint.setTextSize(textSize);
 
         moreReqTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         moreReqTooltipFillPaint.setColor(reqTooltipFillColor);
@@ -194,7 +202,7 @@ public class BarChartView extends View {
         moreReqTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         moreReqTooltipTextPaint.setColor(reqTooltipTextColor);
         moreReqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        moreReqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+        moreReqTooltipTextPaint.setTextSize(textSize);
 
         lessReqTooltipFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         lessReqTooltipFillPaint.setColor(lessReqTooltipFillColor);
@@ -202,7 +210,7 @@ public class BarChartView extends View {
         lessReqTooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         lessReqTooltipTextPaint.setColor(lessReqTooltipTextColor);
         lessReqTooltipTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        lessReqTooltipTextPaint.setTextSize(Utils.convertSpToPixelSize(14, context));
+        lessReqTooltipTextPaint.setTextSize(textSize);
     }
 
     /**

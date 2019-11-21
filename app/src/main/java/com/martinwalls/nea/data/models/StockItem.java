@@ -192,6 +192,13 @@ public class StockItem implements Serializable {
     }
 
     /**
+     * {@link Comparator} to sort stock by ID.
+     */
+    public static Comparator<StockItem> comparatorId() {
+        return (stock1, stock2) -> stock1.getStockId() - stock2.getStockId();
+    }
+
+    /**
      * {@link Comparator} to sort stock alphabetically.
      */
     public static Comparator<StockItem> comparatorAlpha() {

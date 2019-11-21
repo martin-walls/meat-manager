@@ -2,12 +2,19 @@ package com.martinwalls.nea.ui.dashboard;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Location;
@@ -33,9 +40,6 @@ public class DashboardFragment extends Fragment
     private TextView emptyView;
     private ScrollView graphLayout;
 
-    private RecyclerView locationsRecyclerView;
-    private LocationsMenuAdapter locationsAdapter;
-
     private Location filterLocation;
 
     @Override
@@ -48,21 +52,11 @@ public class DashboardFragment extends Fragment
         dbHandler = new DBHandler(getContext());
         prefs = EasyPreferences.createForDefaultPreferences(getContext());
 
-        locationsRecyclerView = fragmentView.findViewById(R.id.recycler_view_locations);
-        locationsAdapter = new LocationsMenuAdapter(
-                dbHandler.getAllLocations(Location.LocationType.Storage), this);
-        locationsRecyclerView.setAdapter(locationsAdapter);
-
-        RecyclerViewMargin margins = new RecyclerViewMargin(
-                Utils.convertDpToPixelSize(16, getContext()), RecyclerViewMargin.HORIZONTAL);
-        locationsRecyclerView.addItemDecoration(margins);
-
         if (filterLocation == null || !TextUtils.isEmpty(filterLocation.getLocationName())) {
             filterLocation = new Location();
         }
 
-        locationsRecyclerView.setLayoutManager(
-                new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        initLocationFilterMenu(fragmentView);
 
         graphView = fragmentView.findViewById(R.id.graph);
         emptyView = fragmentView.findViewById(R.id.empty);
@@ -129,44 +123,46 @@ public class DashboardFragment extends Fragment
     }
 
     /**
+     * Initialises menu to allow the user to filter by location.
+     */
+    private void initLocationFilterMenu(View fragmentView) {
+        RecyclerView locationsRecyclerView =
+                fragmentView.findViewById(R.id.recycler_view_locations);
+        LocationsMenuAdapter locationsAdapter = new LocationsMenuAdapter(
+                dbHandler.getAllLocations(Location.LocationType.Storage), this);
+        locationsRecyclerView.setAdapter(locationsAdapter);
+
+        RecyclerViewMargin margins = new RecyclerViewMargin(
+                Utils.convertDpToPixelSize(16, getContext()), RecyclerViewMargin.HORIZONTAL);
+        locationsRecyclerView.addItemDecoration(margins);
+
+        locationsRecyclerView.setLayoutManager(
+                new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+    }
+
+    /**
      * Gets all stock from the database, sorts it and updates the bar chart
      * to show the updated data.
      */
     private void loadData() {
-        List<BarChartEntry> entries = new ArrayList<>();
 
+        // get data from db and sort it
         List<StockItem> stockList;
         if (filterLocation == null || TextUtils.isEmpty(filterLocation.getLocationName())) {
             stockList = SortUtils.mergeSort(
-                    dbHandler.getAllStock(), StockItem.comparatorAlpha());
+                    dbHandler.getAllStock(), StockItem.comparatorId());
         } else {
             stockList = SortUtils.mergeSort(
                     dbHandler.getAllStockFromLocation(filterLocation.getLocationId()),
-                    StockItem.comparatorAlpha());
+                    StockItem.comparatorId());
         }
 
-        for (int i = 1; i < stockList.size(); i++) {
-            StockItem lastStockItem = stockList.get(i - 1);
-            StockItem thisStockItem = stockList.get(i);
-            if (lastStockItem.getProduct().getProductId()
-                    == thisStockItem.getProduct().getProductId()) {
-                lastStockItem.setMass(lastStockItem.getMass() + thisStockItem.getMass());
-                lastStockItem.setNumBoxes(
-                        lastStockItem.getNumBoxes() + thisStockItem.getNumBoxes());
-                stockList.remove(i);
-                i--;
-            }
-        }
+        groupStockByProduct(stockList);
 
-        if (stockList.size() == 0) {
-            emptyView.setVisibility(View.VISIBLE);
-            graphLayout.setVisibility(View.GONE);
-        } else {
-            emptyView.setVisibility(View.GONE);
-            graphLayout.setVisibility(View.VISIBLE);
-        }
+        // handle case for no data
+        showEmptyView(stockList.size() == 0);
 
-
+        // sort data by chosen sort mode
         switch (prefs.getInt(R.string.pref_dashboard_sort_by, SORT_BY_DEFAULT)) {
             case SortUtils.SORT_NAME:
                 stockList = SortUtils.mergeSort(stockList, StockItem.comparatorAlpha());
@@ -181,6 +177,52 @@ public class DashboardFragment extends Fragment
 
         List<ProductQuantity> productsRequiredList = dbHandler.getAllProductsRequired();
 
+        // get data to pass to the chart view
+        List<BarChartEntry> entries = getChartData(stockList, productsRequiredList);
+        graphView.setData(entries);
+    }
+
+    /**
+     * Groups stock by product, so only one bar is shown for each product, even
+     * if that product is stored in multiple locations. Modifies the original
+     * list.
+     */
+    private void groupStockByProduct(List<StockItem> stockList) {
+        for (int i = 1; i < stockList.size(); i++) {
+            StockItem lastStockItem = stockList.get(i - 1);
+            StockItem thisStockItem = stockList.get(i);
+            if (lastStockItem.getProduct().getProductId()
+                    == thisStockItem.getProduct().getProductId()) {
+                lastStockItem.setMass(lastStockItem.getMass() + thisStockItem.getMass());
+                lastStockItem.setNumBoxes(
+                        lastStockItem.getNumBoxes() + thisStockItem.getNumBoxes());
+                stockList.remove(i);
+                i--;
+            }
+        }
+    }
+
+    /**
+     * Shows/hides the empty view.
+     */
+    private void showEmptyView(boolean showEmptyView) {
+        if (showEmptyView) {
+            emptyView.setVisibility(View.VISIBLE);
+            graphLayout.setVisibility(View.GONE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+            graphLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Gets a list of {@link BarChartEntry} objects to pass to the chart view
+     * from a list of stock items and required products.
+     */
+    private List<BarChartEntry> getChartData(List<StockItem> stockList,
+                                             List<ProductQuantity> productsRequiredList) {
+        List<BarChartEntry> entries = new ArrayList<>();
+
         for (StockItem stockItem : stockList) {
             int productId = stockItem.getProduct().getProductId();
             float amountRequired = 0;
@@ -189,11 +231,9 @@ public class DashboardFragment extends Fragment
                     amountRequired += productRequired.getQuantityMass();
                 }
             }
-
             entries.add(new BarChartEntry(stockItem.getProduct().getProductName(),
                     (float) stockItem.getMass(), amountRequired));
         }
-
-        graphView.setData(entries);
+        return entries;
     }
 }

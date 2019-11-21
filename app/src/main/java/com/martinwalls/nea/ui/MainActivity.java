@@ -62,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         /**
-         * Parses a page from its name. This should be the same as the String
+         * Parses a {@link Page} from its name. This should be the same as the String
          * returned by {@link #name()}.
          */
-        public static Page getPageFromName(String name) {
+        public static Page parsePage(String name) {
             for (Page page : values()) {
                 if (page.name().equalsIgnoreCase(name)) {
                     return page;
@@ -86,11 +86,10 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = EasyPreferences.createForDefaultPreferences(this);
 
-
         if (savedInstanceState == null) {
-            currentPage = Page.getPageFromName(
-                    preferences.getString(
-                            R.string.pref_last_opened_page, Page.DASHBOARD.name()));
+            // open last opened page
+            currentPage = Page.parsePage(preferences.getString(
+                    R.string.pref_last_opened_page, Page.DASHBOARD.name()));
 
             getSupportFragmentManager()
                     .beginTransaction()
@@ -101,59 +100,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // setup nav drawer
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        toggle.setDrawerSlideAnimationEnabled(false);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                super.onDrawerSlide(drawerView, slideOffset);
-                findViewById(currentPage.getNavItem()).setActivated(true);
-                for (Page page : Page.values()) {
-                    if (page != currentPage) {
-                        findViewById(page.getNavItem()).setActivated(false);
-                    }
-                }
-            }
-        });
-
-        LinearLayout navDrawerContent = findViewById(R.id.nav_drawer_content);
-        TextView navDashboard = navDrawerContent.findViewById(R.id.nav_dashboard);
-        navDashboard.setOnClickListener(v -> {
-            replaceFragment(Page.DASHBOARD);
-        });
-
-        TextView navStock = navDrawerContent.findViewById(R.id.nav_stock);
-        navStock.setOnClickListener(v -> {
-            replaceFragment(Page.STOCK);
-        });
-
-        TextView navOrders = navDrawerContent.findViewById(R.id.nav_orders);
-        navOrders.setOnClickListener(v -> {
-            replaceFragment(Page.ORDERS);
-        });
-
-        TextView navContracts = navDrawerContent.findViewById(R.id.nav_contracts);
-        navContracts.setOnClickListener(v -> {
-            replaceFragment(Page.CONTRACTS);
-        });
-
-        TextView navExchange = navDrawerContent.findViewById(R.id.nav_exchange);
-        navExchange.setOnClickListener(v -> {
-            replaceFragment(Page.EXCHANGE);
-        });
-
-        TextView navSettings = navDrawerContent.findViewById(R.id.nav_settings);
-        navSettings.setOnClickListener(v -> {
-            Intent settingsIntent = new Intent(this, SettingsActivity.class);
-            startActivity(settingsIntent);
-        });
+        initNavDrawer(toolbar);
     }
 
     @Override
@@ -210,5 +157,73 @@ public class MainActivity extends AppCompatActivity {
         if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         }
+    }
+
+    /**
+     * Initialises the navigation drawer.
+     *
+     * @param toolbar A reference to this Activity's Toolbar, this is needed
+     *                to set the nav drawer toggle.
+     */
+    private void initNavDrawer(Toolbar toolbar) {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle.setDrawerSlideAnimationEnabled(false);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                activateCurrentNavDrawerItem();
+            }
+        });
+
+        setNavDrawerItemListeners();
+    }
+
+    /**
+     * Activates the nav drawer item for the current page, and dis-activates
+     * all other items so only the current one is selected.
+     */
+    private void activateCurrentNavDrawerItem() {
+        findViewById(currentPage.getNavItem()).setActivated(true);
+        for (Page page : Page.values()) {
+            if (page != currentPage) {
+                findViewById(page.getNavItem()).setActivated(false);
+            }
+        }
+    }
+
+    /**
+     * Sets listeners for navigation drawer items to open the corresponding
+     * page of the app.
+     */
+    private void setNavDrawerItemListeners() {
+        LinearLayout navDrawerContent = findViewById(R.id.nav_drawer_content);
+
+        TextView navDashboard = navDrawerContent.findViewById(R.id.nav_dashboard);
+        navDashboard.setOnClickListener(v -> replaceFragment(Page.DASHBOARD));
+
+        TextView navStock = navDrawerContent.findViewById(R.id.nav_stock);
+        navStock.setOnClickListener(v -> replaceFragment(Page.STOCK));
+
+        TextView navOrders = navDrawerContent.findViewById(R.id.nav_orders);
+        navOrders.setOnClickListener(v -> replaceFragment(Page.ORDERS));
+
+        TextView navContracts = navDrawerContent.findViewById(R.id.nav_contracts);
+        navContracts.setOnClickListener(v -> replaceFragment(Page.CONTRACTS));
+
+        TextView navExchange = navDrawerContent.findViewById(R.id.nav_exchange);
+        navExchange.setOnClickListener(v -> replaceFragment(Page.EXCHANGE));
+
+        TextView navSettings = navDrawerContent.findViewById(R.id.nav_settings);
+        navSettings.setOnClickListener(v -> {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+        });
     }
 }

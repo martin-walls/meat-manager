@@ -50,16 +50,8 @@ public class ContractDetailActivity extends AppCompatActivity
             contract = dbHandler.getContract(contractId);
         }
 
-        ProductsAddedAdapter productsAdapter =
-                new ProductsAddedAdapter(contract.getProductList());
-        RecyclerView productsRecyclerView = findViewById(R.id.recycler_view_products);
-        productsRecyclerView.setAdapter(productsAdapter);
-        productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        initStockForContract();
-
-        TextView relatedStockTitle = findViewById(R.id.related_stock_title);
-        relatedStockTitle.setText(R.string.related_stock_title);
+        initProductsAddedView();
+        initRelatedStockView();
 
         fillFields();
     }
@@ -144,9 +136,38 @@ public class ContractDetailActivity extends AppCompatActivity
     }
 
     /**
+     * Initialises view to show all products added to this contract.
+     */
+    private void initProductsAddedView() {
+        ProductsAddedAdapter productsAdapter =
+                new ProductsAddedAdapter(contract.getProductList());
+        RecyclerView productsRecyclerView = findViewById(R.id.recycler_view_products);
+        productsRecyclerView.setAdapter(productsAdapter);
+        productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    /**
      * Initialises list of related stock for the {@link Contract} being shown.
      */
-    private void initStockForContract() {
+    private void initRelatedStockView() {
+        // set section title
+        TextView relatedStockTitle = findViewById(R.id.related_stock_title);
+        relatedStockTitle.setText(R.string.related_stock_title);
+
+        List<RelatedStock> relatedStockList = getRelatedStock();
+
+        RelatedStockAdapter relatedStockAdapter
+                = new RelatedStockAdapter(relatedStockList, this);
+        RecyclerView relatedStockRecyclerView = findViewById(R.id.recycler_view_related_stock);
+        relatedStockRecyclerView.setAdapter(relatedStockAdapter);
+        relatedStockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    /**
+     * Retrieves all stock related to this contract as {@link RelatedStock}
+     * objects.
+     */
+    private List<RelatedStock> getRelatedStock() {
         List<StockItem> stockForContract = SortUtils.mergeSort(
                 dbHandler.getAllStockForContract(contract.getContractId()),
                 StockItem.comparatorLocation());
@@ -183,24 +204,35 @@ public class ContractDetailActivity extends AppCompatActivity
             }
         }
 
-        RelatedStockAdapter relatedStockAdapter
-                = new RelatedStockAdapter(relatedStockList, this);
-        RecyclerView relatedStockRecyclerView = findViewById(R.id.recycler_view_related_stock);
-        relatedStockRecyclerView.setAdapter(relatedStockAdapter);
-        relatedStockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        return relatedStockList;
     }
 
     /**
      * Initialises fields with data from the {@link Contract} being shown.
      */
     private void fillFields() {
-        TextView destination = findViewById(R.id.destination);
-        destination.setText(contract.getDestName());
+        setDestinationText(contract.getDestName());
+        setRepeatText(contract.getRepeatInterval());
+        setNextRepeatText(contract.getDaysToNextRepeat());
+        setReminderText(contract.getReminder());
+    }
 
-        TextView repeat = findViewById(R.id.repeat);
+    /**
+     * Sets text of the destination field.
+     */
+    private void setDestinationText(String value) {
+        TextView destination = findViewById(R.id.destination);
+        destination.setText(value);
+    }
+
+    /**
+     * Sets text of the repeat field, showing the repeat interval and
+     * repeat on.
+     */
+    private void setRepeatText(Interval repeatInterval) {
+        TextView txtRepeat = findViewById(R.id.repeat);
         String repeatStr;
         String repeatOnStr;
-        Interval repeatInterval = contract.getRepeatInterval();
         if (repeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
             repeatOnStr = getResources()
                     .getStringArray(R.array.weekdays)[contract.getRepeatOn() - 1];
@@ -215,10 +247,15 @@ public class ContractDetailActivity extends AppCompatActivity
                     repeatInterval.getValue(),
                     repeatInterval.getUnit().name().toLowerCase(), repeatOnStr);
         }
-        repeat.setText(repeatStr);
+        txtRepeat.setText(repeatStr);
+    }
 
+    /**
+     * Sets text of the next repeat field, that is, how many days in advance
+     * the next repeat is.
+     */
+    private void setNextRepeatText(int daysToNextRepeat) {
         TextView nextRepeat = findViewById(R.id.next_repeat);
-        int daysToNextRepeat = contract.getDaysToNextRepeat();
         switch (daysToNextRepeat) {
             case 0:
                 nextRepeat.setText(R.string.contracts_next_repeat_today);
@@ -231,9 +268,13 @@ public class ContractDetailActivity extends AppCompatActivity
                         contract.getDaysToNextRepeat()));
                 break;
         }
+    }
 
+    /**
+     * Sets text of the reminder field.
+     */
+    private void setReminderText(int reminderDaysBefore) {
         TextView reminder = findViewById(R.id.reminder);
-        int reminderDaysBefore = contract.getReminder();
         if (reminderDaysBefore > 0) {
             reminder.setText(getResources()
                     .getQuantityString(R.plurals.contract_reminder_display,
