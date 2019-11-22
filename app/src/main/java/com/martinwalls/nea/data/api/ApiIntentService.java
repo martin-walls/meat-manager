@@ -50,6 +50,8 @@ public class ApiIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         PendingIntent reply = intent.getParcelableExtra(EXTRA_PENDING_RESULT);
 
+        //todo separate class to handle API requests/caching e.g. ApiHelper
+        
         // if cache doesn't exists, API request will be made
         long timeDiff = getTimeDiffFromLastCache();
 
