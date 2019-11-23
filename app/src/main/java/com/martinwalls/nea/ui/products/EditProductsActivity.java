@@ -45,29 +45,11 @@ public class EditProductsActivity extends AppCompatActivity
         dbHandler = new DBHandler(this);
         prefs = EasyPreferences.createForDefaultPreferences(this);
 
-        CustomRecyclerView recyclerView = findViewById(R.id.recycler_view);
-        TextView emptyView = findViewById(R.id.empty);
-        recyclerView.setEmptyView(emptyView);
-
-        productsAdapter = new ProductsAdapter(productList, this);
-        recyclerView.setAdapter(productsAdapter);
+        initProductsList();
         loadProducts();
 
-        RecyclerViewDivider recyclerViewDivider =
-                new RecyclerViewDivider(this, R.drawable.divider_thin);
-        recyclerView.addItemDecoration(recyclerViewDivider);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
-                new SwipeToDeleteCallback(productsAdapter, this));
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(v -> {
-            DialogFragment addNewProductDialog = new AddNewProductDialog();
-            addNewProductDialog.show(getSupportFragmentManager(), "add_new_product");
-        });
+        fab.setOnClickListener(v -> showAddNewProductDialog());
     }
 
     @Override
@@ -75,6 +57,9 @@ public class EditProductsActivity extends AppCompatActivity
         super.onResume();
         if (dbHandler == null) {
             dbHandler = new DBHandler(this);
+        }
+        if (prefs == null) {
+            prefs = EasyPreferences.createForDefaultPreferences(this);
         }
         loadProducts();
     }
@@ -106,18 +91,13 @@ public class EditProductsActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_sort_by_name:
-                prefs.setInt(R.string.pref_products_sort_by, SortUtils.SORT_NAME);
-                invalidateOptionsMenu();
-                loadProducts();
+                setSortMode(SortUtils.SORT_NAME);
                 return true;
             case R.id.action_sort_by_meat_type:
-                prefs.setInt(R.string.pref_products_sort_by, SortUtils.SORT_MEAT_TYPE);
-                invalidateOptionsMenu();
-                loadProducts();
+                setSortMode(SortUtils.SORT_MEAT_TYPE);
                 return true;
             case R.id.action_add_meat_type:
-                DialogFragment addNewMeatTypeDialog = new AddNewMeatTypeDialog();
-                addNewMeatTypeDialog.show(getSupportFragmentManager(), "add_new_meat_type");
+                showAddNewMeatTypeDialog();
                 return true;
             case android.R.id.home:
                 super.onBackPressed();
@@ -149,6 +129,31 @@ public class EditProductsActivity extends AppCompatActivity
     }
 
     /**
+     * Initialises the products list. Doesn't load any data, this is done with
+     * {@link #loadProducts()}.
+     */
+    private void initProductsList() {
+        CustomRecyclerView recyclerView = findViewById(R.id.recycler_view);
+        TextView emptyView = findViewById(R.id.empty);
+        recyclerView.setEmptyView(emptyView);
+
+        productsAdapter = new ProductsAdapter(productList, this);
+        recyclerView.setAdapter(productsAdapter);
+
+        // item dividers
+        RecyclerViewDivider recyclerViewDivider =
+                new RecyclerViewDivider(this, R.drawable.divider_thin);
+        recyclerView.addItemDecoration(recyclerViewDivider);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        // swipe to delete action
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
+                new SwipeToDeleteCallback(productsAdapter, this));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    /**
      * Gets all products in the database, sorts them and updates the
      * layout to show the update data.
      */
@@ -160,5 +165,31 @@ public class EditProductsActivity extends AppCompatActivity
                         ? Product.comparatorAlpha()
                         : Product.comparatorMeatType()));
         productsAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Shows an {@link AddNewProductDialog} to allow the user to add a new product.
+     */
+    private void showAddNewProductDialog() {
+        DialogFragment addNewProductDialog = new AddNewProductDialog();
+        addNewProductDialog.show(getSupportFragmentManager(), "add_new_product");
+    }
+
+    /**
+     * Shows an {@link AddNewMeatTypeDialog} to allow the user to add a new
+     * meat type.
+     */
+    private void showAddNewMeatTypeDialog() {
+        DialogFragment addNewMeatTypeDialog = new AddNewMeatTypeDialog();
+        addNewMeatTypeDialog.show(getSupportFragmentManager(), "add_new_meat_type");
+    }
+
+    /**
+     * Sets the sort mode for products, and reloads the data.
+     */
+    private void setSortMode(int sortMode) {
+        prefs.setInt(R.string.pref_products_sort_by, sortMode);
+        invalidateOptionsMenu();
+        loadProducts();
     }
 }

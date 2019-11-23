@@ -1,11 +1,14 @@
 package com.martinwalls.nea.ui;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.models.ProductQuantity;
 import com.martinwalls.nea.util.MassUnit;
@@ -23,11 +26,16 @@ public class ProductsAddedAdapter
     private boolean showDeleteBtn = true;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView name, mass, numBoxes;
-        private ImageButton deleteBtn, editBtn;
+        private Context context;
+        private TextView name;
+        private TextView mass;
+        private TextView numBoxes;
+        private ImageButton deleteBtn;
+        private ImageButton editBtn;
 
-        ViewHolder(View view) {
+        ViewHolder(View view, Context context) {
             super(view);
+            this.context = context;
             name = view.findViewById(R.id.product_name);
             mass = view.findViewById(R.id.mass);
             numBoxes = view.findViewById(R.id.num_boxes);
@@ -72,23 +80,23 @@ public class ProductsAddedAdapter
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_product_options, parent, false);
-        return new ViewHolder(itemView);
+        return new ViewHolder(itemView, parent.getContext());
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ProductQuantity productQuantity = productList.get(position);
         holder.name.setText(productQuantity.getProduct().getProductName());
-        MassUnit massUnit = MassUnit.getMassUnit(holder.mass.getContext());
-        holder.mass.setText(holder.mass.getContext()
+        MassUnit massUnit = MassUnit.getMassUnit(holder.context);
+        holder.mass.setText(holder.context
                 .getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
-                        Utils.getMassDisplayValue(holder.mass.getContext(),
+                        Utils.getMassDisplayValue(holder.context,
                                 productQuantity.getQuantityMass(), 3)));
         if (productQuantity.getQuantityBoxes() < 0) {
             holder.numBoxes.setVisibility(View.GONE);
         } else {
             holder.numBoxes.setVisibility(View.VISIBLE);
-            holder.numBoxes.setText(holder.numBoxes.getContext().getResources()
+            holder.numBoxes.setText(holder.context.getResources()
                     .getQuantityString(R.plurals.amount_boxes,
                             productQuantity.getQuantityBoxes(),
                             productQuantity.getQuantityBoxes()));

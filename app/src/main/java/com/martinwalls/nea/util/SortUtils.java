@@ -8,11 +8,28 @@ import java.util.List;
 
 public class SortUtils {
     // constants to store sort modes throughout app
+    /**
+     * Sort by name alphabetically (A -> Z)
+     */
     public static final int SORT_NAME = 0;
+    /**
+     * Sort by meat type alphabetically (A -> Z)
+     */
     public static final int SORT_MEAT_TYPE = 1;
+    /**
+     * Sort by amount (low -> high)
+     */
     public static final int SORT_AMOUNT_ASC = 2;
+    /**
+     * Sort by amount (high -> low)
+     */
     public static final int SORT_AMOUNT_DESC = 3;
+    /**
+     * Sort by location alphabetically (A -> Z)
+     */
     public static final int SORT_LOCATION = 4;
+
+    private SortUtils() {}
 
     /**
      * Merge sort algorithm (recursive). Takes a list of objects

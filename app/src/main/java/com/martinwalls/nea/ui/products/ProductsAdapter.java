@@ -22,7 +22,7 @@ public class ProductsAdapter extends BaseAdapter<ProductsAdapter.ViewHolder> {
     private Product recentlyDeletedItem;
     private int recentlyDeletedItemPosition;
 
-    private Activity parentActivity; // to show snackbar message
+    private Activity parentActivity; // needed to show snackbar message
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name, meatType;

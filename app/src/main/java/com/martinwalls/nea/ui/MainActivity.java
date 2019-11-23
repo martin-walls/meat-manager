@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,12 +15,13 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.ui.settings.SettingsActivity;
 import com.martinwalls.nea.ui.contracts.ContractsFragment;
 import com.martinwalls.nea.ui.dashboard.DashboardFragment;
 import com.martinwalls.nea.ui.exchange.ExchangeFragment;
 import com.martinwalls.nea.ui.orders.OrdersFragment;
+import com.martinwalls.nea.ui.settings.SettingsActivity;
 import com.martinwalls.nea.ui.stock.StockFragment;
 import com.martinwalls.nea.util.EasyPreferences;
 
@@ -39,10 +43,16 @@ public class MainActivity extends AppCompatActivity {
         CONTRACTS(new ContractsFragment(), R.id.nav_contracts),
         EXCHANGE(new ExchangeFragment(), R.id.nav_exchange);
 
+        /**
+         * The Fragment for this page.
+         */
         private Fragment fragment;
+        /**
+         * The ID of the View for this page in the navigation drawer.
+         */
         private int navItem;
 
-        Page(Fragment fragment, int navItem) {
+        Page(Fragment fragment, @IdRes int navItem) {
             this.fragment = fragment;
             this.navItem = navItem;
         }
@@ -57,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Returns the ID of the navigation drawer item for this page.
          */
+        @IdRes
         public int getNavItem() {
             return navItem;
         }

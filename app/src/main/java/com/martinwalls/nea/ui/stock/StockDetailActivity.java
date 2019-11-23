@@ -9,9 +9,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.ActionBar;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.StockItem;
@@ -36,11 +37,8 @@ public class StockDetailActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_detail);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.stock_details_title);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setTitle(R.string.stock_details_title);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHandler = new DBHandler(this);
 
@@ -74,11 +72,7 @@ public class StockDetailActivity extends AppCompatActivity
                 showConfirmDeleteDialog();
                 return true;
             case R.id.action_edit:
-                Intent editIntent = new Intent(this, EditStockActivity.class);
-                editIntent.putExtra(EditStockActivity.EXTRA_EDIT_TYPE,
-                        EditStockActivity.EDIT_TYPE_EDIT);
-                editIntent.putExtra(EditStockActivity.EXTRA_STOCK_ID, stockItem.getStockId());
-                startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
+                startEditStockActivity();
                 return true;
             case android.R.id.home:
                 super.onBackPressed();
@@ -127,10 +121,6 @@ public class StockDetailActivity extends AppCompatActivity
 
         TextView quantityMass = findViewById(R.id.edit_text_quantity_mass);
         MassUnit massUnit = MassUnit.getMassUnit(this);
-//        quantityMass.setText(getString(
-//        massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
-//                new DecimalFormat(DECIMAL_FORMAT_PATTERN).format(
-//                        Utils.convertToCurrentMassUnit(this, stockItem.getMass()))));
 
         quantityMass.setText(getString(
                 massUnit == MassUnit.KG
@@ -175,5 +165,16 @@ public class StockDetailActivity extends AppCompatActivity
                 stockItem.getProduct().getProductName());
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), "confirm_delete");
+    }
+
+    /**
+     * Opens {@link EditStockActivity} to allow the user to edit this stock item.
+     */
+    private void startEditStockActivity() {
+        Intent editIntent = new Intent(this, EditStockActivity.class);
+        editIntent.putExtra(EditStockActivity.EXTRA_EDIT_TYPE,
+                EditStockActivity.EDIT_TYPE_EDIT);
+        editIntent.putExtra(EditStockActivity.EXTRA_STOCK_ID, stockItem.getStockId());
+        startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
     }
 }

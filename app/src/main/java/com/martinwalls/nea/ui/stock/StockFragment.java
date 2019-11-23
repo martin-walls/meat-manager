@@ -51,25 +51,11 @@ public class StockFragment extends Fragment
         dbHandler = new DBHandler(getContext());
         prefs = EasyPreferences.createForDefaultPreferences(getContext());
 
-        CustomRecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
-        TextView emptyView = fragmentView.findViewById(R.id.empty);
-        recyclerView.setEmptyView(emptyView);
-
-        stockAdapter = new StockItemAdapter(stockList, this);
-        recyclerView.setAdapter(stockAdapter);
+        initStockList(fragmentView);
         loadStock();
 
-        RecyclerViewDivider recyclerViewDivider =
-                new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
-        recyclerView.addItemDecoration(recyclerViewDivider);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-
         FloatingActionButton fab = fragmentView.findViewById(R.id.fab);
-        fab.setOnClickListener(v -> {
-            Intent newStockIntent = new Intent(getContext(), EditStockActivity.class);
-            startActivityForResult(newStockIntent, REQUEST_REFRESH_ON_DONE);
-        });
+        fab.setOnClickListener(v -> startNewStockActivity());
 
         return fragmentView;
     }
@@ -87,6 +73,9 @@ public class StockFragment extends Fragment
         super.onResume();
         if (dbHandler == null) {
             dbHandler = new DBHandler(getContext());
+        }
+        if (prefs == null) {
+            prefs = EasyPreferences.createForDefaultPreferences(getContext());
         }
         loadStock();
     }
@@ -150,18 +139,17 @@ public class StockFragment extends Fragment
                 UndoStack.getInstance().redo(getContext());
                 loadStock();
                 return true;
+
             case R.id.action_edit_products:
-                Intent productsIntent = new Intent(getContext(), EditProductsActivity.class);
-                startActivity(productsIntent);
+                startEditProductsActivity();
                 return true;
             case R.id.action_edit_locations:
-                Intent locationsIntent = new Intent(getContext(), LocationsActivity.class);
-                startActivity(locationsIntent);
+                startLocationsActivity();
                 return true;
             case R.id.action_edit_meat_types:
-                Intent meatTypesIntent = new Intent(getContext(), EditMeatTypesActivity.class);
-                startActivity(meatTypesIntent);
+                startEditMeatTypesActivity();
                 return true;
+
             case R.id.action_sort_by_name:
                 setSortMode(SortUtils.SORT_NAME);
                 return true;
@@ -187,12 +175,23 @@ public class StockFragment extends Fragment
     }
 
     /**
-     * Stores which property to sort stock by, then reloads the data.
+     * Initialises the stock list. Doesn't load any data, this is done with
+     * {@link #loadStock()}.
      */
-    private void setSortMode(int sortMode) {
-        prefs.setInt(R.string.pref_stock_sort_by, sortMode);
-        getActivity().invalidateOptionsMenu();
-        loadStock();
+    private void initStockList(View fragmentView) {
+        CustomRecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
+        TextView emptyView = fragmentView.findViewById(R.id.empty);
+        recyclerView.setEmptyView(emptyView);
+
+        stockAdapter = new StockItemAdapter(stockList, this);
+        recyclerView.setAdapter(stockAdapter);
+
+        // item dividers
+        RecyclerViewDivider recyclerViewDivider =
+                new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
+        recyclerView.addItemDecoration(recyclerViewDivider);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
     }
 
     /**
@@ -219,5 +218,48 @@ public class StockFragment extends Fragment
                 break;
         }
         stockAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Stores which property to sort stock by, then reloads the data.
+     */
+    private void setSortMode(int sortMode) {
+        prefs.setInt(R.string.pref_stock_sort_by, sortMode);
+        getActivity().invalidateOptionsMenu();
+        loadStock();
+    }
+
+    /**
+     * Starts {@link EditStockActivity} to allow the user to add a new stock item.
+     */
+    private void startNewStockActivity() {
+        Intent newStockIntent = new Intent(getContext(), EditStockActivity.class);
+        startActivityForResult(newStockIntent, REQUEST_REFRESH_ON_DONE);
+    }
+
+    /**
+     * Starts {@link EditProductsActivity} to allow the user to view and edit
+     * products.
+     */
+    private void startEditProductsActivity() {
+        Intent productsIntent = new Intent(getContext(), EditProductsActivity.class);
+        startActivity(productsIntent);
+    }
+
+    /**
+     * Starts {@link LocationsActivity} to allow the user to view and edit locations.
+     */
+    private void startLocationsActivity() {
+        Intent locationsIntent = new Intent(getContext(), LocationsActivity.class);
+        startActivity(locationsIntent);
+    }
+
+    /**
+     * Starts {@link EditMeatTypesActivity} to allow the user to view and edit
+     * meat types.
+     */
+    private void startEditMeatTypesActivity() {
+        Intent meatTypesIntent = new Intent(getContext(), EditMeatTypesActivity.class);
+        startActivity(meatTypesIntent);
     }
 }

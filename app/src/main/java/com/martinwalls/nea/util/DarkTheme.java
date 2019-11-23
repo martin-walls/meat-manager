@@ -8,6 +8,8 @@ public final class DarkTheme {
     public static final int MODE_NIGHT_NO = 1;
     public static final int MODE_NIGHT_YES = 2;
 
+    private DarkTheme() {}
+
     /**
      * Sets the app's theme to dark, light or auto depending on {@code mode}.
      */

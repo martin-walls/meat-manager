@@ -2,11 +2,12 @@ package com.martinwalls.nea.ui.settings;
 
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.util.DarkTheme;
 import com.martinwalls.nea.util.EasyPreferences;
@@ -22,10 +23,7 @@ public class SettingsActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.settings, new SettingsFragment())
                 .commit();
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setDarkTheme();
     }
@@ -77,13 +75,12 @@ public class SettingsActivity extends AppCompatActivity {
             int min = prefs.getInt(R.string.pref_reminder_time_min,
                     ReminderUtils.DEFAULT_REMINDER_MIN);
             setReminderTimeSummary(hour, min);
-
         }
 
-        // allow use of resource id in parameter rather than string value
-
         /**
-         * Finds the {@link Preference} with the given key.
+         * Finds the {@link Preference} with the given key. This should be used
+         * rather than {@link #findPreference(CharSequence)} as this forces
+         * the use of a string resource, so it is much less likely to be mistyped.
          *
          * @see #findPreference(CharSequence)
          */
@@ -117,7 +114,8 @@ public class SettingsActivity extends AppCompatActivity {
          * user in the {@link TimePickerDialog}. Makes sure the next reminder 
          * is scheduled for the new time (if notifications are enabled).
          */
-        private TimePickerDialog.OnTimeSetListener listener = (view, hourOfDay, minute) -> {
+        private TimePickerDialog.OnTimeSetListener timePickerListener =
+                (view, hourOfDay, minute) -> {
             prefs.setInt(R.string.pref_reminder_time_hr, hourOfDay);
             prefs.setInt(R.string.pref_reminder_time_min, minute);
             setReminderTimeSummary(hourOfDay, minute);
@@ -136,7 +134,7 @@ public class SettingsActivity extends AppCompatActivity {
             int hour = prefs.getInt(R.string.pref_reminder_time_hr, 9);
             int min = prefs.getInt(R.string.pref_reminder_time_min, 0);
             TimePickerDialog timePickerDialog =
-                    new TimePickerDialog(getContext(), listener, hour, min, true);
+                    new TimePickerDialog(getContext(), timePickerListener, hour, min, true);
             timePickerDialog.show();
         }
     }

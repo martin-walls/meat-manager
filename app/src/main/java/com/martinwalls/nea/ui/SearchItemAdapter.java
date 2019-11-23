@@ -28,8 +28,8 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
             super(view);
             itemName = (TextView) view;
 
-            itemName.setOnClickListener(
-                    v -> listener.onSearchItemSelected(
+            itemName.setOnClickListener(v ->
+                    listener.onSearchItemSelected(
                             itemListFiltered.get(getAdapterPosition()), searchItemType));
         }
     }

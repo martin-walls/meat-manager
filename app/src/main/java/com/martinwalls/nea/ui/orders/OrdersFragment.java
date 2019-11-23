@@ -43,32 +43,16 @@ public class OrdersFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        setTitle();
+        setActionbarTitle();
         View fragmentView = inflater.inflate(R.layout.fragment_orders, container, false);
 
         dbHandler = new DBHandler(getContext());
 
-        CustomRecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
-        TextView emptyView = fragmentView.findViewById(R.id.empty);
-        recyclerView.setEmptyView(emptyView);
-
-        ordersAdapter = new OrdersAdapter(orderList, this);
-        recyclerView.setAdapter(ordersAdapter);
+        initOrdersList(fragmentView);
         loadOrders();
 
-        RecyclerViewDivider recyclerViewDivider =
-                new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
-        recyclerView.addItemDecoration(recyclerViewDivider);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-
         FloatingActionButton fab = fragmentView.findViewById(R.id.fab);
-        fab.setOnClickListener(v -> {
-            Intent newOrderIntent = new Intent(getContext(), EditOrderActivity.class);
-            newOrderIntent.putExtra(EditOrderActivity.EXTRA_EDIT_TYPE,
-                    EditOrderActivity.EDIT_TYPE_NEW);
-            startActivity(newOrderIntent);
-        });
+        fab.setOnClickListener(v -> startNewOrderActivity());
 
         return fragmentView;
     }
@@ -105,7 +89,7 @@ public class OrdersFragment extends Fragment
             case R.id.action_current_orders:
             case R.id.action_order_history:
                 isCurrentView = !isCurrentView;
-                setTitle();
+                setActionbarTitle();
                 getActivity().invalidateOptionsMenu();
                 loadOrders();
                 return true;
@@ -129,12 +113,41 @@ public class OrdersFragment extends Fragment
      * Sets the title for the fragment, depending on whether the layout is
      * showing current orders or the order history.
      */
-    private void setTitle() {
+    private void setActionbarTitle() {
         if (isCurrentView) {
             getActivity().setTitle(R.string.orders_title);
         } else {
             getActivity().setTitle(R.string.orders_history_title);
         }
+    }
+
+    /**
+     * Initialises the orders list. Doesn't load any data, this should be done
+     * with {@link #loadOrders()}.
+     */
+    private void initOrdersList(View fragmentView) {
+        CustomRecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
+        TextView emptyView = fragmentView.findViewById(R.id.empty);
+        recyclerView.setEmptyView(emptyView);
+
+        ordersAdapter = new OrdersAdapter(orderList, this);
+        recyclerView.setAdapter(ordersAdapter);
+
+        RecyclerViewDivider recyclerViewDivider =
+                new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
+        recyclerView.addItemDecoration(recyclerViewDivider);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+    }
+
+    /**
+     * Starts {@link EditOrderActivity} to allow the user to add a new order.
+     */
+    private void startNewOrderActivity() {
+        Intent newOrderIntent = new Intent(getContext(), EditOrderActivity.class);
+        newOrderIntent.putExtra(EditOrderActivity.EXTRA_EDIT_TYPE,
+                EditOrderActivity.EDIT_TYPE_NEW);
+        startActivity(newOrderIntent);
     }
 
     /**

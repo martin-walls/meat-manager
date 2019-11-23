@@ -7,9 +7,7 @@ import androidx.annotation.AttrRes;
 import java.text.DecimalFormat;
 
 public final class Utils {
-    // 1 kg = 2.20462 lbs
-    private static final double kgsToLbs = 2.20462262185;
-    // 1 lb = 0.453592 kgs
+    // 1 lb ~= 0.45359237 kgs
     private static final double lbsToKgs = 0.45359237;
 
     // Utils shouldn't be instantiated

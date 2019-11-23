@@ -11,6 +11,8 @@ import java.util.List;
 
 public class JsonParser {
 
+    private JsonParser() {}
+
     /**
      * Parses the JSON response to get a list of the supported currencies.
      *

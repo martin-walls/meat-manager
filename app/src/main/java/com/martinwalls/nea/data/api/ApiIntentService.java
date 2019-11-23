@@ -4,7 +4,9 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
+
 import androidx.annotation.Nullable;
+
 import com.martinwalls.nea.data.cache.CacheHelper;
 import com.martinwalls.nea.data.db.ExchangeDBHandler;
 import com.martinwalls.nea.data.models.Currency;
@@ -21,6 +23,7 @@ public class ApiIntentService extends IntentService {
 
     public static final String EXTRA_PENDING_RESULT = "pending_result";
     public static final String EXTRA_SUCCESS = "success";
+    public static final String EXTRA_ERROR_CODE = "error_code";
     public static final String EXTRA_RESULT = "result";
     public static final int RESULT_CODE = 0;
 
@@ -34,9 +37,15 @@ public class ApiIntentService extends IntentService {
         System.loadLibrary("native-lib");
     }
 
-    // URL of the API
+    /**
+     * The base URL of the API, to be built upon.
+     */
     private final String REQUEST_URL = "http://data.fixer.io/api/";
 
+    /**
+     * Currencies that will be set to favourite when the currencies are first
+     * retrieved from the API.
+     */
     private final String[] DEFAULT_FAV_CURRENCIES = {"GBP", "EUR", "USD"};
 
     public ApiIntentService() {
@@ -49,31 +58,13 @@ public class ApiIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         PendingIntent reply = intent.getParcelableExtra(EXTRA_PENDING_RESULT);
-
-        //todo separate class to handle API requests/caching e.g. ApiHelper
         
-        // if cache doesn't exists, API request will be made
-        long timeDiff = getTimeDiffFromLastCache();
-
-        String jsonResponse;
-        // if last cache from less than 1 hr ago
-        if (timeDiff < 60 * 60) {
-            jsonResponse = CacheHelper.retrieve(getApplicationContext(), CACHE_KEY_RATES);
-        } else {
-            // make new API request as cache is > 1 hr old
-            jsonResponse = fetchExchangeJsonFromApi();
-        }
+        String jsonResponse = getJsonResponse();
 
         RequestStatus status = JsonParser.getRequestStatus(jsonResponse);
         // if request error, return
         if (!status.isSuccess()) {
-            Intent result = new Intent();
-            result.putExtra(EXTRA_SUCCESS, false);
-            try {
-                reply.send(this, RESULT_CODE, result);
-            } catch (PendingIntent.CanceledException e) {
-                e.printStackTrace();
-            }
+            handleApiError(status, reply);
             return;
         }
 
@@ -89,19 +80,9 @@ public class ApiIntentService extends IntentService {
         // save list of currencies to db
         ExchangeDBHandler dbHandler = new ExchangeDBHandler(this);
         if (dbHandler.getCurrencyCount() == 0) {
-
             List<Currency> currencyList = fetchCurrencies();
-
             if (currencyList != null) {
-                // set default favourited currencies
-                for (Currency currency : currencyList) {
-                    if (Arrays.asList(DEFAULT_FAV_CURRENCIES).contains(currency.getCode())) {
-                        currency.setFavourite(true);
-                    } else {
-                        currency.setFavourite(false);
-                    }
-                }
-
+                setDefaultFavCurrencies(currencyList);
                 dbHandler.addAllCurrencies(currencyList);
             }
         }
@@ -141,6 +122,21 @@ public class ApiIntentService extends IntentService {
         return timeDiff;
     }
 
+    private String getJsonResponse() {
+        // if cache doesn't exists, API request will be made
+        long timeDiff = getTimeDiffFromLastCache();
+
+        String jsonResponse;
+        // if last cache from less than 1 hr ago
+        if (timeDiff < 60 * 60) {
+            jsonResponse = CacheHelper.retrieve(getApplicationContext(), CACHE_KEY_RATES);
+        } else {
+            // make new API request as cache is > 1 hr old
+            jsonResponse = fetchExchangeJsonFromApi();
+        }
+        return jsonResponse;
+    }
+
     /**
      * Fetches the JSON response for the latest exchange rates from the API.
      */
@@ -152,6 +148,23 @@ public class ApiIntentService extends IntentService {
         builder.appendQueryParameter("access_key", getDecodedAccessKey());
 
         return QueryUtils.fetchJsonResponse(builder.toString());
+    }
+
+    /**
+     * Sets the currencies specified in {@link #DEFAULT_FAV_CURRENCIES} to be
+     * favourited, and all others not. This makes sure that when the currencies
+     * are first loaded from the API, some are already selected, otherwise
+     * there would be none to show on the exchange page.
+     * <p>Modifies the items directly in the original list.
+     */
+    private void setDefaultFavCurrencies(List<Currency> currencyList) {
+        for (Currency currency : currencyList) {
+            if (Arrays.asList(DEFAULT_FAV_CURRENCIES).contains(currency.getCode())) {
+                currency.setFavourite(true);
+            } else {
+                currency.setFavourite(false);
+            }
+        }
     }
 
     /**
@@ -173,6 +186,21 @@ public class ApiIntentService extends IntentService {
             return JsonParser.parseCurrencies(jsonResponse);
         } else {
             return null;
+        }
+    }
+
+    /**
+     * This is called when the API returns an error. Sends the reply back
+     * to the calling activity with the error code.
+     */
+    private void handleApiError(RequestStatus status, PendingIntent reply) {
+        Intent result = new Intent();
+        result.putExtra(EXTRA_SUCCESS, false);
+        result.putExtra(EXTRA_ERROR_CODE, status.getCode());
+        try {
+            reply.send(this, RESULT_CODE, result);
+        } catch (PendingIntent.CanceledException e) {
+            e.printStackTrace();
         }
     }
 }

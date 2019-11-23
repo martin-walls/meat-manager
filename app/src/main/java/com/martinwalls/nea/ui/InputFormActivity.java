@@ -48,7 +48,7 @@ public abstract class InputFormActivity extends AppCompatActivity
     public abstract void onSearchItemSelected(SearchItem item, String searchItemType);
 
     /**
-     * This should be overridden to store a list of search items in
+     * This should be implemented to store a list of search items in
      * {@link #searchItemList}. It is called whenever the search view is
      * opened for a particular field.
      */
@@ -69,7 +69,7 @@ public abstract class InputFormActivity extends AppCompatActivity
      *
      * @param id The ID of the View.
      */
-    protected void setAddNewView(@IdRes int id) {
+    protected final void setAddNewView(@IdRes int id) {
         addNewView = findViewById(id);
         addNewView.setOnClickListener(v ->
                 addNewItemFromSearch(addNewView.getSearchItemType()));
@@ -78,7 +78,7 @@ public abstract class InputFormActivity extends AppCompatActivity
     /**
      * Hides the "Add new item" button.
      */
-    protected void hideAddNewView() {
+    protected final void hideAddNewView() {
         addNewView.setVisibility(View.GONE);
     }
 
@@ -87,7 +87,7 @@ public abstract class InputFormActivity extends AppCompatActivity
      *
      * @param id The ID of the root layout.
      */
-    protected void setRootView(@IdRes int id) {
+    protected final void setRootView(@IdRes int id) {
         rootView = findViewById(id);
     }
 
@@ -96,14 +96,14 @@ public abstract class InputFormActivity extends AppCompatActivity
      *
      * @param id The ID of the layout.
      */
-    protected void setSearchResultsLayout(@IdRes int id) {
+    protected final void setSearchResultsLayout(@IdRes int id) {
         searchResultsLayout = findViewById(id);
     }
 
     /**
      * Sets the {@link SearchItemAdapter} for the search results RecyclerView.
      */
-    protected void setSearchItemAdapter(SearchItemAdapter adapter) {
+    protected final void setSearchItemAdapter(SearchItemAdapter adapter) {
         this.searchItemAdapter = adapter;
     }
 
@@ -111,14 +111,14 @@ public abstract class InputFormActivity extends AppCompatActivity
      * Returns the {@link SearchItemAdapter} associated with the search
      * results RecyclerView.
      */
-    protected SearchItemAdapter getSearchItemAdapter() {
+    protected final SearchItemAdapter getSearchItemAdapter() {
         return searchItemAdapter;
     }
 
     /**
      * Returns the list of search items shown in the search view.
      */
-    protected List<SearchItem> getSearchItemList() {
+    protected final List<SearchItem> getSearchItemList() {
         return searchItemList;
     }
 
@@ -126,21 +126,21 @@ public abstract class InputFormActivity extends AppCompatActivity
      * Adds a {@link SearchItem} to the search items list to be shown in
      * the search results layout.
      */
-    protected void addSearchItemToList(SearchItem item) {
+    protected final void addSearchItemToList(SearchItem item) {
         searchItemList.add(item);
     }
 
     /**
      * Returns the current search type of the search view.
      */
-    protected String getCurrentSearchType() {
+    protected final String getCurrentSearchType() {
         return currentSearchType;
     }
 
     /**
      * Sets the search type of the search view that is currently open / being opened.
      */
-    protected void setCurrentSearchType(String currentSearchType) {
+    protected final void setCurrentSearchType(String currentSearchType) {
         this.currentSearchType = currentSearchType;
     }
 
@@ -152,14 +152,14 @@ public abstract class InputFormActivity extends AppCompatActivity
      * @param name  Name of the View so it can be referred to later.
      * @param resId The ID of the View to hide.
      */
-    protected void addViewToHide(String name, @IdRes int resId) {
+    protected final void addViewToHide(String name, @IdRes int resId) {
         viewsToHide.put(name, resId);
     }
 
     /**
      * Hides the soft keyboard if it is showing.
      */
-    protected void hideKeyboard() {
+    protected final void hideKeyboard() {
         InputMethodManager imm =
                 (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (imm != null) {
@@ -177,7 +177,7 @@ public abstract class InputFormActivity extends AppCompatActivity
      *         the text entered.
      * </ul>
      */
-    protected void setListeners(String name,
+    protected final void setListeners(String name,
                                 TextInputLayout inputLayout, TextInputEditText editText) {
         inputLayout.setEndIconVisible(false);
 

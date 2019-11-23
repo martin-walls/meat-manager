@@ -1,10 +1,13 @@
 package com.martinwalls.nea.ui;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.models.ProductQuantity;
 import com.martinwalls.nea.util.MassUnit;
@@ -18,10 +21,14 @@ public class ProductsQuantityAdapter
     private List<ProductQuantity> productList;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView productName, mass, numBoxes;
+        private Context context;
+        private TextView productName;
+        private TextView mass;
+        private TextView numBoxes;
 
-        ViewHolder(View view) {
+        ViewHolder(View view, Context context) {
             super(view);
+            this.context = context;
             productName = view.findViewById(R.id.product_name);
             mass = view.findViewById(R.id.mass);
             numBoxes = view.findViewById(R.id.num_boxes);
@@ -36,20 +43,20 @@ public class ProductsQuantityAdapter
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_product, parent, false);
-        return new ViewHolder(itemView);
+        return new ViewHolder(itemView, parent.getContext());
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ProductQuantity productQuantity = productList.get(position);
         holder.productName.setText(productQuantity.getProduct().getProductName());
-        MassUnit massUnit = MassUnit.getMassUnit(holder.mass.getContext());
-        holder.mass.setText(holder.mass.getContext()
+        MassUnit massUnit = MassUnit.getMassUnit(holder.context);
+        holder.mass.setText(holder.context
                 .getString(massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
-                        Utils.getMassDisplayValue(holder.mass.getContext(),
+                        Utils.getMassDisplayValue(holder.context,
                                 productQuantity.getQuantityMass(), 3)));
         if (productQuantity.getQuantityBoxes() >= 0) {
-            holder.numBoxes.setText(holder.numBoxes.getContext().getResources()
+            holder.numBoxes.setText(holder.context.getResources()
                     .getQuantityString(R.plurals.amount_boxes,
                             productQuantity.getQuantityBoxes(),
                             productQuantity.getQuantityBoxes()));

@@ -106,15 +106,4 @@ public final class EasyPreferences {
     public void clear() {
         prefs.edit().clear().apply();
     }
-
-    //doc remove
-    public void addOnPreferenceChangedListener(
-            SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        prefs.registerOnSharedPreferenceChangeListener(listener);
-    }
-
-    public void removeOnPreferenceChangedListener(
-            SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        prefs.unregisterOnSharedPreferenceChangeListener(listener);
-    }
 }

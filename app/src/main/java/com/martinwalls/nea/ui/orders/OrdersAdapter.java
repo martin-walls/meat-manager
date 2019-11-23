@@ -1,15 +1,18 @@
 package com.martinwalls.nea.ui.orders;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.martinwalls.nea.ui.ProductsQuantityAdapter;
+
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.models.Order;
+import com.martinwalls.nea.ui.ProductsQuantityAdapter;
 import com.martinwalls.nea.util.Utils;
 
 import java.time.LocalDateTime;
@@ -26,12 +29,14 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     private boolean isCurrentView = true;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        private Context context;
         private TextView orderDest;
         private TextView dateDivider;
         private RecyclerView recyclerView;
 
-        ViewHolder(View view) {
+        ViewHolder(View view, Context context) {
             super(view);
+            this.context = context;
             orderDest = view.findViewById(R.id.order_dest);
             dateDivider = view.findViewById(R.id.date_divider);
             recyclerView = view.findViewById(R.id.recycler_view);
@@ -51,7 +56,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_order, parent, false);
-        return new ViewHolder(itemView);
+        return new ViewHolder(itemView, parent.getContext());
     }
 
     @Override
@@ -61,7 +66,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         ProductsQuantityAdapter adapter = new ProductsQuantityAdapter(order.getProductList());
         holder.recyclerView.setAdapter(adapter);
         holder.recyclerView.setLayoutManager(
-                new LinearLayoutManager(holder.recyclerView.getContext()));
+                new LinearLayoutManager(holder.context));
         // allow click events to be passed to parent layout
         holder.recyclerView.suppressLayout(true);
 
@@ -77,12 +82,10 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
 
         // show past dates in red
         if (isCurrentView && order.getOrderDate().isBefore(LocalDateTime.now())) {
-            holder.dateDivider.setTextColor(holder.dateDivider.getContext()
-                    .getColor(R.color.error_red));
+            holder.dateDivider.setTextColor(holder.context.getColor(R.color.error_red));
         } else {
             holder.dateDivider.setTextColor(
-                    Utils.getColorFromTheme(
-                            holder.dateDivider.getContext(), R.attr.textColorEmphasis));
+                    Utils.getColorFromTheme(holder.context, R.attr.textColorEmphasis));
         }
     }
 

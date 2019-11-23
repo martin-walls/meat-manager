@@ -19,6 +19,8 @@ public class ReminderUtils {
 
     private static final int REQUEST_CODE_REMINDER = 1;
 
+    private ReminderUtils() {}
+
     /**
      * Schedules {@link ReminderReceiver} to be run when the given hour and minute
      * next occurs. Sets {@link BootReceiver} to be enabled so the the reminder

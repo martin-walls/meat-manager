@@ -63,12 +63,7 @@ public class OrderDetailActivity extends AppCompatActivity
             order = dbHandler.getOrder(orderId);
         }
 
-        ProductsAddedAdapter productsAdapter =
-                new ProductsAddedAdapter(order.getProductList());
-        RecyclerView productsRecyclerView = findViewById(R.id.recycler_view_products);
-        productsRecyclerView.setAdapter(productsAdapter);
-        productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        initProductsAddedView();
         initStockForOrder();
 
         TextView stockSectionTitle = findViewById(R.id.related_stock_title);
@@ -146,6 +141,17 @@ public class OrderDetailActivity extends AppCompatActivity
     private void showConfirmDeleteDialog() {
         DialogFragment dialog = new ConfirmDeleteDialog();
         dialog.show(getSupportFragmentManager(), "confirm_delete");
+    }
+
+    /**
+     * Initialises the view to show all products added to this order.
+     */
+    private void initProductsAddedView() {
+        ProductsAddedAdapter productsAdapter =
+                new ProductsAddedAdapter(order.getProductList());
+        RecyclerView productsRecyclerView = findViewById(R.id.recycler_view_products);
+        productsRecyclerView.setAdapter(productsAdapter);
+        productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     /**

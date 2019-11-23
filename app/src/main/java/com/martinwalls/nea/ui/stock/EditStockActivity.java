@@ -8,30 +8,31 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.ActionBar;
+
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.martinwalls.nea.ui.products.AddNewProductDialog;
-import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
-import com.martinwalls.nea.ui.InputFormActivity;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.ui.SearchItemAdapter;
-import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Location;
 import com.martinwalls.nea.data.models.Product;
 import com.martinwalls.nea.data.models.SearchItem;
 import com.martinwalls.nea.data.models.StockItem;
+import com.martinwalls.nea.ui.InputFormActivity;
+import com.martinwalls.nea.ui.SearchItemAdapter;
 import com.martinwalls.nea.ui.locations.NewLocationActivity;
+import com.martinwalls.nea.ui.misc.CustomRecyclerView;
+import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
+import com.martinwalls.nea.ui.products.AddNewProductDialog;
 import com.martinwalls.nea.util.MassUnit;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.SortUtils;
 import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.util.undo.UndoStack;
 import com.martinwalls.nea.util.undo.stock.AddStockAction;
 import com.martinwalls.nea.util.undo.stock.EditStockAction;
-import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.util.Arrays;
 
@@ -83,62 +84,11 @@ public class EditStockActivity extends InputFormActivity
             }
         }
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(editType == EDIT_TYPE_NEW
-                    ? R.string.stock_new_title
-                    : R.string.stock_edit_title);
-        }
+        getSupportActionBar().setTitle(editType == EDIT_TYPE_NEW
+                ? R.string.stock_new_title
+                : R.string.stock_edit_title);
 
-        // store reference to each row to show/hide later
-        addViewToHide(INPUT_PRODUCT, R.id.input_layout_product);
-        addViewToHide(INPUT_SUPPLIER, R.id.input_layout_supplier);
-        addViewToHide(INPUT_QUANTITY, R.id.input_row_quantity);
-        addViewToHide(INPUT_LOCATION, R.id.input_layout_location);
-        addViewToHide(INPUT_DESTINATION, R.id.input_layout_destination);
-        addViewToHide(INPUT_QUALITY, R.id.input_layout_quality);
-
-        setAddNewView(R.id.add_new);
-
-        setRootView(R.id.root_layout);
-
-        setCurrentSearchType(INPUT_PRODUCT);
-
-        // setup recycler view
-        setSearchItemAdapter(
-                new SearchItemAdapter(getSearchItemList(), getCurrentSearchType(), this));
-        TextView emptyView = findViewById(R.id.no_results);
-        CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
-        recyclerView.setEmptyView(emptyView);
-        recyclerView.setAdapter(getSearchItemAdapter());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        setSearchResultsLayout(R.id.search_results_layout);
-
-        if (MassUnit.getMassUnit(this) == MassUnit.LBS) {
-            TextInputLayout inputLayoutQuantityMass =
-                    findViewById(R.id.input_layout_quantity_mass);
-            inputLayoutQuantityMass.setHint(getString(R.string.stock_input_quantity_lbs));
-        }
-
-        setListeners(INPUT_PRODUCT,
-                findViewById(R.id.input_layout_product),
-                findViewById(R.id.edit_text_product));
-
-        setListeners(INPUT_SUPPLIER,
-                findViewById(R.id.input_layout_supplier),
-                findViewById(R.id.edit_text_supplier));
-
-        setListeners(INPUT_LOCATION,
-                findViewById(R.id.input_layout_location),
-                findViewById(R.id.edit_text_location));
-
-        setListeners(INPUT_DESTINATION,
-                findViewById(R.id.input_layout_destination),
-                findViewById(R.id.edit_text_destination));
-
-        setListeners(INPUT_QUALITY,
-                findViewById(R.id.input_layout_quality),
-                findViewById(R.id.edit_text_quality));
+        initViews();
 
         if (editType == EDIT_TYPE_EDIT) {
             findViewById(R.id.text_product).setVisibility(View.VISIBLE);
@@ -149,6 +99,7 @@ public class EditStockActivity extends InputFormActivity
             findViewById(R.id.input_layout_product).setVisibility(View.VISIBLE);
         }
 
+        // listen for any changes made by the user
         setTextChangedListeners();
     }
 
@@ -170,20 +121,10 @@ public class EditStockActivity extends InputFormActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                if (addStockToDb()) {
-                    finish();
-                } else {
-                    Toast.makeText(this,
-                            getString(R.string.db_error_insert, "stock"), Toast.LENGTH_SHORT)
-                            .show();
-                }
+                onDoneAction();
                 return true;
             case R.id.action_cancel:
-                if (hasChanged) {
-                    showConfirmCancelDialog();
-                } else {
-                    finish();
-                }
+                onCancelAction();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -293,15 +234,6 @@ public class EditStockActivity extends InputFormActivity
         finish();
     }
 
-    /**
-     * Shows a {@link ConfirmCancelDialog} asking the user to confirm the 
-     * cancel action.
-     */
-    private void showConfirmCancelDialog() {
-        DialogFragment dialog = new ConfirmCancelDialog();
-        dialog.show(getSupportFragmentManager(), "confirm_cancel");
-    }
-
     @Override
     protected void addNewItemFromSearch(String searchType) {
         switch (searchType) {
@@ -328,6 +260,89 @@ public class EditStockActivity extends InputFormActivity
                 startActivityForResult(newDestIntent, REQUEST_REFRESH_ON_DONE);
                 break;
         }
+    }
+
+    /**
+     * Initialises all the views in the layout, including any on click listeners
+     * and other behaviours.
+     */
+    private void initViews() {
+        setViewsToHide();
+
+        setAddNewView(R.id.add_new);
+        setRootView(R.id.root_layout);
+        setCurrentSearchType(INPUT_PRODUCT);
+
+        checkMassUnit();
+
+        initSearchLayout();
+        initSearchFieldListeners();
+    }
+
+    /**
+     * Retrieves the current mass unit set by the user preferences, and updates
+     * the input fields accordingly.
+     */
+    private void checkMassUnit() {
+        if (MassUnit.getMassUnit(this) == MassUnit.LBS) {
+            TextInputLayout inputLayoutQuantityMass =
+                    findViewById(R.id.input_layout_quantity_mass);
+            inputLayoutQuantityMass.setHint(getString(R.string.stock_input_quantity_lbs));
+        }
+    }
+
+    /**
+     * Sets which views should be hidden when a search view is opened.
+     */
+    private void setViewsToHide() {
+        addViewToHide(INPUT_PRODUCT, R.id.input_layout_product);
+        addViewToHide(INPUT_SUPPLIER, R.id.input_layout_supplier);
+        addViewToHide(INPUT_QUANTITY, R.id.input_row_quantity);
+        addViewToHide(INPUT_LOCATION, R.id.input_layout_location);
+        addViewToHide(INPUT_DESTINATION, R.id.input_layout_destination);
+        addViewToHide(INPUT_QUALITY, R.id.input_layout_quality);
+    }
+
+    /**
+     * Initialises the search layout which is shown when the user clicks on a
+     * relevant input field. These are set in {@link #initSearchFieldListeners()}.
+     */
+    private void initSearchLayout() {
+        CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
+        TextView emptyView = findViewById(R.id.no_results);
+        recyclerView.setEmptyView(emptyView);
+        setSearchItemAdapter(
+                new SearchItemAdapter(getSearchItemList(), getCurrentSearchType(), this));
+        recyclerView.setAdapter(getSearchItemAdapter());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setSearchResultsLayout(R.id.search_results_layout);
+    }
+
+    /**
+     * Sets listeners for the input fields that should open the search layout
+     * when clicked. This should include any field that references other objects
+     * in the database that the user should choose from.
+     */
+    private void initSearchFieldListeners() {
+        setListeners(INPUT_PRODUCT,
+                findViewById(R.id.input_layout_product),
+                findViewById(R.id.edit_text_product));
+
+        setListeners(INPUT_SUPPLIER,
+                findViewById(R.id.input_layout_supplier),
+                findViewById(R.id.edit_text_supplier));
+
+        setListeners(INPUT_LOCATION,
+                findViewById(R.id.input_layout_location),
+                findViewById(R.id.edit_text_location));
+
+        setListeners(INPUT_DESTINATION,
+                findViewById(R.id.input_layout_destination),
+                findViewById(R.id.edit_text_destination));
+
+        setListeners(INPUT_QUALITY,
+                findViewById(R.id.input_layout_quality),
+                findViewById(R.id.edit_text_quality));
     }
 
     /**
@@ -424,6 +439,43 @@ public class EditStockActivity extends InputFormActivity
         selectedSupplierId = stockToEdit.getSupplierId();
         selectedLocationId = stockToEdit.getLocationId();
         selectedDestId = stockToEdit.getDestId();
+    }
+
+    /**
+     * This is called when the user clicks the done button in the action bar.
+     * Tries to add the stock to the database, but if there are validation
+     * errors shows an error message to the user.
+     */
+    private void onDoneAction() {
+        if (addStockToDb()) {
+            finish();
+        } else {
+            Toast.makeText(this,
+                    getString(R.string.db_error_insert, "stock"), Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
+
+    /**
+     * This is called when the user clicks the cancel button. Checks to see if
+     * the user has made any changes, and shows a {@link ConfirmCancelDialog}
+     * if this is the case.
+     */
+    private void onCancelAction() {
+        if (hasChanged) {
+            showConfirmCancelDialog();
+        } else {
+            finish();
+        }
+    }
+
+    /**
+     * Shows a {@link ConfirmCancelDialog} asking the user to confirm the
+     * cancel action.
+     */
+    private void showConfirmCancelDialog() {
+        DialogFragment dialog = new ConfirmCancelDialog();
+        dialog.show(getSupportFragmentManager(), "confirm_cancel");
     }
 
     /**
