@@ -19,13 +19,22 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
      */
     private final ColorDrawable background;
 
-    private BaseAdapter adapter;
+    /**
+     * The icon to draw in the 'swiped' area.
+     */
     private Drawable deleteIcon;
+
+    /**
+     * The adapter attached to the RecyclerView. This handles deleting the
+     * item when a swipe gesture is performed.
+     */
+    private BaseAdapter adapter;
 
     public SwipeToDeleteCallback(BaseAdapter adapter, Context context) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         this.adapter = adapter;
         deleteIcon = context.getDrawable(R.drawable.ic_delete);
+        // set icon white
         deleteIcon.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
         background = new ColorDrawable(context.getColor(R.color.delete));
     }

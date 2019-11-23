@@ -315,7 +315,7 @@ public class EditContractActivity extends InputFormActivity
 
     /**
      * Initialises all the views in the layout, including any on click listeners
-     * and other behaviour.
+     * and other behaviours.
      */
     private void initViews() {
         setViewsToHide();

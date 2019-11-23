@@ -14,33 +14,34 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import androidx.appcompat.app.ActionBar;
+
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.martinwalls.nea.ui.products.AddNewProductDialog;
-import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
-import com.martinwalls.nea.ui.InputFormActivity;
-import com.martinwalls.nea.ui.ProductsAddedAdapter;
 import com.martinwalls.nea.R;
-import com.martinwalls.nea.ui.SearchItemAdapter;
-import com.martinwalls.nea.ui.misc.CustomRecyclerView;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Location;
 import com.martinwalls.nea.data.models.Order;
 import com.martinwalls.nea.data.models.Product;
 import com.martinwalls.nea.data.models.ProductQuantity;
 import com.martinwalls.nea.data.models.SearchItem;
+import com.martinwalls.nea.ui.InputFormActivity;
+import com.martinwalls.nea.ui.ProductsAddedAdapter;
+import com.martinwalls.nea.ui.SearchItemAdapter;
 import com.martinwalls.nea.ui.locations.NewLocationActivity;
+import com.martinwalls.nea.ui.misc.CustomRecyclerView;
+import com.martinwalls.nea.ui.misc.dialog.ConfirmCancelDialog;
+import com.martinwalls.nea.ui.products.AddNewProductDialog;
 import com.martinwalls.nea.util.MassUnit;
 import com.martinwalls.nea.util.SimpleTextWatcher;
 import com.martinwalls.nea.util.SortUtils;
 import com.martinwalls.nea.util.Utils;
+import com.martinwalls.nea.util.undo.UndoStack;
 import com.martinwalls.nea.util.undo.orders.AddOrderAction;
 import com.martinwalls.nea.util.undo.orders.EditOrderAction;
-import com.martinwalls.nea.util.undo.UndoStack;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -104,75 +105,13 @@ public class EditOrderActivity extends InputFormActivity
             }
         }
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(editType == EDIT_TYPE_NEW
-                    ? R.string.orders_new_title
-                    : R.string.order_edit_title);
-        }
-
-        addViewToHide(INPUT_PRODUCT, R.id.input_layout_product);
-        addViewToHide(INPUT_QUANTITY, R.id.input_row_quantity);
-        addViewToHide(INPUT_DESTINATION, R.id.input_layout_destination);
-        addViewToHide(INPUT_DATE, R.id.input_layout_date);
-
-        addViewToHide("add_product_btn", R.id.add_product);
-        addViewToHide("products_added_recycler_view", R.id.products_added_recycler_view);
-        if (editType == EDIT_TYPE_EDIT) {
-            addViewToHide("completed_checkbox", R.id.row_completed);
-        }
-
-        setAddNewView(R.id.add_new);
-        setRootView(R.id.root_layout);
+        getSupportActionBar().setTitle(editType == EDIT_TYPE_NEW
+                ? R.string.orders_new_title
+                : R.string.order_edit_title);
 
         setCurrentSearchType(INPUT_PRODUCT);
 
-        setSearchItemAdapter(
-                new SearchItemAdapter(getSearchItemList(), getCurrentSearchType(), this));
-        TextView emptyView = findViewById(R.id.no_results);
-        CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
-        recyclerView.setEmptyView(emptyView);
-        recyclerView.setAdapter(getSearchItemAdapter());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        setSearchResultsLayout(R.id.search_results_layout);
-
-        if (MassUnit.getMassUnit(this) == MassUnit.LBS) {
-            TextInputLayout inputLayoutQuantityMass =
-                    findViewById(R.id.input_layout_quantity_mass);
-            inputLayoutQuantityMass.setHint(getString(R.string.orders_input_quantity_lbs));
-        }
-
-        setListeners(INPUT_PRODUCT,
-                findViewById(R.id.input_layout_product),
-                findViewById(R.id.edit_text_product));
-
-        setListeners(INPUT_DESTINATION,
-                findViewById(R.id.input_layout_destination),
-                findViewById(R.id.edit_text_destination));
-
-        productsAddedAdapter =
-                new ProductsAddedAdapter(productsAddedList, this,
-                        editType == EDIT_TYPE_EDIT, true);
-        RecyclerView productsAddedRecyclerView =
-                findViewById(R.id.products_added_recycler_view);
-        productsAddedRecyclerView.setAdapter(productsAddedAdapter);
-        productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
-        editTextDate.setOnClickListener(v -> {
-            final Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePickerDialog =
-                    new DatePickerDialog(this, this, year, month, day);
-            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-            datePickerDialog.show();
-        });
-
-        addProductBtn = findViewById(R.id.add_product);
-        addProductBtn.setOnClickListener(v -> addProductToProductsAddedList());
+        initViews();
 
         if (editType == EDIT_TYPE_NEW) {
             findViewById(R.id.row_completed).setVisibility(View.GONE);
@@ -338,9 +277,7 @@ public class EditOrderActivity extends InputFormActivity
         // (month + 1) adjusts for DatePicker returning month in range 0-11,
         // LocalDate uses 1-12
         selectedDate = LocalDate.of(year, month + 1, day);
-        TimePickerDialog timePickerDialog =
-                new TimePickerDialog(this, this, 12, 0, true);
-        timePickerDialog.show();
+        showTimePickerDialog();
     }
 
     /**
@@ -393,6 +330,130 @@ public class EditOrderActivity extends InputFormActivity
                 startActivityForResult(newDestIntent, REQUEST_REFRESH_ON_DONE);
                 break;
         }
+    }
+
+    /**
+     * Initialises all the views in the layout, including any on click listeners
+     * and other behaviours.
+     */
+    private void initViews() {
+        setViewsToHide();
+        setAddNewView(R.id.add_new);
+        setRootView(R.id.root_layout);
+
+        checkMassUnit();
+
+        initSearchLayout();
+        initSearchFieldListeners();
+
+        initProductsAddedView();
+        initDateInput();
+    }
+
+    /**
+     * Retrieves the current mass unit set by the user preferences, and updates
+     * the input fields accordingly.
+     */
+    private void checkMassUnit() {
+        if (MassUnit.getMassUnit(this) == MassUnit.LBS) {
+            TextInputLayout inputLayoutQuantityMass =
+                    findViewById(R.id.input_layout_quantity_mass);
+            inputLayoutQuantityMass.setHint(getString(R.string.orders_input_quantity_lbs));
+        }
+    }
+
+    /**
+     * Sets which views should be hidden when a search view is opened.
+     */
+    private void setViewsToHide() {
+        addViewToHide(INPUT_PRODUCT, R.id.input_layout_product);
+        addViewToHide(INPUT_QUANTITY, R.id.input_row_quantity);
+        addViewToHide(INPUT_DESTINATION, R.id.input_layout_destination);
+        addViewToHide(INPUT_DATE, R.id.input_layout_date);
+
+        addViewToHide("add_product_btn", R.id.add_product);
+        addViewToHide("products_added_recycler_view", R.id.products_added_recycler_view);
+        if (editType == EDIT_TYPE_EDIT) {
+            addViewToHide("completed_checkbox", R.id.row_completed);
+        }
+    }
+
+    /**
+     * Initialises the search layout which is shown when the user clicks on a
+     * relevant input field. These are set in {@link #initSearchFieldListeners()}.
+     */
+    private void initSearchLayout() {
+        CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
+        TextView emptyView = findViewById(R.id.no_results);
+        recyclerView.setEmptyView(emptyView);
+        setSearchItemAdapter(
+                new SearchItemAdapter(getSearchItemList(), getCurrentSearchType(), this));
+        recyclerView.setAdapter(getSearchItemAdapter());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setSearchResultsLayout(R.id.search_results_layout);
+    }
+
+    /**
+     * Sets listeners for the input fields that should open the search layout
+     * when clicked. This should include any field that references other objects
+     * in the database that the user should choose from.
+     */
+    private void initSearchFieldListeners() {
+        setListeners(INPUT_PRODUCT,
+                findViewById(R.id.input_layout_product),
+                findViewById(R.id.edit_text_product));
+
+        setListeners(INPUT_DESTINATION,
+                findViewById(R.id.input_layout_destination),
+                findViewById(R.id.edit_text_destination));
+    }
+
+    /**
+     * Initialises the view to show a list of products the user has already
+     * added to the contract, if they add more than one.
+     */
+    private void initProductsAddedView() {
+        productsAddedAdapter = new ProductsAddedAdapter(productsAddedList, this,
+                editType == EDIT_TYPE_EDIT, true);
+        RecyclerView productsAddedRecyclerView =
+                findViewById(R.id.products_added_recycler_view);
+        productsAddedRecyclerView.setAdapter(productsAddedAdapter);
+        productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        addProductBtn = findViewById(R.id.add_product);
+        addProductBtn.setOnClickListener(v -> addProductToProductsAddedList());
+    }
+
+    /**
+     * Initialises the date input field.
+     */
+    private void initDateInput() {
+        TextInputEditText editTextDate = findViewById(R.id.edit_text_date);
+        editTextDate.setOnClickListener(v -> showDatePickerDialog());
+    }
+
+    /**
+     * Shows a {@link DatePickerDialog} so the user can choose a date. Minimum
+     * date is set to today.
+     */
+    private void showDatePickerDialog() {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog =
+                new DatePickerDialog(this, this, year, month, day);
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        datePickerDialog.show();
+    }
+    /**
+     * Shows a {@link TimePickerDialog} so the user can choose a time.
+     */
+    private void showTimePickerDialog() {
+        TimePickerDialog timePickerDialog =
+                new TimePickerDialog(this, this, 12, 0, true);
+        timePickerDialog.show();
     }
 
     /**

@@ -68,25 +68,15 @@ public class ExchangeFragment extends Fragment {
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.exchange_title);
         View fragmentView = inflater.inflate(R.layout.fragment_exchange, container, false);
+        bindViews(fragmentView);
 
         dbHandler = new ExchangeDBHandler(getContext());
         prefs = EasyPreferences.createForDefaultPreferences(getContext());
 
-        ratesLayout = fragmentView.findViewById(R.id.rates_layout);
-        emptyView = fragmentView.findViewById(R.id.empty);
         ratesLayout.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
 
-        lastUpdateTime = fragmentView.findViewById(R.id.last_update_time);
-
         checkConnectionAndFetchRates();
-
-        primaryCurrencyText = fragmentView.findViewById(R.id.currency_primary);
-        secondaryCurrencyText = fragmentView.findViewById(R.id.currency_secondary);
-        secondaryCurrencyValueText = fragmentView.findViewById(R.id.currency_secondary_value);
-
-        currencyPickerLeft = fragmentView.findViewById(R.id.currency_picker_left);
-        currencyPickerRight = fragmentView.findViewById(R.id.currency_picker_right);
 
         ImageButton swapBtn = fragmentView.findViewById(R.id.swap_currencies);
         swapBtn.setOnClickListener(v -> swapCurrencies());
@@ -94,32 +84,9 @@ public class ExchangeFragment extends Fragment {
         exchangeHistoryAdapter = new ExchangeHistoryAdapter(conversionList);
         loadConversionHistory();
 
-        TextView emptyView = fragmentView.findViewById(R.id.no_exchange_history);
-        CustomRecyclerView conversionHistoryView =
-                fragmentView.findViewById(R.id.exchange_history);
-        conversionHistoryView.setAdapter(exchangeHistoryAdapter);
-        conversionHistoryView.setEmptyView(emptyView);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        conversionHistoryView.setLayoutManager(layoutManager);
+        initConversionHistoryView(fragmentView);
 
-        primaryCurrencyValueInput = fragmentView.findViewById(R.id.currency_primary_value);
-        primaryCurrencyValueInput.addTextChangedListener(new SimpleTextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(s)) {
-                    primaryCurrencyValue = Double.parseDouble(s.toString());
-                    updateRates();
-                }
-            }
-        });
-        primaryCurrencyValueInput.setOnEditorActionListener((view, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                addConversionToHistory();
-                // returning false means keyboard will be closed
-                return false;
-            }
-            return false;
-        });
+        setPrimaryCurrencyValueInputListeners();
 
         return fragmentView;
     }
@@ -127,6 +94,12 @@ public class ExchangeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (dbHandler == null) {
+            dbHandler = new ExchangeDBHandler(getContext());
+        }
+        if (prefs == null) {
+            prefs = EasyPreferences.createForDefaultPreferences(getContext());
+        }
     }
 
     @Override
@@ -155,6 +128,59 @@ public class ExchangeFragment extends Fragment {
         if (requestCode == REQUEST_REFRESH_ON_DONE) {
             initCurrencyPickers();
         }
+    }
+
+    /**
+     * Binds views in the layout to their variables so they can be referenced
+     * later. This should be called directly after inflating the layout.
+     */
+    private void bindViews(View fragmentView) {
+        ratesLayout = fragmentView.findViewById(R.id.rates_layout);
+        emptyView = fragmentView.findViewById(R.id.empty);
+        primaryCurrencyText = fragmentView.findViewById(R.id.currency_primary);
+        secondaryCurrencyText = fragmentView.findViewById(R.id.currency_secondary);
+        secondaryCurrencyValueText = fragmentView.findViewById(R.id.currency_secondary_value);
+        primaryCurrencyValueInput = fragmentView.findViewById(R.id.currency_primary_value);
+        currencyPickerLeft = fragmentView.findViewById(R.id.currency_picker_left);
+        currencyPickerRight = fragmentView.findViewById(R.id.currency_picker_right);
+        lastUpdateTime = fragmentView.findViewById(R.id.last_update_time);
+    }
+
+    /**
+     * Initialises the view that shows the conversion history.
+     */
+    private void initConversionHistoryView(View fragmentView) {
+        CustomRecyclerView conversionHistoryView =
+                fragmentView.findViewById(R.id.exchange_history);
+        conversionHistoryView.setAdapter(exchangeHistoryAdapter);
+
+        TextView emptyView = fragmentView.findViewById(R.id.no_exchange_history);
+        conversionHistoryView.setEmptyView(emptyView);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        conversionHistoryView.setLayoutManager(layoutManager);
+    }
+
+    private void setPrimaryCurrencyValueInputListeners() {
+        // update rates when user input text
+        primaryCurrencyValueInput.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!TextUtils.isEmpty(s)) {
+                    primaryCurrencyValue = Double.parseDouble(s.toString());
+                    updateRates();
+                }
+            }
+        });
+        // when user clicks soft keyboard done btn, store conversion
+        primaryCurrencyValueInput.setOnEditorActionListener((view, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addConversionToHistory();
+                // returning false means keyboard will be closed
+                return false;
+            }
+            return false;
+        });
     }
 
     /**

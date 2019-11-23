@@ -5,10 +5,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.ExchangeDBHandler;
 import com.martinwalls.nea.data.models.Currency;
@@ -34,14 +36,8 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
 
         dbHandler = new ExchangeDBHandler(this);
 
-        List<Currency> currencyList = SortUtils.mergeSort(dbHandler.getCurrencies(),
-                (currency1, currency2) -> currency1.getCode().compareTo(currency2.getCode()));
-
-        currencyAdapter = new CurrencyAdapter(currencyList, this);
-
-        CustomRecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setAdapter(currencyAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        List<Currency> currencyList = loadCurrencies();
+        initCurrenciesList(currencyList);
     }
 
     @Override
@@ -91,5 +87,26 @@ public class ChooseCurrenciesActivity extends AppCompatActivity
     @Override
     public void onCurrencyFavStateChange(Currency currency) {
         dbHandler.setCurrencyFavourite(currency.getCode(), currency.isFavourite());
+    }
+
+    /**
+     * Gets all currencies from the database, sorted by their currency code
+     * alphabetically.
+     */
+    private List<Currency> loadCurrencies() {
+        return SortUtils.mergeSort(
+                dbHandler.getCurrencies(),
+                Currency.comparatorCode());
+    }
+
+    /**
+     * Initialises the view to show the list of currencies given.
+     */
+    private void initCurrenciesList(List<Currency> currencyList) {
+        currencyAdapter = new CurrencyAdapter(currencyList, this);
+
+        CustomRecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setAdapter(currencyAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }

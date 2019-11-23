@@ -29,6 +29,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
     private List<Currency> currencyList;
     private List<Currency> currencyListFiltered;
     private List<Currency> favCurrencyList = new ArrayList<>();
+
     private CurrencyAdapterListener listener;
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -51,6 +52,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
             favouritesStar = view.findViewById(R.id.favourite_star);
 
             favouritesStar.setOnClickListener(v -> {
+                // if item clicked is in favourites list
                 if (getLayoutPosition() < favCurrencyList.size()) {
                     onStarClicked(getLayoutPosition(), true);
                 } else {

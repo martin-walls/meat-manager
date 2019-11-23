@@ -34,34 +34,14 @@ public class LocationsActivity extends AppCompatActivity
         setContentView(R.layout.activity_locations);
 
         getSupportActionBar().setTitle(R.string.locations_title);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHandler = new DBHandler(this);
 
-        CustomRecyclerView recyclerView = findViewById(R.id.recycler_view);
-        TextView emptyView = findViewById(R.id.empty);
-        recyclerView.setEmptyView(emptyView);
-
-        locationsAdapter = new LocationsAdapter(locationList, this, this);
-        recyclerView.setAdapter(locationsAdapter);
-        loadLocations();
-
-        RecyclerViewDivider recyclerViewDivider =
-                new RecyclerViewDivider(this, R.drawable.divider_thin);
-        recyclerView.addItemDecoration(recyclerViewDivider);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
-                new SwipeToDeleteCallback(locationsAdapter, this));
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        initLocationsListView();
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(v -> {
-            Intent editLocationIntent = new Intent(this, NewLocationActivity.class);
-            startActivity(editLocationIntent);
-        });
+        fab.setOnClickListener(v -> startNewLocationActivity());
     }
 
     @Override
@@ -91,6 +71,40 @@ public class LocationsActivity extends AppCompatActivity
         detailsIntent.putExtra(LocationDetailActivity.EXTRA_LOCATION_ID,
                 location.getLocationId());
         startActivity(detailsIntent);
+    }
+
+    /**
+     * Initialises the view to display the list of locations.
+     */
+    private void initLocationsListView() {
+        CustomRecyclerView recyclerView = findViewById(R.id.recycler_view);
+
+        TextView emptyView = findViewById(R.id.empty);
+        recyclerView.setEmptyView(emptyView);
+
+        locationsAdapter = new LocationsAdapter(locationList, this, this);
+        recyclerView.setAdapter(locationsAdapter);
+        loadLocations();
+
+        // add item dividers
+        RecyclerViewDivider recyclerViewDivider =
+                new RecyclerViewDivider(this, R.drawable.divider_thin);
+        recyclerView.addItemDecoration(recyclerViewDivider);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        // set swipe to delete action
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
+                new SwipeToDeleteCallback(locationsAdapter, this));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    /**
+     * Opens {@link NewLocationActivity} so the user can add a new {@link Location}.
+     */
+    private void startNewLocationActivity() {
+        Intent editLocationIntent = new Intent(this, NewLocationActivity.class);
+        startActivity(editLocationIntent);
     }
 
     /**

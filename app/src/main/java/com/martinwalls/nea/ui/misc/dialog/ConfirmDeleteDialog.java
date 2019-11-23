@@ -25,19 +25,9 @@ public class ConfirmDeleteDialog extends DialogFragment {
 
         View dialogView = inflater.inflate(R.layout.dialog_confirm_delete, null);
 
-        Bundle args = getArguments();
-        String name = "";
-        if (args != null) {
-            name = args.getString(EXTRA_NAME);
-        }
+        setDialogMessage(dialogView);
 
-        TextView message = dialogView.findViewById(R.id.message);
-        if (TextUtils.isEmpty(name)) {
-            message.setText(R.string.dialog_confirm_delete_msg_default);
-        } else {
-            message.setText(getString(R.string.dialog_confirm_delete_msg, name));
-        }
-
+        // set button listeners
         Button btnDelete = dialogView.findViewById(R.id.btn_delete);
         Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
 
@@ -63,6 +53,28 @@ public class ConfirmDeleteDialog extends DialogFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement " + ConfirmDeleteListener.class.getSimpleName());
+        }
+    }
+
+    /**
+     * Checks if a name has been passed as an argument to the dialog, sets the
+     * dialog's message based on this. Shows a default message if no name has
+     * been passed.
+     */
+    private void setDialogMessage(View dialogView) {
+        // check if name has been passed to the dialog
+        Bundle args = getArguments();
+        String name = "";
+        if (args != null) {
+            name = args.getString(EXTRA_NAME);
+        }
+
+        TextView message = dialogView.findViewById(R.id.message);
+        // show default delete message if no name given
+        if (TextUtils.isEmpty(name)) {
+            message.setText(R.string.dialog_confirm_delete_msg_default);
+        } else {
+            message.setText(getString(R.string.dialog_confirm_delete_msg, name));
         }
     }
 

@@ -21,6 +21,7 @@ public class ConfirmCancelDialog extends DialogFragment {
 
         View dialogView = inflater.inflate(R.layout.dialog_confirm_cancel, null);
 
+        // set button listeners
         Button btnYes = dialogView.findViewById(R.id.btn_yes);
         Button btnNo = dialogView.findViewById(R.id.btn_no);
 

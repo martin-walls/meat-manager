@@ -7,8 +7,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.ActionBar;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.data.db.DBHandler;
 import com.martinwalls.nea.data.models.Location;
@@ -27,11 +28,8 @@ public class LocationDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_detail);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.location_details_title);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setTitle(R.string.location_details_title);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHandler = new DBHandler(this);
 
@@ -65,10 +63,7 @@ public class LocationDetailActivity extends AppCompatActivity {
                 deleteLocation();
                 return true;
             case R.id.action_edit:
-                Intent editIntent = new Intent(this, EditLocationActivity.class);
-                editIntent.putExtra(EditLocationActivity.EXTRA_LOCATION_ID,
-                        location.getLocationId());
-                startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
+                startEditLocationActivity();
                 return true;
             case android.R.id.home:
                 super.onBackPressed();
@@ -87,6 +82,16 @@ public class LocationDetailActivity extends AppCompatActivity {
     }
 
     /**
+     * Opens {@link EditLocationActivity} so the user can edit this Location.
+     */
+    private void startEditLocationActivity() {
+        Intent editIntent = new Intent(this, EditLocationActivity.class);
+        editIntent.putExtra(EditLocationActivity.EXTRA_LOCATION_ID,
+                location.getLocationId());
+        startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
+    }
+
+    /**
      * Initialises fields with data from the {@link Location} being shown.
      */
     private void fillData() {
@@ -96,22 +101,9 @@ public class LocationDetailActivity extends AppCompatActivity {
         TextView locationType = findViewById(R.id.location_type);
         locationType.setText(location.getLocationType().name());
 
+        // combine address fields into one textview
         TextView address = findViewById(R.id.address);
-        StringBuilder builder = new StringBuilder();
-        builder.append(location.getAddrLine1());
-        if (!location.getAddrLine2().isEmpty()) {
-            builder.append("\n");
-            builder.append(location.getAddrLine2());
-        }
-        if (!location.getCity().isEmpty()) {
-            builder.append("\n");
-            builder.append(location.getCity());
-        }
-        builder.append("\n");
-        builder.append(location.getPostcode());
-        builder.append("\n");
-        builder.append(location.getCountry());
-        address.setText(builder.toString());
+        address.setText(getAddressDisplayString());
 
         TextView email = findViewById(R.id.email);
         if (!location.getEmail().isEmpty()) {
@@ -126,6 +118,28 @@ public class LocationDetailActivity extends AppCompatActivity {
         } else {
             phone.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * Combines the location's address fields into one string, so it can
+     * be displayed in a single TextView.
+     */
+    private String getAddressDisplayString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(location.getAddrLine1());
+        if (!location.getAddrLine2().isEmpty()) {
+            builder.append("\n");
+            builder.append(location.getAddrLine2());
+        }
+        if (!location.getCity().isEmpty()) {
+            builder.append("\n");
+            builder.append(location.getCity());
+        }
+        builder.append("\n");
+        builder.append(location.getPostcode());
+        builder.append("\n");
+        builder.append(location.getCountry());
+        return builder.toString();
     }
 
     /**

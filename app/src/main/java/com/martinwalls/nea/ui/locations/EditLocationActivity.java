@@ -7,9 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import androidx.appcompat.app.ActionBar;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.R;
@@ -42,15 +43,12 @@ public class EditLocationActivity extends AppCompatActivity
             location = dbHandler.getLocation(locationId);
         }
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(getString(
-                    R.string.location_edit_title,
-                    location.getLocationType().name().toLowerCase()));
-        }
+        getSupportActionBar().setTitle(getString(
+                R.string.location_edit_title,
+                location.getLocationType().name().toLowerCase()));
 
         // hide location type spinner, this can't be edited
-        findViewById(R.id.row_location_type).setVisibility(View.GONE);
+        hideLocationTypeSpn();
 
         fillFields();
     }
@@ -95,6 +93,14 @@ public class EditLocationActivity extends AppCompatActivity
     @Override
     public void onConfirmCancelYesAction() {
         finish();
+    }
+
+    /**
+     * Hides the Spinner for location types, as the user should not be able
+     * to edit this.
+     */
+    private void hideLocationTypeSpn() {
+        findViewById(R.id.row_location_type).setVisibility(View.GONE);
     }
 
     /**
@@ -191,6 +197,7 @@ public class EditLocationActivity extends AppCompatActivity
 
         TextInputEditText editTextPhone= findViewById(R.id.edit_text_phone);
 
+        // is name valid (not blank, unique)
         if (TextUtils.isEmpty(editTextName.getText())) {
             inputLayoutName.setError(getString(R.string.input_error_blank));
             isValid = false;
@@ -205,25 +212,28 @@ public class EditLocationActivity extends AppCompatActivity
         } else {
             inputLayoutName.setError(null);
         }
+        // is address line 1 valid (not blank)
         if (TextUtils.isEmpty(editTextAddr1.getText())) {
             inputLayoutAddr1.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutAddr1.setError(null);
         }
+        // is postcode valid (not blank)
         if (TextUtils.isEmpty(editTextPostcode.getText())) {
             inputLayoutPostcode.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutPostcode.setError(null);
         }
+        // is country valid (not blank)
         if (TextUtils.isEmpty(editTextCountry.getText())) {
             inputLayoutCountry.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutCountry.setError(null);
         }
-        // check for valid email address
+        // is email address valid (not blank, matches email address pattern)
         if (!TextUtils.isEmpty(editTextEmail.getText())
                 && !Patterns.EMAIL_ADDRESS.matcher(editTextEmail.getText()).matches()) {
             inputLayoutEmail.setError(getString(R.string.input_error_invalid_email));

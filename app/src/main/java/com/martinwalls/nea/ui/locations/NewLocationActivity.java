@@ -5,13 +5,13 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.nea.R;
@@ -35,6 +35,8 @@ public class NewLocationActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_locations);
 
+        dbHandler = new DBHandler(this);
+
         String locationType = getString(R.string.locations_type_storage);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -44,18 +46,8 @@ public class NewLocationActivity extends AppCompatActivity
         getSupportActionBar().setTitle(
                 getString(R.string.locations_add_new_title, locationType.toLowerCase()));
 
-        dbHandler = new DBHandler(this);
-
-        // location type spinner
-        Spinner locationTypeSpn = findViewById(R.id.spn_location_type);
-        locationTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-        locationTypeAdapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item);
-        locationTypeAdapter.addAll(Location.LocationType.getLocationTypeStrings());
-        locationTypeAdapter.notifyDataSetChanged();
-        locationTypeSpn.setAdapter(locationTypeAdapter);
-
-        locationTypeSpn.setSelection(Location.LocationType.valueOf(locationType).ordinal());
+        initLocationTypeSpn();
+        setLocationTypeSelected(Location.LocationType.valueOf(locationType));
     }
 
     @Override
@@ -100,17 +92,43 @@ public class NewLocationActivity extends AppCompatActivity
         finish();
     }
 
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        View view = findViewById(R.id.root_layout);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    /**
+     * Initialises spinner for location types.
+     */
+    private void initLocationTypeSpn() {
+        Spinner locationTypeSpn = findViewById(R.id.spn_location_type);
+        locationTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        locationTypeAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
+        locationTypeAdapter.addAll(Location.LocationType.getLocationTypeStrings());
+        locationTypeAdapter.notifyDataSetChanged();
+        locationTypeSpn.setAdapter(locationTypeAdapter);
     }
 
+    /**
+     * Sets the location type spinner to the given location type.
+     */
+    private void setLocationTypeSelected(Location.LocationType locationType) {
+        Spinner locationTypeSpn = findViewById(R.id.spn_location_type);
+        locationTypeSpn.setSelection(locationType.ordinal());
+    }
+
+    /**
+     * Shows a {@link ConfirmCancelDialog} asking the user to confirm the
+     * cancel action.
+     */
     private void showConfirmCancelDialog() {
         DialogFragment dialog = new ConfirmCancelDialog();
         dialog.show(getSupportFragmentManager(), "confirm_cancel");
     }
 
+    /**
+     * Stores the {@link Location} in the database if it is valid.
+     * First checks each input field to check it is valid. It a field is
+     * invalid, an appropriate error message is shown to help the user correct
+     * the error. If all fields have valid data, edits the existing location
+     * in the database to the new values.
+     */
     private boolean addLocationToDb() {
         boolean isValid = true;
         Location newLocation = new Location();
@@ -138,6 +156,7 @@ public class NewLocationActivity extends AppCompatActivity
 
         TextInputEditText editTextPhone= findViewById(R.id.edit_text_phone);
 
+        // is name valid (not blank, unique)
         if (TextUtils.isEmpty(editTextName.getText())) {
             inputLayoutName.setError(getString(R.string.input_error_blank));
             isValid = false;
@@ -151,25 +170,28 @@ public class NewLocationActivity extends AppCompatActivity
         } else {
             inputLayoutName.setError(null);
         }
+        // is address line 1 valid (not blank)
         if (TextUtils.isEmpty(editTextAddr1.getText())) {
             inputLayoutAddr1.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutAddr1.setError(null);
         }
+        // is postcode valid (not blank)
         if (TextUtils.isEmpty(editTextPostcode.getText())) {
             inputLayoutPostcode.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutPostcode.setError(null);
         }
+        // is country valid (not blank)
         if (TextUtils.isEmpty(editTextCountry.getText())) {
             inputLayoutCountry.setError(getString(R.string.input_error_blank));
             isValid = false;
         } else {
             inputLayoutCountry.setError(null);
         }
-        // check for valid email address
+        // is email address valid (not blank, matches email address pattern.
         if (!TextUtils.isEmpty(editTextEmail.getText())
                 && !Patterns.EMAIL_ADDRESS.matcher(editTextEmail.getText()).matches()) {
             inputLayoutEmail.setError(getString(R.string.input_error_invalid_email));
@@ -207,6 +229,11 @@ public class NewLocationActivity extends AppCompatActivity
         return false;
     }
 
+    /**
+     * Checks whether the user has entered any data into the input fields, which
+     * determines whether to show a {@link ConfirmCancelDialog} when the user
+     * wants to go back.
+     */
     private boolean areAllFieldsEmpty() {
         TextInputEditText editTextName = findViewById(R.id.edit_text_location_name);
         TextInputEditText editTextAddr1= findViewById(R.id.edit_text_addr_1);

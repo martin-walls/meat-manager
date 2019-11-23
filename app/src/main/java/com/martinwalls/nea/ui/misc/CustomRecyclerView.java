@@ -48,7 +48,7 @@ public class CustomRecyclerView extends RecyclerView {
     /**
      * Sets the View to use as the empty view for this RecyclerView. This is
      * the View shown when there is no data, so the user is not just shown
-     * a blank page.
+     * a blank screen.
      */
     public void setEmptyView(View emptyView) {
         this.emptyView = emptyView;
