@@ -7,12 +7,12 @@
             <item>
                 <shape>
                     <padding android:left="6dp" />
-                    <solid android:color="?attr/colorPrimary" />
+                    <solid android:color="?colorPrimary" />
                 </shape>
             </item>
             <item>
                 <shape>
-                    <solid android:color="?attr/selectedItemBackgroundColor" />
+                    <solid android:color="?selectedItemBackgroundColor" />
                 </shape>
             </item>
         </layer-list>

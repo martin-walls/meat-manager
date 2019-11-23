@@ -2,11 +2,9 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="?colorControlHighlight"
     >
-
     <item>
         <shape android:shape="rectangle">
-            <solid
-                android:color="?navDrawerBackgroundColor" />
+            <solid android:color="?navDrawerBackgroundColor" />
         </shape>
     </item>
 </ripple>

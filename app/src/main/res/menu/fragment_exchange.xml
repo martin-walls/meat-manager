@@ -5,17 +5,16 @@
 
     <item
         android:id="@+id/action_refresh"
-        android:title="@string/action_refresh"
         android:icon="@drawable/ic_refresh"
+        android:title="@string/action_refresh"
         app:showAsAction="ifRoom"
         />
 
 
-
     <item
         android:id="@+id/action_favourites"
-        android:title="@string/action_favourites"
         android:icon="@drawable/ic_star_filled"
+        android:title="@string/action_favourites"
         app:showAsAction="ifRoom"
         />
 

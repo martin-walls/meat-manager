@@ -5,49 +5,55 @@
 
     <item
         android:id="@+id/action_search"
-        android:title="@string/search_title"
         android:icon="@drawable/ic_search"
-        app:showAsAction="always|collapseActionView"
+        android:title="@string/search_title"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView"
         />
 
     <item
         android:id="@+id/action_undo"
-        android:title="@string/action_undo"
         android:icon="@drawable/ic_undo"
+        android:title="@string/action_undo"
         app:showAsAction="always"
         />
 
     <item
         android:id="@+id/action_redo"
-        android:title="@string/action_redo"
         android:icon="@drawable/ic_redo"
+        android:title="@string/action_redo"
         app:showAsAction="always"
         />
 
     <item
         android:id="@+id/action_sort_by"
-        android:title="@string/action_sort_by"
         android:icon="@drawable/ic_sort"
+        android:title="@string/action_sort_by"
         app:showAsAction="ifRoom"
         >
         <menu>
-            <group android:id="@+id/group_sort_by"
-                android:checkableBehavior="single">
+            <group
+                android:id="@+id/group_sort_by"
+                android:checkableBehavior="single"
+                >
 
-                <item android:id="@+id/action_sort_by_name"
+                <item
+                    android:id="@+id/action_sort_by_name"
                     android:title="@string/action_sort_by_name"
                     />
 
-                <item android:id="@+id/action_sort_by_location"
+                <item
+                    android:id="@+id/action_sort_by_location"
                     android:title="@string/action_sort_by_location"
                     />
 
-                <item android:id="@+id/action_sort_by_amount_desc"
+                <item
+                    android:id="@+id/action_sort_by_amount_desc"
                     android:title="@string/action_sort_by_amount_desc"
                     />
 
-                <item android:id="@+id/action_sort_by_amount_asc"
+                <item
+                    android:id="@+id/action_sort_by_amount_asc"
                     android:title="@string/action_sort_by_amount_asc"
                     />
             </group>
