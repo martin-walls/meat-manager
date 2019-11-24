@@ -21,6 +21,11 @@
         </value>
       </option>
     </AndroidXmlCodeStyleSettings>
+    <codeStyleSettings language="JAVA">
+      <indentOptions>
+        <option name="USE_RELATIVE_INDENTS" value="true" />
+      </indentOptions>
+    </codeStyleSettings>
     <codeStyleSettings language="XML">
       <indentOptions>
         <option name="CONTINUATION_INDENT_SIZE" value="4" />
