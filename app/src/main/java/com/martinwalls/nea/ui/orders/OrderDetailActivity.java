@@ -199,6 +199,8 @@ public class OrderDetailActivity extends AppCompatActivity
         RecyclerView relatedStockRecyclerView = findViewById(R.id.recycler_view_related_stock);
         relatedStockRecyclerView.setAdapter(relatedStockAdapter);
         relatedStockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // disable layout change animations
+        relatedStockRecyclerView.setItemAnimator(null);
     }
 
     /**

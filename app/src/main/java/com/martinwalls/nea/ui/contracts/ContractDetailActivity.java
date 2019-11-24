@@ -161,6 +161,8 @@ public class ContractDetailActivity extends AppCompatActivity
         RecyclerView relatedStockRecyclerView = findViewById(R.id.recycler_view_related_stock);
         relatedStockRecyclerView.setAdapter(relatedStockAdapter);
         relatedStockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // disable animations for layout changes
+        relatedStockRecyclerView.setItemAnimator(null);
     }
 
     /**

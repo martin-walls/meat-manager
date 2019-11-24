@@ -23,6 +23,8 @@ public class RelatedStockAdapter extends RecyclerView.Adapter<RelatedStockAdapte
     private RelatedStockListener listener;
     private List<RelatedStock> relatedStockList;
 
+    private int expandedItemPos = -1;
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private Context context;
         private TextView title;
@@ -69,9 +71,15 @@ public class RelatedStockAdapter extends RecyclerView.Adapter<RelatedStockAdapte
         private View.OnClickListener titleClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo collapse other views so only one is expanded at any time
-                childrenLayout.setVisibility(childrenLayout.getVisibility() == View.VISIBLE
-                        ? View.GONE : View.VISIBLE);
+                int prevExpandedItemPos = expandedItemPos;
+                if (expandedItemPos != getAdapterPosition()) {
+                    expandedItemPos = getAdapterPosition();
+                    notifyItemChanged(prevExpandedItemPos);
+                    notifyItemChanged(expandedItemPos);
+                } else {
+                    expandedItemPos = -1;
+                    notifyItemChanged(prevExpandedItemPos);
+                }
             }
         };
 
@@ -89,7 +97,8 @@ public class RelatedStockAdapter extends RecyclerView.Adapter<RelatedStockAdapte
         };
     }
 
-    public RelatedStockAdapter(List<RelatedStock> relatedStockList, RelatedStockListener listener) {
+    public RelatedStockAdapter(List<RelatedStock> relatedStockList,
+                               RelatedStockListener listener) {
         this.relatedStockList = relatedStockList;
         this.listener = listener;
     }
@@ -129,6 +138,12 @@ public class RelatedStockAdapter extends RecyclerView.Adapter<RelatedStockAdapte
                 Utils.getMassDisplayValue(
                         holder.context, relatedStock.getTotalMass(), 3),
                 relatedStock.getStockItemList().size()));
+
+        if (position == expandedItemPos) {
+            holder.childrenLayout.setVisibility(View.VISIBLE);
+        } else {
+            holder.childrenLayout.setVisibility(View.GONE);
+        }
 
         int numChildViews = holder.childrenLayout.getChildCount();
         int numChildrenToShow = relatedStock.getStockItemList().size();
