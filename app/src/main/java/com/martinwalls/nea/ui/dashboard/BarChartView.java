@@ -8,7 +8,9 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
 import androidx.annotation.Nullable;
+
 import com.martinwalls.nea.R;
 import com.martinwalls.nea.util.MassUnit;
 import com.martinwalls.nea.util.Utils;
@@ -87,7 +89,7 @@ public class BarChartView extends View {
 
     // to store bounds of labels and tooltips
     private Rect labelTextBounds = new Rect();
-    private Rect tooltipTextBounds = new Rect();
+    private Rect amountTooltipTextBounds = new Rect();
     private Rect reqTooltipTextBounds = new Rect();
 
     // to round values to 2 d.p.
@@ -282,6 +284,11 @@ public class BarChartView extends View {
 
             // redraw graph
             invalidate();
+
+//            Toast.makeText(context,
+//                    getTooltipPos(dataSet.get(selectedIndex),
+//                            getLabelPos(dataSet.get(selectedIndex))).name(),
+//                    Toast.LENGTH_SHORT).show();
         }
         return true;
     }
@@ -403,6 +410,9 @@ public class BarChartView extends View {
     //region label
     /**
      * Calculates the pixel width of a bar label including its margin.
+     *
+     * @param isInside whether to calculate the width for showing the label
+     *                 inside a bar or outside.
      */
     private float getLabelTextWidth(boolean isInside) {
         if (isInside) {
@@ -435,7 +445,7 @@ public class BarChartView extends View {
         // if text doesn't fit inside, show it outside
         if (getLabelTextWidth(true) > barLength) {
             // if required bar shown
-            if (data.getAmountRequired() > data.getAmount()) {
+            if (isMoreReqBarShown(data)) {
                 // if text doesn't fit outside required bar
                 if (getLabelTextWidth(false) > getWidth() - reqBarLength) {
                     return LabelPos.INSIDE_REQ;
@@ -502,10 +512,10 @@ public class BarChartView extends View {
     //region tooltips
     /**
      * Calculates the width of a tooltip with text bounds stored in
-     * {@link #tooltipTextBounds}.
+     * {@link #amountTooltipTextBounds}.
      */
     private float getTooltipWidth() {
-        return tooltipTextBounds.width() + tooltipPadding * 2f;
+        return amountTooltipTextBounds.width() + tooltipPadding * 2f;
     }
 
     /**
@@ -620,14 +630,14 @@ public class BarChartView extends View {
      */
     private float getTooltipTop(int pos) {
         return (getBarTop(pos) + getBarBottom(pos)
-                - tooltipTextBounds.height()) / 2f - tooltipPadding;
+                - amountTooltipTextBounds.height()) / 2f - tooltipPadding;
     }
 
     /**
      * Calculates the y-value of the bottom edge of the tooltip.
      */
     private float getTooltipBottom(int pos) {
-        return (getBarTop(pos) + getBarBottom(pos) + tooltipTextBounds.height()) / 2f
+        return (getBarTop(pos) + getBarBottom(pos) + amountTooltipTextBounds.height()) / 2f
                 + tooltipPadding;
     }
 
@@ -649,16 +659,7 @@ public class BarChartView extends View {
      * Draws a tooltip to show amount of stock for {@code data} at position {@code pos}.
      */
     private float drawAmountTooltip(Canvas c, BarChartEntry data, int pos) {
-
-        MassUnit massUnit = MassUnit.getMassUnit(context);
-
-        String tooltipText = context.getString(
-                massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
-                decimalFormat.format(
-                        Utils.convertToCurrentMassUnit(context, data.getAmount())));
-
-        amountTooltipTextPaint.getTextBounds(
-                tooltipText, 0, tooltipText.length(), tooltipTextBounds);
+        String tooltipText = getTooltipText(data.getAmount());
 
         float left = getTooltipLeft(data, getLabelPos(data));
         float top = getTooltipTop(pos);
@@ -693,12 +694,24 @@ public class BarChartView extends View {
         if (isMoreReqBarShown(data)) {
             float reqBarLength = getBarLength(data.getAmountRequired());
 
-            // if required tooltip fits inside more required bar
-            if (getReqTooltipWidthWithMargin() < reqBarLength - barLength) {
+            if ( // label inside required bar and tooltip fits
+                    (labelPos == LabelPos.INSIDE_REQ
+                            && getReqTooltipWidthWithMargin()
+                            < reqBarLength - barLength - getLabelTextWidth(true))
+                    // or label not inside required bar and tooltip fits
+                    || (labelPos != LabelPos.INSIDE_REQ
+                            && getReqTooltipWidthWithMargin() < reqBarLength - barLength)) {
+                // show tooltip inside required bar (right side of bar)
                 return reqBarLength - getReqTooltipWidth() - tooltipMargin;
-            } else if (amountTooltipPos == TooltipPos.INSIDE_NORMAL) {
-                return reqBarLength + tooltipMargin;
-            } else {
+            } else if ( // amount tooltip is shown inside amount bar
+                    amountTooltipPos == TooltipPos.INSIDE_NORMAL) {
+                if ( // label is outside bar
+                        labelPos == LabelPos.OUTSIDE_REQ) {
+                    return reqBarLength + getLabelTextWidth(false) + tooltipMargin;
+                } else { // label is inside bar
+                    return reqBarLength + tooltipMargin;
+                }
+            } else { // show tooltip to right of amount tooltip
                 return normalTooltipRight + tooltipMargin;
             }
         } else if (isLessReqBarShown(data)) {
@@ -748,12 +761,7 @@ public class BarChartView extends View {
      */
     private void drawReqTooltip(Canvas c, BarChartEntry data, int pos,
                                 float normalTooltipRight) {
-        MassUnit massUnit = MassUnit.getMassUnit(context);
-        String text = context.getString(
-                massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
-                decimalFormat.format(
-                        Utils.convertToCurrentMassUnit(context, data.getAmountRequired())));
-        moreReqTooltipTextPaint.getTextBounds(text, 0, text.length(), reqTooltipTextBounds);
+        String tooltipText = getTooltipText(data.getAmountRequired());
 
         float left = getReqTooltipLeft(data, getLabelPos(data), normalTooltipRight);
         float top = getTooltipTop(pos);
@@ -766,18 +774,57 @@ public class BarChartView extends View {
         if (isMoreReqBarShown(data)) {
             drawTooltip(c,
                     left, top, right, bottom, moreReqTooltipFillPaint,
-                    text, textX, textY, moreReqTooltipTextPaint);
+                    tooltipText, textX, textY, moreReqTooltipTextPaint);
         } else if (isLessReqBarShown(data)) {
             drawTooltip(c,
                     left, top, right, bottom, lessReqTooltipFillPaint,
-                    text, textX, textY, lessReqTooltipTextPaint);
+                    tooltipText, textX, textY, lessReqTooltipTextPaint);
         }
+    }
+
+    /**
+     * Formats the given value with the current mass unit so it can be displayed
+     * in a tooltip.
+     */
+    private String getTooltipText(float value) {
+        MassUnit massUnit = MassUnit.getMassUnit(context);
+        return context.getString(
+                massUnit == MassUnit.KG ? R.string.amount_kg : R.string.amount_lbs,
+                decimalFormat.format(Utils.convertToCurrentMassUnit(context, value)));
+    }
+
+    /**
+     * Calculates the text bounds for the given text with the given Paint.
+     * Stores the result in {@code outRect}.
+     */
+    private void calculateTooltipTextBounds(String text, Paint paint, Rect outRect) {
+        paint.getTextBounds(text, 0, text.length(), outRect);
+    }
+
+    /**
+     * Calculates the text bounds for the amount tooltip for this data. Stores
+     * the result in {@link #amountTooltipTextBounds}.
+     */
+    private void calculateAmountTooltipTextBounds(BarChartEntry data) {
+        calculateTooltipTextBounds(getTooltipText(data.getAmount()),
+                amountTooltipTextPaint, amountTooltipTextBounds);
+    }
+
+    /**
+     * Calculates the text bounds for the required tooltip for this data. Stores
+     * the result in {@link #reqTooltipTextBounds}.
+     */
+    private void calculateReqTooltipTextBounds(BarChartEntry data) {
+        calculateTooltipTextBounds(getTooltipText(data.getAmountRequired()),
+                moreReqTooltipTextPaint, reqTooltipTextBounds);
     }
 
     /**
      * Draws all tooltips that should be shown for {@code data} at position {@code pos}.
      */
     private void drawTooltips(Canvas c, BarChartEntry data, int pos) {
+        calculateAmountTooltipTextBounds(data);
+        calculateReqTooltipTextBounds(data);
         amountTooltipFillPaint.setAlpha(tooltipAlpha);
         amountTooltipTextPaint.setAlpha(tooltipAlpha);
         float normalTooltipRight = drawAmountTooltip(c, data, pos);
@@ -798,6 +845,8 @@ public class BarChartView extends View {
      * bar, these fade out as the alpha value is decreased.
      */
     private void drawPreviousTooltips(Canvas c, BarChartEntry data, int pos) {
+        calculateAmountTooltipTextBounds(data);
+        calculateReqTooltipTextBounds(data);
         amountTooltipFillPaint.setAlpha(prevTooltipAlpha);
         amountTooltipTextPaint.setAlpha(prevTooltipAlpha);
         float normalTooltipRight = drawAmountTooltip(c, data, pos);
