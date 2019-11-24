@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -136,23 +137,31 @@ public class RepeatIntervalDialog extends DialogFragment {
                 radioMonth.setChecked(true);
                 break;
             case OPTION_CUSTOM:
-                if (selectedCustomInterval.getUnit() != null) {
-                    radioCustomSelected.setVisibility(View.VISIBLE);
-                    radioCustomSelected.setChecked(true);
-                    if (selectedCustomInterval.getValue() == 1) {
-                        radioCustomSelected.setText(
-                                getString(R.string.contracts_repeat_interval_display_one,
-                                        selectedCustomInterval.getUnit()
-                                                .name().toLowerCase()));
-                    } else {
-                        radioCustomSelected.setText(
-                                getString(R.string.contracts_repeat_interval_display_multiple,
-                                        selectedCustomInterval.getValue(),
-                                        selectedCustomInterval.getUnit()
-                                                .name().toLowerCase()));
-                    }
-                }
+                setCustomRadioBtnSelected(selectedCustomInterval);
                 break;
+        }
+    }
+
+    /**
+     * Shows a radio button for a custom interval that the user has entered,
+     * and sets it to selected.
+     */
+    private void setCustomRadioBtnSelected(Interval selectedCustomInterval) {
+        if (selectedCustomInterval.getUnit() != null) {
+            radioCustomSelected.setVisibility(View.VISIBLE);
+            radioCustomSelected.setChecked(true);
+            if (selectedCustomInterval.getValue() == 1) {
+                radioCustomSelected.setText(
+                        getString(R.string.contracts_repeat_interval_display_one,
+                                selectedCustomInterval.getUnit()
+                                        .name().toLowerCase()));
+            } else {
+                radioCustomSelected.setText(
+                        getString(R.string.contracts_repeat_interval_display_multiple,
+                                selectedCustomInterval.getValue(),
+                                selectedCustomInterval.getUnit()
+                                        .name().toLowerCase()));
+            }
         }
     }
 
@@ -207,6 +216,13 @@ public class RepeatIntervalDialog extends DialogFragment {
                 }
             }
         });
+
+        // plus and minus buttons
+        ImageButton btnMinus = dialogView.findViewById(R.id.btn_minus);
+        btnMinus.setOnClickListener(v -> decrementCustomValue());
+
+        ImageButton btnPlus = dialogView.findViewById(R.id.btn_plus);
+        btnPlus.setOnClickListener(v -> incrementCustomValue());
     }
 
     /**
@@ -235,6 +251,38 @@ public class RepeatIntervalDialog extends DialogFragment {
             listener.onCustomIntervalSelected(interval);
             dismiss();
         });
+    }
+
+    /**
+     * Sets the custom value input field to the specified value.
+     */
+    private void setCustomValueInputValue(int value) {
+        editTextCustomValue.setText(String.valueOf(value));
+    }
+
+    /**
+     * Increments the value in the custom value input field.
+     */
+    private void incrementCustomValue() {
+        if (TextUtils.isEmpty(editTextCustomValue.getText())) {
+            setCustomValueInputValue(1);
+        } else {
+            int currentValue = Integer.valueOf(editTextCustomValue.getText().toString());
+            setCustomValueInputValue(currentValue + 1);
+        }
+    }
+
+    /**
+     * Decrements the value in the custom value input field, if it is greater
+     * than 0.
+     */
+    private void decrementCustomValue() {
+        if (!TextUtils.isEmpty(editTextCustomValue.getText())) {
+            int currentValue = Integer.valueOf(editTextCustomValue.getText().toString());
+            if (currentValue > 0) {
+                setCustomValueInputValue(currentValue - 1);
+            }
+        }
     }
 
     /**

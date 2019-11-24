@@ -631,7 +631,6 @@ public class EditContractActivity extends InputFormActivity
         Spinner repeatOnSpn = findViewById(R.id.spn_repeat_on);
         repeatOnSpn.setSelection(contractToEdit.getRepeatOn() - 1);
 
-        EditText editTextReminder = findViewById(R.id.edit_text_reminder);
         TextView hintReminder = findViewById(R.id.text_reminder);
         int reminderDays = contractToEdit.getReminder();
         if (reminderDays > 0) {
