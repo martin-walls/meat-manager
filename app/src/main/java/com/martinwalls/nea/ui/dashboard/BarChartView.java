@@ -425,10 +425,22 @@ public class BarChartView extends View {
     /**
      * Stores the different positions a label can be in, relative to its bar.
      */
-    private enum LabelPos { //todo javadoc for each value
-        INSIDE_NORMAL,
+    private enum LabelPos {
+        /**
+         * Label shown inside amount bar.
+         */
+        INSIDE_AMOUNT,
+        /**
+         * Label shown inside required bar.
+         */
         INSIDE_REQ,
+        /**
+         * Label shown to right of required bar.
+         */
         OUTSIDE_REQ,
+        /**
+         * Label shown to right of amount bar (more required bar is not showing).
+         */
         OUTSIDE_NO_REQ
     }
 
@@ -456,7 +468,7 @@ public class BarChartView extends View {
                 return LabelPos.OUTSIDE_NO_REQ;
             }
         } else /* if text fits inside */ {
-            return LabelPos.INSIDE_NORMAL;
+            return LabelPos.INSIDE_AMOUNT;
         }
     }
 
@@ -471,7 +483,7 @@ public class BarChartView extends View {
         float reqBarLength = getBarLength(data.getAmountRequired());
 
         switch (getLabelPos(data)) {
-            case INSIDE_NORMAL:
+            case INSIDE_AMOUNT:
                 return labelMarginInside;
             case INSIDE_REQ:
             case OUTSIDE_NO_REQ:
@@ -501,7 +513,7 @@ public class BarChartView extends View {
         float labelY = getLabelY(pos);
 
         // if inside normal bar, use inside fill paint
-        if (getLabelPos(data) == LabelPos.INSIDE_NORMAL) {
+        if (getLabelPos(data) == LabelPos.INSIDE_AMOUNT) {
             c.drawText(label, labelX, labelY, barInnerLabelPaint);
         } else {
             c.drawText(label, labelX, labelY, barOuterLabelPaint);
@@ -548,13 +560,33 @@ public class BarChartView extends View {
      * Stores the different positions the amount tooltip can be in relative to
      * its bar.
      */
-    private enum AmountTooltipPos { //todo javadoc for each value
-        INSIDE_NORMAL,
+    private enum AmountTooltipPos {
+        /**
+         * Tooltip inside amount bar (to right edge of bar).
+         */
+        INSIDE_AMOUNT,
+        /**
+         * Tooltip inside more required bar (to right edge of bar).
+         */
         INSIDE_MORE_REQ,
+        /**
+         * Tooltip outside required bar, with the label shown inside one of the bars.
+         */
         OUTSIDE_REQ_LABEL_IN,
+        /**
+         * Tooltip outside required bar, with the label also outside, so tooltip
+         * shown to right of label.
+         */
         OUTSIDE_REQ_LABEL_OUT,
-        OUTSIDE_NO_REQ_LABEL_IN,
-        OUTSIDE_NO_REQ_LABEL_OUT
+        /**
+         * Tooltip outside amount bar, with the label shown inside the bar.
+         */
+        OUTSIDE_AMOUNT_LABEL_IN,
+        /**
+         * Tooltip outside amount bar, with the label also outside, so tooltip
+         * shown to right of label.
+         */
+        OUTSIDE_AMOUNT_LABEL_OUT
     }
 
     /**
@@ -563,12 +595,12 @@ public class BarChartView extends View {
      */
     private AmountTooltipPos getTooltipPos(BarChartEntry data, LabelPos labelPos) {
         if (( // enough space inside amount bar for tooltip
-                labelPos == LabelPos.INSIDE_NORMAL
+                labelPos == LabelPos.INSIDE_AMOUNT
                         && getTooltipWidthWithMargin()
                         < getBarLength(data.getAmount()) - getLabelTextWidth(true))
-                || (labelPos != LabelPos.INSIDE_NORMAL
+                || (labelPos != LabelPos.INSIDE_AMOUNT
                         && getTooltipWidthWithMargin() < getBarLength(data.getAmount()))) {
-            return AmountTooltipPos.INSIDE_NORMAL;
+            return AmountTooltipPos.INSIDE_AMOUNT;
         } else if ( // tooltip can't fit outside req bar (if shown)
                 isMoreReqBarShown(data)
                 && getTooltipWidthWithMargin()
@@ -577,17 +609,17 @@ public class BarChartView extends View {
         } else if (// not enough space inside amount bar for tooltip
                 // and not shown inside required bar
                 // and bar label is shown inside
-                labelPos == LabelPos.INSIDE_NORMAL) {
+                labelPos == LabelPos.INSIDE_AMOUNT) {
             if (isMoreReqBarShown(data)) {
                 return AmountTooltipPos.OUTSIDE_REQ_LABEL_IN;
             } else {
-                return AmountTooltipPos.OUTSIDE_NO_REQ_LABEL_IN;
+                return AmountTooltipPos.OUTSIDE_AMOUNT_LABEL_IN;
             }
         } else { // not shown inside amount or required bars, and bar label is outside
             if (isMoreReqBarShown(data)) {
                 return AmountTooltipPos.OUTSIDE_REQ_LABEL_OUT;
             } else {
-                return AmountTooltipPos.OUTSIDE_NO_REQ_LABEL_OUT;
+                return AmountTooltipPos.OUTSIDE_AMOUNT_LABEL_OUT;
             }
         }
     }
@@ -601,18 +633,18 @@ public class BarChartView extends View {
         float reqBarLength = getBarLength(data.getAmountRequired());
 
         switch (getTooltipPos(data, labelPos)) {
-            case INSIDE_NORMAL:
+            case INSIDE_AMOUNT:
                 return barLength - getTooltipWidth() - tooltipMargin;
             case INSIDE_MORE_REQ:
                 return reqBarLength - (getReqTooltipWidth() + tooltipMargin)
                         - (getTooltipWidth() + tooltipMargin);
             case OUTSIDE_REQ_LABEL_IN:
                 return reqBarLength + tooltipMargin;
-            case OUTSIDE_NO_REQ_LABEL_IN:
+            case OUTSIDE_AMOUNT_LABEL_IN:
                 return barLength + tooltipMargin;
             case OUTSIDE_REQ_LABEL_OUT:
                 return reqBarLength + getLabelTextWidth(false) + tooltipMargin;
-            case OUTSIDE_NO_REQ_LABEL_OUT:
+            case OUTSIDE_AMOUNT_LABEL_OUT:
                 return barLength + getLabelTextWidth(false) + tooltipMargin;
         }
         return 0;
@@ -762,7 +794,7 @@ public class BarChartView extends View {
                 // req tooltip fits inside req bar
                 return ReqTooltipPos.INSIDE_REQ;
             } else if ( // amount tooltip inside amount bar
-                    amountTooltipPos == AmountTooltipPos.INSIDE_NORMAL) {
+                    amountTooltipPos == AmountTooltipPos.INSIDE_AMOUNT) {
                 if (labelPos == LabelPos.OUTSIDE_REQ) { // label outside bar
                     return ReqTooltipPos.OUTSIDE_REQ_LABEL_OUT;
                 } else { // label not outside bar
@@ -773,8 +805,8 @@ public class BarChartView extends View {
             }
         } else if (isLessReqBarShown(data)) {
             // amount tooltip inside amount bar
-            if (amountTooltipPos == AmountTooltipPos.INSIDE_NORMAL) {
-                if (labelPos == LabelPos.INSIDE_NORMAL) { // label inside amount bar
+            if (amountTooltipPos == AmountTooltipPos.INSIDE_AMOUNT) {
+                if (labelPos == LabelPos.INSIDE_AMOUNT) { // label inside amount bar
                     // fits inside with label
                     if (reqTooltipFitsInsideAmountBarWithLabel(
                             tooltipWidth, amountBarLength)) {
