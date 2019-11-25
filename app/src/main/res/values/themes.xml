@@ -46,6 +46,8 @@
         <!-- List divider color -->
         <item name="dividerColor">@color/medium_dark_grey</item>
 
+        <item name="itemHighlight">@color/medium_light_grey</item>
+
         <!-- Dashboard graph -->
         <item name="dashboardGraphAmountBarColor">@color/dashboard_graph_bar</item>
         <item name="dashboardAmountTooltipColor">@color/dashboard_tooltip</item>

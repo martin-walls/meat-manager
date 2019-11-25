@@ -5,6 +5,7 @@
     <attr name="textColorEmphasis" format="reference" />
 
     <attr name="dividerColor" format="reference" />
+    <attr name="itemHighlight" format="reference" />
 
     <attr name="selectedItemBackgroundColor" format="reference" />
 

@@ -14,9 +14,8 @@
     <View
         android:layout_width="1.5dp"
         android:layout_height="match_parent"
-        android:background="@color/medium_light_grey"
+        android:background="?itemHighlight"
         />
-<!--    todo theme attr for color -->
 
     <TextView
         android:id="@+id/location"
