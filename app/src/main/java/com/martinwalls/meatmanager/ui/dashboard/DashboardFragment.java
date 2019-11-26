@@ -148,6 +148,8 @@ public class DashboardFragment extends Fragment
 
         //todo show bar where stock required but none held
 
+        //todo dont show locations that have no data
+
         // get data from db and sort it
         List<StockItem> stockList;
         if (filterLocation == null || TextUtils.isEmpty(filterLocation.getLocationName())) {
