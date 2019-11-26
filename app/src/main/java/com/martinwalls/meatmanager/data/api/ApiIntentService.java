@@ -112,7 +112,7 @@ public class ApiIntentService extends IntentService {
      * and stored in cache. Returns 0 if no cached data exists.
      */
     private long getTimeDiffFromLastCache() {
-        long timeDiff = 0;
+        long timeDiff = -1;
         if (CacheHelper.doesCacheExist(getApplicationContext(), CACHE_KEY_TIMESTAMP)) {
             long lastTimestamp = Long.parseLong(
                     CacheHelper.retrieve(getApplicationContext(), CACHE_KEY_TIMESTAMP));
@@ -128,7 +128,7 @@ public class ApiIntentService extends IntentService {
 
         String jsonResponse;
         // if last cache from less than 1 hr ago
-        if (timeDiff < 60 * 60) {
+        if (timeDiff != -1 && timeDiff < 60 * 60) {
             jsonResponse = CacheHelper.retrieve(getApplicationContext(), CACHE_KEY_RATES);
         } else {
             // make new API request as cache is > 1 hr old
