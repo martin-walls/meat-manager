@@ -201,6 +201,7 @@ public class ExchangeFragment extends Fragment {
     private boolean checkInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager) getContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
+
         return cm.getActiveNetwork() != null;
     }
 
@@ -246,7 +247,7 @@ public class ExchangeFragment extends Fragment {
 
         //noinspection unchecked
         rates = (HashMap<String, Double>)
-                data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
+                        data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
         updateRates();
 
         initCurrencyPickers();

@@ -2,6 +2,7 @@ package com.martinwalls.meatmanager.util;
 
 import android.content.Context;
 import android.util.TypedValue;
+
 import androidx.annotation.AttrRes;
 
 import java.text.DecimalFormat;

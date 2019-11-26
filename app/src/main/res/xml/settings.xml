@@ -1,7 +1,4 @@
-<androidx.preference.PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory app:title="@string/settings_category_general">
 
@@ -28,13 +25,14 @@
     <PreferenceCategory app:title="@string/settings_category_notifications">
 
         <SwitchPreference
-            android:key="@string/pref_enable_notifications"
-            android:title="@string/settings_enable_notifications"
+            app:defaultValue="true"
+            app:key="@string/pref_enable_notifications"
+            app:title="@string/settings_enable_notifications"
             />
 
         <Preference
-            android:key="@string/pref_reminder_time"
-            android:title="@string/settings_reminder_time"
+            app:key="@string/pref_reminder_time"
+            app:title="@string/settings_reminder_time"
             />
 
     </PreferenceCategory>
