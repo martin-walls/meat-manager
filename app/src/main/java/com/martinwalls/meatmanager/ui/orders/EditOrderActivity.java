@@ -63,7 +63,7 @@ public class EditOrderActivity extends InputFormActivity
     public static final int EDIT_TYPE_EDIT = 1;
     public static final String EXTRA_ORDER_ID = "order_id";
 
-    private final int REQUEST_REFRESH_ON_DONE = 1;
+    private final int REQUEST_NEW_DESTINATION = 1;
     private final String DATE_FORMAT = "dd MMMM yyyy, HH:mm";
 
     private final String INPUT_PRODUCT = "product";
@@ -172,9 +172,13 @@ public class EditOrderActivity extends InputFormActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_REFRESH_ON_DONE) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_NEW_DESTINATION) {
+            selectedDestId = data.getIntExtra(NewLocationActivity.RESULT_ID, -1);
+            Location newDest = dbHandler.getLocation(selectedDestId);
+            TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
+            editTextDest.setText(newDest.getLocationName());
+            editTextDest.clearFocus();
             cancelSearch();
-            openSearch(getCurrentSearchType());
         }
     }
 
@@ -221,9 +225,11 @@ public class EditOrderActivity extends InputFormActivity
     public void onAddNewProductDoneAction(Product newProduct) {
         boolean successful = dbHandler.addProduct(newProduct);
         if (successful) {
-            // refresh list
+            selectedProductId = newProduct.getProductId();
+            TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
+            editTextProduct.setText(newProduct.getProductName());
+            editTextProduct.clearFocus();
             cancelSearch();
-            openSearch(getCurrentSearchType());
         }
     }
 
@@ -327,7 +333,7 @@ public class EditOrderActivity extends InputFormActivity
                 Intent newDestIntent = new Intent(this, NewLocationActivity.class);
                 newDestIntent.putExtra(NewLocationActivity.EXTRA_LOCATION_TYPE,
                         Location.LocationType.Destination.name());
-                startActivityForResult(newDestIntent, REQUEST_REFRESH_ON_DONE);
+                startActivityForResult(newDestIntent, REQUEST_NEW_DESTINATION);
                 break;
         }
     }

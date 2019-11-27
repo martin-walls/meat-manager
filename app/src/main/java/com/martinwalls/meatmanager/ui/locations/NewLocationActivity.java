@@ -1,10 +1,12 @@
 package com.martinwalls.meatmanager.ui.locations;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -26,9 +28,11 @@ public class NewLocationActivity extends AppCompatActivity
 
     public static final String EXTRA_LOCATION_TYPE = "location_type";
 
+    public static final String RESULT_ID = "id";
+
     private DBHandler dbHandler;
 
-    private ArrayAdapter<CharSequence> locationTypeAdapter;
+    private Location.LocationType locationType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +41,26 @@ public class NewLocationActivity extends AppCompatActivity
 
         dbHandler = new DBHandler(this);
 
-        String locationType = getString(R.string.locations_type_storage);
+        String locationTypeStr = "";
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            locationType = extras.getString(EXTRA_LOCATION_TYPE, locationType);
+            locationTypeStr = extras.getString(EXTRA_LOCATION_TYPE, locationTypeStr);
+            if (!TextUtils.isEmpty(locationTypeStr)) {
+                locationType = Location.LocationType.valueOf(locationTypeStr);
+            }
         }
 
-        getSupportActionBar().setTitle(
-                getString(R.string.locations_add_new_title, locationType.toLowerCase()));
+        getSupportActionBar().setTitle(getString(R.string.locations_add_new_title,
+                locationType == null
+                        ? "location"
+                        : locationTypeStr.toLowerCase()));
 
-        initLocationTypeSpn();
-        setLocationTypeSelected(Location.LocationType.valueOf(locationType));
+        // if adding location of specific type, hide location type spinner
+        if (locationType == null) {
+            initLocationTypeSpn();
+        } else {
+            findViewById(R.id.row_location_type).setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -68,7 +81,11 @@ public class NewLocationActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                if (addLocationToDb()) {
+                int newRowId = (int) addLocationToDb();
+                if (newRowId != -1) {
+                    Intent result = new Intent();
+                    result.putExtra(RESULT_ID, newRowId);
+                    setResult(RESULT_OK, result);
                     finish();
                 } else {
                     Toast.makeText(this, getString(R.string.db_error_insert, "location"),
@@ -79,6 +96,7 @@ public class NewLocationActivity extends AppCompatActivity
                 if (!areAllFieldsEmpty()) {
                     showConfirmCancelDialog();
                 } else {
+                    setResult(RESULT_CANCELED);
                     finish();
                 }
                 return true;
@@ -97,20 +115,12 @@ public class NewLocationActivity extends AppCompatActivity
      */
     private void initLocationTypeSpn() {
         Spinner locationTypeSpn = findViewById(R.id.spn_location_type);
-        locationTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> locationTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         locationTypeAdapter.setDropDownViewResource(
                 android.R.layout.simple_spinner_dropdown_item);
         locationTypeAdapter.addAll(Location.LocationType.getLocationTypeStrings());
         locationTypeAdapter.notifyDataSetChanged();
         locationTypeSpn.setAdapter(locationTypeAdapter);
-    }
-
-    /**
-     * Sets the location type spinner to the given location type.
-     */
-    private void setLocationTypeSelected(Location.LocationType locationType) {
-        Spinner locationTypeSpn = findViewById(R.id.spn_location_type);
-        locationTypeSpn.setSelection(locationType.ordinal());
     }
 
     /**
@@ -127,9 +137,10 @@ public class NewLocationActivity extends AppCompatActivity
      * First checks each input field to check it is valid. It a field is
      * invalid, an appropriate error message is shown to help the user correct
      * the error. If all fields have valid data, edits the existing location
-     * in the database to the new values.
+     * in the database to the new values. Returns the ID of the new row in the
+     * database.
      */
-    private boolean addLocationToDb() {
+    private long addLocationToDb() {
         boolean isValid = true;
         Location newLocation = new Location();
 
@@ -202,8 +213,12 @@ public class NewLocationActivity extends AppCompatActivity
 
         if (isValid) {
             newLocation.setLocationName(editTextName.getText().toString());
-            newLocation.setLocationType(
-                    Location.LocationType.values()[locationTypeSpn.getSelectedItemPosition()]);
+            if (locationType == null) {
+                newLocation.setLocationType(
+                        Location.LocationType.values()[locationTypeSpn.getSelectedItemPosition()]);
+            } else {
+                newLocation.setLocationType(locationType);
+            }
             newLocation.setAddrLine1(editTextAddr1.getText().toString());
             newLocation.setAddrLine2(
                     editTextAddr2.getText() == null
@@ -226,7 +241,7 @@ public class NewLocationActivity extends AppCompatActivity
 
             return dbHandler.addLocation(newLocation);
         }
-        return false;
+        return -1;
     }
 
     /**

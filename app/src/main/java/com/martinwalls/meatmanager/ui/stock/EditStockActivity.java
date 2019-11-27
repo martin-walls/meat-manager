@@ -45,12 +45,16 @@ public class EditStockActivity extends InputFormActivity
     public static final int EDIT_TYPE_EDIT = 1;
     public static final String EXTRA_STOCK_ID = "stock_id";
 
-    private final int REQUEST_REFRESH_ON_DONE = 1;
+    private final int REQUEST_REFRESH_ON_DONE = 0;
+
+    private final int REQUEST_NEW_SUPPLIER = 1;
+    private final int REQUEST_NEW_STORAGE = 2;
+    private final int REQUEST_NEW_DESTINATION = 3;
 
     private final String INPUT_PRODUCT = "product";
     private final String INPUT_SUPPLIER = "supplier";
     private final String INPUT_QUANTITY = "quantity";
-    private final String INPUT_LOCATION = "location";
+    private final String INPUT_STORAGE = "location";
     private final String INPUT_DESTINATION = "destination";
     private final String INPUT_QUALITY = "quality";
 
@@ -62,7 +66,7 @@ public class EditStockActivity extends InputFormActivity
     // store ids of selected items
     private int selectedProductId;
     private int selectedSupplierId;
-    private int selectedLocationId;
+    private int selectedStorageId;
     private int selectedDestId;
 
     private boolean hasChanged = false;
@@ -134,9 +138,30 @@ public class EditStockActivity extends InputFormActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_REFRESH_ON_DONE) {
+        if (resultCode == RESULT_OK) {
+            int newLocationId = data.getIntExtra(NewLocationActivity.RESULT_ID, -1);
+            Location newLocation = dbHandler.getLocation(newLocationId);
+            switch (requestCode) {
+                case REQUEST_NEW_SUPPLIER:
+                    selectedSupplierId = newLocationId;
+                    TextInputEditText editTextSupplier = findViewById(R.id.edit_text_supplier);
+                    editTextSupplier.setText(newLocation.getLocationName());
+                    editTextSupplier.clearFocus();
+                    break;
+                case REQUEST_NEW_STORAGE:
+                    selectedStorageId = newLocationId;
+                    TextInputEditText editTextStorage = findViewById(R.id.edit_text_location);
+                    editTextStorage.setText(newLocation.getLocationName());
+                    editTextStorage.clearFocus();
+                    break;
+                case REQUEST_NEW_DESTINATION:
+                    selectedDestId = newLocationId;
+                    TextInputEditText editTextDest = findViewById(R.id.edit_text_destination);
+                    editTextDest.setText(newLocation.getLocationName());
+                    editTextDest.clearFocus();
+                    break;
+            }
             cancelSearch();
-            openSearch(getCurrentSearchType());
         }
     }
 
@@ -177,7 +202,7 @@ public class EditStockActivity extends InputFormActivity
                                     location.getLocationName(), location.getLocationId()));
                 }
                 break;
-            case INPUT_LOCATION:
+            case INPUT_STORAGE:
                 for (Location location : SortUtils.mergeSort(
                         dbHandler.getAllLocations(Location.LocationType.Storage),
                         Location.comparatorAlpha())) {
@@ -205,8 +230,8 @@ public class EditStockActivity extends InputFormActivity
             case INPUT_SUPPLIER:
                 selectedSupplierId = item.getId();
                 break;
-            case INPUT_LOCATION:
-                selectedLocationId = item.getId();
+            case INPUT_STORAGE:
+                selectedStorageId = item.getId();
                 break;
             case INPUT_DESTINATION:
                 selectedDestId = item.getId();
@@ -223,9 +248,11 @@ public class EditStockActivity extends InputFormActivity
     public void onAddNewProductDoneAction(Product newProduct) {
         boolean successful = dbHandler.addProduct(newProduct);
         if (successful) {
-            // refresh list
+            selectedProductId = newProduct.getProductId();
+            TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
+            editTextProduct.setText(newProduct.getProductName());
+            editTextProduct.clearFocus();
             cancelSearch();
-            openSearch(getCurrentSearchType());
         }
     }
 
@@ -245,19 +272,19 @@ public class EditStockActivity extends InputFormActivity
                 Intent newSupplierIntent = new Intent(this, NewLocationActivity.class);
                 newSupplierIntent.putExtra(NewLocationActivity.EXTRA_LOCATION_TYPE,
                         Location.LocationType.Supplier.name());
-                startActivityForResult(newSupplierIntent, REQUEST_REFRESH_ON_DONE);
+                startActivityForResult(newSupplierIntent, REQUEST_NEW_SUPPLIER);
                 break;
-            case INPUT_LOCATION:
+            case INPUT_STORAGE:
                 Intent newLocationIntent = new Intent(this, NewLocationActivity.class);
                 newLocationIntent.putExtra(NewLocationActivity.EXTRA_LOCATION_TYPE,
                         Location.LocationType.Storage.name());
-                startActivityForResult(newLocationIntent, REQUEST_REFRESH_ON_DONE);
+                startActivityForResult(newLocationIntent, REQUEST_NEW_STORAGE);
                 break;
             case INPUT_DESTINATION:
                 Intent newDestIntent = new Intent(this, NewLocationActivity.class);
                 newDestIntent.putExtra(NewLocationActivity.EXTRA_LOCATION_TYPE,
                         Location.LocationType.Destination.name());
-                startActivityForResult(newDestIntent, REQUEST_REFRESH_ON_DONE);
+                startActivityForResult(newDestIntent, REQUEST_NEW_DESTINATION);
                 break;
         }
     }
@@ -298,7 +325,7 @@ public class EditStockActivity extends InputFormActivity
         addViewToHide(INPUT_PRODUCT, R.id.input_layout_product);
         addViewToHide(INPUT_SUPPLIER, R.id.input_layout_supplier);
         addViewToHide(INPUT_QUANTITY, R.id.input_row_quantity);
-        addViewToHide(INPUT_LOCATION, R.id.input_layout_location);
+        addViewToHide(INPUT_STORAGE, R.id.input_layout_location);
         addViewToHide(INPUT_DESTINATION, R.id.input_layout_destination);
         addViewToHide(INPUT_QUALITY, R.id.input_layout_quality);
     }
@@ -332,7 +359,7 @@ public class EditStockActivity extends InputFormActivity
                 findViewById(R.id.input_layout_supplier),
                 findViewById(R.id.edit_text_supplier));
 
-        setListeners(INPUT_LOCATION,
+        setListeners(INPUT_STORAGE,
                 findViewById(R.id.input_layout_location),
                 findViewById(R.id.edit_text_location));
 
@@ -437,7 +464,7 @@ public class EditStockActivity extends InputFormActivity
 
         selectedProductId = stockToEdit.getProduct().getProductId();
         selectedSupplierId = stockToEdit.getSupplierId();
-        selectedLocationId = stockToEdit.getLocationId();
+        selectedStorageId = stockToEdit.getLocationId();
         selectedDestId = stockToEdit.getDestId();
     }
 
@@ -545,12 +572,12 @@ public class EditStockActivity extends InputFormActivity
         // if new stock item or location has changed
         if (editType == EDIT_TYPE_NEW
                 || (editType == EDIT_TYPE_EDIT
-                    && selectedLocationId != stockToEdit.getLocationId())) {
+                    && selectedStorageId != stockToEdit.getLocationId())) {
             if (dbHandler.getAllStock().stream()
                     .map(stockItem -> new int[]{stockItem.getProduct().getProductId(),
                             stockItem.getSupplierId(), stockItem.getLocationId()})
                     .anyMatch(x -> Arrays.equals(x, new int[]{selectedProductId,
-                            selectedSupplierId, selectedLocationId}))) {
+                            selectedSupplierId, selectedStorageId}))) {
                 inputLayoutLocation.setError(
                         getString(R.string.input_error_stock_already_in_location));
                 isValid = false;
@@ -569,7 +596,7 @@ public class EditStockActivity extends InputFormActivity
             } else {
                 newStockItem.setNumBoxes(-1);
             }
-            newStockItem.setLocation(dbHandler.getLocation(selectedLocationId));
+            newStockItem.setLocation(dbHandler.getLocation(selectedStorageId));
             if (!TextUtils.isEmpty(editTextDest.getText())) {
                 newStockItem.setDest(dbHandler.getLocation(selectedDestId));
             } else {
