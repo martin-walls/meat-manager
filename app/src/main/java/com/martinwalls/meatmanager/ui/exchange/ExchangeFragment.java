@@ -44,7 +44,7 @@ import java.util.List;
 
 public class ExchangeFragment extends Fragment {
 
-    private static final int REQUEST_REFRESH_ON_DONE = 1;
+    private static final int REQUEST_REFRESH_ON_DONE = 2;
 
     private static final int HISTORY_WEEKS_TO_SHOW = 2;
 
@@ -123,9 +123,9 @@ public class ExchangeFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_favourites:
-                Intent favouritesIntent = new Intent(getContext(),
+                Intent chooseCurrenciesIntent = new Intent(getContext(),
                         ChooseCurrenciesActivity.class);
-                startActivityForResult(favouritesIntent, REQUEST_REFRESH_ON_DONE);
+                startActivityForResult(chooseCurrenciesIntent, REQUEST_REFRESH_ON_DONE);
                 return true;
             case R.id.action_refresh:
                 checkConnectionAndFetchRates();
@@ -137,9 +137,12 @@ public class ExchangeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_REFRESH_ON_DONE) {
-            initCurrencyPickers();
-        }
+//        Log.e("DEBUG", "1");
+        initCurrencyPickers();
+//        Log.e("DEBUG", "2");
+//        if (requestCode == REQUEST_REFRESH_ON_DONE) {
+//            initCurrencyPickers();
+//        }
     }
 
     /**
@@ -292,21 +295,23 @@ public class ExchangeFragment extends Fragment {
         String secondaryCurrencyValue = prefs.getString(
                 R.string.pref_exchange_currency_secondary, "");
 
-        currencyPickerLeft.setMinValue(0);
-        currencyPickerLeft.setMaxValue(currencies.length - 1);
+        // range of number pickers set to (1, currencies.length) as this seems to
+        // fix the ArrayIndexOutOfBoundsException we had before
+        currencyPickerLeft.setMinValue(1);
+        currencyPickerLeft.setMaxValue(currencies.length);
         currencyPickerLeft.setDisplayedValues(currencies);
         currencyPickerLeft.setWrapSelectorWheel(false);
         currencyPickerLeft.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
         currencyPickerLeft.setOnValueChangedListener(
-                (picker, oldVal, newVal) -> setPrimaryCurrency(currencies[newVal]));
+                (picker, oldVal, newVal) -> setPrimaryCurrency(currencies[newVal - 1]));
 
-        currencyPickerRight.setMinValue(0);
-        currencyPickerRight.setMaxValue(currencies.length - 1);
+        currencyPickerRight.setMinValue(1);
+        currencyPickerRight.setMaxValue(currencies.length);
         currencyPickerRight.setDisplayedValues(currencies);
         currencyPickerRight.setWrapSelectorWheel(false);
         currencyPickerRight.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
         currencyPickerRight.setOnValueChangedListener(
-                (picker, oldVal, newVal) -> setSecondaryCurrency(currencies[newVal]));
+                (picker, oldVal, newVal) -> setSecondaryCurrency(currencies[newVal - 1]));
 
         // select last selected currencies
         List<String> currencyList = Arrays.asList(currencies);
@@ -317,8 +322,8 @@ public class ExchangeFragment extends Fragment {
             currencyPickerRight.setValue(currencyList.indexOf(secondaryCurrencyValue));
         }
 
-        setPrimaryCurrency(currencies[currencyPickerLeft.getValue()]);
-        setSecondaryCurrency(currencies[currencyPickerRight.getValue()]);
+        setPrimaryCurrency(primaryCurrencyValue);
+        setSecondaryCurrency(secondaryCurrencyValue);
     }
 
     /**
