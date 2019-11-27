@@ -1,2 +1,4 @@
 /build
 /src/main/cpp/native-lib.cpp
+/release
+/.cxx
