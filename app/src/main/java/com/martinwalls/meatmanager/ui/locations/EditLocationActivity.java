@@ -32,7 +32,7 @@ public class EditLocationActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_locations);
+        setContentView(R.layout.activity_edit_location);
 
 
         dbHandler = new DBHandler(this);
