@@ -27,7 +27,6 @@
 
     <item
         android:id="@+id/action_sort_by"
-        android:icon="@drawable/ic_sort"
         android:title="@string/action_sort_by"
         app:showAsAction="ifRoom"
         >
