@@ -40,7 +40,6 @@
         <activity android:name="com.martinwalls.meatmanager.ui.stock.StockDetailActivity"
             android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity" />
 
-
         <activity
             android:name="com.martinwalls.meatmanager.ui.settings.SettingsActivity"
             android:label="@string/settings_title"
@@ -89,6 +88,11 @@
         <activity android:name="com.martinwalls.meatmanager.ui.stock.EditStockActivity" />
 
         <activity android:name="com.martinwalls.meatmanager.ui.orders.EditOrderActivity" />
+
+        <activity android:name=".ui.tutorial.TutorialActivity"
+            android:exported="true"
+            /> <!-- exported so it can be launched from Android Studio:
+                            remove once not needed -->
 
         <receiver
             android:name="com.martinwalls.meatmanager.util.notification.ReminderReceiver"

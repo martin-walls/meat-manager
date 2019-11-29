@@ -9,7 +9,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.martinwalls.meatmanager.R;
-import com.martinwalls.meatmanager.util.DarkTheme;
+import com.martinwalls.meatmanager.util.AppTheme;
 import com.martinwalls.meatmanager.util.EasyPreferences;
 import com.martinwalls.meatmanager.util.notification.ReminderUtils;
 
@@ -34,8 +34,8 @@ public class SettingsActivity extends AppCompatActivity {
      */
     private void setDarkTheme() {
         EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
-        DarkTheme.setDarkTheme(
-                prefs.getIntFromString(R.string.pref_dark_theme, DarkTheme.MODE_NIGHT_AUTO));
+        AppTheme.setDarkTheme(
+                prefs.getIntFromString(R.string.pref_dark_theme, AppTheme.MODE_AUTO));
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {

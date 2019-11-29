@@ -29,4 +29,13 @@
     <color name="dashboard_tooltip">#bbdefb</color>
     <color name="dashboard_tooltip_more_req">#D32F2F</color>
     <color name="dashboard_tooltip_less_req">#43A047</color>
+
+
+    <!-- tutorial screen -->
+    <color name="dot_active">#cfff</color>
+    <color name="dot_inactive">#5fff</color>
+
+    <color name="light_blue">#2196f3</color> <!-- blue 500 -->
+    <color name="dark_blue">#002171</color> <!-- blue 900 dark -->
+    <color name="light_green">#4caf50</color> <!-- green 500 -->
 </resources>

@@ -341,4 +341,9 @@
     <string name="redo_edit_contract_success">Redo edit contract</string>
     <string name="undo_delete_contract_success">Undo delete contract</string>
     <string name="redo_delete_contract_success">Redo delete contract</string>
+
+    <!-- tutorial screen -->
+    <string name="btn_next">NEXT</string>
+    <string name="btn_skip">SKIP</string>
+    <string name="btn_done">GOT IT</string>
 </resources>

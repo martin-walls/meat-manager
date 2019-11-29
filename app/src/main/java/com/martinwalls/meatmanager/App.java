@@ -7,7 +7,7 @@ import android.os.Build;
 
 import androidx.preference.PreferenceManager;
 
-import com.martinwalls.meatmanager.util.DarkTheme;
+import com.martinwalls.meatmanager.util.AppTheme;
 import com.martinwalls.meatmanager.util.EasyPreferences;
 import com.martinwalls.meatmanager.util.notification.ReminderUtils;
 
@@ -19,8 +19,8 @@ public class App extends Application {
 
         // load theme on startup
         EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
-        DarkTheme.setDarkTheme(
-                prefs.getIntFromString(R.string.pref_dark_theme, DarkTheme.MODE_NIGHT_AUTO));
+        AppTheme.setDarkTheme(
+                prefs.getIntFromString(R.string.pref_dark_theme, AppTheme.MODE_AUTO));
 
         // start on default page so clear saved position
         prefs.setString(R.string.pref_last_opened_page, null);
