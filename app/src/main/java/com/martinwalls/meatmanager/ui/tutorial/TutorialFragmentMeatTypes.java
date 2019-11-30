@@ -49,7 +49,7 @@ public class TutorialFragmentMeatTypes extends Fragment {
     }
 
     private void addCustomMeatType() {
-        Toast.makeText(getContext(), "Coming soon", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Coming soon.", Toast.LENGTH_SHORT).show();
     }
 
 }

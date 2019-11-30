@@ -1,4 +1,5 @@
 <resources>
+
     <style name="Fab" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="backgroundTint">@color/fab_background</item>
         <item name="rippleColor">@color/fab_ripple_light</item>
@@ -155,7 +156,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="ExchangeRateText.Primary" >
+    <style name="ExchangeRateText.Primary">
         <item name="android:textColor">?textColorPrimary</item>
     </style>
 
@@ -173,6 +174,47 @@
     <style name="ExchangeHistoryItemText">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">?textColorSecondary</item>
+    </style>
+
+    <!-- tutorial screens -->
+    <style name="TutorialTitleText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TutorialButtonPrimary">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">64dp</item>
+        <item name="android:paddingBottom">64dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/tutorial_btn_primary</item>
+        <item name="android:foreground">@drawable/tutorial_btn_primary_ripple</item>
+    </style>
+
+    <style name="TutorialButtonPrimary.DarkText">
+        <item name="android:textColor">@color/dark_grey</item>
+    </style>
+
+    <style name="TutorialButtonThemeLight" parent="TutorialButtonPrimary.DarkText">
+        <item name="android:background">@drawable/tutorial_theme_select_light</item>
+        <item name="android:foreground">@null</item>
+    </style>
+
+    <style name="TutorialButtonThemeDark" parent="TutorialButtonPrimary">
+        <item name="android:background">@drawable/tutorial_theme_select_dark</item>
+        <item name="android:foreground">@null</item>
+    </style>
+
+    <style name="TutorialButtonSecondary">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:background">@drawable/tutorial_btn_secondary</item>
     </style>
 
 </resources>

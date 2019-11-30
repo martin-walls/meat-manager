@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2196f3"
+    android:background="@color/light_blue"
     >
 
     <TextView
         android:id="@+id/title"
+        style="@style/TutorialTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/themes_layout"
         android:layout_marginBottom="64dp"
         android:gravity="center_horizontal|bottom"
-        android:text="Enable notifications"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:text="@string/tutorial_notifications_title"
         />
 
     <LinearLayout
@@ -28,39 +27,25 @@
         >
 
         <TextView
-            android:id="@+id/off"
+            android:id="@+id/btn_off"
+            style="@style/TutorialButtonPrimary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="64dp"
             android:layout_marginEnd="32dp"
             android:layout_weight="1"
-            android:background="@drawable/tutorial_btn_primary"
-            android:clickable="true"
-            android:gravity="center"
-            android:paddingTop="64dp"
-            android:paddingBottom="64dp"
-            android:textColor="@color/white"
-            android:text="OFF"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            android:text="@string/tutorial_notifications_on"
             />
 
         <TextView
-            android:id="@+id/on"
+            android:id="@+id/btn_on"
+            style="@style/TutorialButtonPrimary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="64dp"
             android:layout_weight="1"
-            android:background="@drawable/tutorial_btn_primary"
-            android:clickable="true"
-            android:gravity="center"
-            android:paddingTop="64dp"
-            android:paddingBottom="64dp"
-            android:text="ON"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            android:text="@string/tutorial_notifications_off"
             />
 
     </LinearLayout>

@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="#2000"
-    >
 
-    <item>
-        <shape>
-            <solid android:color="#2fff" />
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/tutorial_btn_bg" />
 
-            <stroke
-                android:width="3dp"
-                android:color="@color/white"
-                />
+    <stroke
+        android:width="3dp"
+        android:color="@color/tutorial_btn_stroke"
+        />
 
-            <corners android:radius="8dp" />
-        </shape>
-    </item>
-
-</ripple>
+    <corners android:radius="8dp" />
+</shape>

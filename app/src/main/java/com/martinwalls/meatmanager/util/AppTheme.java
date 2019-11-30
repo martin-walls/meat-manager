@@ -1,6 +1,9 @@
 package com.martinwalls.meatmanager.util;
 
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Build;
+
 import androidx.appcompat.app.AppCompatDelegate;
 
 public final class AppTheme {
@@ -16,8 +19,9 @@ public final class AppTheme {
     public static void setDarkTheme(int mode) {
         switch (mode) {
             case MODE_AUTO:
-                // "follow system" only available in Android 9 or later
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                // "follow system" only available in Android 10 or later
+                // (technically can be enabled in Android 9 in dev options)
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
                     AppCompatDelegate.setDefaultNightMode(
                             AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
@@ -31,6 +35,22 @@ public final class AppTheme {
             case MODE_DARK:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 break;
+        }
+    }
+
+    /**
+     * Gets the current night mode of the system, that the user has chosen in
+     * their settings. Returns light mode if system theme not defined.
+     */
+    public static int getCurrentSystemTheme(Context context) {
+        int nightMode = context.getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK;
+        switch (nightMode) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                return MODE_DARK;
+            default:
+            case Configuration.UI_MODE_NIGHT_NO:
+                return MODE_LIGHT;
         }
     }
 }

@@ -12,19 +12,19 @@ import com.martinwalls.meatmanager.R;
 
 public class TutorialFragmentNotifications extends Fragment {
 
-    private TextView off;
-    private TextView on;
+    private TextView btnOff;
+    private TextView btnOn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tutorial_notifications, container, false);
 
-        off = view.findViewById(R.id.off);
-        on = view.findViewById(R.id.on);
+        btnOff = view.findViewById(R.id.btn_off);
+        btnOn = view.findViewById(R.id.btn_on);
 
-        off.setOnClickListener(v -> setSelected(false));
-        on.setOnClickListener(v -> setSelected(true));
+        btnOff.setOnClickListener(v -> setSelected(false));
+        btnOn.setOnClickListener(v -> setSelected(true));
 
         setSelected(true);
 
@@ -32,7 +32,7 @@ public class TutorialFragmentNotifications extends Fragment {
     }
 
     private void setSelected(boolean isOn) {
-        on.setSelected(isOn);
-        off.setSelected(!isOn);
+        btnOn.setSelected(isOn);
+        btnOff.setSelected(!isOn);
     }
 }

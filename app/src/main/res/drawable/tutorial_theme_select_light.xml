@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="#2000"
+    android:color="@color/tutorial_btn_primary_ripple_dark"
     >
 
     <item>
         <shape>
-            <solid android:color="#afff" />
+            <solid android:color="@color/tutorial_btn_theme_light_bg" />
 
             <stroke
                 android:width="3dp"
-                android:color="@color/white"
+                android:color="@color/tutorial_btn_stroke"
                 />
 
             <corners android:radius="8dp" />

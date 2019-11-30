@@ -38,4 +38,17 @@
     <color name="light_blue">#2196f3</color> <!-- blue 500 -->
     <color name="dark_blue">#002171</color> <!-- blue 900 dark -->
     <color name="light_green">#4caf50</color> <!-- green 500 -->
+
+    <color name="tutorial_btn_theme_light_bg">#afff</color>
+    <color name="tutorial_btn_theme_dark_bg">#8000</color>
+
+    <color name="tutorial_btn_bg">#2fff</color>
+    <color name="tutorial_btn_bg_selected">#8fff</color>
+    <color name="tutorial_btn_stroke">@color/white</color>
+
+    <color name="tutorial_btn_primary_ripple_dark">#2000</color>
+    <color name="tutorial_btn_primary_ripple_light">#2fff</color>
+    <color name="tutorial_btn_secondary_ripple">#8000</color>
+
+    <color name="tutorial_text_secondary">#7fff</color>
 </resources>

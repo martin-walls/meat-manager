@@ -9,15 +9,13 @@
 
     <TextView
         android:id="@+id/title"
+        style="@style/TutorialTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/themes_layout"
         android:layout_marginBottom="64dp"
         android:gravity="center_horizontal|bottom"
-        android:text="Choose theme"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:text="@string/tutorial_theme_title"
         />
 
     <LinearLayout
@@ -30,40 +28,38 @@
 
         <TextView
             android:id="@+id/light"
+            style="@style/TutorialButtonThemeLight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="64dp"
             android:layout_marginEnd="32dp"
             android:layout_weight="1"
-            android:background="@drawable/theme_select_light"
-            android:clickable="true"
-            android:gravity="center"
-            android:paddingTop="64dp"
-            android:paddingBottom="64dp"
-            android:textColor="?textColorPrimary"
-            android:text="Light"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            android:text="@string/tutorial_theme_light"
             />
 
         <TextView
             android:id="@+id/dark"
+            style="@style/TutorialButtonThemeDark"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="64dp"
             android:layout_weight="1"
-            android:background="@drawable/theme_select_dark"
-            android:clickable="true"
-            android:gravity="center"
-            android:paddingTop="64dp"
-            android:paddingBottom="64dp"
-            android:text="Dark"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            android:text="@string/tutorial_theme_dark"
             />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/system_default"
+        style="@style/TutorialButtonSecondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="80dp"
+        android:text="@string/tutorial_theme_auto"
+        />
+
 
 </RelativeLayout>

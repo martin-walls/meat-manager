@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:enterFadeDuration="500"
-    android:exitFadeDuration="500">
+    android:enterFadeDuration="@integer/tutorial_btn_fade_duration"
+    android:exitFadeDuration="@integer/tutorial_btn_fade_duration">
 
     <item android:drawable="@drawable/tutorial_btn_primary_selected"
         android:state_selected="true" />
