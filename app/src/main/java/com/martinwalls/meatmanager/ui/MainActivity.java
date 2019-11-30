@@ -22,6 +22,7 @@ import com.martinwalls.meatmanager.ui.exchange.ExchangeFragment;
 import com.martinwalls.meatmanager.ui.orders.OrdersFragment;
 import com.martinwalls.meatmanager.ui.settings.SettingsActivity;
 import com.martinwalls.meatmanager.ui.stock.StockFragment;
+import com.martinwalls.meatmanager.ui.tutorial.TutorialActivity;
 import com.martinwalls.meatmanager.util.EasyPreferences;
 
 public class MainActivity extends AppCompatActivity {
@@ -85,20 +86,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private EasyPreferences preferences;
+    private EasyPreferences prefs;
 
     private Page currentPage = Page.DASHBOARD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        preferences = EasyPreferences.createForDefaultPreferences(this);
+        prefs = EasyPreferences.createForDefaultPreferences(this);
+
+        // show tutorial page if first time opening app
+        boolean isFirstTimeUser = prefs.getBoolean(R.string.pref_is_first_time_user, true);
+        if (isFirstTimeUser) {
+            Intent tutorialIntent = new Intent(this, TutorialActivity.class);
+            startActivity(tutorialIntent);
+            finish();
+        }
+
+        setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
             // open last opened page
-            currentPage = Page.parsePage(preferences.getString(
+            currentPage = Page.parsePage(prefs.getString(
                     R.string.pref_last_opened_page, Page.DASHBOARD.name()));
 
             getSupportFragmentManager()
@@ -159,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
             currentPage = newPage;
 
-            preferences.setString(R.string.pref_last_opened_page, currentPage.name());
+            prefs.setString(R.string.pref_last_opened_page, currentPage.name());
         }
 
         // close nav drawer if open

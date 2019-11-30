@@ -5,6 +5,8 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 
+import androidx.preference.PreferenceManager;
+
 import com.martinwalls.meatmanager.util.AppTheme;
 import com.martinwalls.meatmanager.util.EasyPreferences;
 import com.martinwalls.meatmanager.util.notification.ReminderUtils;
@@ -27,7 +29,7 @@ public class App extends Application {
         createNotificationChannels();
 
         // set default values of settings; this doesn't override any the user has changed
-//        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
+        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 
         // if notifications are enabled in settings
         if (prefs.getBoolean(R.string.pref_enable_notifications, false)) {

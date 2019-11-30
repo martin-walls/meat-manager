@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.ui.MainActivity;
+import com.martinwalls.meatmanager.util.EasyPreferences;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 
 public class TutorialActivity extends FragmentActivity {
@@ -54,9 +55,12 @@ public class TutorialActivity extends FragmentActivity {
             if (currentPage < NUM_PAGES - 1) {
                 viewPager.setCurrentItem(currentPage + 1);
             } else {
-                Intent startIntent = new Intent(this, MainActivity.class);
-                startActivity(startIntent);
+                startApp();
             }
+        });
+
+        btnSkip.setOnClickListener(v -> {
+            startApp();
         });
 
         dotsIndicator = findViewById(R.id.dots_indicator);
@@ -89,6 +93,14 @@ public class TutorialActivity extends FragmentActivity {
             }
         }
     };
+
+    private void startApp() {
+        EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
+        prefs.setBoolean(R.string.pref_is_first_time_user, false);
+        Intent startIntent = new Intent(this, MainActivity.class);
+        startActivity(startIntent);
+        finish();
+    }
 
     private class ScreenSlidePagerAdapter extends FragmentStateAdapter {
         public ScreenSlidePagerAdapter(FragmentActivity activity) {

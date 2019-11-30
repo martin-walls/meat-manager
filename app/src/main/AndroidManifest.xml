@@ -89,13 +89,7 @@
 
         <activity android:name="com.martinwalls.meatmanager.ui.orders.EditOrderActivity" />
 
-        <activity android:name=".ui.tutorial.TutorialActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ui.tutorial.TutorialActivity" />
 
         <receiver
             android:name="com.martinwalls.meatmanager.util.notification.ReminderReceiver"
