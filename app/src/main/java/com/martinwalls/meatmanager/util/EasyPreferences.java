@@ -22,7 +22,7 @@ public final class EasyPreferences {
     /**
      * Returns instance of {@link EasyPreferences}.
      */
-    public static EasyPreferences getInstance(Context context) {
+    public static synchronized EasyPreferences getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = createForDefaultPreferences(context.getApplicationContext());
         }
