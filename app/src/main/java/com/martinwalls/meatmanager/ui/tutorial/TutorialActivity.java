@@ -42,6 +42,7 @@ public class TutorialActivity extends FragmentActivity {
         viewPager = findViewById(R.id.viewpager);
         pagerAdapter = new ScreenSlidePagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
+        viewPager.registerOnPageChangeCallback(pageChangeCallback);
 
         btnNext = findViewById(R.id.btn_next);
         btnSkip = findViewById(R.id.btn_skip);
@@ -65,6 +66,21 @@ public class TutorialActivity extends FragmentActivity {
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         }
     }
+
+    ViewPager2.OnPageChangeCallback pageChangeCallback = new ViewPager2.OnPageChangeCallback() {
+        @Override
+        public void onPageSelected(int position) {
+            super.onPageSelected(position);
+
+            if (position == NUM_PAGES - 1) {
+                btnNext.setText(R.string.btn_done);
+                btnSkip.setVisibility(View.GONE);
+            } else {
+                btnNext.setText(R.string.btn_next);
+                btnSkip.setVisibility(View.VISIBLE);
+            }
+        }
+    };
 
     private class ScreenSlidePagerAdapter extends FragmentStateAdapter {
         public ScreenSlidePagerAdapter(FragmentActivity activity) {

@@ -345,5 +345,5 @@
     <!-- tutorial screen -->
     <string name="btn_next">NEXT</string>
     <string name="btn_skip">SKIP</string>
-    <string name="btn_done">GOT IT</string>
+    <string name="btn_done">DONE</string>
 </resources>

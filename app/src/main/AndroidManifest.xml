@@ -89,10 +89,13 @@
 
         <activity android:name="com.martinwalls.meatmanager.ui.orders.EditOrderActivity" />
 
-        <activity android:name=".ui.tutorial.TutorialActivity"
-            android:exported="true"
-            /> <!-- exported so it can be launched from Android Studio:
-                            remove once not needed -->
+        <activity android:name=".ui.tutorial.TutorialActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name="com.martinwalls.meatmanager.util.notification.ReminderReceiver"
