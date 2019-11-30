@@ -34,8 +34,8 @@ public class SettingsActivity extends AppCompatActivity {
      */
     private void setDarkTheme() {
         EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
-        AppTheme.setDarkTheme(
-                prefs.getIntFromString(R.string.pref_dark_theme, AppTheme.MODE_AUTO));
+        AppTheme.setAppTheme(
+                prefs.getIntFromString(R.string.pref_theme, AppTheme.MODE_AUTO));
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
@@ -49,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             prefs = EasyPreferences.createForDefaultPreferences(getContext());
 
-            Preference darkThemePref = findPreference(R.string.pref_dark_theme);
+            Preference darkThemePref = findPreference(R.string.pref_theme);
 
             darkThemePref.setOnPreferenceChangeListener((preference, newValue) -> {
                 getActivity().recreate();

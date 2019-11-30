@@ -9,9 +9,12 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.martinwalls.meatmanager.R;
+import com.martinwalls.meatmanager.util.EasyPreferences;
 import com.martinwalls.meatmanager.util.MassUnit;
 
 public class TutorialFragmentMassUnit extends Fragment {
+
+    private EasyPreferences prefs;
 
     private TextView kgs;
     private TextView lbs;
@@ -20,6 +23,8 @@ public class TutorialFragmentMassUnit extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tutorial_mass_unit, container, false);
+
+        prefs = EasyPreferences.createForDefaultPreferences(getContext());
 
         kgs = view.findViewById(R.id.kgs);
         lbs = view.findViewById(R.id.lbs);
@@ -37,10 +42,12 @@ public class TutorialFragmentMassUnit extends Fragment {
             case KG:
                 kgs.setSelected(true);
                 lbs.setSelected(false);
+                prefs.setString(R.string.pref_mass_unit, getString(R.string.unit_kg));
                 break;
             case LBS:
                 kgs.setSelected(false);
                 lbs.setSelected(true);
+                prefs.setString(R.string.pref_mass_unit, getString(R.string.unit_lbs));
                 break;
         }
     }

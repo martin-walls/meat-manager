@@ -17,6 +17,8 @@ public class TutorialMeatTypesAdapter
 
     private List<String> meatTypes;
 
+    private TutorialMeatTypesAdapterListener listener;
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name;
         private CheckBox checkbox;
@@ -25,11 +27,17 @@ public class TutorialMeatTypesAdapter
             super(view);
             name = view.findViewById(R.id.name);
             checkbox = view.findViewById(R.id.checkbox);
+
+            checkbox.setOnCheckedChangeListener((buttonView, isChecked) ->
+                    listener.onMeatTypeChecked(
+                            meatTypes.get(getAdapterPosition()), isChecked));
         }
     }
 
-    TutorialMeatTypesAdapter(List<String> meatTypes) {
+    TutorialMeatTypesAdapter(List<String> meatTypes,
+                             TutorialMeatTypesAdapterListener listener) {
         this.meatTypes = meatTypes;
+        this.listener = listener;
     }
 
     @Override
@@ -47,5 +55,9 @@ public class TutorialMeatTypesAdapter
     @Override
     public int getItemCount() {
         return meatTypes.size();
+    }
+
+    public interface TutorialMeatTypesAdapterListener {
+        void onMeatTypeChecked(String name, boolean isChecked);
     }
 }

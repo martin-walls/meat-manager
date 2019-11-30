@@ -12,10 +12,9 @@
             />
 
         <ListPreference
-            app:defaultValue="0"
-            app:entries="@array/pref_dark_theme_entries"
-            app:entryValues="@array/pref_dark_theme_values"
-            app:key="@string/pref_dark_theme"
+            app:entries="@array/pref_theme_entries"
+            app:entryValues="@array/pref_theme_values"
+            app:key="@string/pref_theme"
             app:title="@string/settings_dark_theme"
             app:useSimpleSummaryProvider="true"
             />

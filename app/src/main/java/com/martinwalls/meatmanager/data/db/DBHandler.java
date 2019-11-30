@@ -3,6 +3,7 @@ package com.martinwalls.meatmanager.data.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -445,6 +446,16 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.close();
         return success;
+    }
+
+    /**
+     * Queries the database to see if the given meat type has already been added.
+     */
+    public boolean isMeatTypeInDb(String meatType) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int numRows = (int) DatabaseUtils.queryNumEntries(db, MeatTypesTable.TABLE_NAME,
+                MeatTypesTable.MEAT_TYPE + "=?", new String[]{meatType});
+        return numRows > 0;
     }
     //endregion meat types
 

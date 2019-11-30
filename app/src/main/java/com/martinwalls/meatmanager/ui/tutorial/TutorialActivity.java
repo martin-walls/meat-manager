@@ -1,5 +1,6 @@
 package com.martinwalls.meatmanager.ui.tutorial;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.martinwalls.meatmanager.R;
+import com.martinwalls.meatmanager.ui.MainActivity;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 
 public class TutorialActivity extends FragmentActivity {
@@ -51,6 +53,9 @@ public class TutorialActivity extends FragmentActivity {
             int currentPage = viewPager.getCurrentItem();
             if (currentPage < NUM_PAGES - 1) {
                 viewPager.setCurrentItem(currentPage + 1);
+            } else {
+                Intent startIntent = new Intent(this, MainActivity.class);
+                startActivity(startIntent);
             }
         });
 
@@ -75,6 +80,9 @@ public class TutorialActivity extends FragmentActivity {
             if (position == NUM_PAGES - 1) {
                 btnNext.setText(R.string.btn_done);
                 btnSkip.setVisibility(View.GONE);
+            } else if (position == 0) {
+                btnNext.setText(R.string.btn_start);
+                btnSkip.setVisibility(View.VISIBLE);
             } else {
                 btnNext.setText(R.string.btn_next);
                 btnSkip.setVisibility(View.VISIBLE);

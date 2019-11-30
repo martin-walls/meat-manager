@@ -2,6 +2,7 @@ package com.martinwalls.meatmanager.ui.tutorial;
 
 import android.animation.ObjectAnimator;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +16,13 @@ import androidx.vectordrawable.graphics.drawable.ArgbEvaluator;
 
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.util.AppTheme;
+import com.martinwalls.meatmanager.util.EasyPreferences;
 
 public class TutorialFragmentTheme extends Fragment {
 
-    RelativeLayout rootLayout;
+    private EasyPreferences prefs;
+
+    private RelativeLayout rootLayout;
 
     private int currentTheme = AppTheme.MODE_LIGHT;
 
@@ -26,6 +30,8 @@ public class TutorialFragmentTheme extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tutorial_theme, container, false);
+
+        prefs = EasyPreferences.createForDefaultPreferences(getContext());
 
         rootLayout = view.findViewById(R.id.root_layout);
 
@@ -36,6 +42,10 @@ public class TutorialFragmentTheme extends Fragment {
         light.setOnClickListener(v -> setTheme(AppTheme.MODE_LIGHT));
         dark.setOnClickListener(v -> setTheme(AppTheme.MODE_DARK));
         systemDefault.setOnClickListener(v -> setTheme(AppTheme.MODE_AUTO));
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            systemDefault.setVisibility(View.GONE);
+        }
 
         setTheme(AppTheme.MODE_AUTO);
 
@@ -67,14 +77,22 @@ public class TutorialFragmentTheme extends Fragment {
                 // if new theme same as system theme set by auto
                 if (currentTheme == AppTheme.MODE_AUTO
                         && AppTheme.getCurrentSystemTheme(getContext()) == theme) {
-                    currentTheme = theme;
+                    updateCurrentTheme(theme);
                     return;
                 }
                 setBackground(theme);
             }
-            currentTheme = theme;
+            updateCurrentTheme(theme);
         }
-        //todo change in settings
+    }
+
+    /**
+     * Stores the new theme in preferences and updates app to show the new theme.
+     */
+    private void updateCurrentTheme(int theme) {
+        currentTheme = theme;
+        AppTheme.setAppTheme(theme);
+        prefs.setIntToString(R.string.pref_theme, theme);
     }
 
     /**

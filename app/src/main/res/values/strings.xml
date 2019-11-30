@@ -346,6 +346,9 @@
     <string name="btn_next">NEXT</string>
     <string name="btn_skip">SKIP</string>
     <string name="btn_done">DONE</string>
+    <string name="btn_start">GET STARTED</string>
+
+    <string name="tutorial_welcome_swipe_to_start">Swipe to get started</string>
 
     <string name="tutorial_theme_title">Choose theme</string>
     <string name="tutorial_theme_light">Light</string>

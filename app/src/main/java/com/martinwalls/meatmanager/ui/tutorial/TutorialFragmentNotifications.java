@@ -9,8 +9,11 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.martinwalls.meatmanager.R;
+import com.martinwalls.meatmanager.util.EasyPreferences;
 
 public class TutorialFragmentNotifications extends Fragment {
+
+    private EasyPreferences prefs;
 
     private TextView btnOff;
     private TextView btnOn;
@@ -19,6 +22,8 @@ public class TutorialFragmentNotifications extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tutorial_notifications, container, false);
+
+        prefs = EasyPreferences.createForDefaultPreferences(getContext());
 
         btnOff = view.findViewById(R.id.btn_off);
         btnOn = view.findViewById(R.id.btn_on);
@@ -34,5 +39,6 @@ public class TutorialFragmentNotifications extends Fragment {
     private void setSelected(boolean isOn) {
         btnOn.setSelected(isOn);
         btnOff.setSelected(!isOn);
+        prefs.setBoolean(R.string.pref_enable_notifications, isOn);
     }
 }

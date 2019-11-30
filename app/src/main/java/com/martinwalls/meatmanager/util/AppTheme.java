@@ -16,7 +16,7 @@ public final class AppTheme {
     /**
      * Sets the app's theme to dark, light or auto depending on {@code mode}.
      */
-    public static void setDarkTheme(int mode) {
+    public static void setAppTheme(int mode) {
         switch (mode) {
             case MODE_AUTO:
                 // "follow system" only available in Android 10 or later

@@ -12,7 +12,7 @@ import androidx.preference.PreferenceManager;
  * sure the same keys are used throughout the app, and to avoid errors from
  * mistyping a key.
  */
-public final class EasyPreferences {
+public final class EasyPreferences { //todo singleton pattern
 
     private final SharedPreferences prefs;
     private final Resources res;
