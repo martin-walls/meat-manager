@@ -17,14 +17,14 @@ public final class Utils {
     /**
      * Converts a value from kgs to lbs.
      */
-    private static double convertToLbs(double kgs) {
+    public static double convertToLbs(double kgs) {
         return kgs / lbsToKgs;
     }
 
     /**
      * Converts a value from lbs to kgs.
      */
-    private static double convertToKgs(double lbs) {
+    public static double convertToKgs(double lbs) {
         return lbs * lbsToKgs;
     }
 
