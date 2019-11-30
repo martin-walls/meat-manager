@@ -50,7 +50,8 @@ public class DashboardFragment extends Fragment
         View fragmentView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         dbHandler = new DBHandler(getContext());
-        prefs = EasyPreferences.createForDefaultPreferences(getContext());
+//        prefs = EasyPreferences.createForDefaultPreferences(getContext());
+        prefs = EasyPreferences.getInstance(getContext());
 
         if (filterLocation == null || !TextUtils.isEmpty(filterLocation.getLocationName())) {
             filterLocation = new Location();

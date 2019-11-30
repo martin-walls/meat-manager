@@ -49,7 +49,8 @@ public class StockFragment extends Fragment
         View fragmentView = inflater.inflate(R.layout.fragment_stock, container, false);
 
         dbHandler = new DBHandler(getContext());
-        prefs = EasyPreferences.createForDefaultPreferences(getContext());
+//        prefs = EasyPreferences.createForDefaultPreferences(getContext());
+        prefs = EasyPreferences.getInstance(getContext());
 
         initStockList(fragmentView);
         loadStock();
@@ -75,7 +76,7 @@ public class StockFragment extends Fragment
             dbHandler = new DBHandler(getContext());
         }
         if (prefs == null) {
-            prefs = EasyPreferences.createForDefaultPreferences(getContext());
+            prefs = EasyPreferences.getInstance(getContext());
         }
         loadStock();
     }

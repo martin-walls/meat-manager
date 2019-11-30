@@ -23,7 +23,7 @@ public class TutorialFragmentNotifications extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tutorial_notifications, container, false);
 
-        prefs = EasyPreferences.createForDefaultPreferences(getContext());
+        prefs = EasyPreferences.getInstance(getContext());
 
         btnOff = view.findViewById(R.id.btn_off);
         btnOn = view.findViewById(R.id.btn_on);

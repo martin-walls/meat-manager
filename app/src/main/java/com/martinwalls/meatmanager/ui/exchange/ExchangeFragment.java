@@ -83,7 +83,8 @@ public class ExchangeFragment extends Fragment {
         bindViews(fragmentView);
 
         dbHandler = new ExchangeDBHandler(getContext());
-        prefs = EasyPreferences.createForDefaultPreferences(getContext());
+//        prefs = EasyPreferences.createForDefaultPreferences(getContext());
+        prefs = EasyPreferences.getInstance(getContext());
 
         ratesLayout.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
@@ -110,7 +111,7 @@ public class ExchangeFragment extends Fragment {
             dbHandler = new ExchangeDBHandler(getContext());
         }
         if (prefs == null) {
-            prefs = EasyPreferences.createForDefaultPreferences(getContext());
+            prefs = EasyPreferences.getInstance(getContext());
         }
     }
 

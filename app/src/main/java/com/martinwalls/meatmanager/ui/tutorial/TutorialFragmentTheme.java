@@ -31,7 +31,7 @@ public class TutorialFragmentTheme extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tutorial_theme, container, false);
 
-        prefs = EasyPreferences.createForDefaultPreferences(getContext());
+        prefs = EasyPreferences.getInstance(getContext());
 
         rootLayout = view.findViewById(R.id.root_layout);
 

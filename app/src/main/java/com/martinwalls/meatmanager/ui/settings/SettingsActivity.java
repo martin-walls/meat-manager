@@ -33,7 +33,8 @@ public class SettingsActivity extends AppCompatActivity {
      * changes when the user changes the dark theme preference.
      */
     private void setDarkTheme() {
-        EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
+//        EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
+        EasyPreferences prefs = EasyPreferences.getInstance(this);
         AppTheme.setAppTheme(
                 prefs.getIntFromString(R.string.pref_theme, AppTheme.MODE_AUTO));
     }
@@ -47,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.settings, rootKey);
 
-            prefs = EasyPreferences.createForDefaultPreferences(getContext());
+            prefs = EasyPreferences.getInstance(getContext());
 
             Preference darkThemePref = findPreference(R.string.pref_theme);
 

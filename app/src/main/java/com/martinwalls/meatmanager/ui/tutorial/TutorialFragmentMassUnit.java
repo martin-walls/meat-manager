@@ -24,7 +24,8 @@ public class TutorialFragmentMassUnit extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tutorial_mass_unit, container, false);
 
-        prefs = EasyPreferences.createForDefaultPreferences(getContext());
+//        prefs = EasyPreferences.createForDefaultPreferences(getContext());
+        prefs = EasyPreferences.getInstance(getContext());
 
         kgs = view.findViewById(R.id.kgs);
         lbs = view.findViewById(R.id.lbs);

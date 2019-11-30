@@ -95,7 +95,7 @@ public class TutorialActivity extends FragmentActivity {
     };
 
     private void startApp() {
-        EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
+        EasyPreferences prefs = EasyPreferences.getInstance(this);
         prefs.setBoolean(R.string.pref_is_first_time_user, false);
         Intent startIntent = new Intent(this, MainActivity.class);
         startActivity(startIntent);

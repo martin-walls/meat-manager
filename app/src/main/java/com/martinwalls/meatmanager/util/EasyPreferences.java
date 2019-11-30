@@ -12,16 +12,28 @@ import androidx.preference.PreferenceManager;
  * sure the same keys are used throughout the app, and to avoid errors from
  * mistyping a key.
  */
-public final class EasyPreferences { //todo singleton pattern
+public final class EasyPreferences {
+
+    private static EasyPreferences INSTANCE;
 
     private final SharedPreferences prefs;
     private final Resources res;
 
     /**
+     * Returns instance of {@link EasyPreferences}.
+     */
+    public static EasyPreferences getInstance(Context context) {
+        if (INSTANCE == null) {
+            INSTANCE = createForDefaultPreferences(context.getApplicationContext());
+        }
+        return INSTANCE;
+    }
+
+    /**
      * Creates an {@link EasyPreferences} object. This is used instead of
      * the constructor to create an instance.
      */
-    public static EasyPreferences createForDefaultPreferences(Context context) {
+    private static EasyPreferences createForDefaultPreferences(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         Resources resources = context.getResources();
         return new EasyPreferences(preferences, resources);

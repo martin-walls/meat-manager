@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        prefs = EasyPreferences.createForDefaultPreferences(this);
+        prefs = EasyPreferences.getInstance(this);
 
         // show tutorial page if first time opening app
         boolean isFirstTimeUser = prefs.getBoolean(R.string.pref_is_first_time_user, true);

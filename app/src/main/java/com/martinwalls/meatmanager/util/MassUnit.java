@@ -12,7 +12,8 @@ public enum MassUnit {
      * Returns a {@link MassUnit} object corresponding to the current setting.
      */
     public static MassUnit getMassUnit(Context context) {
-        EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(context);
+//        EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(context);
+        EasyPreferences prefs = EasyPreferences.getInstance(context);
         if (prefs.getString(R.string.pref_mass_unit, "kg").equals("kg")) {
             return KG;
         } else {

@@ -53,7 +53,8 @@ public class ReminderUtils {
      * user in settings.
      */
     public static void scheduleReminderAtDefaultTime(Context context) {
-        EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(context);
+//        EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(context);
+        EasyPreferences prefs = EasyPreferences.getInstance(context);
         int hour = prefs.getInt(R.string.pref_reminder_time_hr, DEFAULT_REMINDER_HR);
         int min = prefs.getInt(R.string.pref_reminder_time_min, DEFAULT_REMINDER_MIN);
         scheduleReminder(context, hour, min);

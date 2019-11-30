@@ -18,7 +18,7 @@ public class App extends Application {
         super.onCreate();
 
         // load theme on startup
-        EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
+        EasyPreferences prefs = EasyPreferences.getInstance(this);
         AppTheme.setAppTheme(
                 prefs.getIntFromString(R.string.pref_theme, AppTheme.MODE_AUTO));
 
