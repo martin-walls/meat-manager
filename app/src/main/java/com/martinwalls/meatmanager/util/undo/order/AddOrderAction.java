@@ -1,39 +1,39 @@
-package com.martinwalls.meatmanager.util.undo.contracts;
+package com.martinwalls.meatmanager.util.undo.order;
 
 import android.content.Context;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
-import com.martinwalls.meatmanager.data.models.Contract;
+import com.martinwalls.meatmanager.data.models.Order;
 import com.martinwalls.meatmanager.util.undo.UndoableAction;
 
-public class AddContractAction extends UndoableAction {
-    private Contract contract;
+public class AddOrderAction extends UndoableAction {
+    private Order order;
 
-    public AddContractAction(Contract contract) {
-        this.contract = contract;
+    public AddOrderAction(Order order) {
+        this.order = order;
     }
 
     @Override
     public boolean undoAction(Context context) {
         DBHandler dbHandler = new DBHandler(context);
-        return dbHandler.deleteContract(contract.getContractId());
+        return dbHandler.deleteOrder(order.getOrderId());
     }
 
     @Override
     public void showUndoMessage(Context context) {
-        showUndoSnackbar(context, R.string.undo_add_contract_success);
+        showUndoSnackbar(context, R.string.undo_add_order_success);
     }
 
     @Override
     public boolean redoAction(Context context) {
         DBHandler dbHandler = new DBHandler(context);
-        int newId = dbHandler.addContract(contract);
-        contract.setContractId(newId);
+        int newId = dbHandler.addOrder(order);
+        order.setOrderId(newId);
         return true;
     }
 
     @Override
     public void showRedoMessage(Context context) {
-        showRedoSnackbar(context, R.string.redo_add_contract_success);
+        showRedoSnackbar(context, R.string.redo_add_order_success);
     }
 }

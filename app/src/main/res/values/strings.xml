@@ -323,8 +323,8 @@
 
     <string name="undo_add_stock_success">Undo add \"%s\"</string>
     <string name="redo_add_stock_success">Redo add \"%s\"</string>
-    <string name="undo_edit_stock_success">Undo edit stock</string>
-    <string name="redo_edit_stock_success">Redo edit stock</string>
+    <string name="undo_edit_stock_success">Undo edit \"%s\"</string>
+    <string name="redo_edit_stock_success">Redo edit \"%s\"</string>
     <string name="undo_delete_stock_success">Undo delete \"%s\"</string>
     <string name="redo_delete_stock_success">Redo delete \"%s\"</string>
 
@@ -341,6 +341,13 @@
     <string name="redo_edit_contract_success">Redo edit contract</string>
     <string name="undo_delete_contract_success">Undo delete contract</string>
     <string name="redo_delete_contract_success">Redo delete contract</string>
+
+    <string name="undo_add_location_success">Undo add \"%s\"</string>
+    <string name="redo_add_location_success">Redo add \"%s\"</string>
+    <string name="undo_edit_location_success">Undo edit \"%s\"</string>
+    <string name="redo_edit_location_success">Redo edit \"%s\"</string>
+    <string name="undo_delete_location_success">Undo delete \"%s\"</string>
+    <string name="redo_delete_location_success">Redo delete \"%s\"</string>
 
     <!-- tutorial screen -->
     <string name="btn_next">NEXT</string>

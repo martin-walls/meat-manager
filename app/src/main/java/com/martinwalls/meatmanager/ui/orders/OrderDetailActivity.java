@@ -24,7 +24,7 @@ import com.martinwalls.meatmanager.ui.misc.dialog.ConfirmDeleteDialog;
 import com.martinwalls.meatmanager.ui.stock.StockDetailActivity;
 import com.martinwalls.meatmanager.util.SortUtils;
 import com.martinwalls.meatmanager.util.undo.UndoStack;
-import com.martinwalls.meatmanager.util.undo.orders.DeleteOrderAction;
+import com.martinwalls.meatmanager.util.undo.order.DeleteOrderAction;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

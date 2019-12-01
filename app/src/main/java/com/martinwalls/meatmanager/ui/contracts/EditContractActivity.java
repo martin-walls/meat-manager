@@ -27,8 +27,8 @@ import com.martinwalls.meatmanager.util.SimpleTextWatcher;
 import com.martinwalls.meatmanager.util.SortUtils;
 import com.martinwalls.meatmanager.util.Utils;
 import com.martinwalls.meatmanager.util.undo.UndoStack;
-import com.martinwalls.meatmanager.util.undo.contracts.AddContractAction;
-import com.martinwalls.meatmanager.util.undo.contracts.EditContractAction;
+import com.martinwalls.meatmanager.util.undo.contract.AddContractAction;
+import com.martinwalls.meatmanager.util.undo.contract.EditContractAction;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

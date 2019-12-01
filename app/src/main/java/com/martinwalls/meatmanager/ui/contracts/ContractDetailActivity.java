@@ -19,7 +19,7 @@ import com.martinwalls.meatmanager.ui.misc.dialog.ConfirmDeleteDialog;
 import com.martinwalls.meatmanager.ui.stock.StockDetailActivity;
 import com.martinwalls.meatmanager.util.SortUtils;
 import com.martinwalls.meatmanager.util.undo.UndoStack;
-import com.martinwalls.meatmanager.util.undo.contracts.DeleteContractAction;
+import com.martinwalls.meatmanager.util.undo.contract.DeleteContractAction;
 
 import java.util.ArrayList;
 import java.util.List;

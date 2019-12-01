@@ -13,6 +13,8 @@ import com.martinwalls.meatmanager.ui.BaseAdapter;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Location;
+import com.martinwalls.meatmanager.util.undo.UndoStack;
+import com.martinwalls.meatmanager.util.undo.location.DeleteLocationAction;
 
 import java.util.List;
 
@@ -105,7 +107,10 @@ public class LocationsAdapter extends BaseAdapter<LocationsAdapter.ViewHolder> {
             public void onDismissed(Snackbar snackbar, int event) {
                 if (event == DISMISS_EVENT_TIMEOUT || event == DISMISS_EVENT_MANUAL) {
                     DBHandler dbHandler = new DBHandler(parentActivity);
+                    Location deletedLocation =
+                            dbHandler.getLocation(recentlyDeletedItem.getLocationId());
                     dbHandler.deleteLocation(recentlyDeletedItem.getLocationId());
+                    UndoStack.getInstance().push(new DeleteLocationAction(deletedLocation));
                 }
 
             }

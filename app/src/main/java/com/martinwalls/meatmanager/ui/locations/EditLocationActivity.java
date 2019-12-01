@@ -17,6 +17,8 @@ import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Location;
 import com.martinwalls.meatmanager.ui.misc.dialog.ConfirmCancelDialog;
+import com.martinwalls.meatmanager.util.undo.UndoStack;
+import com.martinwalls.meatmanager.util.undo.location.EditLocationAction;
 
 import java.util.stream.Collectors;
 
@@ -27,27 +29,26 @@ public class EditLocationActivity extends AppCompatActivity
 
     private DBHandler dbHandler;
 
-    private Location location;
+    private Location locationToEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_location);
 
-
         dbHandler = new DBHandler(this);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             int locationId = extras.getInt(EXTRA_LOCATION_ID);
-            location = dbHandler.getLocation(locationId);
+            locationToEdit = dbHandler.getLocation(locationId);
         }
 
         getSupportActionBar().setTitle(getString(
                 R.string.location_edit_title,
-                location.getLocationType().name().toLowerCase()));
+                locationToEdit.getLocationType().name().toLowerCase()));
 
-        // hide location type spinner, this can't be edited
+        // hide locationToEdit type spinner, this can't be edited
         hideLocationTypeSpn();
 
         fillFields();
@@ -74,7 +75,7 @@ public class EditLocationActivity extends AppCompatActivity
                 if (updateLocationInDb()) {
                     finish();
                 } else {
-                    Toast.makeText(this, getString(R.string.db_error_update, "location"),
+                    Toast.makeText(this, getString(R.string.db_error_update, "locationToEdit"),
                             Toast.LENGTH_SHORT).show();
                 }
                 return true;
@@ -96,7 +97,7 @@ public class EditLocationActivity extends AppCompatActivity
     }
 
     /**
-     * Hides the Spinner for location types, as the user should not be able
+     * Hides the Spinner for locationToEdit types, as the user should not be able
      * to edit this.
      */
     private void hideLocationTypeSpn() {
@@ -117,28 +118,28 @@ public class EditLocationActivity extends AppCompatActivity
      */
     private void fillFields() {
         TextInputEditText editTextName = findViewById(R.id.edit_text_location_name);
-        editTextName.setText(location.getLocationName());
+        editTextName.setText(locationToEdit.getLocationName());
 
         TextInputEditText editTextAddr1= findViewById(R.id.edit_text_addr_1);
-        editTextAddr1.setText(location.getAddrLine1());
+        editTextAddr1.setText(locationToEdit.getAddrLine1());
 
         TextInputEditText editTextAddr2= findViewById(R.id.edit_text_addr_2);
-        editTextAddr2.setText(location.getAddrLine2());
+        editTextAddr2.setText(locationToEdit.getAddrLine2());
 
         TextInputEditText editTextCity= findViewById(R.id.edit_text_city);
-        editTextCity.setText(location.getCity());
+        editTextCity.setText(locationToEdit.getCity());
 
         TextInputEditText editTextPostcode= findViewById(R.id.edit_text_postcode);
-        editTextPostcode.setText(location.getPostcode());
+        editTextPostcode.setText(locationToEdit.getPostcode());
 
         TextInputEditText editTextCountry= findViewById(R.id.edit_text_country);
-        editTextCountry.setText(location.getCountry());
+        editTextCountry.setText(locationToEdit.getCountry());
 
         TextInputEditText editTextEmail= findViewById(R.id.edit_text_email);
-        editTextEmail.setText(location.getEmail());
+        editTextEmail.setText(locationToEdit.getEmail());
 
         TextInputEditText editTextPhone= findViewById(R.id.edit_text_phone);
-        editTextPhone.setText(location.getPhone());
+        editTextPhone.setText(locationToEdit.getPhone());
     }
 
     /**
@@ -156,25 +157,26 @@ public class EditLocationActivity extends AppCompatActivity
         TextInputEditText editTextEmail= findViewById(R.id.edit_text_email);
         TextInputEditText editTextPhone= findViewById(R.id.edit_text_phone);
 
-        return !TextUtils.equals(editTextName.getText(), location.getLocationName())
-                || !TextUtils.equals(editTextAddr1.getText(), location.getAddrLine1())
-                || !TextUtils.equals(editTextAddr2.getText(), location.getAddrLine2())
-                || !TextUtils.equals(editTextCity.getText(), location.getCity())
-                || !TextUtils.equals(editTextPostcode.getText(), location.getPostcode())
-                || !TextUtils.equals(editTextCountry.getText(), location.getCountry())
-                || !TextUtils.equals(editTextEmail.getText(), location.getEmail())
-                || !TextUtils.equals(editTextPhone.getText(), location.getPhone());
+        return !TextUtils.equals(editTextName.getText(), locationToEdit.getLocationName())
+                || !TextUtils.equals(editTextAddr1.getText(), locationToEdit.getAddrLine1())
+                || !TextUtils.equals(editTextAddr2.getText(), locationToEdit.getAddrLine2())
+                || !TextUtils.equals(editTextCity.getText(), locationToEdit.getCity())
+                || !TextUtils.equals(editTextPostcode.getText(), locationToEdit.getPostcode())
+                || !TextUtils.equals(editTextCountry.getText(), locationToEdit.getCountry())
+                || !TextUtils.equals(editTextEmail.getText(), locationToEdit.getEmail())
+                || !TextUtils.equals(editTextPhone.getText(), locationToEdit.getPhone());
     }
 
     /**
      * Stores the {@link Location} in the database if it is valid.
      * First checks each input field to check it is valid. It a field is
      * invalid, an appropriate error message is shown to help the user correct
-     * the error. If all fields have valid data, edits the existing location
+     * the error. If all fields have valid data, edits the existing locationToEdit
      * in the database to the new values.
      */
     private boolean updateLocationInDb() {
         boolean isValid = true;
+        Location newLocation = new Location();
 
         TextInputEditText editTextName = findViewById(R.id.edit_text_location_name);
         TextInputLayout inputLayoutName = findViewById(R.id.input_layout_location_name);
@@ -206,7 +208,7 @@ public class EditLocationActivity extends AppCompatActivity
                 .map(Location::getLocationName)
                 .collect(Collectors.toList())
                 .contains(editTextName.getText().toString())
-                && !TextUtils.equals(editTextName.getText(), location.getLocationName())) {
+                && !TextUtils.equals(editTextName.getText(), locationToEdit.getLocationName())) {
             inputLayoutName.setError(getString(R.string.input_error_duplicate));
             isValid = false;
         } else {
@@ -243,28 +245,32 @@ public class EditLocationActivity extends AppCompatActivity
         }
 
         if (isValid) {
-            location.setLocationName(editTextName.getText().toString());
-            location.setAddrLine1(editTextAddr1.getText().toString());
-            location.setAddrLine2(
+            newLocation.setLocationId(locationToEdit.getLocationId());
+            newLocation.setLocationName(editTextName.getText().toString());
+            newLocation.setLocationType(locationToEdit.getLocationType());
+            newLocation.setAddrLine1(editTextAddr1.getText().toString());
+            newLocation.setAddrLine2(
                     editTextAddr2.getText() == null
                             ? ""
                             : editTextAddr2.getText().toString());
-            location.setCity(
+            newLocation.setCity(
                     editTextCity.getText() == null
                             ? ""
                             : editTextCity.getText().toString());
-            location.setPostcode(editTextPostcode.getText().toString());
-            location.setCountry(editTextCountry.getText().toString());
-            location.setEmail(
+            newLocation.setPostcode(editTextPostcode.getText().toString());
+            newLocation.setCountry(editTextCountry.getText().toString());
+            newLocation.setEmail(
                     editTextEmail.getText() == null
                             ? ""
                             : editTextEmail.getText().toString());
-            location.setPhone(
+            newLocation.setPhone(
                     editTextPhone.getText() == null
                             ? ""
                             : editTextPhone.getText().toString());
 
-            return dbHandler.updateLocation(location);
+            boolean success = dbHandler.updateLocation(newLocation);
+            UndoStack.getInstance().push(new EditLocationAction(locationToEdit, newLocation));
+            return success;
         }
         return false;
     }

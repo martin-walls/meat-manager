@@ -40,8 +40,8 @@ import com.martinwalls.meatmanager.util.SimpleTextWatcher;
 import com.martinwalls.meatmanager.util.SortUtils;
 import com.martinwalls.meatmanager.util.Utils;
 import com.martinwalls.meatmanager.util.undo.UndoStack;
-import com.martinwalls.meatmanager.util.undo.orders.AddOrderAction;
-import com.martinwalls.meatmanager.util.undo.orders.EditOrderAction;
+import com.martinwalls.meatmanager.util.undo.order.AddOrderAction;
+import com.martinwalls.meatmanager.util.undo.order.EditOrderAction;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

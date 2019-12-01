@@ -20,6 +20,8 @@ import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Location;
 import com.martinwalls.meatmanager.ui.misc.dialog.ConfirmCancelDialog;
+import com.martinwalls.meatmanager.util.undo.UndoStack;
+import com.martinwalls.meatmanager.util.undo.location.AddLocationAction;
 
 import java.util.stream.Collectors;
 
@@ -81,7 +83,7 @@ public class NewLocationActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                int newRowId = (int) addLocationToDb();
+                int newRowId = addLocationToDb();
                 if (newRowId != -1) {
                     Intent result = new Intent();
                     result.putExtra(RESULT_ID, newRowId);
@@ -140,7 +142,7 @@ public class NewLocationActivity extends AppCompatActivity
      * in the database to the new values. Returns the ID of the new row in the
      * database.
      */
-    private long addLocationToDb() {
+    private int addLocationToDb() {
         boolean isValid = true;
         Location newLocation = new Location();
 
@@ -239,7 +241,9 @@ public class NewLocationActivity extends AppCompatActivity
                             ? ""
                             : editTextPhone.getText().toString());
 
-            return dbHandler.addLocation(newLocation);
+            int newRowId = dbHandler.addLocation(newLocation);
+            UndoStack.getInstance().push(new AddLocationAction(newLocation));
+            return newRowId;
         }
         return -1;
     }

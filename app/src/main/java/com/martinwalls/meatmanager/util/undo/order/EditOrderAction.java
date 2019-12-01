@@ -1,4 +1,4 @@
-package com.martinwalls.meatmanager.util.undo.orders;
+package com.martinwalls.meatmanager.util.undo.order;
 
 import android.content.Context;
 import com.martinwalls.meatmanager.R;

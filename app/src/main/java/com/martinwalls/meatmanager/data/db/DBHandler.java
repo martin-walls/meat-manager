@@ -1092,7 +1092,7 @@ public class DBHandler extends SQLiteOpenHelper {
     /**
      * Stores a {@link Location} in the database.
      */
-    public long addLocation(Location location) {
+    public int addLocation(Location location) {
         ContentValues values = new ContentValues();
         values.put(LocationsTable.NAME, location.getLocationName());
         values.put(LocationsTable.TYPE, location.getLocationType().name());
@@ -1107,7 +1107,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         long newRowId = db.insert(LocationsTable.TABLE_NAME, null, values);
         db.close();
-        return newRowId;
+        return (int) newRowId;
     }
 
     /**

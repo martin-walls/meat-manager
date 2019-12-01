@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Location;
+import com.martinwalls.meatmanager.util.undo.UndoStack;
+import com.martinwalls.meatmanager.util.undo.location.DeleteLocationAction;
 
 public class LocationDetailActivity extends AppCompatActivity {
 
@@ -61,6 +63,7 @@ public class LocationDetailActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_delete:
                 deleteLocation();
+                finish();
                 return true;
             case R.id.action_edit:
                 startEditLocationActivity();
@@ -152,6 +155,7 @@ public class LocationDetailActivity extends AppCompatActivity {
             if (success) {
                 Toast.makeText(this, R.string.location_delete_success, Toast.LENGTH_SHORT)
                         .show();
+                UndoStack.getInstance().push(new DeleteLocationAction(location));
             } else {
                 Toast.makeText(this, R.string.location_delete_error, Toast.LENGTH_SHORT)
                         .show();
