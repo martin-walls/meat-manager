@@ -9,14 +9,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Location;
+import com.martinwalls.meatmanager.ui.misc.dialog.ConfirmDeleteDialog;
 import com.martinwalls.meatmanager.util.undo.UndoStack;
 import com.martinwalls.meatmanager.util.undo.location.DeleteLocationAction;
 
-public class LocationDetailActivity extends AppCompatActivity {
+public class LocationDetailActivity extends AppCompatActivity
+        implements ConfirmDeleteDialog.ConfirmDeleteListener {
 
     public static final String EXTRA_LOCATION_ID = "location_id";
 
@@ -62,8 +65,7 @@ public class LocationDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete:
-                deleteLocation();
-                finish();
+                showConfirmDeleteDialog();
                 return true;
             case R.id.action_edit:
                 startEditLocationActivity();
@@ -84,6 +86,20 @@ public class LocationDetailActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onConfirmDelete() {
+        boolean success = dbHandler.deleteLocation(location.getLocationId());
+        if (success) {
+            Toast.makeText(this, R.string.location_delete_success, Toast.LENGTH_SHORT)
+                    .show();
+            UndoStack.getInstance().push(new DeleteLocationAction(location));
+            finish();
+        } else {
+            Toast.makeText(this, R.string.location_delete_error, Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
+
     /**
      * Opens {@link EditLocationActivity} so the user can edit this Location.
      */
@@ -92,6 +108,25 @@ public class LocationDetailActivity extends AppCompatActivity {
         editIntent.putExtra(EditLocationActivity.EXTRA_LOCATION_ID,
                 location.getLocationId());
         startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
+    }
+
+    /**
+     * Shows a {@link ConfirmDeleteDialog} asking the user to confirm the
+     * delete action. First checks if the location is safe to delete, shows an
+     * error message to the user if not.
+     */
+    private void showConfirmDeleteDialog() {
+        if (dbHandler.isLocationSafeToDelete(location.getLocationId())) {
+            DialogFragment dialog = new ConfirmDeleteDialog();
+            Bundle args = new Bundle();
+            args.putString(ConfirmDeleteDialog.EXTRA_NAME, location.getLocationName());
+            dialog.setArguments(args);
+            dialog.show(getSupportFragmentManager(), "confirm_delete");
+        } else {
+            Toast.makeText(this,
+                    getString(R.string.db_error_delete_location, location.getLocationName()),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -143,25 +178,5 @@ public class LocationDetailActivity extends AppCompatActivity {
         builder.append("\n");
         builder.append(location.getCountry());
         return builder.toString();
-    }
-
-    /**
-     * Checks if this {@link Location} is safe to delete, removes it from
-     * the database if it is.
-     */
-    private void deleteLocation() {
-        if (dbHandler.isLocationSafeToDelete(location.getLocationId())) {
-            boolean success = dbHandler.deleteLocation(location.getLocationId());
-            if (success) {
-                Toast.makeText(this, R.string.location_delete_success, Toast.LENGTH_SHORT)
-                        .show();
-                UndoStack.getInstance().push(new DeleteLocationAction(location));
-            } else {
-                Toast.makeText(this, R.string.location_delete_error, Toast.LENGTH_SHORT)
-                        .show();
-            }
-        } else {
-            Toast.makeText(this, R.string.location_delete_error, Toast.LENGTH_SHORT).show();
-        }
     }
 }
