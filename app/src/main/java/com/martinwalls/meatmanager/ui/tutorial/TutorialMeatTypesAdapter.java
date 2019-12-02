@@ -28,6 +28,8 @@ public class TutorialMeatTypesAdapter
             name = view.findViewById(R.id.name);
             checkbox = view.findViewById(R.id.checkbox);
 
+            name.setOnClickListener(v -> checkbox.setChecked(!checkbox.isChecked()));
+
             checkbox.setOnCheckedChangeListener((buttonView, isChecked) ->
                     listener.onMeatTypeChecked(
                             meatTypes.get(getAdapterPosition()), isChecked));

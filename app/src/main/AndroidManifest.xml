@@ -37,8 +37,10 @@
         </activity>
 
 
-        <activity android:name="com.martinwalls.meatmanager.ui.stock.StockDetailActivity"
-            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity" />
+        <activity
+            android:name="com.martinwalls.meatmanager.ui.stock.StockDetailActivity"
+            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity"
+            />
 
         <activity
             android:name="com.martinwalls.meatmanager.ui.settings.SettingsActivity"
@@ -52,33 +54,49 @@
                 />
         </activity>
 
-        <activity android:name="com.martinwalls.meatmanager.ui.contracts.ContractDetailActivity"
-            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity" />
+        <activity
+            android:name="com.martinwalls.meatmanager.ui.contracts.ContractDetailActivity"
+            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity"
+            />
 
         <activity android:name="com.martinwalls.meatmanager.ui.contracts.EditContractActivity" />
 
-        <activity android:name="com.martinwalls.meatmanager.ui.orders.OrderDetailActivity"
-            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity" />
+        <activity
+            android:name="com.martinwalls.meatmanager.ui.orders.OrderDetailActivity"
+            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity"
+            />
 
         <activity android:name="com.martinwalls.meatmanager.ui.locations.NewLocationActivity" />
 
-        <activity android:name="com.martinwalls.meatmanager.ui.locations.EditLocationActivity"
-            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity" />
+        <activity
+            android:name="com.martinwalls.meatmanager.ui.locations.EditLocationActivity"
+            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity"
+            />
 
-        <activity android:name="com.martinwalls.meatmanager.ui.products.EditProductsActivity"
-            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity" />
+        <activity
+            android:name="com.martinwalls.meatmanager.ui.products.EditProductsActivity"
+            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity"
+            />
 
-        <activity android:name="com.martinwalls.meatmanager.ui.meatTypes.EditMeatTypesActivity"
-            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity" />
+        <activity
+            android:name="com.martinwalls.meatmanager.ui.meatTypes.EditMeatTypesActivity"
+            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity"
+            />
 
-        <activity android:name="com.martinwalls.meatmanager.ui.locations.LocationsActivity"
-            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity" />
+        <activity
+            android:name="com.martinwalls.meatmanager.ui.locations.LocationsActivity"
+            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity"
+            />
 
-        <activity android:name="com.martinwalls.meatmanager.ui.locations.LocationDetailActivity"
-            android:parentActivityName="com.martinwalls.meatmanager.ui.locations.LocationsActivity" />
+        <activity
+            android:name="com.martinwalls.meatmanager.ui.locations.LocationDetailActivity"
+            android:parentActivityName="com.martinwalls.meatmanager.ui.locations.LocationsActivity"
+            />
 
-        <activity android:name="com.martinwalls.meatmanager.ui.exchange.ChooseCurrenciesActivity"
-            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity" >
+        <activity
+            android:name="com.martinwalls.meatmanager.ui.exchange.ChooseCurrenciesActivity"
+            android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity"
+            >
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable"
@@ -89,7 +107,10 @@
 
         <activity android:name="com.martinwalls.meatmanager.ui.orders.EditOrderActivity" />
 
-        <activity android:name=".ui.tutorial.TutorialActivity" />
+        <activity
+            android:name=".ui.tutorial.TutorialActivity"
+            android:exported="true"
+            />
 
         <receiver
             android:name="com.martinwalls.meatmanager.util.notification.ReminderReceiver"
