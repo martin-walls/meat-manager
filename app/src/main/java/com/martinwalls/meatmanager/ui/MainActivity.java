@@ -98,6 +98,10 @@ public class MainActivity extends AppCompatActivity {
 
         // show tutorial page if first time opening app
         boolean isFirstTimeUser = prefs.getBoolean(R.string.pref_is_first_time_user, true);
+
+        //todo this is only for testing
+//        isFirstTimeUser = true;
+
         if (isFirstTimeUser) {
             Intent tutorialIntent = new Intent(this, TutorialActivity.class);
             startActivity(tutorialIntent);

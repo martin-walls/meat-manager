@@ -365,6 +365,10 @@
     <string name="tutorial_meat_types_title">Add meat types</string>
     <string name="tutorial_meat_types_suggested_title">Suggested:</string>
     <string name="tutorial_meat_types_add_custom">Add a custom meat type</string>
+    <string name="tutorial_meat_types_custom_title">Add custom meat type</string>
+    <string name="tutorial_meat_types_custom_hint">Custom meat type</string>
+    <string name="tutorial_meat_types_custom_done">Done</string>
+    <string name="tutorial_meat_types_custom_not_unique">Already added</string>
 
     <string name="tutorial_mass_unit_title">Choose mass unit</string>
     <string name="tutorial_mass_unit_kgs">Kilograms\n(kg)</string>
