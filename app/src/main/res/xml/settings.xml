@@ -37,4 +37,13 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="TESTING">
+
+        <Preference
+            app:key="show_tutorial"
+            app:title="Show welcome screen"
+            />
+
+    </PreferenceCategory>
+
 </androidx.preference.PreferenceScreen>
