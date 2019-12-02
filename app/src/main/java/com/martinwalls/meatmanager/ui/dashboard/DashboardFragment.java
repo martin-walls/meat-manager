@@ -147,20 +147,16 @@ public class DashboardFragment extends Fragment
      */
     private void loadData() {
 
-        //todo show bar where stock required but none held
-
         // get data from db and sort it
         List<StockItem> stockList;
         if (filterLocation == null || TextUtils.isEmpty(filterLocation.getLocationName())) {
             stockList = SortUtils.mergeSort(
-                    dbHandler.getAllStock(), StockItem.comparatorId());
+                    dbHandler.getAllStockByProduct(), StockItem.comparatorId());
         } else {
             stockList = SortUtils.mergeSort(
-                    dbHandler.getAllStockFromLocation(filterLocation.getLocationId()),
+                    dbHandler.getAllStockFromLocationByProduct(filterLocation.getLocationId()),
                     StockItem.comparatorId());
         }
-
-        groupStockByProduct(stockList);
 
         // handle case for no data
         showEmptyView(stockList.size() == 0);
@@ -183,26 +179,6 @@ public class DashboardFragment extends Fragment
         // get data to pass to the chart view
         List<BarChartEntry> entries = getChartData(stockList, productsRequiredList);
         graphView.setData(entries);
-    }
-
-    /**
-     * Groups stock by product, so only one bar is shown for each product, even
-     * if that product is stored in multiple locations. Modifies the original
-     * list.
-     */
-    private void groupStockByProduct(List<StockItem> stockList) {
-        for (int i = 1; i < stockList.size(); i++) {
-            StockItem lastStockItem = stockList.get(i - 1);
-            StockItem thisStockItem = stockList.get(i);
-            if (lastStockItem.getProduct().getProductId()
-                    == thisStockItem.getProduct().getProductId()) {
-                lastStockItem.setMass(lastStockItem.getMass() + thisStockItem.getMass());
-                lastStockItem.setNumBoxes(
-                        lastStockItem.getNumBoxes() + thisStockItem.getNumBoxes());
-                stockList.remove(i);
-                i--;
-            }
-        }
     }
 
     /**
@@ -237,6 +213,45 @@ public class DashboardFragment extends Fragment
             entries.add(new BarChartEntry(stockItem.getProduct().getProductName(),
                     (float) stockItem.getMass(), amountRequired));
         }
+
+        List<ProductQuantity> noStockProducts = new ArrayList<>();
+        for (ProductQuantity productRequired : productsRequiredList) {
+            int productId = productRequired.getProduct().getProductId();
+            boolean hasStock = false;
+            for (StockItem stockItem : stockList) {
+                if (stockItem.getProduct().getProductId() == productId) {
+                    hasStock = true;
+                    break;
+                }
+            }
+            // if no stock held
+            if (!hasStock) {
+                // check if same product already required elsewhere
+                boolean isNewEntry = true;
+                for (ProductQuantity productQuantity : noStockProducts) {
+                    if (productQuantity.getProduct().getProductId() == productId) {
+                        productQuantity.setQuantityMass(
+                                productQuantity.getQuantityMass()
+                                        + productRequired.getQuantityMass());
+                        isNewEntry = false;
+                        break;
+                    }
+                }
+                if (isNewEntry) {
+                    noStockProducts.add(new ProductQuantity(
+                            productRequired.getProduct(),
+                            productRequired.getQuantityMass()));
+                }
+            }
+        }
+
+        // add bar for each required product with no stock
+        for (ProductQuantity productRequired : noStockProducts) {
+            entries.add(new BarChartEntry(
+                    productRequired.getProduct().getProductName(),
+                    0, (float) productRequired.getQuantityMass()));
+        }
+
         return entries;
     }
 }
