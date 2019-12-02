@@ -130,7 +130,7 @@ public class DashboardFragment extends Fragment
         RecyclerView locationsRecyclerView =
                 fragmentView.findViewById(R.id.recycler_view_locations);
         LocationsMenuAdapter locationsAdapter = new LocationsMenuAdapter(
-                dbHandler.getAllLocations(Location.LocationType.Storage), this);
+                dbHandler.getAllStorageLocationsWithStock(), this);
         locationsRecyclerView.setAdapter(locationsAdapter);
 
         RecyclerViewMargin margins = new RecyclerViewMargin(
@@ -148,8 +148,6 @@ public class DashboardFragment extends Fragment
     private void loadData() {
 
         //todo show bar where stock required but none held
-
-        //todo dont show locations that have no data
 
         // get data from db and sort it
         List<StockItem> stockList;

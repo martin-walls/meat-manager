@@ -1090,6 +1090,47 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /**
+     * Gets all storage locations that have stock.
+     */
+    public List<Location> getAllStorageLocationsWithStock() {
+        List<Location> locationResultList = new ArrayList<>();
+        String query = "SELECT * FROM " + LocationsTable.TABLE_NAME
+                + " INNER JOIN " + StockTable.TABLE_NAME
+                + " ON " + LocationsTable.TABLE_NAME + "." + LocationsTable.ID
+                + "=" + StockTable.TABLE_NAME + "." + StockTable.LOCATION_ID
+                + " GROUP BY " + LocationsTable.TABLE_NAME + "." + LocationsTable.ID;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        while (cursor.moveToNext()) {
+            Location location = new Location();
+            location.setLocationId(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(LocationsTable.ID)));
+            location.setLocationName(
+                    cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.NAME)));
+            location.setLocationType(Location.LocationType.parseLocationType(
+                    cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.TYPE))));
+            location.setAddrLine1(
+                    cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.ADDR_1)));
+            location.setAddrLine2(
+                    cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.ADDR_2)));
+            location.setCity(
+                    cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.CITY)));
+            location.setPostcode(
+                    cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.POSTCODE)));
+            location.setCountry(
+                    cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.COUNTRY)));
+            location.setPhone(
+                    cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.PHONE)));
+            location.setEmail(
+                    cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.EMAIL)));
+            locationResultList.add(location);
+        }
+        cursor.close();
+        db.close();
+        return locationResultList;
+    }
+
+    /**
      * Stores a {@link Location} in the database.
      */
     public int addLocation(Location location) {

@@ -284,11 +284,6 @@ public class BarChartView extends View {
 
             // redraw graph
             invalidate();
-
-//            Toast.makeText(context,
-//                    getTooltipPos(dataSet.get(selectedIndex),
-//                            getLabelPos(dataSet.get(selectedIndex))).name(),
-//                    Toast.LENGTH_SHORT).show();
         }
         return true;
     }
