@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.martinwalls.meatmanager.R;
@@ -300,7 +301,7 @@ public class BarChartView extends View {
      * Sets the data set to draw the graph for. Redraws the graph with
      * the updated data.
      */
-    public void setData(List<BarChartEntry> newDataSet) {
+    public void setData(@NonNull List<BarChartEntry> newDataSet) {
         if (newDataSet.size() == 0) {
             return;
         }

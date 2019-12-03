@@ -4,19 +4,23 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.meatmanager.R;
-import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.StockItem;
 import com.martinwalls.meatmanager.data.viewmodel.StockViewModel;
 import com.martinwalls.meatmanager.ui.locations.LocationsActivity;
@@ -27,9 +31,6 @@ import com.martinwalls.meatmanager.ui.products.EditProductsActivity;
 import com.martinwalls.meatmanager.util.EasyPreferences;
 import com.martinwalls.meatmanager.util.SortUtils;
 import com.martinwalls.meatmanager.util.undo.UndoStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class StockFragment extends Fragment
         implements StockItemAdapter.StockItemAdapterListener {
@@ -55,7 +56,7 @@ public class StockFragment extends Fragment
         // initialise RecyclerView
         initStockList(fragmentView);
 
-        viewModel = ViewModelProviders.of(getActivity()).get(StockViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(StockViewModel.class);
 
         viewModel.getStockListObservable().observe(getViewLifecycleOwner(),
                 stockItems -> stockAdapter.setStockList(stockItems));

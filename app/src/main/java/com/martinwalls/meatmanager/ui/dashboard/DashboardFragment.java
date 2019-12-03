@@ -12,6 +12,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +21,7 @@ import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Location;
 import com.martinwalls.meatmanager.data.models.ProductQuantity;
 import com.martinwalls.meatmanager.data.models.StockItem;
+import com.martinwalls.meatmanager.data.viewmodel.DashboardViewModel;
 import com.martinwalls.meatmanager.ui.misc.RecyclerViewMargin;
 import com.martinwalls.meatmanager.util.EasyPreferences;
 import com.martinwalls.meatmanager.util.SortUtils;
@@ -33,8 +35,9 @@ public class DashboardFragment extends Fragment
 
     private final int SORT_BY_DEFAULT = SortUtils.SORT_AMOUNT_DESC;
 
-    private DBHandler dbHandler;
+//    private DBHandler dbHandler;
     private EasyPreferences prefs;
+    private DashboardViewModel viewModel;
 
     private BarChartView graphView;
     private TextView emptyView;
@@ -49,8 +52,9 @@ public class DashboardFragment extends Fragment
         getActivity().setTitle(R.string.dashboard_title);
         View fragmentView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        dbHandler = new DBHandler(getContext());
-//        prefs = EasyPreferences.createForDefaultPreferences(getContext());
+        viewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
+
+//        dbHandler = new DBHandler(getContext());
         prefs = EasyPreferences.getInstance(getContext());
 
         if (filterLocation == null || !TextUtils.isEmpty(filterLocation.getLocationName())) {
@@ -62,7 +66,12 @@ public class DashboardFragment extends Fragment
         graphView = fragmentView.findViewById(R.id.graph);
         emptyView = fragmentView.findViewById(R.id.empty);
         graphLayout = fragmentView.findViewById(R.id.graph_layout);
-        loadData();
+
+        viewModel.getStockListObservable().observe(getViewLifecycleOwner(),
+                stockItems -> graphView.setData(null)); //todo format data into List<BarChartEntry>, like in #loadData()
+
+
+//        loadData();
 
         return fragmentView;
     }

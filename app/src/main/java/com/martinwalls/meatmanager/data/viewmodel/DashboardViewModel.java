@@ -13,16 +13,17 @@ import com.martinwalls.meatmanager.util.SortUtils;
 
 import java.util.List;
 
-public class StockViewModel extends AndroidViewModel {
+public class DashboardViewModel extends AndroidViewModel {
 
     private final DBHandler dbHandler;
 
     private final MutableLiveData<List<StockItem>> dbStockList;
     private final MediatorLiveData<List<StockItem>> stockListObservable;
 
-    private int sortMode = SortUtils.SORT_NAME;
+    private int sortMode = SortUtils.SORT_AMOUNT_DESC;
+    private int filterLocationId = -1;
 
-    public StockViewModel(Application application) {
+    public DashboardViewModel(Application application) {
         super(application);
 
         dbHandler = new DBHandler(application);
@@ -50,8 +51,6 @@ public class StockViewModel extends AndroidViewModel {
         switch (sortMode) {
             case SortUtils.SORT_NAME:
                 return SortUtils.mergeSort(stockItems, StockItem.comparatorAlpha());
-            case SortUtils.SORT_LOCATION:
-                return SortUtils.mergeSort(stockItems, StockItem.comparatorLocation());
             case SortUtils.SORT_AMOUNT_DESC:
                 return SortUtils.mergeSort(stockItems, StockItem.comparatorAmount(false));
             case SortUtils.SORT_AMOUNT_ASC:
@@ -61,7 +60,7 @@ public class StockViewModel extends AndroidViewModel {
     }
 
     public void loadStock() {
-        dbStockList.setValue(dbHandler.getAllStock());
+        dbStockList.setValue(dbHandler.getAllStockByProduct());
     }
 
     public LiveData<List<StockItem>> getStockListObservable() {
