@@ -43,6 +43,10 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
         }
     }
 
+    StockItemAdapter(StockItemAdapterListener listener) {
+        this.listener = listener;
+    }
+
     StockItemAdapter(List<StockItem> stockItemList, StockItemAdapterListener listener) {
         this.stockItemList = stockItemList;
         this.stockItemListFiltered = stockItemList;
@@ -58,6 +62,9 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        if (stockItemListFiltered == null) {
+            return;
+        }
         StockItem item = stockItemListFiltered.get(position);
         holder.itemName.setText(item.getProduct().getProductName());
         holder.itemLocation.setText(holder.itemLocation.getContext()
@@ -81,7 +88,11 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
     @Override
     public int getItemCount() {
-        return stockItemListFiltered.size();
+        if (stockItemListFiltered != null) {
+            return stockItemListFiltered.size();
+        } else {
+            return 0;
+        }
     }
 
     @Override
@@ -112,6 +123,12 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
                 notifyDataSetChanged();
             }
         };
+    }
+
+    public void setStockList(List<StockItem> stockList) {
+        this.stockItemList = stockList;
+        this.stockItemListFiltered = stockList;
+        notifyDataSetChanged();
     }
 
     /**

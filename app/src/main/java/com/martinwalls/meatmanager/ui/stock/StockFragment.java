@@ -9,12 +9,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.StockItem;
+import com.martinwalls.meatmanager.data.viewmodel.StockViewModel;
 import com.martinwalls.meatmanager.ui.locations.LocationsActivity;
 import com.martinwalls.meatmanager.ui.meatTypes.EditMeatTypesActivity;
 import com.martinwalls.meatmanager.ui.misc.CustomRecyclerView;
@@ -34,11 +38,9 @@ public class StockFragment extends Fragment
 
     private final int SORT_BY_DEFAULT = SortUtils.SORT_NAME;
 
-    private DBHandler dbHandler;
     private EasyPreferences prefs;
-
+    private StockViewModel viewModel;
     private StockItemAdapter stockAdapter;
-    private List<StockItem> stockList = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -48,12 +50,15 @@ public class StockFragment extends Fragment
 
         View fragmentView = inflater.inflate(R.layout.fragment_stock, container, false);
 
-        dbHandler = new DBHandler(getContext());
-//        prefs = EasyPreferences.createForDefaultPreferences(getContext());
         prefs = EasyPreferences.getInstance(getContext());
 
+        // initialise RecyclerView
         initStockList(fragmentView);
-        loadStock();
+
+        viewModel = ViewModelProviders.of(getActivity()).get(StockViewModel.class);
+
+        viewModel.getStockListObservable().observe(getViewLifecycleOwner(),
+                stockItems -> stockAdapter.setStockList(stockItems));
 
         FloatingActionButton fab = fragmentView.findViewById(R.id.fab);
         fab.setOnClickListener(v -> startNewStockActivity());
@@ -72,9 +77,6 @@ public class StockFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        if (dbHandler == null) {
-            dbHandler = new DBHandler(getContext());
-        }
         if (prefs == null) {
             prefs = EasyPreferences.getInstance(getContext());
         }
@@ -89,7 +91,8 @@ public class StockFragment extends Fragment
         SearchManager searchManager =
                 (SearchManager) getContext().getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getActivity().getComponentName()));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -132,6 +135,7 @@ public class StockFragment extends Fragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            // undo / redo
             case R.id.action_undo:
                 UndoStack.getInstance().undo(getContext());
                 loadStock();
@@ -140,7 +144,7 @@ public class StockFragment extends Fragment
                 UndoStack.getInstance().redo(getContext());
                 loadStock();
                 return true;
-
+            // products, locations, meat types pages
             case R.id.action_edit_products:
                 startEditProductsActivity();
                 return true;
@@ -150,7 +154,7 @@ public class StockFragment extends Fragment
             case R.id.action_edit_meat_types:
                 startEditMeatTypesActivity();
                 return true;
-
+            // sort options
             case R.id.action_sort_by_name:
                 setSortMode(SortUtils.SORT_NAME);
                 return true;
@@ -176,15 +180,15 @@ public class StockFragment extends Fragment
     }
 
     /**
-     * Initialises the stock list. Doesn't load any data, this is done with
-     * {@link #loadStock()}.
+     * Initialises the RecyclerView to show stock.
      */
     private void initStockList(View fragmentView) {
         CustomRecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
         TextView emptyView = fragmentView.findViewById(R.id.empty);
         recyclerView.setEmptyView(emptyView);
 
-        stockAdapter = new StockItemAdapter(stockList, this);
+//        stockAdapter = new StockItemAdapter(stockList, this);
+        stockAdapter = new StockItemAdapter(this);
         recyclerView.setAdapter(stockAdapter);
 
         // item dividers
@@ -196,29 +200,11 @@ public class StockFragment extends Fragment
     }
 
     /**
-     * Gets all stock items from the database, sorts them and reloads the
-     * layout to show the updated data.
+     * Refreshes data from the ViewModel.
      */
     private void loadStock() {
-        stockList.clear();
-        List<StockItem> stock = dbHandler.getAllStock();
-        switch (prefs.getInt(R.string.pref_stock_sort_by, SORT_BY_DEFAULT)) {
-            case SortUtils.SORT_NAME:
-                stockList.addAll(SortUtils.mergeSort(stock, StockItem.comparatorAlpha()));
-                break;
-            case SortUtils.SORT_LOCATION:
-                stockList.addAll(SortUtils.mergeSort(stock, StockItem.comparatorLocation()));
-                break;
-            case SortUtils.SORT_AMOUNT_DESC:
-                stockList.addAll(SortUtils.mergeSort(
-                        stock, StockItem.comparatorAmount(false)));
-                break;
-            case SortUtils.SORT_AMOUNT_ASC:
-                stockList.addAll(SortUtils.mergeSort(
-                        stock, StockItem.comparatorAmount(true)));
-                break;
-        }
-        stockAdapter.notifyDataSetChanged();
+        viewModel.loadStock();
+        viewModel.sortStock(prefs.getInt(R.string.pref_stock_sort_by, SORT_BY_DEFAULT));
     }
 
     /**
