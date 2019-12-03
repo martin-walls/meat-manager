@@ -84,6 +84,7 @@ public class SettingsActivity extends AppCompatActivity {
             showTutorialPref.setOnPreferenceClickListener(preference -> {
                 Intent tutorialIntent = new Intent(getContext(), TutorialActivity.class);
                 startActivity(tutorialIntent);
+                finish();
                 return true;
             });
         }
