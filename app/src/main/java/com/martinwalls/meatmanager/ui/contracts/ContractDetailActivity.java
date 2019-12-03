@@ -15,6 +15,7 @@ import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.*;
 import com.martinwalls.meatmanager.ui.ProductsAddedAdapter;
 import com.martinwalls.meatmanager.ui.RelatedStockAdapter;
+import com.martinwalls.meatmanager.ui.locations.LocationDetailActivity;
 import com.martinwalls.meatmanager.ui.misc.dialog.ConfirmDeleteDialog;
 import com.martinwalls.meatmanager.ui.stock.StockDetailActivity;
 import com.martinwalls.meatmanager.util.SortUtils;
@@ -52,6 +53,9 @@ public class ContractDetailActivity extends AppCompatActivity
 
         initProductsAddedView();
         initRelatedStockView();
+
+        TextView destination = findViewById(R.id.destination);
+        destination.setOnClickListener(v -> openLocationDetailPage(contract.getDestId()));
 
         fillFields();
     }
@@ -133,6 +137,15 @@ public class ContractDetailActivity extends AppCompatActivity
     private void showConfirmDeleteDialog() {
         DialogFragment dialog = new ConfirmDeleteDialog();
         dialog.show(getSupportFragmentManager(), "confirm_delete");
+    }
+
+    /**
+     * Opens the detail page for the location with the given ID.
+     */
+    private void openLocationDetailPage(int locationId) {
+        Intent detailIntent = new Intent(this, LocationDetailActivity.class);
+        detailIntent.putExtra(LocationDetailActivity.EXTRA_LOCATION_ID, locationId);
+        startActivityForResult(detailIntent, REQUEST_REFRESH_ON_DONE);
     }
 
     /**

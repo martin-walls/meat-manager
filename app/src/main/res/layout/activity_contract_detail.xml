@@ -27,6 +27,8 @@
         style="@style/DetailsText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
         android:drawableStart="@drawable/ic_destination"
         android:drawablePadding="16dp"
         android:paddingStart="24dp"

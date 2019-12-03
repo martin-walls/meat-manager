@@ -28,6 +28,8 @@
         style="@style/DetailsText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
         android:drawableStart="@drawable/ic_location"
         android:drawablePadding="16dp"
         android:paddingStart="24dp"
@@ -97,8 +99,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/row_supplier"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
         android:orientation="horizontal"
         android:paddingStart="24dp"
         android:paddingTop="16dp"
@@ -128,6 +133,8 @@
         android:id="@+id/row_destination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
         android:orientation="horizontal"
         android:paddingStart="24dp"
         android:paddingTop="16dp"

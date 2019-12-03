@@ -16,6 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.StockItem;
+import com.martinwalls.meatmanager.ui.locations.LocationDetailActivity;
 import com.martinwalls.meatmanager.ui.misc.dialog.ConfirmDeleteDialog;
 import com.martinwalls.meatmanager.util.MassUnit;
 import com.martinwalls.meatmanager.util.Utils;
@@ -47,6 +48,14 @@ public class StockDetailActivity extends AppCompatActivity
             int stockId = extras.getInt(EXTRA_STOCK_ID);
             stockItem = dbHandler.getStockItem(stockId);
         }
+
+        TextView location = findViewById(R.id.location);
+        LinearLayout supplier = findViewById(R.id.row_supplier);
+        LinearLayout destination = findViewById(R.id.row_destination);
+
+        location.setOnClickListener(v -> openLocationDetailPage(stockItem.getLocationId()));
+        supplier.setOnClickListener(v -> openLocationDetailPage(stockItem.getSupplierId()));
+        destination.setOnClickListener(v -> openLocationDetailPage(stockItem.getDestId()));
 
         fillData();
     }
@@ -165,6 +174,15 @@ public class StockDetailActivity extends AppCompatActivity
                 stockItem.getProduct().getProductName());
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), "confirm_delete");
+    }
+
+    /**
+     * Opens the detail page for the location with the given ID.
+     */
+    private void openLocationDetailPage(int locationId) {
+        Intent detailIntent = new Intent(this, LocationDetailActivity.class);
+        detailIntent.putExtra(LocationDetailActivity.EXTRA_LOCATION_ID, locationId);
+        startActivityForResult(detailIntent, REQUEST_REFRESH_ON_DONE);
     }
 
     /**
