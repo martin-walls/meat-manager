@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.martinwalls.meatmanager.BuildConfig;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.ui.tutorial.TutorialActivity;
 import com.martinwalls.meatmanager.util.AppTheme;
@@ -79,14 +80,19 @@ public class SettingsActivity extends AppCompatActivity {
                     ReminderUtils.DEFAULT_REMINDER_MIN);
             setReminderTimeSummary(hour, min);
 
-            ///////////////////////////////////////////// todo TESTING: remove from production
-            Preference showTutorialPref = findPreference("show_tutorial");
-            showTutorialPref.setOnPreferenceClickListener(preference -> {
-                Intent tutorialIntent = new Intent(getContext(), TutorialActivity.class);
-                startActivity(tutorialIntent);
-                finish();
-                return true;
-            });
+            ///////// todo TESTING: remove from production
+            if (BuildConfig.BUILD_TYPE.equals("debug")) {
+                Preference testCategory = findPreference("pref_test");
+                testCategory.setVisible(true);
+
+                Preference showTutorialPref = findPreference("show_tutorial");
+                showTutorialPref.setOnPreferenceClickListener(preference -> {
+                    Intent tutorialIntent = new Intent(getContext(), TutorialActivity.class);
+                    startActivity(tutorialIntent);
+                    getActivity().finish();
+                    return true;
+                });
+            }
         }
 
         /**

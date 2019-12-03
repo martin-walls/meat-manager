@@ -37,7 +37,11 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="TESTING">
+    <PreferenceCategory
+        app:title="TESTING"
+        app:key="pref_test"
+        app:isPreferenceVisible="false"
+        >
 
         <Preference
             app:key="show_tutorial"
