@@ -28,7 +28,7 @@ import java.util.List;
 public class OrdersFragment extends Fragment
         implements OrdersAdapter.OrdersAdapterListener {
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler; //todo ViewModel
 
     private OrdersAdapter ordersAdapter;
     private List<Order> orderList = new ArrayList<>();
