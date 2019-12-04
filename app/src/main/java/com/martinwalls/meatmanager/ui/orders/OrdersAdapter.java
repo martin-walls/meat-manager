@@ -47,8 +47,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         }
     }
 
-    OrdersAdapter(List<Order> orderList, OrdersAdapterListener listener) {
-        this.orderList = orderList;
+    OrdersAdapter(OrdersAdapterListener listener) {
         this.listener = listener;
     }
 
@@ -91,7 +90,16 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return orderList.size();
+        if (orderList != null) {
+            return orderList.size();
+        } else {
+            return 0;
+        }
+    }
+
+    public void setOrderList(List<Order> orderList) {
+        this.orderList = orderList;
+        notifyDataSetChanged();
     }
 
     /**
