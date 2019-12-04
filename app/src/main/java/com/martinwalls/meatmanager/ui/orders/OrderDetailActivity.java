@@ -42,7 +42,7 @@ public class OrderDetailActivity extends AppCompatActivity
 
     private final String DATE_FORMAT = "dd MMMM yyyy, HH:mm";
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler; // todo ViewModel
     private Order order;
 
     @Override
