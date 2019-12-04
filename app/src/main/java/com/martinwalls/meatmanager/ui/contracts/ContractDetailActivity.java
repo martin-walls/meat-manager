@@ -33,7 +33,7 @@ public class ContractDetailActivity extends AppCompatActivity
 
     private static final int REQUEST_REFRESH_ON_DONE = 1;
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler; //todo ViewModel
     private Contract contract;
 
     @Override
