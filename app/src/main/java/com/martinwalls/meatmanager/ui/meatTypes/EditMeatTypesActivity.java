@@ -23,7 +23,7 @@ import java.util.List;
 public class EditMeatTypesActivity extends AppCompatActivity
         implements AddNewMeatTypeDialog.AddNewMeatTypeListener {
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler; //todo ViewModel
 
     private MeatTypesAdapter meatTypesAdapter;
     private List<String> meatTypesList = new ArrayList<>();
