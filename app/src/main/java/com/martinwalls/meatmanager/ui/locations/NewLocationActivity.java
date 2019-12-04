@@ -25,6 +25,7 @@ import com.martinwalls.meatmanager.util.undo.location.AddLocationAction;
 
 import java.util.stream.Collectors;
 
+// todo merge with EditLocationActivity?
 public class NewLocationActivity extends AppCompatActivity
         implements ConfirmCancelDialog.ConfirmCancelListener {
 
@@ -32,7 +33,7 @@ public class NewLocationActivity extends AppCompatActivity
 
     public static final String RESULT_ID = "id";
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler; //todo ViewModel
 
     private Location.LocationType locationType;
 
