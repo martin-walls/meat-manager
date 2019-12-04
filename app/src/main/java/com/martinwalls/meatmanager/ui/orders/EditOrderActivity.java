@@ -73,7 +73,7 @@ public class EditOrderActivity extends InputFormActivity
 
     private int editType = EDIT_TYPE_NEW;
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler; //todo ViewModel
     private Order orderToEdit;
 
     private ProductsAddedAdapter productsAddedAdapter;
