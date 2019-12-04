@@ -48,7 +48,7 @@ public class ExchangeFragment extends Fragment {
 
     private static final int HISTORY_WEEKS_TO_SHOW = 2;
 
-    private ExchangeDBHandler dbHandler;
+    private ExchangeDBHandler dbHandler; //todo ViewModel
     private EasyPreferences prefs;
 
     private LinearLayout ratesLayout;
