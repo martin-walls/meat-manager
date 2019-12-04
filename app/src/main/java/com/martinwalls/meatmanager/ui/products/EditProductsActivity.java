@@ -28,7 +28,7 @@ public class EditProductsActivity extends AppCompatActivity
         implements AddNewProductDialog.AddNewProductListener,
         AddNewMeatTypeDialog.AddNewMeatTypeListener {
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler; //todo ViewModel
     private EasyPreferences prefs;
 
     private ProductsAdapter productsAdapter;
