@@ -27,7 +27,7 @@ import java.util.List;
 public class ContractsFragment extends Fragment
         implements ContractsAdapter.ContractsAdapterListener {
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler; //todo ViewModel
 
     private ContractsAdapter contractsAdapter;
     private List<Contract> contractList = new ArrayList<>();
