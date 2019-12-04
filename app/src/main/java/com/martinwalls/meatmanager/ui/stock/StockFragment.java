@@ -71,7 +71,7 @@ public class StockFragment extends Fragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_REFRESH_ON_DONE) {
-            loadStock();
+            viewModel.loadStock();
         }
     }
 
@@ -81,7 +81,7 @@ public class StockFragment extends Fragment
         if (prefs == null) {
             prefs = EasyPreferences.getInstance(getContext());
         }
-        loadStock();
+        viewModel.loadStock();
     }
 
     @Override
@@ -139,11 +139,11 @@ public class StockFragment extends Fragment
             // undo / redo
             case R.id.action_undo:
                 UndoStack.getInstance().undo(getContext());
-                loadStock();
+                viewModel.loadStock();
                 return true;
             case R.id.action_redo:
                 UndoStack.getInstance().redo(getContext());
-                loadStock();
+                viewModel.loadStock();
                 return true;
             // products, locations, meat types pages
             case R.id.action_edit_products:
@@ -188,7 +188,6 @@ public class StockFragment extends Fragment
         TextView emptyView = fragmentView.findViewById(R.id.empty);
         recyclerView.setEmptyView(emptyView);
 
-//        stockAdapter = new StockItemAdapter(stockList, this);
         stockAdapter = new StockItemAdapter(this);
         recyclerView.setAdapter(stockAdapter);
 
@@ -201,20 +200,12 @@ public class StockFragment extends Fragment
     }
 
     /**
-     * Refreshes data from the ViewModel.
-     */
-    private void loadStock() {
-        viewModel.loadStock();
-        viewModel.sortStock(prefs.getInt(R.string.pref_stock_sort_by, SORT_BY_DEFAULT));
-    }
-
-    /**
      * Stores which property to sort stock by, then reloads the data.
      */
     private void setSortMode(int sortMode) {
         prefs.setInt(R.string.pref_stock_sort_by, sortMode);
         getActivity().invalidateOptionsMenu();
-        loadStock();
+        viewModel.sortStock(sortMode);
     }
 
     /**

@@ -35,6 +35,15 @@ public class StockViewModel extends AndroidViewModel {
                 stockListObservable.setValue(sortedStockList(stockItems, sortMode)));
     }
 
+    public LiveData<List<StockItem>> getStockListObservable() {
+        loadStock();
+        return stockListObservable;
+    }
+
+    public void loadStock() {
+        dbStockList.setValue(dbHandler.getAllStock());
+    }
+
     public void sortStock(int sortMode) {
         this.sortMode = sortMode;
 
@@ -58,14 +67,5 @@ public class StockViewModel extends AndroidViewModel {
                 return SortUtils.mergeSort(stockItems, StockItem.comparatorAmount(true));
         }
         return stockItems;
-    }
-
-    public void loadStock() {
-        dbStockList.setValue(dbHandler.getAllStock());
-    }
-
-    public LiveData<List<StockItem>> getStockListObservable() {
-        loadStock();
-        return stockListObservable;
     }
 }

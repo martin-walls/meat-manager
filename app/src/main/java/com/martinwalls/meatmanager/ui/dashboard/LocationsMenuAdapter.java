@@ -16,7 +16,7 @@ public class LocationsMenuAdapter
 
     private LocationsMenuAdapterListener listener;
 
-    private List<Location> locationsList;
+    private List<LocationFilter> locationsList;
 
     private int selectedItemPos = 0;
 
@@ -36,11 +36,8 @@ public class LocationsMenuAdapter
         }
     }
 
-    LocationsMenuAdapter(List<Location> locationsList, LocationsMenuAdapterListener listener) {
-        this.locationsList = locationsList;
+    LocationsMenuAdapter(LocationsMenuAdapterListener listener) {
         this.listener = listener;
-
-        this.locationsList.add(0, new Location());
     }
 
     @Override
@@ -52,11 +49,11 @@ public class LocationsMenuAdapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Location location = locationsList.get(position);
-        if (!TextUtils.isEmpty(location.getLocationName())) {
-            holder.locationName.setText(location.getLocationName());
-        } else {
+        LocationFilter location = locationsList.get(position);
+        if (location.filterAll()) {
             holder.locationName.setText(R.string.dashboard_filter_locations_all);
+        } else {
+            holder.locationName.setText(location.getName());
         }
         if (position == selectedItemPos) {
             holder.locationName.setSelected(true);
@@ -68,6 +65,12 @@ public class LocationsMenuAdapter
     @Override
     public int getItemCount() {
         return locationsList.size();
+    }
+
+    public void setLocationsList(List<LocationFilter> locationsList) {
+        this.locationsList = locationsList;
+        this.locationsList.add(0, new LocationFilter(true));
+        notifyDataSetChanged();
     }
 
     /**
@@ -95,6 +98,6 @@ public class LocationsMenuAdapter
          * This is called when a menu item is clicked. This should be
          * implemented to filter stock by location.
          */
-        void onLocationItemClicked(Location location);
+        void onLocationItemClicked(LocationFilter location);
     }
 }

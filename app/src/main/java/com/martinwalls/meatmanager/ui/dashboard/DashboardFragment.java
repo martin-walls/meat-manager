@@ -1,7 +1,6 @@
 package com.martinwalls.meatmanager.ui.dashboard;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,33 +16,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.martinwalls.meatmanager.R;
-import com.martinwalls.meatmanager.data.db.DBHandler;
-import com.martinwalls.meatmanager.data.models.Location;
-import com.martinwalls.meatmanager.data.models.ProductQuantity;
-import com.martinwalls.meatmanager.data.models.StockItem;
 import com.martinwalls.meatmanager.data.viewmodel.DashboardViewModel;
 import com.martinwalls.meatmanager.ui.misc.RecyclerViewMargin;
 import com.martinwalls.meatmanager.util.EasyPreferences;
 import com.martinwalls.meatmanager.util.SortUtils;
 import com.martinwalls.meatmanager.util.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DashboardFragment extends Fragment
         implements LocationsMenuAdapter.LocationsMenuAdapterListener {
 
     private final int SORT_BY_DEFAULT = SortUtils.SORT_AMOUNT_DESC;
 
-//    private DBHandler dbHandler;
     private EasyPreferences prefs;
     private DashboardViewModel viewModel;
 
-    private BarChartView graphView;
+    private BarChartView chartView;
     private TextView emptyView;
-    private ScrollView graphLayout;
+    private ScrollView chartLayout;
 
-    private Location filterLocation;
+    LocationsMenuAdapter locationsAdapter;
+
+    private LocationFilter filterLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,24 +47,25 @@ public class DashboardFragment extends Fragment
 
         viewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
 
-//        dbHandler = new DBHandler(getContext());
         prefs = EasyPreferences.getInstance(getContext());
 
-        if (filterLocation == null || !TextUtils.isEmpty(filterLocation.getLocationName())) {
-            filterLocation = new Location();
+        if (filterLocation == null) {
+            filterLocation = new LocationFilter(true);
         }
 
         initLocationFilterMenu(fragmentView);
 
-        graphView = fragmentView.findViewById(R.id.graph);
+        chartView = fragmentView.findViewById(R.id.graph);
         emptyView = fragmentView.findViewById(R.id.empty);
-        graphLayout = fragmentView.findViewById(R.id.graph_layout);
+        chartLayout = fragmentView.findViewById(R.id.graph_layout);
 
-        viewModel.getStockListObservable().observe(getViewLifecycleOwner(),
-                stockItems -> graphView.setData(null)); //todo format data into List<BarChartEntry>, like in #loadData()
+        viewModel.getChartDataObservable().observe(getViewLifecycleOwner(), entries -> {
+            chartView.setData(entries);
+            showEmptyView(entries.size() == 0);
+        });
 
-
-//        loadData();
+        viewModel.getLocationsObservable().observe(getViewLifecycleOwner(),
+                locations -> locationsAdapter.setLocationsList(locations));
 
         return fragmentView;
     }
@@ -118,18 +112,13 @@ public class DashboardFragment extends Fragment
     }
 
     @Override
-    public void onLocationItemClicked(Location location) {
+    public void onLocationItemClicked(LocationFilter location) {
         filterLocation = location;
-        loadData();
-    }
-
-    /**
-     * Sets which property to sort stock by, then reloads the data.
-     */
-    private void setSortMode(int sortMode) {
-        prefs.setInt(R.string.pref_dashboard_sort_by, sortMode);
-        getActivity().invalidateOptionsMenu();
-        loadData();
+        if (filterLocation.filterAll()) {
+            viewModel.filterByLocation(DashboardViewModel.FILTER_ALL);
+        } else {
+            viewModel.filterByLocation(location.getId());
+        }
     }
 
     /**
@@ -138,8 +127,7 @@ public class DashboardFragment extends Fragment
     private void initLocationFilterMenu(View fragmentView) {
         RecyclerView locationsRecyclerView =
                 fragmentView.findViewById(R.id.recycler_view_locations);
-        LocationsMenuAdapter locationsAdapter = new LocationsMenuAdapter(
-                dbHandler.getAllStorageLocationsWithStock(), this);
+        locationsAdapter = new LocationsMenuAdapter(this);
         locationsRecyclerView.setAdapter(locationsAdapter);
 
         RecyclerViewMargin margins = new RecyclerViewMargin(
@@ -151,43 +139,12 @@ public class DashboardFragment extends Fragment
     }
 
     /**
-     * Gets all stock from the database, sorts it and updates the bar chart
-     * to show the updated data.
+     * Sets which property to sort stock by, then reloads the data.
      */
-    private void loadData() {
-
-        // get data from db and sort it
-        List<StockItem> stockList;
-        if (filterLocation == null || TextUtils.isEmpty(filterLocation.getLocationName())) {
-            stockList = SortUtils.mergeSort(
-                    dbHandler.getAllStockByProduct(), StockItem.comparatorId());
-        } else {
-            stockList = SortUtils.mergeSort(
-                    dbHandler.getAllStockFromLocationByProduct(filterLocation.getLocationId()),
-                    StockItem.comparatorId());
-        }
-
-        // handle case for no data
-        showEmptyView(stockList.size() == 0);
-
-        // sort data by chosen sort mode
-        switch (prefs.getInt(R.string.pref_dashboard_sort_by, SORT_BY_DEFAULT)) {
-            case SortUtils.SORT_NAME:
-                stockList = SortUtils.mergeSort(stockList, StockItem.comparatorAlpha());
-                break;
-            case SortUtils.SORT_AMOUNT_DESC:
-                stockList = SortUtils.mergeSort(stockList, StockItem.comparatorAmount(false));
-                break;
-            case SortUtils.SORT_AMOUNT_ASC:
-                stockList = SortUtils.mergeSort(stockList, StockItem.comparatorAmount(true));
-                break;
-        }
-
-        List<ProductQuantity> productsRequiredList = dbHandler.getAllProductsRequired();
-
-        // get data to pass to the chart view
-        List<BarChartEntry> entries = getChartData(stockList, productsRequiredList);
-        graphView.setData(entries);
+    private void setSortMode(int sortMode) {
+        prefs.setInt(R.string.pref_dashboard_sort_by, sortMode);
+        getActivity().invalidateOptionsMenu();
+        viewModel.sortChartData(sortMode);
     }
 
     /**
@@ -196,71 +153,10 @@ public class DashboardFragment extends Fragment
     private void showEmptyView(boolean showEmptyView) {
         if (showEmptyView) {
             emptyView.setVisibility(View.VISIBLE);
-            graphLayout.setVisibility(View.GONE);
+            chartLayout.setVisibility(View.GONE);
         } else {
             emptyView.setVisibility(View.GONE);
-            graphLayout.setVisibility(View.VISIBLE);
+            chartLayout.setVisibility(View.VISIBLE);
         }
-    }
-
-    /**
-     * Gets a list of {@link BarChartEntry} objects to pass to the chart view
-     * from a list of stock items and required products.
-     */
-    private List<BarChartEntry> getChartData(List<StockItem> stockList,
-                                             List<ProductQuantity> productsRequiredList) {
-        List<BarChartEntry> entries = new ArrayList<>();
-
-        for (StockItem stockItem : stockList) {
-            int productId = stockItem.getProduct().getProductId();
-            float amountRequired = 0;
-            for (ProductQuantity productRequired : productsRequiredList) {
-                if (productRequired.getProduct().getProductId() == productId) {
-                    amountRequired += productRequired.getQuantityMass();
-                }
-            }
-            entries.add(new BarChartEntry(stockItem.getProduct().getProductName(),
-                    (float) stockItem.getMass(), amountRequired));
-        }
-
-        List<ProductQuantity> noStockProducts = new ArrayList<>();
-        for (ProductQuantity productRequired : productsRequiredList) {
-            int productId = productRequired.getProduct().getProductId();
-            boolean hasStock = false;
-            for (StockItem stockItem : stockList) {
-                if (stockItem.getProduct().getProductId() == productId) {
-                    hasStock = true;
-                    break;
-                }
-            }
-            // if no stock held
-            if (!hasStock) {
-                // check if same product already required elsewhere
-                boolean isNewEntry = true;
-                for (ProductQuantity productQuantity : noStockProducts) {
-                    if (productQuantity.getProduct().getProductId() == productId) {
-                        productQuantity.setQuantityMass(
-                                productQuantity.getQuantityMass()
-                                        + productRequired.getQuantityMass());
-                        isNewEntry = false;
-                        break;
-                    }
-                }
-                if (isNewEntry) {
-                    noStockProducts.add(new ProductQuantity(
-                            productRequired.getProduct(),
-                            productRequired.getQuantityMass()));
-                }
-            }
-        }
-
-        // add bar for each required product with no stock
-        for (ProductQuantity productRequired : noStockProducts) {
-            entries.add(new BarChartEntry(
-                    productRequired.getProduct().getProductName(),
-                    0, (float) productRequired.getQuantityMass()));
-        }
-
-        return entries;
     }
 }
