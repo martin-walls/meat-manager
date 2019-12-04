@@ -23,7 +23,7 @@ import java.util.List;
 public class ChooseCurrenciesActivity extends AppCompatActivity
         implements CurrencyAdapter.CurrencyAdapterListener {
 
-    private ExchangeDBHandler dbHandler;
+    private ExchangeDBHandler dbHandler; //todo ViewModel
 
     private CurrencyAdapter currencyAdapter;
 
