@@ -62,7 +62,7 @@ public class AddNewMeatTypeDialog extends DialogFragment {
      * database.
      */
     private boolean isNewMeatTypeAlreadyAdded(String meatType) {
-        DBHandler dbHandler = new DBHandler(getContext());
+        DBHandler dbHandler = new DBHandler(getContext()); //todo ViewModel
         List<String> meatTypes = dbHandler.getAllMeatTypes();
         return meatTypes.contains(meatType);
     }
