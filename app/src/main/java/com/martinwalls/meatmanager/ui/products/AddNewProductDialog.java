@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 public class AddNewProductDialog extends DialogFragment {
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler; //todo ViewModel
 
     private AddNewProductListener listener;
 
