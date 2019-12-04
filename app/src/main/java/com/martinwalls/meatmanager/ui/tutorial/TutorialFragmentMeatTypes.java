@@ -39,7 +39,7 @@ public class TutorialFragmentMeatTypes extends Fragment
     private TutorialMeatTypesAdapter adapter;
     private LinearLayoutManager layoutManager;
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler; //todo ViewModel
 
     private TextView title;
     private LinearLayout meatTypesListLayout;
