@@ -59,7 +59,7 @@ public class EditContractActivity extends InputFormActivity
 
     private int editType = EDIT_TYPE_NEW;
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler; //todo ViewModel
     private Contract contractToEdit;
 
     private ProductsAddedAdapter productsAddedAdapter;
