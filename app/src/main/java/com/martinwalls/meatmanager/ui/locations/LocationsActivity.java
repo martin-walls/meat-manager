@@ -23,7 +23,7 @@ import java.util.List;
 public class LocationsActivity extends AppCompatActivity
         implements LocationsAdapter.LocationsAdapterListener {
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler; //todo ViewModel
 
     private LocationsAdapter locationsAdapter;
     private List<Location> locationList = new ArrayList<>();
