@@ -27,7 +27,7 @@ public class EditLocationActivity extends AppCompatActivity
 
     public static final String EXTRA_LOCATION_ID = "location_id";
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler; //todo ViewModel
 
     private Location locationToEdit;
 
