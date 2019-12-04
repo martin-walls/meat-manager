@@ -31,7 +31,7 @@ public class LocationDetailActivity extends AppCompatActivity
 
     public static final int REQUEST_REFRESH_ON_DONE = 1;
 
-    private DBHandler dbHandler;
+    private DBHandler dbHandler; //todo ViewModel
     private Location location;
 
     @Override
