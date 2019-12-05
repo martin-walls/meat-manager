@@ -90,11 +90,10 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        if (orderList != null) {
-            return orderList.size();
-        } else {
+        if (orderList == null) {
             return 0;
         }
+        return orderList.size();
     }
 
     public void setOrderList(List<Order> orderList) {

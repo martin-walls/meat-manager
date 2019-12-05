@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.meatmanager.R;
@@ -27,10 +28,9 @@ import java.util.List;
 public class ContractsFragment extends Fragment
         implements ContractsAdapter.ContractsAdapterListener {
 
-    private DBHandler dbHandler; //todo ViewModel
+    private ContractsViewModel viewModel;
 
     private ContractsAdapter contractsAdapter;
-    private List<Contract> contractList = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -39,24 +39,17 @@ public class ContractsFragment extends Fragment
         getActivity().setTitle(R.string.contracts_title);
         View fragmentView = inflater.inflate(R.layout.fragment_contracts, container, false);
 
-        dbHandler = new DBHandler(getContext());
+        viewModel = ViewModelProviders.of(this).get(ContractsViewModel.class);
 
         initContractsList(fragmentView);
-        loadContracts();
+
+        viewModel.getContractListObservable().observe(getViewLifecycleOwner(),
+                contracts -> contractsAdapter.setContractList(contracts));
 
         FloatingActionButton fab = fragmentView.findViewById(R.id.fab);
         fab.setOnClickListener(v -> startNewContractActivity());
 
         return fragmentView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (dbHandler == null) {
-            dbHandler = new DBHandler(getContext());
-        }
-        loadContracts();
     }
 
     @Override
@@ -69,11 +62,11 @@ public class ContractsFragment extends Fragment
         switch (item.getItemId()) {
             case R.id.action_undo:
                 UndoStack.getInstance().undo(getContext());
-                loadContracts();
+                viewModel.loadContracts();
                 return true;
             case R.id.action_redo:
                 UndoStack.getInstance().redo(getContext());
-                loadContracts();
+                viewModel.loadContracts();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -93,32 +86,20 @@ public class ContractsFragment extends Fragment
     }
 
     /**
-     * Initialises the contracts list. Doesn't load any data, this should be
-     * done by calling {@link #loadContracts()}.
+     * Initialises the contracts list.
      */
     private void initContractsList(View fragmentView) {
         CustomRecyclerView recyclerView = fragmentView.findViewById(R.id.recycler_view);
         TextView emptyView = fragmentView.findViewById(R.id.empty);
         recyclerView.setEmptyView(emptyView);
 
-        contractsAdapter = new ContractsAdapter(contractList, this);
+        contractsAdapter = new ContractsAdapter(this);
         recyclerView.setAdapter(contractsAdapter);
 
         RecyclerViewDivider recyclerViewDivider =
                 new RecyclerViewDivider(getContext(), R.drawable.divider_thin);
         recyclerView.addItemDecoration(recyclerViewDivider);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-    }
-
-    /**
-     * Gets all contracts in the database, sorts them and updates the view to
-     * show them.
-     */
-    private void loadContracts() {
-        contractList.clear();
-        contractList.addAll(SortUtils.mergeSort(dbHandler.getAllContracts(),
-                Contract.comparatorDate()));
-        contractsAdapter.notifyDataSetChanged();
     }
 
     /**

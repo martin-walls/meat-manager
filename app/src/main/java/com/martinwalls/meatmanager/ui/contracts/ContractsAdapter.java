@@ -38,8 +38,7 @@ public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.View
         }
     }
 
-    ContractsAdapter(List<Contract> contractList, ContractsAdapterListener listener) {
-        this.contractList = contractList;
+    ContractsAdapter(ContractsAdapterListener listener) {
         this.listener = listener;
     }
 
@@ -108,7 +107,15 @@ public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.View
 
     @Override
     public int getItemCount() {
+        if (contractList == null) {
+            return 0;
+        }
         return contractList.size();
+    }
+
+    public void setContractList(List<Contract> contractList) {
+        this.contractList = contractList;
+        notifyDataSetChanged();
     }
 
     /**
