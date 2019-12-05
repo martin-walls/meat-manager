@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.martinwalls.meatmanager.R;
-import com.martinwalls.meatmanager.data.viewmodel.DashboardViewModel;
 import com.martinwalls.meatmanager.ui.misc.RecyclerViewMargin;
 import com.martinwalls.meatmanager.util.EasyPreferences;
 import com.martinwalls.meatmanager.util.SortUtils;

@@ -16,16 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.meatmanager.R;
-import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Order;
-import com.martinwalls.meatmanager.data.viewmodel.OrdersViewModel;
 import com.martinwalls.meatmanager.ui.misc.CustomRecyclerView;
 import com.martinwalls.meatmanager.ui.misc.RecyclerViewDivider;
-import com.martinwalls.meatmanager.util.SortUtils;
 import com.martinwalls.meatmanager.util.undo.UndoStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class OrdersFragment extends Fragment
         implements OrdersAdapter.OrdersAdapterListener {

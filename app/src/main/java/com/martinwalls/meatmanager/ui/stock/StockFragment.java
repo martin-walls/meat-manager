@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.models.StockItem;
-import com.martinwalls.meatmanager.data.viewmodel.StockViewModel;
 import com.martinwalls.meatmanager.ui.locations.LocationsActivity;
 import com.martinwalls.meatmanager.ui.meatTypes.EditMeatTypesActivity;
 import com.martinwalls.meatmanager.ui.misc.CustomRecyclerView;

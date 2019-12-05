@@ -1,4 +1,4 @@
-package com.martinwalls.meatmanager.data.viewmodel;
+package com.martinwalls.meatmanager.ui.stock;
 
 import android.app.Application;
 
