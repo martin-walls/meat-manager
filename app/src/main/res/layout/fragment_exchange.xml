@@ -116,7 +116,7 @@
 
         </LinearLayout>
 
-        <com.martinwalls.meatmanager.ui.misc.CustomRecyclerView
+        <com.martinwalls.meatmanager.ui.common.recyclerview.CustomRecyclerView
             android:id="@+id/exchange_history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

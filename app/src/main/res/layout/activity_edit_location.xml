@@ -14,7 +14,7 @@
         android:layout_marginTop="@dimen/screen_margin_top"
         android:layout_marginEnd="@dimen/screen_margin_horizontal"
         android:orientation="vertical"
-        tools:context=".ui.locations.NewLocationActivity"
+        tools:context=".ui.locations.edit.NewLocationActivity"
         >
 
         <com.google.android.material.textfield.TextInputLayout

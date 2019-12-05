@@ -7,10 +7,10 @@
     android:divider="@drawable/divider_thick"
     android:orientation="vertical"
     android:showDividers="middle"
-    tools:context=".ui.exchange.ChooseCurrenciesActivity"
+    tools:context=".ui.exchange.currencies.ChooseCurrenciesActivity"
     >
 
-    <com.martinwalls.meatmanager.ui.misc.CustomRecyclerView
+    <com.martinwalls.meatmanager.ui.common.recyclerview.CustomRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

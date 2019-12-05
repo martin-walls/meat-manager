@@ -10,8 +10,8 @@ import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Contract;
 import com.martinwalls.meatmanager.data.models.Order;
 import com.martinwalls.meatmanager.data.models.ProductQuantity;
-import com.martinwalls.meatmanager.ui.contracts.ContractDetailActivity;
-import com.martinwalls.meatmanager.ui.orders.OrderDetailActivity;
+import com.martinwalls.meatmanager.ui.contracts.detail.ContractDetailActivity;
+import com.martinwalls.meatmanager.ui.orders.detail.OrderDetailActivity;
 
 import java.util.List;
 

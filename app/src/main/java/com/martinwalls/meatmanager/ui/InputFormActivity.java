@@ -14,8 +14,9 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.meatmanager.R;
-import com.martinwalls.meatmanager.ui.misc.AddNewTextView;
+import com.martinwalls.meatmanager.ui.common.AddNewTextView;
 import com.martinwalls.meatmanager.data.models.SearchItem;
+import com.martinwalls.meatmanager.ui.common.adapter.SearchItemAdapter;
 import com.martinwalls.meatmanager.util.SimpleTextWatcher;
 
 import java.util.ArrayList;

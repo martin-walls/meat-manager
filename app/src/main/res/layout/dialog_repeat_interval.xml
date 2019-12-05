@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.contracts.RepeatIntervalDialog"
+    tools:context=".ui.contracts.edit.RepeatIntervalDialog"
     >
 
     <LinearLayout

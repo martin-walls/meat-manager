@@ -38,7 +38,7 @@
 
 
         <activity
-            android:name="com.martinwalls.meatmanager.ui.stock.StockDetailActivity"
+            android:name="com.martinwalls.meatmanager.ui.stock.detail.StockDetailActivity"
             android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity"
             />
 
@@ -55,21 +55,21 @@
         </activity>
 
         <activity
-            android:name="com.martinwalls.meatmanager.ui.contracts.ContractDetailActivity"
+            android:name="com.martinwalls.meatmanager.ui.contracts.detail.ContractDetailActivity"
             android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity"
             />
 
-        <activity android:name="com.martinwalls.meatmanager.ui.contracts.EditContractActivity" />
+        <activity android:name="com.martinwalls.meatmanager.ui.contracts.edit.EditContractActivity" />
 
         <activity
-            android:name="com.martinwalls.meatmanager.ui.orders.OrderDetailActivity"
+            android:name="com.martinwalls.meatmanager.ui.orders.detail.OrderDetailActivity"
             android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity"
             />
 
-        <activity android:name="com.martinwalls.meatmanager.ui.locations.NewLocationActivity" />
+        <activity android:name="com.martinwalls.meatmanager.ui.locations.edit.NewLocationActivity" />
 
         <activity
-            android:name="com.martinwalls.meatmanager.ui.locations.EditLocationActivity"
+            android:name="com.martinwalls.meatmanager.ui.locations.edit.EditLocationActivity"
             android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity"
             />
 
@@ -84,17 +84,17 @@
             />
 
         <activity
-            android:name="com.martinwalls.meatmanager.ui.locations.LocationsActivity"
+            android:name="com.martinwalls.meatmanager.ui.locations.list.LocationsActivity"
             android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity"
             />
 
         <activity
-            android:name="com.martinwalls.meatmanager.ui.locations.LocationDetailActivity"
-            android:parentActivityName="com.martinwalls.meatmanager.ui.locations.LocationsActivity"
+            android:name="com.martinwalls.meatmanager.ui.locations.detail.LocationDetailActivity"
+            android:parentActivityName="com.martinwalls.meatmanager.ui.locations.list.LocationsActivity"
             />
 
         <activity
-            android:name="com.martinwalls.meatmanager.ui.exchange.ChooseCurrenciesActivity"
+            android:name="com.martinwalls.meatmanager.ui.exchange.currencies.ChooseCurrenciesActivity"
             android:parentActivityName="com.martinwalls.meatmanager.ui.MainActivity"
             >
             <meta-data
@@ -103,9 +103,9 @@
                 />
         </activity>
 
-        <activity android:name="com.martinwalls.meatmanager.ui.stock.EditStockActivity" />
+        <activity android:name="com.martinwalls.meatmanager.ui.stock.edit.EditStockActivity" />
 
-        <activity android:name="com.martinwalls.meatmanager.ui.orders.EditOrderActivity" />
+        <activity android:name="com.martinwalls.meatmanager.ui.orders.edit.EditOrderActivity" />
 
         <activity
             android:name=".ui.tutorial.TutorialActivity"

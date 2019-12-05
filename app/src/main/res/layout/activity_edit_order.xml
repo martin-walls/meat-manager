@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.orders.EditOrderActivity"
+    tools:context=".ui.orders.edit.EditOrderActivity"
     >
 
     <ScrollView
@@ -205,7 +205,7 @@
         android:visibility="gone"
         >
 
-        <com.martinwalls.meatmanager.ui.misc.AddNewTextView
+        <com.martinwalls.meatmanager.ui.common.AddNewTextView
             android:id="@+id/add_new"
             style="@style/SearchResultsItem.Selectable.AddNew"
             android:layout_width="match_parent"
@@ -216,7 +216,7 @@
             android:paddingBottom="16dp"
             />
 
-        <com.martinwalls.meatmanager.ui.misc.CustomRecyclerView
+        <com.martinwalls.meatmanager.ui.common.recyclerview.CustomRecyclerView
             android:id="@+id/recycler_view_results"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

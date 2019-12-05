@@ -16,12 +16,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.martinwalls.meatmanager.R;
-import com.martinwalls.meatmanager.ui.contracts.ContractsFragment;
+import com.martinwalls.meatmanager.ui.contracts.main.ContractsFragment;
 import com.martinwalls.meatmanager.ui.dashboard.DashboardFragment;
-import com.martinwalls.meatmanager.ui.exchange.ExchangeFragment;
-import com.martinwalls.meatmanager.ui.orders.OrdersFragment;
+import com.martinwalls.meatmanager.ui.exchange.main.ExchangeFragment;
+import com.martinwalls.meatmanager.ui.orders.main.OrdersFragment;
 import com.martinwalls.meatmanager.ui.settings.SettingsActivity;
-import com.martinwalls.meatmanager.ui.stock.StockFragment;
+import com.martinwalls.meatmanager.ui.stock.main.StockFragment;
 import com.martinwalls.meatmanager.ui.tutorial.TutorialActivity;
 import com.martinwalls.meatmanager.util.EasyPreferences;
 

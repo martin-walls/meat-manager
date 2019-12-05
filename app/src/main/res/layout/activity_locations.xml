@@ -6,10 +6,10 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.locations.LocationsActivity"
+    tools:context=".ui.locations.list.LocationsActivity"
     >
 
-    <com.martinwalls.meatmanager.ui.misc.CustomRecyclerView
+    <com.martinwalls.meatmanager.ui.common.recyclerview.CustomRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
