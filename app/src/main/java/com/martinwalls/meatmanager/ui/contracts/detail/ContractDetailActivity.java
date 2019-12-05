@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.meatmanager.R;
@@ -34,8 +35,12 @@ public class ContractDetailActivity extends AppCompatActivity
 
     private static final int REQUEST_REFRESH_ON_DONE = 1;
 
-    private DBHandler dbHandler; //todo ViewModel
-    private Contract contract;
+    private ContractDetailViewModel viewModel;
+
+    private ProductsAddedAdapter productsAdapter;
+    private RelatedStockAdapter relatedStockAdapter;
+
+    private int contractId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,29 +49,34 @@ public class ContractDetailActivity extends AppCompatActivity
         getSupportActionBar().setTitle(R.string.contract_details_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        dbHandler = new DBHandler(this);
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            int contractId = extras.getInt(EXTRA_CONTRACT_ID);
-            contract = dbHandler.getContract(contractId);
+            contractId = extras.getInt(EXTRA_CONTRACT_ID);
         }
+
+        ContractDetailViewModelFactory factory =
+                new ContractDetailViewModelFactory(getApplication(), contractId);
+        viewModel = ViewModelProviders.of(this, factory)
+                .get(ContractDetailViewModel.class);
 
         initProductsAddedView();
         initRelatedStockView();
 
         TextView destination = findViewById(R.id.destination);
-        destination.setOnClickListener(v -> openLocationDetailPage(contract.getDestId()));
 
-        fillFields();
-    }
+        viewModel.getContract().observe(this, contract -> {
+            contractId = contract.getContractId();
+            productsAdapter.setProductList(contract.getProductList());
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (dbHandler == null) {
-            dbHandler = new DBHandler(this);
-        }
+            setDestinationText(contract.getDestName());
+            destination.setOnClickListener(v -> openLocationDetailPage(contract.getDestId()));
+            setRepeatText(contract.getRepeatInterval(), contract.getRepeatOn());
+            setNextRepeatText(contract.getDaysToNextRepeat());
+            setReminderText(contract.getReminder());
+        });
+
+        viewModel.getRelatedStock().observe(this,
+                stockItems -> relatedStockAdapter.setRelatedStockList(stockItems));
     }
 
     @Override
@@ -85,8 +95,7 @@ public class ContractDetailActivity extends AppCompatActivity
                 Intent editIntent = new Intent(this, EditContractActivity.class);
                 editIntent.putExtra(EditContractActivity.EXTRA_EDIT_TYPE,
                         EditContractActivity.EDIT_TYPE_EDIT);
-                editIntent.putExtra(EditContractActivity.EXTRA_CONTRACT_ID,
-                        contract.getContractId());
+                editIntent.putExtra(EditContractActivity.EXTRA_CONTRACT_ID, contractId);
                 startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
                 return true;
             case android.R.id.home:
@@ -106,17 +115,17 @@ public class ContractDetailActivity extends AppCompatActivity
     }
 
     /**
-     * Deletes the {@link Contract} being edited from the database. This is 
+     * Deletes the {@link Contract} being edited. This is
      * called when the user confirms the delete action from the 
      * {@link ConfirmDeleteDialog}.
      */
     @Override
     public void onConfirmDelete() {
-        boolean success = dbHandler.deleteContract(contract.getContractId());
+        boolean success = viewModel.deleteContract();
+
         if (success) {
             Toast.makeText(this, R.string.db_delete_contract_success, Toast.LENGTH_SHORT)
                     .show();
-            UndoStack.getInstance().push(new DeleteContractAction(contract));
             finish();
         } else {
             Toast.makeText(this, R.string.db_delete_contract_error, Toast.LENGTH_SHORT)
@@ -153,8 +162,7 @@ public class ContractDetailActivity extends AppCompatActivity
      * Initialises view to show all products added to this contract.
      */
     private void initProductsAddedView() {
-        ProductsAddedAdapter productsAdapter =
-                new ProductsAddedAdapter(contract.getProductList());
+        productsAdapter = new ProductsAddedAdapter();
         RecyclerView productsRecyclerView = findViewById(R.id.recycler_view_products);
         productsRecyclerView.setAdapter(productsAdapter);
         productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -168,69 +176,12 @@ public class ContractDetailActivity extends AppCompatActivity
         TextView relatedStockTitle = findViewById(R.id.related_stock_title);
         relatedStockTitle.setText(R.string.related_stock_title);
 
-        List<RelatedStock> relatedStockList = getRelatedStock();
-
-        RelatedStockAdapter relatedStockAdapter
-                = new RelatedStockAdapter(relatedStockList, this);
+        relatedStockAdapter = new RelatedStockAdapter(this);
         RecyclerView relatedStockRecyclerView = findViewById(R.id.recycler_view_related_stock);
         relatedStockRecyclerView.setAdapter(relatedStockAdapter);
         relatedStockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // disable animations for layout changes
         relatedStockRecyclerView.setItemAnimator(null);
-    }
-
-    /**
-     * Retrieves all stock related to this contract as {@link RelatedStock}
-     * objects.
-     */
-    private List<RelatedStock> getRelatedStock() {
-        List<StockItem> stockForContract = SortUtils.mergeSort(
-                dbHandler.getAllStockForContract(contract.getContractId()),
-                StockItem.comparatorLocation());
-
-        // get list of related stock by product, with child stock items for each location
-        List<RelatedStock> relatedStockList = new ArrayList<>();
-        int thisProductId;
-        int lastProductId = -1;
-        for (StockItem stockItem : stockForContract) {
-            thisProductId = stockItem.getProduct().getProductId();
-            if (relatedStockList.size() == 0 || thisProductId != lastProductId) {
-                RelatedStock relatedStock = new RelatedStock();
-                relatedStock.setProduct(stockItem.getProduct());
-                relatedStock.addStockItem(stockItem);
-                relatedStockList.add(relatedStock);
-            } else {
-                relatedStockList.get(relatedStockList.size() - 1).addStockItem(stockItem);
-            }
-            lastProductId = thisProductId;
-        }
-
-        // show items for products that have no stock
-        for (ProductQuantity productQuantity : contract.getProductList()) {
-            boolean hasRelatedStock = false;
-            for (RelatedStock relatedStock : relatedStockList) {
-                if (relatedStock.getProduct().getProductId()
-                        == productQuantity.getProduct().getProductId()) {
-                    hasRelatedStock = true;
-                    break;
-                }
-            }
-            if (!hasRelatedStock) {
-                relatedStockList.add(new RelatedStock(productQuantity.getProduct()));
-            }
-        }
-
-        return relatedStockList;
-    }
-
-    /**
-     * Initialises fields with data from the {@link Contract} being shown.
-     */
-    private void fillFields() {
-        setDestinationText(contract.getDestName());
-        setRepeatText(contract.getRepeatInterval());
-        setNextRepeatText(contract.getDaysToNextRepeat());
-        setReminderText(contract.getReminder());
     }
 
     /**
@@ -245,15 +196,15 @@ public class ContractDetailActivity extends AppCompatActivity
      * Sets text of the repeat field, showing the repeat interval and
      * repeat on.
      */
-    private void setRepeatText(Interval repeatInterval) {
+    private void setRepeatText(Interval repeatInterval, int repeatOn) {
         TextView txtRepeat = findViewById(R.id.repeat);
         String repeatStr;
         String repeatOnStr;
         if (repeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
             repeatOnStr = getResources()
-                    .getStringArray(R.array.weekdays)[contract.getRepeatOn() - 1];
+                    .getStringArray(R.array.weekdays)[repeatOn - 1];
         } else {
-            repeatOnStr = "day " + contract.getRepeatOn();
+            repeatOnStr = "day " + repeatOn;
         }
         if (repeatInterval.getValue() == 1) {
             repeatStr = getString(R.string.contracts_repeat_display_one,
@@ -280,8 +231,8 @@ public class ContractDetailActivity extends AppCompatActivity
                 nextRepeat.setText(R.string.contracts_next_repeat_tomorrow);
                 break;
             default:
-                nextRepeat.setText(getString(R.string.contracts_next_repeat_on,
-                        contract.getDaysToNextRepeat()));
+                nextRepeat.setText(getString(
+                        R.string.contracts_next_repeat_on, daysToNextRepeat));
                 break;
         }
     }

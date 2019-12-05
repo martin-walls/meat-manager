@@ -97,6 +97,11 @@ public class RelatedStockAdapter extends RecyclerView.Adapter<RelatedStockAdapte
         };
     }
 
+    public RelatedStockAdapter(RelatedStockListener listener) {
+        this.listener = listener;
+    }
+
+    @Deprecated
     public RelatedStockAdapter(List<RelatedStock> relatedStockList,
                                RelatedStockListener listener) {
         this.relatedStockList = relatedStockList;
@@ -198,7 +203,13 @@ public class RelatedStockAdapter extends RecyclerView.Adapter<RelatedStockAdapte
 
     @Override
     public int getItemCount() {
+        if (relatedStockList == null) return 0;
         return relatedStockList.size();
+    }
+
+    public void setRelatedStockList(List<RelatedStock> relatedStockList) {
+        this.relatedStockList = relatedStockList;
+        notifyDataSetChanged();
     }
 
     /**

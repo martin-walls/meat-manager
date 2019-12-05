@@ -52,21 +52,40 @@ public class ProductsAddedAdapter
     /**
      * Constructor for when both buttons are hidden, so no listener is required.
      */
-    public ProductsAddedAdapter(List<ProductQuantity> productList) {
-        this.productList = productList;
+    public ProductsAddedAdapter() {
         showEditBtn = false;
         showDeleteBtn = false;
     }
 
-    public ProductsAddedAdapter(List<ProductQuantity> productList,
-                                ProductsAddedAdapterListener listener) {
-        this.productList = productList;
+    public ProductsAddedAdapter(ProductsAddedAdapterListener listener) {
         this.listener = listener;
     }
 
     /**
      * Constructor to set which buttons should be showing.
      */
+    public ProductsAddedAdapter(ProductsAddedAdapterListener listener,
+                                 boolean showEditBtn, boolean showDeleteBtn) {
+        this.listener = listener;
+        this.showEditBtn = showEditBtn;
+        this.showDeleteBtn = showDeleteBtn;
+    }
+
+    @Deprecated
+    public ProductsAddedAdapter(List<ProductQuantity> productList) {
+        this.productList = productList;
+        showEditBtn = false;
+        showDeleteBtn = false;
+    }
+
+    @Deprecated
+    public ProductsAddedAdapter(List<ProductQuantity> productList,
+                                ProductsAddedAdapterListener listener) {
+        this.productList = productList;
+        this.listener = listener;
+    }
+
+    @Deprecated
     public ProductsAddedAdapter(List<ProductQuantity> productList,
                                 ProductsAddedAdapterListener listener,
                                 boolean showEditBtn, boolean showDeleteBtn) {
@@ -111,7 +130,13 @@ public class ProductsAddedAdapter
 
     @Override
     public int getItemCount() {
+        if (productList == null) return 0;
         return productList.size();
+    }
+
+    public void setProductList(List<ProductQuantity> productList) {
+        this.productList = productList;
+        notifyDataSetChanged();
     }
 
     /**
