@@ -6,6 +6,8 @@ import android.util.TypedValue;
 import androidx.annotation.AttrRes;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 public final class Utils {
     // 1 lb ~= 0.45359237 kgs
@@ -64,14 +66,16 @@ public final class Utils {
      * Rounds {@code value} to {@code dp} decimal places.
      */
     public static String roundToDp(double value, int dp) {
+        // use UK locale when formatting decimals (use '.' not ',')
+        DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(Locale.UK);
         if (dp == 0) {
-            return new DecimalFormat("#").format(value);
+            return new DecimalFormat("#", symbols).format(value);
         }
         StringBuilder pattern = new StringBuilder("#.0");
         for (int i = 0; i < dp - 1; i++) {
             pattern.append("#");
         }
-        return new DecimalFormat(pattern.toString()).format(value);
+        return new DecimalFormat(pattern.toString(), symbols).format(value);
     }
 
     /**
