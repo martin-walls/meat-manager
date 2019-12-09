@@ -1,6 +1,7 @@
 package com.martinwalls.meatmanager.ui;
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -8,6 +9,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.CallSuper;
 import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.transition.Transition;
 import androidx.transition.TransitionInflater;
 import androidx.transition.TransitionManager;
@@ -31,15 +33,42 @@ import java.util.List;
 public abstract class InputFormActivity extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener {
 
+    private SearchItemViewModel viewModel;
+
     private SearchItemAdapter searchItemAdapter;
 
     private HashMap<String, Integer> viewsToHide = new HashMap<>();
+    @Deprecated
     private List<SearchItem> searchItemList = new ArrayList<>();
     private String currentSearchType;
 
     private ViewGroup rootView;
     private AddNewTextView addNewView;
     private LinearLayout searchResultsLayout;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        searchItemAdapter = new SearchItemAdapter(this);
+    }
+
+
+    protected final <T extends SearchItemViewModel> void setSearchItemViewModel(
+            Class<T> viewModelClass) {
+        viewModel = ViewModelProviders.of(this).get(viewModelClass);
+
+        viewModel.getSearchItemList().observe(this,
+                searchItems -> searchItemAdapter.setSearchItems(searchItems));
+    }
+
+    protected final void setViewModel(SearchItemViewModel viewModel) {
+        this.viewModel = viewModel;
+
+        viewModel.getSearchItemList().observe(this,
+                searchItems -> searchItemAdapter.setSearchItems(searchItems));
+    }
 
     /**
      * This is called when a search result is clicked when the search view is
@@ -54,6 +83,7 @@ public abstract class InputFormActivity extends AppCompatActivity
      * opened for a particular field.
      */
     @CallSuper
+    @Deprecated
     protected void loadSearchItems(String searchType) {
         searchItemList.clear();
     }
@@ -67,9 +97,14 @@ public abstract class InputFormActivity extends AppCompatActivity
 
     /**
      * Stores a reference to the "Add new item" button in search view.
-     *
-     * @param id The ID of the View.
      */
+    protected final void setAddNewView(AddNewTextView view) {
+        addNewView = view;
+        addNewView.setOnClickListener(v ->
+                addNewItemFromSearch(addNewView.getSearchItemType()));
+    }
+
+    @Deprecated
     protected final void setAddNewView(@IdRes int id) {
         addNewView = findViewById(id);
         addNewView.setOnClickListener(v ->
@@ -85,18 +120,24 @@ public abstract class InputFormActivity extends AppCompatActivity
 
     /**
      * Stores a reference to the root layout of the activity.
-     *
-     * @param id The ID of the root layout.
      */
+    protected final void setRootView(ViewGroup viewGroup) {
+        rootView = viewGroup;
+    }
+
+    @Deprecated
     protected final void setRootView(@IdRes int id) {
         rootView = findViewById(id);
     }
 
     /**
      * Stores a reference to the search results layout.
-     *
-     * @param id The ID of the layout.
      */
+    protected final void setSearchResultsLayout(LinearLayout view) {
+        searchResultsLayout = view;
+    }
+
+    @Deprecated
     protected final void setSearchResultsLayout(@IdRes int id) {
         searchResultsLayout = findViewById(id);
     }
@@ -119,6 +160,7 @@ public abstract class InputFormActivity extends AppCompatActivity
     /**
      * Returns the list of search items shown in the search view.
      */
+    @Deprecated
     protected final List<SearchItem> getSearchItemList() {
         return searchItemList;
     }
@@ -127,6 +169,7 @@ public abstract class InputFormActivity extends AppCompatActivity
      * Adds a {@link SearchItem} to the search items list to be shown in
      * the search results layout.
      */
+    @Deprecated
     protected final void addSearchItemToList(SearchItem item) {
         searchItemList.add(item);
     }
@@ -143,6 +186,7 @@ public abstract class InputFormActivity extends AppCompatActivity
      */
     protected final void setCurrentSearchType(String currentSearchType) {
         this.currentSearchType = currentSearchType;
+        searchItemAdapter.setSearchItemType(currentSearchType);
     }
 
     /**
@@ -222,10 +266,11 @@ public abstract class InputFormActivity extends AppCompatActivity
             }
         }
 
-        loadSearchItems(inputName);
+//        loadSearchItems(inputName);
+        viewModel.loadSearchItems(inputName);
+
         currentSearchType = inputName;
         searchItemAdapter.setSearchItemType(currentSearchType);
-        searchItemAdapter.notifyDataSetChanged();
 
         // filter data at start in case text already entered
         TextInputEditText editText = (TextInputEditText) getCurrentFocus();

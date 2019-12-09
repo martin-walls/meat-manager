@@ -12,20 +12,15 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.meatmanager.R;
-import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.*;
+import com.martinwalls.meatmanager.databinding.ActivityContractDetailBinding;
+import com.martinwalls.meatmanager.databinding.ItemSectionDividerBinding;
 import com.martinwalls.meatmanager.ui.common.adapter.ProductsAddedAdapter;
 import com.martinwalls.meatmanager.ui.common.adapter.RelatedStockAdapter;
 import com.martinwalls.meatmanager.ui.contracts.edit.EditContractActivity;
 import com.martinwalls.meatmanager.ui.locations.detail.LocationDetailActivity;
 import com.martinwalls.meatmanager.ui.common.dialog.ConfirmDeleteDialog;
 import com.martinwalls.meatmanager.ui.stock.detail.StockDetailActivity;
-import com.martinwalls.meatmanager.util.SortUtils;
-import com.martinwalls.meatmanager.util.undo.UndoStack;
-import com.martinwalls.meatmanager.util.undo.contract.DeleteContractAction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ContractDetailActivity extends AppCompatActivity
         implements ConfirmDeleteDialog.ConfirmDeleteListener,
@@ -37,6 +32,8 @@ public class ContractDetailActivity extends AppCompatActivity
 
     private ContractDetailViewModel viewModel;
 
+    private ActivityContractDetailBinding binding;
+
     private ProductsAddedAdapter productsAdapter;
     private RelatedStockAdapter relatedStockAdapter;
 
@@ -45,7 +42,8 @@ public class ContractDetailActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contract_detail);
+        binding = ActivityContractDetailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         getSupportActionBar().setTitle(R.string.contract_details_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -62,14 +60,13 @@ public class ContractDetailActivity extends AppCompatActivity
         initProductsAddedView();
         initRelatedStockView();
 
-        TextView destination = findViewById(R.id.destination);
-
         viewModel.getContract().observe(this, contract -> {
             contractId = contract.getContractId();
             productsAdapter.setProductList(contract.getProductList());
 
-            setDestinationText(contract.getDestName());
-            destination.setOnClickListener(v -> openLocationDetailPage(contract.getDestId()));
+            binding.destination.setText(contract.getDestName());
+            binding.destination.setOnClickListener(
+                    v -> openLocationDetailPage(contract.getDestId()));
             setRepeatText(contract.getRepeatInterval(), contract.getRepeatOn());
             setNextRepeatText(contract.getDaysToNextRepeat());
             setReminderText(contract.getReminder());
@@ -163,9 +160,8 @@ public class ContractDetailActivity extends AppCompatActivity
      */
     private void initProductsAddedView() {
         productsAdapter = new ProductsAddedAdapter();
-        RecyclerView productsRecyclerView = findViewById(R.id.recycler_view_products);
-        productsRecyclerView.setAdapter(productsAdapter);
-        productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerViewProducts.setAdapter(productsAdapter);
+        binding.recyclerViewProducts.setLayoutManager(new LinearLayoutManager(this));
     }
 
     /**
@@ -173,23 +169,13 @@ public class ContractDetailActivity extends AppCompatActivity
      */
     private void initRelatedStockView() {
         // set section title
-        TextView relatedStockTitle = findViewById(R.id.related_stock_title);
-        relatedStockTitle.setText(R.string.related_stock_title);
+//        binding.relatedStockTitle.dividerText.setText(R.string.related_stock_title); //fixme
 
         relatedStockAdapter = new RelatedStockAdapter(this);
-        RecyclerView relatedStockRecyclerView = findViewById(R.id.recycler_view_related_stock);
-        relatedStockRecyclerView.setAdapter(relatedStockAdapter);
-        relatedStockRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerViewRelatedStock.setAdapter(relatedStockAdapter);
+        binding.recyclerViewRelatedStock.setLayoutManager(new LinearLayoutManager(this));
         // disable animations for layout changes
-        relatedStockRecyclerView.setItemAnimator(null);
-    }
-
-    /**
-     * Sets text of the destination field.
-     */
-    private void setDestinationText(String value) {
-        TextView destination = findViewById(R.id.destination);
-        destination.setText(value);
+        binding.recyclerViewRelatedStock.setItemAnimator(null);
     }
 
     /**
@@ -197,7 +183,6 @@ public class ContractDetailActivity extends AppCompatActivity
      * repeat on.
      */
     private void setRepeatText(Interval repeatInterval, int repeatOn) {
-        TextView txtRepeat = findViewById(R.id.repeat);
         String repeatStr;
         String repeatOnStr;
         if (repeatInterval.getUnit() == Interval.TimeUnit.WEEK) {
@@ -214,7 +199,7 @@ public class ContractDetailActivity extends AppCompatActivity
                     repeatInterval.getValue(),
                     repeatInterval.getUnit().name().toLowerCase(), repeatOnStr);
         }
-        txtRepeat.setText(repeatStr);
+        binding.repeatInterval.setText(repeatStr);
     }
 
     /**
@@ -222,16 +207,15 @@ public class ContractDetailActivity extends AppCompatActivity
      * the next repeat is.
      */
     private void setNextRepeatText(int daysToNextRepeat) {
-        TextView nextRepeat = findViewById(R.id.next_repeat);
         switch (daysToNextRepeat) {
             case 0:
-                nextRepeat.setText(R.string.contracts_next_repeat_today);
+                binding.nextRepeat.setText(R.string.contracts_next_repeat_today);
                 break;
             case 1:
-                nextRepeat.setText(R.string.contracts_next_repeat_tomorrow);
+                binding.nextRepeat.setText(R.string.contracts_next_repeat_tomorrow);
                 break;
             default:
-                nextRepeat.setText(getString(
+                binding.nextRepeat.setText(getString(
                         R.string.contracts_next_repeat_on, daysToNextRepeat));
                 break;
         }
@@ -241,13 +225,12 @@ public class ContractDetailActivity extends AppCompatActivity
      * Sets text of the reminder field.
      */
     private void setReminderText(int reminderDaysBefore) {
-        TextView reminder = findViewById(R.id.reminder);
         if (reminderDaysBefore > 0) {
-            reminder.setText(getResources()
+            binding.reminder.setText(getResources()
                     .getQuantityString(R.plurals.contract_reminder_display,
                             reminderDaysBefore, reminderDaysBefore));
         } else {
-            reminder.setText(R.string.contract_reminder_display_off);
+            binding.reminder.setText(R.string.contract_reminder_display_off);
         }
     }
 }

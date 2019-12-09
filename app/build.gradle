@@ -35,6 +35,9 @@ android {
             path file('CMakeLists.txt')
         }
     }
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {

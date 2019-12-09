@@ -16,6 +16,7 @@ public class ContractDetailViewModelFactory implements ViewModelProvider.Factory
         this.extra = extra;
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

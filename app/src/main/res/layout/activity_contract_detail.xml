@@ -40,7 +40,7 @@
 
     <!-- Repeat on -->
     <TextView
-        android:id="@+id/repeat"
+        android:id="@+id/repeat_interval"
         style="@style/DetailsText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

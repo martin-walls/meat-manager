@@ -34,6 +34,11 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         }
     }
 
+    public SearchItemAdapter(SearchItemAdapterListener listener) {
+        this.listener = listener;
+    }
+
+    @Deprecated
     public SearchItemAdapter(List<SearchItem> itemList, String searchItemType,
                              SearchItemAdapterListener listener) {
         this.itemList = itemList;
@@ -58,6 +63,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
 
     @Override
     public int getItemCount() {
+        if (itemListFiltered == null) return 0;
         return itemListFiltered.size();
     }
 
@@ -92,8 +98,15 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
         };
     }
 
+    public void setSearchItems(List<SearchItem> itemList) {
+        this.itemList = itemList;
+        this.itemListFiltered = itemList;
+        notifyDataSetChanged();
+    }
+
     public void setSearchItemType(String searchItemType) {
         this.searchItemType = searchItemType;
+        notifyDataSetChanged();
     }
 
     /**
