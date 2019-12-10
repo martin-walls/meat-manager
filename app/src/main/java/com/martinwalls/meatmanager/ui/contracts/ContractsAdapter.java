@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.martinwalls.meatmanager.ui.ProductsQuantityAdapter;
+import com.martinwalls.meatmanager.ui.common.adapter.ProductsQuantityAdapter;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.models.Contract;
 import com.martinwalls.meatmanager.data.models.Interval;

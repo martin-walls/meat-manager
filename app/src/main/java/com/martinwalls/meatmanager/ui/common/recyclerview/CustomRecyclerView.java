@@ -1,4 +1,4 @@
-package com.martinwalls.meatmanager.ui.misc;
+package com.martinwalls.meatmanager.ui.common.recyclerview;
 
 import android.content.Context;
 import android.util.AttributeSet;

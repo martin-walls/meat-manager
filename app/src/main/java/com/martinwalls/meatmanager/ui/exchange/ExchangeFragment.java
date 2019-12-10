@@ -31,7 +31,7 @@ import com.martinwalls.meatmanager.data.db.ExchangeDBHandler;
 import com.martinwalls.meatmanager.data.models.Conversion;
 import com.martinwalls.meatmanager.data.models.Currency;
 import com.martinwalls.meatmanager.ui.MainActivity;
-import com.martinwalls.meatmanager.ui.misc.CustomRecyclerView;
+import com.martinwalls.meatmanager.ui.common.recyclerview.CustomRecyclerView;
 import com.martinwalls.meatmanager.util.EasyPreferences;
 import com.martinwalls.meatmanager.util.SimpleTextWatcher;
 import com.martinwalls.meatmanager.util.SortUtils;

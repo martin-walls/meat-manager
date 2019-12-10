@@ -11,7 +11,6 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
-import com.martinwalls.meatmanager.ui.misc.RecyclerViewMargin;
+import com.martinwalls.meatmanager.ui.common.recyclerview.RecyclerViewMargin;
 import com.martinwalls.meatmanager.util.Utils;
 
 import java.util.ArrayList;

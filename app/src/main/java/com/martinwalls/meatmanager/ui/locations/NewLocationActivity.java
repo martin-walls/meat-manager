@@ -19,7 +19,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Location;
-import com.martinwalls.meatmanager.ui.misc.dialog.ConfirmCancelDialog;
+import com.martinwalls.meatmanager.ui.common.dialog.ConfirmCancelDialog;
 import com.martinwalls.meatmanager.util.undo.UndoStack;
 import com.martinwalls.meatmanager.util.undo.location.AddLocationAction;
 

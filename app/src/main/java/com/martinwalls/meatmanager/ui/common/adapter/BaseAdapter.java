@@ -1,4 +1,4 @@
-package com.martinwalls.meatmanager.ui;
+package com.martinwalls.meatmanager.ui.common.adapter;
 
 import androidx.recyclerview.widget.RecyclerView;
 

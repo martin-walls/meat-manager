@@ -1,4 +1,4 @@
-package com.martinwalls.meatmanager.ui.misc;
+package com.martinwalls.meatmanager.ui.common;
 
 import android.content.Context;
 import android.content.res.TypedArray;

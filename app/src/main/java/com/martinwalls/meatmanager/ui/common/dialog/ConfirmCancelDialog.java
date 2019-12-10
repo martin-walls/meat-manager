@@ -1,4 +1,4 @@
-package com.martinwalls.meatmanager.ui.misc.dialog;
+package com.martinwalls.meatmanager.ui.common.dialog;
 
 import android.app.Dialog;
 import android.content.Context;

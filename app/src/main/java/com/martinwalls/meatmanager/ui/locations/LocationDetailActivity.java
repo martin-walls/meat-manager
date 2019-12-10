@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Location;
-import com.martinwalls.meatmanager.ui.misc.dialog.ConfirmDeleteDialog;
+import com.martinwalls.meatmanager.ui.common.dialog.ConfirmDeleteDialog;
 import com.martinwalls.meatmanager.util.undo.UndoStack;
 import com.martinwalls.meatmanager.util.undo.location.DeleteLocationAction;
 

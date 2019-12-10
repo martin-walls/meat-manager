@@ -1,4 +1,4 @@
-package com.martinwalls.meatmanager.ui.misc;
+package com.martinwalls.meatmanager.ui.common.recyclerview;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,7 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-import com.martinwalls.meatmanager.ui.BaseAdapter;
+import com.martinwalls.meatmanager.ui.common.adapter.BaseAdapter;
 import com.martinwalls.meatmanager.R;
 
 public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {

@@ -17,7 +17,7 @@ import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.StockItem;
 import com.martinwalls.meatmanager.ui.locations.LocationDetailActivity;
-import com.martinwalls.meatmanager.ui.misc.dialog.ConfirmDeleteDialog;
+import com.martinwalls.meatmanager.ui.common.dialog.ConfirmDeleteDialog;
 import com.martinwalls.meatmanager.util.MassUnit;
 import com.martinwalls.meatmanager.util.Utils;
 import com.martinwalls.meatmanager.util.undo.UndoStack;

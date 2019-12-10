@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.ExchangeDBHandler;
 import com.martinwalls.meatmanager.data.models.Currency;
-import com.martinwalls.meatmanager.ui.misc.CustomRecyclerView;
+import com.martinwalls.meatmanager.ui.common.recyclerview.CustomRecyclerView;
 import com.martinwalls.meatmanager.util.SortUtils;
 
 import java.util.List;

@@ -11,7 +11,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Product;
-import com.martinwalls.meatmanager.ui.BaseAdapter;
+import com.martinwalls.meatmanager.ui.common.adapter.BaseAdapter;
 
 import java.util.List;
 

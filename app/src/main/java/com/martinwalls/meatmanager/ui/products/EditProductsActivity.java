@@ -15,9 +15,9 @@ import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Product;
 import com.martinwalls.meatmanager.ui.meatTypes.AddNewMeatTypeDialog;
-import com.martinwalls.meatmanager.ui.misc.CustomRecyclerView;
-import com.martinwalls.meatmanager.ui.misc.RecyclerViewDivider;
-import com.martinwalls.meatmanager.ui.misc.SwipeToDeleteCallback;
+import com.martinwalls.meatmanager.ui.common.recyclerview.CustomRecyclerView;
+import com.martinwalls.meatmanager.ui.common.recyclerview.RecyclerViewDivider;
+import com.martinwalls.meatmanager.ui.common.recyclerview.SwipeToDeleteCallback;
 import com.martinwalls.meatmanager.util.EasyPreferences;
 import com.martinwalls.meatmanager.util.SortUtils;
 

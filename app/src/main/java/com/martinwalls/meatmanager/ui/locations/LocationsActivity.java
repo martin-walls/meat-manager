@@ -12,9 +12,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Location;
-import com.martinwalls.meatmanager.ui.misc.CustomRecyclerView;
-import com.martinwalls.meatmanager.ui.misc.RecyclerViewDivider;
-import com.martinwalls.meatmanager.ui.misc.SwipeToDeleteCallback;
+import com.martinwalls.meatmanager.ui.common.recyclerview.CustomRecyclerView;
+import com.martinwalls.meatmanager.ui.common.recyclerview.RecyclerViewDivider;
+import com.martinwalls.meatmanager.ui.common.recyclerview.SwipeToDeleteCallback;
 import com.martinwalls.meatmanager.util.SortUtils;
 
 import java.util.ArrayList;

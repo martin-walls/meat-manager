@@ -20,7 +20,7 @@ import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Location;
 import com.martinwalls.meatmanager.data.models.ProductQuantity;
 import com.martinwalls.meatmanager.data.models.StockItem;
-import com.martinwalls.meatmanager.ui.misc.RecyclerViewMargin;
+import com.martinwalls.meatmanager.ui.common.recyclerview.RecyclerViewMargin;
 import com.martinwalls.meatmanager.util.EasyPreferences;
 import com.martinwalls.meatmanager.util.SortUtils;
 import com.martinwalls.meatmanager.util.Utils;

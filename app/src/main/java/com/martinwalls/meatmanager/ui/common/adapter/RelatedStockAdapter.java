@@ -1,4 +1,4 @@
-package com.martinwalls.meatmanager.ui;
+package com.martinwalls.meatmanager.ui.common.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
