@@ -43,10 +43,12 @@ public class TutorialFragmentTheme extends Fragment {
         dark.setOnClickListener(v -> setTheme(AppTheme.MODE_DARK));
         systemDefault.setOnClickListener(v -> setTheme(AppTheme.MODE_AUTO));
 
+        // system default only available on Android Q or higher
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             systemDefault.setVisibility(View.GONE);
         }
 
+        // initialise to auto theme
         setTheme(AppTheme.MODE_AUTO);
 
         return view;

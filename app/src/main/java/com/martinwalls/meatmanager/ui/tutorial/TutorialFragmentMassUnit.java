@@ -24,7 +24,6 @@ public class TutorialFragmentMassUnit extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tutorial_mass_unit, container, false);
 
-//        prefs = EasyPreferences.createForDefaultPreferences(getContext());
         prefs = EasyPreferences.getInstance(getContext());
 
         kgs = view.findViewById(R.id.kgs);
@@ -38,6 +37,10 @@ public class TutorialFragmentMassUnit extends Fragment {
         return view;
     }
 
+    /**
+     * Sets the button corresponding to {@code massUnit} selected, and deselects
+     * the other button.
+     */
     private void setSelected(MassUnit massUnit) {
         switch (massUnit) {
             case KG:

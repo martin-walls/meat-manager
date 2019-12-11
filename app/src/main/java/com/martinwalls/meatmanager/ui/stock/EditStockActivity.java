@@ -45,8 +45,6 @@ public class EditStockActivity extends InputFormActivity
     public static final int EDIT_TYPE_EDIT = 1;
     public static final String EXTRA_STOCK_ID = "stock_id";
 
-    private final int REQUEST_REFRESH_ON_DONE = 0;
-
     private final int REQUEST_NEW_SUPPLIER = 1;
     private final int REQUEST_NEW_STORAGE = 2;
     private final int REQUEST_NEW_DESTINATION = 3;
@@ -78,7 +76,6 @@ public class EditStockActivity extends InputFormActivity
 
         dbHandler = new DBHandler(this);
 
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             editType = extras.getInt(EXTRA_EDIT_TYPE, EDIT_TYPE_NEW);
@@ -92,6 +89,7 @@ public class EditStockActivity extends InputFormActivity
                 ? R.string.stock_new_title
                 : R.string.stock_edit_title);
 
+        // initialise views, including click listeners
         initViews();
 
         if (editType == EDIT_TYPE_EDIT) {
@@ -489,11 +487,8 @@ public class EditStockActivity extends InputFormActivity
      * if this is the case.
      */
     private void onCancelAction() {
-        if (hasChanged) {
-            showConfirmCancelDialog();
-        } else {
-            finish();
-        }
+        if (hasChanged) showConfirmCancelDialog();
+        else finish();
     }
 
     /**
@@ -583,7 +578,6 @@ public class EditStockActivity extends InputFormActivity
                 isValid = false;
             }
         }
-
 
         if (isValid) {
             newStockItem.setProduct(dbHandler.getProduct(selectedProductId));

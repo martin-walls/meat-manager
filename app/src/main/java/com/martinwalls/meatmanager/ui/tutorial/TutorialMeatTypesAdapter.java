@@ -59,7 +59,13 @@ public class TutorialMeatTypesAdapter
         return meatTypes.size();
     }
 
+    /**
+     * Interface to handle clicks on meat types list items.
+     */
     public interface TutorialMeatTypesAdapterListener {
+        /**
+         * This is called when the user checks/unchecks an item in the list.
+         */
         void onMeatTypeChecked(String name, boolean isChecked);
     }
 }

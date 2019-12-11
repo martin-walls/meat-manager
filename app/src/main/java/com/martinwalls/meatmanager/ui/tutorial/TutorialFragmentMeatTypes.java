@@ -32,6 +32,9 @@ import java.util.List;
 public class TutorialFragmentMeatTypes extends Fragment
         implements TutorialMeatTypesAdapter.TutorialMeatTypesAdapterListener {
 
+    /**
+     * Meat types that are shown to the user as suggestions to add.
+     */
     private final String[] MEAT_TYPES_SUGGESTED = {"Beef", "Pork", "Lamb", "Chicken"};
 
     private List<String> meatTypesList;
@@ -42,7 +45,6 @@ public class TutorialFragmentMeatTypes extends Fragment
 
     private TextView title;
     private LinearLayout meatTypesListLayout;
-    private LinearLayout customMeatTypeLayout;
     private Button btnCustom;
     private EditText editTextCustom;
     private View greenBg;
@@ -54,7 +56,6 @@ public class TutorialFragmentMeatTypes extends Fragment
 
         title = view.findViewById(R.id.title);
         meatTypesListLayout = view.findViewById(R.id.meat_types_layout);
-        customMeatTypeLayout = view.findViewById(R.id.layout_custom_meat_type);
         editTextCustom = view.findViewById(R.id.edit_text_custom);
         greenBg = view.findViewById(R.id.green_bg);
 
@@ -71,8 +72,7 @@ public class TutorialFragmentMeatTypes extends Fragment
 
         RecyclerViewMargin margin =
                 new RecyclerViewMargin(Utils.convertDpToPixelSize(16, getContext()),
-                        0, 0,
-                        RecyclerViewMargin.VERTICAL);
+                        0, 0, RecyclerViewMargin.VERTICAL);
         recyclerView.addItemDecoration(margin);
 
         btnCustom = view.findViewById(R.id.btn_custom_meat_type);
@@ -117,13 +117,18 @@ public class TutorialFragmentMeatTypes extends Fragment
         }
     }
 
+    /**
+     * This is called when the user selects the done button from the custom input
+     * layout. Returns to the normal layout, with a list of meat types, and adds
+     * the custom meat type to the list.
+     */
     private void onCustomInputDone() {
         showNormalView();
 
         String customInput = editTextCustom.getText().toString();
         if (!TextUtils.isEmpty(customInput)) {
-
             boolean isValid = true;
+
             for (String meatType : meatTypesList) {
                 if (meatType.toLowerCase().equals(customInput.toLowerCase())) {
                     isValid = false;
@@ -144,8 +149,6 @@ public class TutorialFragmentMeatTypes extends Fragment
      * Shows the layout that allows the user to input a custom meat type.
      */
     private void showCustomMeatTypeView() {
-//        Toast.makeText(getContext(), "Coming soon.", Toast.LENGTH_SHORT).show();
-
         int cx = (int) (btnCustom.getX() + btnCustom.getWidth() / 2);
         int cy = (int) (btnCustom.getY() + btnCustom.getHeight() / 2);
         float finalRadius = (float) Math.hypot(cx, cy);
@@ -164,7 +167,6 @@ public class TutorialFragmentMeatTypes extends Fragment
                 showKeyboard(true);
             }
         });
-
 
         greenBg.setVisibility(View.VISIBLE);
         animator.start();

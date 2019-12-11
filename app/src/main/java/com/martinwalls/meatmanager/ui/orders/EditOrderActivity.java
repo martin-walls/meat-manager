@@ -111,6 +111,7 @@ public class EditOrderActivity extends InputFormActivity
 
         setCurrentSearchType(INPUT_PRODUCT);
 
+        // initialise views, including click listeners
         initViews();
 
         if (editType == EDIT_TYPE_NEW) {
@@ -128,6 +129,7 @@ public class EditOrderActivity extends InputFormActivity
             });
         }
 
+        // listen for changes made by the user
         setTextChangedListeners();
     }
 

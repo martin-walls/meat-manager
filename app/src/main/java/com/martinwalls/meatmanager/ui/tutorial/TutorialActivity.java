@@ -59,9 +59,7 @@ public class TutorialActivity extends FragmentActivity {
             }
         });
 
-        btnSkip.setOnClickListener(v -> {
-            startApp();
-        });
+        btnSkip.setOnClickListener(v -> startApp());
 
         dotsIndicator = findViewById(R.id.dots_indicator);
         dotsIndicator.setViewPager2(viewPager);
@@ -76,6 +74,9 @@ public class TutorialActivity extends FragmentActivity {
         }
     }
 
+    /**
+     * This callback is called when the user navigates to a new page.
+     */
     ViewPager2.OnPageChangeCallback pageChangeCallback = new ViewPager2.OnPageChangeCallback() {
         @Override
         public void onPageSelected(int position) {
@@ -94,6 +95,9 @@ public class TutorialActivity extends FragmentActivity {
         }
     };
 
+    /**
+     * Launch the main app.
+     */
     private void startApp() {
         EasyPreferences prefs = EasyPreferences.getInstance(this);
         prefs.setBoolean(R.string.pref_is_first_time_user, false);
@@ -102,6 +106,9 @@ public class TutorialActivity extends FragmentActivity {
         finish();
     }
 
+    /**
+     * This is an adapter that returns the corresponding Fragment for each page.
+     */
     private class ScreenSlidePagerAdapter extends FragmentStateAdapter {
         public ScreenSlidePagerAdapter(FragmentActivity activity) {
             super(activity);

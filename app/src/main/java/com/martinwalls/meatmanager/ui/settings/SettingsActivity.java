@@ -1,7 +1,6 @@
 package com.martinwalls.meatmanager.ui.settings;
 
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.StringRes;
@@ -9,9 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.martinwalls.meatmanager.BuildConfig;
 import com.martinwalls.meatmanager.R;
-import com.martinwalls.meatmanager.ui.tutorial.TutorialActivity;
 import com.martinwalls.meatmanager.util.AppTheme;
 import com.martinwalls.meatmanager.util.EasyPreferences;
 import com.martinwalls.meatmanager.util.notification.ReminderUtils;
@@ -36,7 +33,6 @@ public class SettingsActivity extends AppCompatActivity {
      * changes when the user changes the dark theme preference.
      */
     private void setDarkTheme() {
-//        EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(this);
         EasyPreferences prefs = EasyPreferences.getInstance(this);
         AppTheme.setAppTheme(
                 prefs.getIntFromString(R.string.pref_theme, AppTheme.MODE_AUTO));
@@ -79,20 +75,6 @@ public class SettingsActivity extends AppCompatActivity {
             int min = prefs.getInt(R.string.pref_reminder_time_min,
                     ReminderUtils.DEFAULT_REMINDER_MIN);
             setReminderTimeSummary(hour, min);
-
-            ///////// todo TESTING: remove from production
-            if (BuildConfig.BUILD_TYPE.equals("debug")) {
-                Preference testCategory = findPreference("pref_test");
-                testCategory.setVisible(true);
-
-                Preference showTutorialPref = findPreference("show_tutorial");
-                showTutorialPref.setOnPreferenceClickListener(preference -> {
-                    Intent tutorialIntent = new Intent(getContext(), TutorialActivity.class);
-                    startActivity(tutorialIntent);
-                    getActivity().finish();
-                    return true;
-                });
-            }
         }
 
         /**

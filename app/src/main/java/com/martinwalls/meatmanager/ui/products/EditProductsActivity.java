@@ -43,7 +43,6 @@ public class EditProductsActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHandler = new DBHandler(this);
-//        prefs = EasyPreferences.createForDefaultPreferences(this);
         prefs = EasyPreferences.getInstance(this);
 
         initProductsList();

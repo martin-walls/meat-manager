@@ -49,7 +49,6 @@ public class StockFragment extends Fragment
         View fragmentView = inflater.inflate(R.layout.fragment_stock, container, false);
 
         dbHandler = new DBHandler(getContext());
-//        prefs = EasyPreferences.createForDefaultPreferences(getContext());
         prefs = EasyPreferences.getInstance(getContext());
 
         initStockList(fragmentView);
@@ -132,6 +131,7 @@ public class StockFragment extends Fragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            // undo/redo
             case R.id.action_undo:
                 UndoStack.getInstance().undo(getContext());
                 loadStock();
@@ -140,7 +140,7 @@ public class StockFragment extends Fragment
                 UndoStack.getInstance().redo(getContext());
                 loadStock();
                 return true;
-
+            // products, locations, meat types pages
             case R.id.action_edit_products:
                 startEditProductsActivity();
                 return true;
@@ -150,7 +150,7 @@ public class StockFragment extends Fragment
             case R.id.action_edit_meat_types:
                 startEditMeatTypesActivity();
                 return true;
-
+            // sort options
             case R.id.action_sort_by_name:
                 setSortMode(SortUtils.SORT_NAME);
                 return true;

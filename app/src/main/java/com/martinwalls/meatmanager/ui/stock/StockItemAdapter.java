@@ -107,7 +107,6 @@ public class StockItemAdapter extends RecyclerView.Adapter<StockItemAdapter.View
 
             @Override
             protected void publishResults(CharSequence filterText, FilterResults results) {
-                //noinspection unchecked
                 stockItemListFiltered = (List<StockItem>) results.values;
                 notifyDataSetChanged();
             }

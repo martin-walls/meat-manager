@@ -36,6 +36,9 @@ public class TutorialFragmentNotifications extends Fragment {
         return view;
     }
 
+    /**
+     * Sets the corresponding button selected for notifications on/off.
+     */
     private void setSelected(boolean isOn) {
         btnOn.setSelected(isOn);
         btnOff.setSelected(!isOn);

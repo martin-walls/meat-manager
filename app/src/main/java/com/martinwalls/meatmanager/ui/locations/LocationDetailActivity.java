@@ -30,6 +30,8 @@ public class LocationDetailActivity extends AppCompatActivity
 
     public static final int REQUEST_REFRESH_ON_DONE = 1;
 
+    private final String MAPS_API_URL = "https://www.google.com/maps/search/?api=1&query=";
+
     private DBHandler dbHandler;
     private Location location;
 
@@ -147,7 +149,7 @@ public class LocationDetailActivity extends AppCompatActivity
         TextView locationType = findViewById(R.id.location_type);
         locationType.setText(location.getLocationType().name());
 
-        // combine address fields into one textview
+        // combine address fields into one TextView
         TextView address = findViewById(R.id.address);
         address.setText(getAddressDisplayString());
 
@@ -212,7 +214,7 @@ public class LocationDetailActivity extends AppCompatActivity
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String url = "https://www.google.com/maps/search/?api=1&query=" + query;
+        String url = MAPS_API_URL + query;
 
         Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(mapsIntent);

@@ -117,7 +117,8 @@ public class NewLocationActivity extends AppCompatActivity
      */
     private void initLocationTypeSpn() {
         Spinner locationTypeSpn = findViewById(R.id.spn_location_type);
-        ArrayAdapter<CharSequence> locationTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> locationTypeAdapter =
+                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         locationTypeAdapter.setDropDownViewResource(
                 android.R.layout.simple_spinner_dropdown_item);
         locationTypeAdapter.addAll(Location.LocationType.getLocationTypeStrings());
@@ -217,7 +218,8 @@ public class NewLocationActivity extends AppCompatActivity
             newLocation.setLocationName(editTextName.getText().toString());
             if (locationType == null) {
                 newLocation.setLocationType(
-                        Location.LocationType.values()[locationTypeSpn.getSelectedItemPosition()]);
+                        Location.LocationType.values()
+                                [locationTypeSpn.getSelectedItemPosition()]);
             } else {
                 newLocation.setLocationType(locationType);
             }
