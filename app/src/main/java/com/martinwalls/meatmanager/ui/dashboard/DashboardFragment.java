@@ -213,42 +213,45 @@ public class DashboardFragment extends Fragment
                     (float) stockItem.getMass(), amountRequired));
         }
 
-        List<ProductQuantity> noStockProducts = new ArrayList<>();
-        for (ProductQuantity productRequired : productsRequiredList) {
-            int productId = productRequired.getProduct().getProductId();
-            boolean hasStock = false;
-            for (StockItem stockItem : stockList) {
-                if (stockItem.getProduct().getProductId() == productId) {
-                    hasStock = true;
-                    break;
-                }
-            }
-            // if no stock held
-            if (!hasStock) {
-                // check if same product already required elsewhere
-                boolean isNewEntry = true;
-                for (ProductQuantity productQuantity : noStockProducts) {
-                    if (productQuantity.getProduct().getProductId() == productId) {
-                        productQuantity.setQuantityMass(
-                                productQuantity.getQuantityMass()
-                                        + productRequired.getQuantityMass());
-                        isNewEntry = false;
+        // only show bars where stock is required but not held if filtered by ALL
+        if (filterLocation == null || TextUtils.isEmpty(filterLocation.getLocationName())) {
+            List<ProductQuantity> noStockProducts = new ArrayList<>();
+            for (ProductQuantity productRequired : productsRequiredList) {
+                int productId = productRequired.getProduct().getProductId();
+                boolean hasStock = false;
+                for (StockItem stockItem : stockList) {
+                    if (stockItem.getProduct().getProductId() == productId) {
+                        hasStock = true;
                         break;
                     }
                 }
-                if (isNewEntry) {
-                    noStockProducts.add(new ProductQuantity(
-                            productRequired.getProduct(),
-                            productRequired.getQuantityMass()));
+                // if no stock held
+                if (!hasStock) {
+                    // check if same product already required elsewhere
+                    boolean isNewEntry = true;
+                    for (ProductQuantity productQuantity : noStockProducts) {
+                        if (productQuantity.getProduct().getProductId() == productId) {
+                            productQuantity.setQuantityMass(
+                                    productQuantity.getQuantityMass()
+                                            + productRequired.getQuantityMass());
+                            isNewEntry = false;
+                            break;
+                        }
+                    }
+                    if (isNewEntry) {
+                        noStockProducts.add(new ProductQuantity(
+                                productRequired.getProduct(),
+                                productRequired.getQuantityMass()));
+                    }
                 }
             }
-        }
 
-        // add bar for each required product with no stock
-        for (ProductQuantity productRequired : noStockProducts) {
-            entries.add(new BarChartEntry(
-                    productRequired.getProduct().getProductName(),
-                    0, (float) productRequired.getQuantityMass()));
+            // add bar for each required product with no stock
+            for (ProductQuantity productRequired : noStockProducts) {
+                entries.add(new BarChartEntry(
+                        productRequired.getProduct().getProductName(),
+                        0, (float) productRequired.getQuantityMass()));
+            }
         }
 
         return entries;

@@ -57,18 +57,18 @@ public class RelatedStockAdapter extends RecyclerView.Adapter<RelatedStockAdapte
             for (int i = 0; i < maxChildren; i++) {
                 View childView =
                         inflater.inflate(R.layout.item_stock_in_location, null);
-                childView.setOnClickListener(childClickListener);
+                childView.setOnClickListener(this::onChildClick);
                 childrenLayout.addView(childView);
             }
 
-            title.setOnClickListener(titleClickListener);
+            title.setOnClickListener(this::onTitleClick);
         }
 
         /**
          * Listener to handle clicks on the item title. Expands or collapses
          * the child views depending on the current state.
          */
-        private View.OnClickListener titleClickListener = v -> {
+        private void onTitleClick(View v) {
             int prevExpandedItemPos = expandedItemPos;
             if (expandedItemPos != getAdapterPosition()) {
                 expandedItemPos = getAdapterPosition();
@@ -78,17 +78,17 @@ public class RelatedStockAdapter extends RecyclerView.Adapter<RelatedStockAdapte
                 expandedItemPos = -1;
                 notifyItemChanged(prevExpandedItemPos);
             }
-        };
+        }
 
         /**
          * Listener to handle clicks on child items. Calls
          * {@link RelatedStockListener#onStockItemClicked(int)} to allow the
          * Activity to handle the click action.
          */
-        private View.OnClickListener childClickListener = v -> {
+        private void onChildClick(View v) {
             TextView stockId = v.findViewById(R.id.stock_id);
             listener.onStockItemClicked(Integer.valueOf(stockId.getText().toString()));
-        };
+        }
     }
 
     public RelatedStockAdapter(List<RelatedStock> relatedStockList,
