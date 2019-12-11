@@ -50,8 +50,7 @@ public class Location implements Serializable {
     private String phone;
     private String email;
 
-    public Location() {
-    }
+    public Location() {}
 
     public int getLocationId() {
         return locationId;

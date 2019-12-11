@@ -56,6 +56,10 @@ public class Interval implements Serializable {
         this.unit = unit;
     }
 
+    /**
+     * Checks whether this Interval has the same values as those given. Used to
+     * compare Interval objects.
+     */
     public boolean hasValues(int value, TimeUnit unit) {
         return this.value == value && this.unit.equals(unit);
     }

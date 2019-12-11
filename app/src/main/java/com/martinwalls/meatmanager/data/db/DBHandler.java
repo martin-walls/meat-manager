@@ -15,12 +15,14 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("FieldCanBeLocal")
+/**
+ * Helper class to handle database operations for stock data.
+ */
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "stockDB.db";
     private static final int DATABASE_VERSION = 7;
 
-    //region db constants
+    // database constants
     private final class ProductsTable {
         static final String TABLE_NAME = "Products";
         static final String ID = "ProductId";
@@ -93,7 +95,6 @@ public class DBHandler extends SQLiteOpenHelper {
         static final String PHONE = "Phone";
         static final String EMAIL = "Email";
     }
-    //endregion db constants
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -104,7 +105,6 @@ public class DBHandler extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //region create table queries
         String createMeatTypesTableQuery = "CREATE TABLE IF NOT EXISTS "
                 + MeatTypesTable.TABLE_NAME + " ("
                 + MeatTypesTable.MEAT_TYPE + " TEXT PRIMARY KEY )";
@@ -214,7 +214,6 @@ public class DBHandler extends SQLiteOpenHelper {
                     + ProductsTable.TABLE_NAME + "(" + ProductsTable.ID + ") "
                     + "ON DELETE RESTRICT )";
         db.execSQL(createContractProductsTableQuery);
-        //endregion create table queries
     }
 
     @Override
@@ -226,8 +225,6 @@ public class DBHandler extends SQLiteOpenHelper {
         // make sure foreign keys are enabled
         db.setForeignKeyConstraintsEnabled(true);
     }
-
-    //region product
 
     /**
      * Queries the database for a {@link Product} with the specified ID.
@@ -398,9 +395,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return deletedRows == 1;
     }
-    //endregion product
-
-    //region meat types
 
     /**
      * Gets all meat types in the database.
@@ -457,9 +451,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 MeatTypesTable.MEAT_TYPE + "=?", new String[]{meatType});
         return numRows > 0;
     }
-    //endregion meat types
-
-    //region stock
 
     /**
      * Queries the database for a {@link StockItem} with the specified ID.
@@ -955,7 +946,6 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, new String[]{contractId + ""});
         while (cursor.moveToNext()) {
-            //todo refactor these parts into method eg. getStockInfoFromCursor() or similar
             StockItem stockItem = new StockItem();
             // get product data from inner join
             Product stockProduct = new Product();
@@ -1059,9 +1049,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return deletedRows == 1;
     }
-    //endregion stock
-
-    //region location
 
     /**
      * Queries the database for a {@link Location} with the specified ID.
@@ -1308,9 +1295,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return deletedRows == 1;
     }
-    //endregion location
-
-    //region order
 
     /**
      * Queries the database for a {@link Order} with the specified ID.
@@ -1530,9 +1514,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return deletedRows == 1;
     }
-    //endregion order
-
-    //region contract
 
     /**
      * Queries the database for a {@link Contract} with the specified ID.
@@ -1758,5 +1739,4 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return deletedRows == 1;
     }
-    //endregion contract
 }

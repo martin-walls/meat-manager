@@ -13,11 +13,14 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("FieldCanBeLocal")
+/**
+ * Helper class to handle database operations for exchange data.
+ */
 public class ExchangeDBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "exchangeDB.db";
     private static final int DATABASE_VERSION = 3;
 
+    // database constants
     private final class ConversionsTable {
         static final String TABLE_NAME = "Conversions";
         static final String ID = "ConversionId";

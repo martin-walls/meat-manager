@@ -54,7 +54,8 @@ enum RequestStatus {
     }
 
     /**
-     * Returns the {@link RequestStatus} with the specified code.
+     * Returns the {@link RequestStatus} with the specified code. If the specified
+     * code doesn't belong to a status, returns {@link #UnknownError}.
      */
     static RequestStatus getStatusByCode(int code) {
         for (RequestStatus status : values()) {

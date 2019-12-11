@@ -3,15 +3,14 @@ package com.martinwalls.meatmanager.data.models;
 import java.io.Serializable;
 
 /**
- * Class to store quantity with product in Order / Contract
+ * Class to store quantity with product in Order / Contract.
  */
 public class ProductQuantity implements Serializable {
     private Product product;
     private double quantityMass; // in kg
     private int quantityBoxes;
 
-    public ProductQuantity() {
-    }
+    public ProductQuantity() {}
 
     public ProductQuantity(Product product, double quantityMass) {
         this.product = product;

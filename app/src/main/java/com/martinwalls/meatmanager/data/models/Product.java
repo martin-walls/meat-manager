@@ -8,13 +8,7 @@ public class Product implements Serializable {
     private String productName;
     private String meatType;
 
-    public Product() {
-    }
-
-    // for testing
-    public Product(String productName) {
-        this.productName = productName;
-    }
+    public Product() {}
 
     public Product(int productId, String productName, String meatType) {
         this.productId = productId;

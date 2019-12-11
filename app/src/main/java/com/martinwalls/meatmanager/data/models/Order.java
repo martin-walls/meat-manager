@@ -14,11 +14,9 @@ public class Order implements Serializable {
     private String destName;
     private LocalDateTime orderDate;
     private boolean isCompleted;
-
     private List<ProductQuantity> productList = new ArrayList<>();
 
-    public Order() {
-    }
+    public Order() {}
 
     public Order(int orderId, int destId, String destName,
                  LocalDateTime orderDate, boolean isCompleted) {
@@ -90,6 +88,9 @@ public class Order implements Serializable {
         productList.add(new ProductQuantity(product, quantityMass, quantityBoxes));
     }
 
+    /**
+     * Calculates how many days are remaining until the date of this Order.
+     */
     public int getDaysToOrderDate() {
         LocalDate today = LocalDate.now();
         Period period = Period.between(today, orderDate.toLocalDate());

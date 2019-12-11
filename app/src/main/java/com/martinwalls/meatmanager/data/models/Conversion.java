@@ -15,8 +15,7 @@ public class Conversion {
     private Currency secondaryCurrency;
     private Double secondaryValue;
 
-    public Conversion() {
-    }
+    public Conversion() {}
 
     public Conversion(long timestamp, Currency primaryCurrency, Double primaryValue,
                       Currency secondaryCurrency, Double secondaryValue) {

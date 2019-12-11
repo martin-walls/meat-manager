@@ -17,7 +17,6 @@ public class StockItem implements Serializable {
         Pet_Food,
         Waste;
 
-
         /**
          * Gets a display version of the quality's name.
          */
@@ -67,7 +66,6 @@ public class StockItem implements Serializable {
 
     public StockItem() {}
 
-    // db "not null" fields
     public StockItem(Product product, int locationId, int supplierId,
                      double mass, Quality quality) {
         this.product = product;

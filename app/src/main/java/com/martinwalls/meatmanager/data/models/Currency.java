@@ -53,6 +53,11 @@ public class Currency {
         isFavourite = favourite;
     }
 
+    /**
+     * Toggles the favourite status of this Currency.
+     *
+     * @return the new favourite status
+     */
     public boolean toggleFavourite() {
         isFavourite = !isFavourite;
         return isFavourite;
