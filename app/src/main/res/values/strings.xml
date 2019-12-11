@@ -72,12 +72,6 @@
     <string name="db_import_success">Database imported successfully</string>
     <string name="db_import_error">Error importing database</string>
 
-
-    <!-- permissions -->
-    <string name="perm_error_storage_denied">
-        Please allow external storage permissions for this feature.
-    </string>
-
     <!-- Search -->
     <string name="search_title">Search</string>
     <string name="search_add_new">Add new %s…</string>

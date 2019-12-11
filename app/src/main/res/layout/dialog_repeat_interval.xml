@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/dialog_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.contracts.RepeatIntervalDialog"
     >
 
+    <!-- radio buttons -->
     <LinearLayout
         android:id="@+id/radio_group"
         android:layout_width="match_parent"
@@ -21,6 +20,7 @@
         android:orientation="vertical"
         >
 
+        <!-- every week -->
         <RadioButton
             android:id="@+id/radio_week"
             style="@style/TextDark"
@@ -31,6 +31,7 @@
             android:text="@string/contracts_dialog_repeat_interval_week"
             />
 
+        <!-- every 2 weeks -->
         <RadioButton
             android:id="@+id/radio_two_week"
             style="@style/TextDark"
@@ -41,6 +42,7 @@
             android:text="@string/contracts_dialog_repeat_interval_two_week"
             />
 
+        <!-- every month -->
         <RadioButton
             android:id="@+id/radio_month"
             style="@style/TextDark"
@@ -51,6 +53,7 @@
             android:text="@string/contracts_dialog_repeat_interval_month"
             />
 
+        <!-- previously entered custom value -->
         <RadioButton
             android:id="@+id/radio_custom_selected"
             style="@style/TextDark"
@@ -61,6 +64,7 @@
             android:visibility="gone"
             />
 
+        <!-- custom -->
         <RadioButton
             android:id="@+id/radio_custom"
             style="@style/TextDark"
@@ -70,6 +74,7 @@
             android:paddingEnd="16dp"
             android:text="@string/contracts_dialog_repeat_interval_custom"
             />
+
     </LinearLayout>
 
     <LinearLayout
@@ -82,9 +87,9 @@
         android:layout_marginBottom="@dimen/dialog_margin_vertical"
         android:orientation="vertical"
         android:visibility="gone"
-        tools:visibility="visible"
         >
 
+        <!-- custom input title -->
         <TextView
             style="@style/TextDark"
             android:layout_width="wrap_content"
@@ -92,6 +97,7 @@
             android:text="@string/contracts_dialog_repeat_interval_title"
             />
 
+        <!-- custom input -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -114,12 +120,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:importantForAutofill="no"
                 android:inputType="number"
                 android:maxLength="2"
                 android:minEms="2"
                 android:text="@string/contracts_dialog_repeat_interval_custom_value_default"
-                android:importantForAutofill="no"
-                tools:ignore="LabelFor"
                 />
 
             <ImageButton
@@ -142,6 +147,7 @@
 
         </LinearLayout>
 
+        <!-- done button -->
         <Button
             android:id="@+id/btn_done"
             style="?borderlessButtonStyle"
@@ -152,5 +158,4 @@
             />
 
     </LinearLayout>
-
 </LinearLayout>

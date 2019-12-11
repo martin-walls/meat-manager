@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- base app theme -->
     <style name="BaseTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- App colors -->
         <item name="colorPrimary">@color/color_primary</item>
@@ -29,6 +30,7 @@
         <item name="dialogTitleStyle">@style/DialogTitle</item>
     </style>
 
+    <!-- light theme -->
     <style name="AppTheme" parent="BaseTheme">
         <!-- Text -->
         <item name="textColorPrimary">@color/dark_grey</item>
@@ -72,6 +74,7 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
+    <!-- theme with fade in and out transitions for windows -->
     <style name="AppTheme.FadeTransition">
         <item name="android:windowActivityTransitions">true</item>
 

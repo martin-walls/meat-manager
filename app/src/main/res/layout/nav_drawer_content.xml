@@ -8,6 +8,7 @@
     android:showDividers="middle"
     >
 
+    <!-- nav drawer header text -->
     <TextView
         android:id="@+id/header"
         android:layout_width="match_parent"
@@ -23,7 +24,7 @@
         android:textStyle="bold"
         />
 
-
+    <!-- dashboard -->
     <TextView
         android:id="@+id/nav_dashboard"
         style="@style/NavDrawerItem"
@@ -39,6 +40,7 @@
         android:orientation="vertical"
         >
 
+        <!-- stock -->
         <TextView
             android:id="@+id/nav_stock"
             style="@style/NavDrawerItem"
@@ -48,6 +50,7 @@
             android:text="@string/stock_title"
             />
 
+        <!-- orders -->
         <TextView
             android:id="@+id/nav_orders"
             style="@style/NavDrawerItem"
@@ -57,6 +60,7 @@
             android:text="@string/orders_title"
             />
 
+        <!-- contracts -->
         <TextView
             android:id="@+id/nav_contracts"
             style="@style/NavDrawerItem"
@@ -66,6 +70,7 @@
             android:text="@string/contracts_title"
             />
 
+        <!-- exchange -->
         <TextView
             android:id="@+id/nav_exchange"
             style="@style/NavDrawerItem"
@@ -74,8 +79,8 @@
             android:drawableStart="@drawable/ic_exchange"
             android:text="@string/exchange_title"
             />
-    </LinearLayout>
 
+    </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
@@ -83,6 +88,7 @@
         android:layout_weight="1"
         />
 
+    <!-- settings -->
     <TextView
         android:id="@+id/nav_settings"
         style="@style/NavDrawerItem"

@@ -8,6 +8,7 @@
     android:orientation="horizontal"
     >
 
+    <!-- primary text -->
     <TextView
         android:id="@+id/info_primary"
         style="@style/TextDark"

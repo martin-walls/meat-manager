@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- related stock title for when no stock held -->
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/current_stock_title"
     style="@style/DetailsText"
     android:layout_width="match_parent"
@@ -12,5 +12,4 @@
     android:paddingEnd="24dp"
     android:paddingBottom="16dp"
     android:textColor="?textColorPrimary"
-    tools:text="Product: no stock"
     />

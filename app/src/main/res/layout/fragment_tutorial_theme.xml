@@ -7,6 +7,7 @@
     android:background="@color/light_blue"
     >
 
+    <!-- title -->
     <TextView
         android:id="@+id/title"
         style="@style/TutorialTitleText"
@@ -26,6 +27,7 @@
         android:orientation="horizontal"
         >
 
+        <!-- light button -->
         <TextView
             android:id="@+id/light"
             style="@style/TutorialButtonThemeLight"
@@ -37,6 +39,7 @@
             android:text="@string/tutorial_theme_light"
             />
 
+        <!-- dark button -->
         <TextView
             android:id="@+id/dark"
             style="@style/TutorialButtonThemeDark"
@@ -50,6 +53,7 @@
 
     </LinearLayout>
 
+    <!-- system default button -->
     <Button
         android:id="@+id/system_default"
         style="@style/TutorialButtonSecondary"
@@ -60,6 +64,5 @@
         android:layout_marginBottom="80dp"
         android:text="@string/tutorial_theme_auto"
         />
-
 
 </RelativeLayout>

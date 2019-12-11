@@ -10,7 +10,6 @@
         app:showAsAction="ifRoom"
         />
 
-
     <item
         android:id="@+id/action_favourites"
         android:icon="@drawable/ic_star_filled"

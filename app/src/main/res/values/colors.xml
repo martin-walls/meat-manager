@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_primary">#673ab7</color> <!-- Deep Purple 500 -->
+    <color name="color_primary">#673ab7</color>
     <color name="color_primary_dark">#320b86</color>
     <!-- dummy fallback color, only needed in night version -->
     <color name="color_primary_light">#9a67ea</color>
@@ -17,12 +17,11 @@
 
     <color name="window_background">#ffffff</color>
 
-    <!--<color name="selected_item">#eeeeee</color>-->
-
-    <color name="error_red">#f44336</color> <!-- Red 500 -->
+    <color name="error_red">#f44336</color>
 
     <color name="delete">#FF0000</color>
 
+    <!-- dashboard graph colours -->
     <color name="dashboard_graph_bar">#64b5f6</color>
     <color name="dashboard_graph_bar_more_req">#e57373</color>
     <color name="dashboard_graph_bar_less_req">#4caf50</color>
@@ -30,14 +29,13 @@
     <color name="dashboard_tooltip_more_req">#D32F2F</color>
     <color name="dashboard_tooltip_less_req">#43A047</color>
 
-
     <!-- tutorial screen -->
     <color name="dot_active">#cfff</color>
     <color name="dot_inactive">#5fff</color>
 
-    <color name="light_blue">#2196f3</color> <!-- blue 500 -->
-    <color name="dark_blue">#002171</color> <!-- blue 900 dark -->
-    <color name="light_green">#4caf50</color> <!-- green 500 -->
+    <color name="light_blue">#2196f3</color>
+    <color name="dark_blue">#002171</color>
+    <color name="light_green">#4caf50</color>
 
     <color name="tutorial_btn_theme_light_bg">#afff</color>
     <color name="tutorial_btn_theme_dark_bg">#8000</color>

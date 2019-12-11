@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
@@ -17,6 +16,7 @@
         android:background="?itemHighlight"
         />
 
+    <!-- location text -->
     <TextView
         android:id="@+id/location"
         style="@style/TextNormal"
@@ -27,7 +27,6 @@
         android:maxLines="1"
         android:paddingStart="20dp"
         android:paddingEnd="8dp"
-        tools:text="UK1535"
         />
 
     <Space
@@ -45,6 +44,7 @@
         android:paddingBottom="16dp"
         >
 
+        <!-- quantity mass text -->
         <TextView
             android:id="@+id/mass"
             style="@style/ItemAmountPrimary"
@@ -52,9 +52,9 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical|end"
-            tools:text="1900.00 kg"
             />
 
+        <!-- quantity boxes text -->
         <TextView
             android:id="@+id/num_boxes"
             style="@style/ItemAmountSecondary"
@@ -62,8 +62,8 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical|end"
-            tools:text="100 boxes"
             />
+
     </LinearLayout>
 
     <TextView

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- filter location menu item -->
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -13,5 +13,4 @@
     android:textAllCaps="true"
     android:textColor="@color/filter_item_text_color"
     android:textStyle="bold"
-    tools:text="all"
     />

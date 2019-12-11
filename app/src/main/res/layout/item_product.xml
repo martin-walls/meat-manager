@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingBottom="8dp"
     >
 
+    <!-- product name text -->
     <TextView
         android:id="@+id/product_name"
         style="@style/ItemInfoPrimary"
@@ -15,7 +15,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_vertical|start"
-        tools:text="Product"
         />
 
     <LinearLayout
@@ -24,6 +23,7 @@
         android:orientation="vertical"
         >
 
+        <!-- quantity mass text -->
         <TextView
             android:id="@+id/mass"
             style="@style/ItemAmountPrimary"
@@ -31,9 +31,9 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical|end"
-            tools:text="1900.00 kg"
             />
 
+        <!-- number of boxes text -->
         <TextView
             android:id="@+id/num_boxes"
             style="@style/ItemAmountSecondary"
@@ -41,7 +41,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical|end"
-            tools:text="100 boxes"
             />
+
     </LinearLayout>
 </LinearLayout>

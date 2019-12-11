@@ -2,25 +2,21 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.orders.OrderDetailActivity"
     >
 
-    <!-- Products list -->
+    <!-- products list -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_products"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        tools:itemCount="2"
-        tools:listitem="@layout/item_product_options"
         />
 
-    <!-- Destination -->
+    <!-- destination -->
     <TextView
         android:id="@+id/destination"
         style="@style/DetailsText"
@@ -34,10 +30,9 @@
         android:paddingTop="16dp"
         android:paddingEnd="24dp"
         android:paddingBottom="16dp"
-        tools:text="Destination"
         />
 
-    <!-- Date -->
+    <!-- date -->
     <TextView
         android:id="@+id/date"
         style="@style/DetailsText"
@@ -49,9 +44,9 @@
         android:paddingTop="16dp"
         android:paddingEnd="24dp"
         android:paddingBottom="16dp"
-        tools:text="12 September 2019, 12:00"
         />
 
+    <!-- completed checkbox -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -85,6 +80,7 @@
         app:srcCompat="@drawable/divider_thin"
         />
 
+    <!-- related stock list -->
     <include
         android:id="@+id/related_stock_title"
         layout="@layout/item_section_divider"
@@ -97,8 +93,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:overScrollMode="never"
-        tools:itemCount="1"
-        tools:listitem="@layout/item_current_stock_in_location"
         />
 
 </LinearLayout>

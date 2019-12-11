@@ -7,6 +7,7 @@
     android:background="@color/light_blue"
     >
 
+    <!-- title -->
     <TextView
         android:id="@+id/title"
         style="@style/TutorialTitleText"
@@ -26,6 +27,7 @@
         android:orientation="horizontal"
         >
 
+        <!-- off button -->
         <TextView
             android:id="@+id/btn_off"
             style="@style/TutorialButtonPrimary"
@@ -37,6 +39,7 @@
             android:text="@string/tutorial_notifications_off"
             />
 
+        <!-- on button -->
         <TextView
             android:id="@+id/btn_on"
             style="@style/TutorialButtonPrimary"
@@ -49,5 +52,4 @@
             />
 
     </LinearLayout>
-
 </RelativeLayout>

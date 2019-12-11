@@ -2,12 +2,12 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     >
 
+    <!-- favourites section title -->
     <TextView
         android:id="@+id/section_title_fav"
         style="@style/ListSectionDividerText"
@@ -20,6 +20,7 @@
         android:text="@string/exchange_favourites"
         />
 
+    <!-- no favourites text -->
     <TextView
         style="@style/ListItemTextSecondary"
         android:layout_width="match_parent"
@@ -38,6 +39,7 @@
         app:srcCompat="@drawable/divider_thick"
         />
 
+    <!-- all currencies title -->
     <TextView
         android:id="@+id/section_title_all"
         style="@style/ListSectionDividerText"
@@ -56,6 +58,7 @@
         android:orientation="horizontal"
         >
 
+        <!-- currency code text -->
         <TextView
             android:id="@+id/currency_code"
             style="@style/ListItemTextPrimary"
@@ -67,9 +70,9 @@
             android:paddingEnd="8dp"
             android:paddingBottom="16dp"
             android:textStyle="bold"
-            tools:text="GBP"
             />
 
+        <!-- currency name text -->
         <TextView
             android:id="@+id/currency_name"
             style="@style/ListItemTextSecondary"
@@ -82,9 +85,9 @@
             android:paddingTop="16dp"
             android:paddingEnd="24dp"
             android:paddingBottom="16dp"
-            tools:text="British Pound Sterling"
             />
 
+        <!-- favourite button -->
         <ImageButton
             android:id="@+id/favourite_star"
             android:layout_width="wrap_content"
@@ -95,6 +98,6 @@
             android:padding="2dp"
             app:srcCompat="@drawable/ic_star_outline"
             />
-    </LinearLayout>
 
+    </LinearLayout>
 </LinearLayout>

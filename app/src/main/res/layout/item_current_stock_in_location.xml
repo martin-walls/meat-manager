@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     >
 
+    <!-- related stock title -->
     <TextView
         android:id="@+id/current_stock_title"
         style="@style/DetailsText"
@@ -21,9 +21,9 @@
         android:paddingEnd="24dp"
         android:paddingBottom="16dp"
         android:textColor="?textColorPrimary"
-        tools:text="Product: 1456 kg in 3 locations"
         />
 
+    <!-- layout to hold child views -->
     <LinearLayout
         android:id="@+id/current_stock_children"
         android:layout_width="match_parent"

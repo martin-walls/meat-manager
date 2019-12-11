@@ -7,6 +7,7 @@
     android:background="?colorPrimary"
     >
 
+    <!-- title -->
     <TextView
         android:id="@+id/title"
         style="@style/TutorialTitleText"
@@ -26,6 +27,7 @@
         android:orientation="horizontal"
         >
 
+        <!-- kg button -->
         <TextView
             android:id="@+id/kgs"
             style="@style/TutorialButtonPrimary"
@@ -37,6 +39,7 @@
             android:text="@string/tutorial_mass_unit_kgs"
             />
 
+        <!-- lbs button -->
         <TextView
             android:id="@+id/lbs"
             style="@style/TutorialButtonPrimary"
@@ -49,5 +52,4 @@
             />
 
     </LinearLayout>
-
 </RelativeLayout>

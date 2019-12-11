@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     >
 
+    <!-- day title -->
     <TextView
         android:id="@+id/day_divider"
         style="@style/ListSectionDividerText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        tools:text="2 days ago"
         />
 
     <LinearLayout
@@ -21,6 +20,7 @@
         android:layout_height="wrap_content"
         >
 
+        <!-- primary currency -->
         <TextView
             android:id="@+id/currency_primary"
             style="@style/ExchangeHistoryItemText"
@@ -28,7 +28,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="end|center_vertical"
-            tools:text="30.00 GBP"
             />
 
         <TextView
@@ -41,6 +40,7 @@
             android:text="@string/exchange_currency_separator"
             />
 
+        <!-- secondary currency -->
         <TextView
             android:id="@+id/currency_secondary"
             style="@style/ExchangeHistoryItemText"
@@ -48,8 +48,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="start|center_vertical"
-            tools:text="150.00 PLN"
             />
-    </LinearLayout>
 
+    </LinearLayout>
 </LinearLayout>

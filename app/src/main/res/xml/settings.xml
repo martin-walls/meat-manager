@@ -37,17 +37,4 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        app:title="TESTING"
-        app:key="pref_test"
-        app:isPreferenceVisible="false"
-        >
-
-        <Preference
-            app:key="show_tutorial"
-            app:title="Show welcome screen"
-            />
-
-    </PreferenceCategory>
-
 </androidx.preference.PreferenceScreen>

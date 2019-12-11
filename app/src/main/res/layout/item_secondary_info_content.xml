@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     >
 
+    <!-- primary text -->
     <TextView
         android:id="@+id/info_primary"
         style="@style/TextDark"
@@ -17,9 +17,9 @@
         android:paddingTop="16dp"
         android:paddingEnd="24dp"
         android:paddingBottom="16dp"
-        tools:text="Beef hearts"
         />
 
+    <!-- secondary text -->
     <TextView
         android:id="@+id/info_secondary"
         style="@style/TextNormal"
@@ -29,7 +29,6 @@
         android:paddingTop="16dp"
         android:paddingEnd="24dp"
         android:paddingBottom="16dp"
-        tools:text="Beef"
         />
 
 </LinearLayout>

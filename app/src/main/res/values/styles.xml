@@ -1,5 +1,4 @@
 <resources>
-
     <style name="Fab" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="backgroundTint">@color/fab_background</item>
         <item name="rippleColor">@color/fab_ripple_light</item>
@@ -24,7 +23,6 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-
     <!-- Generic text styles -->
     <style name="TextNormal">
         <item name="android:textSize">18sp</item>
@@ -35,7 +33,6 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">?textColorPrimary</item>
     </style>
-
 
     <!-- Dialog styles -->
     <style name="DialogTitle">
@@ -48,7 +45,6 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">?textColorSecondary</item>
     </style>
-
 
     <!-- List item text styles -->
     <style name="ItemInfoPrimary">
@@ -88,7 +84,6 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
     </style>
-
 
     <!-- Input styles -->
     <style name="AppTextInputLayout" parent="Widget.Design.TextInputLayout">
@@ -142,13 +137,11 @@
         <item name="android:showDividers">middle</item>
     </style>
 
-
-    <!-- For details such as destination in details pages -->
+    <!-- For text fields in details pages -->
     <style name="DetailsText">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">?textColorSecondary</item>
     </style>
-
 
     <!-- Exchange screen styles -->
     <style name="ExchangeRateText">
@@ -216,5 +209,4 @@
         <item name="android:paddingEnd">16dp</item>
         <item name="android:background">@drawable/tutorial_btn_secondary</item>
     </style>
-
 </resources>

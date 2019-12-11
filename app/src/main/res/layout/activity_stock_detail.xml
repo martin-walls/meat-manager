@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.stock.StockDetailActivity"
     >
 
+    <!-- product name text -->
     <TextView
         android:id="@+id/product_name"
         style="@style/DetailsText"
@@ -20,9 +19,9 @@
         android:paddingEnd="24dp"
         android:paddingBottom="16dp"
         android:textColor="?textColorPrimary"
-        tools:text="Beef hearts"
         />
 
+    <!-- location text -->
     <TextView
         android:id="@+id/location"
         style="@style/DetailsText"
@@ -37,9 +36,9 @@
         android:paddingEnd="24dp"
         android:paddingBottom="16dp"
         android:textColor="?textColorPrimary"
-        tools:text="UK1535"
         />
 
+    <!-- quantity mass text -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,10 +64,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:textColor="?textColorPrimary"
-            tools:text="1900.00"
             />
+
     </LinearLayout>
 
+    <!-- quantity boxes text -->
     <LinearLayout
         android:id="@+id/row_boxes"
         android:layout_width="match_parent"
@@ -96,8 +96,10 @@
             android:layout_weight="2"
             android:textColor="?textColorPrimary"
             />
+
     </LinearLayout>
 
+    <!-- supplier text -->
     <LinearLayout
         android:id="@+id/row_supplier"
         android:layout_width="match_parent"
@@ -125,10 +127,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            tools:text="PL8273498"
             />
+
     </LinearLayout>
 
+    <!-- destination text -->
     <LinearLayout
         android:id="@+id/row_destination"
         android:layout_width="match_parent"
@@ -156,10 +159,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            tools:text="DEST1523"
             />
+
     </LinearLayout>
 
+    <!-- quality text -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -184,8 +188,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            tools:text="Good"
             />
-    </LinearLayout>
 
+    </LinearLayout>
 </LinearLayout>

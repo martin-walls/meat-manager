@@ -7,6 +7,7 @@
     android:orientation="vertical"
     >
 
+    <!-- dialog message -->
     <TextView
         android:id="@+id/message"
         style="@style/TextNormal"
@@ -33,6 +34,7 @@
             android:layout_weight="1"
             />
 
+        <!-- cancel button -->
         <Button
             android:id="@+id/btn_cancel"
             style="?borderlessButtonStyle"
@@ -41,6 +43,7 @@
             android:text="@string/action_cancel"
             />
 
+        <!-- delete button -->
         <Button
             android:id="@+id/btn_delete"
             style="?borderlessButtonStyle"
@@ -48,6 +51,6 @@
             android:layout_height="wrap_content"
             android:text="@string/action_delete"
             />
-    </LinearLayout>
 
+    </LinearLayout>
 </LinearLayout>

@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_primary">#4527a0</color> <!-- Deep purple 800  -->
+    <color name="color_primary">#4527a0</color>
     <color name="color_primary_dark">#000070</color>
     <color name="color_primary_light">#7953d2</color>
-    <color name="color_accent">#ffc107</color> <!-- Amber 500 -->
+    <color name="color_accent">#ffc107</color>
 
-    <color name="fab_background">#ffa000</color> <!-- Amber 700 -->
-
+    <color name="fab_background">#ffa000</color>
 
     <color name="window_background">#212121</color>
 
-    <!--<color name="selected_item">#424242</color>-->
-
+    <!-- dashboard graph colours -->
     <color name="dashboard_graph_bar">#5EA4E2</color>
     <color name="dashboard_graph_bar_more_req">#D35454</color>
     <color name="dashboard_tooltip">#bbdefb</color>

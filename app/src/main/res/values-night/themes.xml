@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- dark theme -->
     <style name="AppTheme" parent="BaseTheme">
         <!-- Text -->
         <item name="textColorPrimary">@color/light_grey</item>
@@ -38,5 +39,4 @@
         <item name="dashboardLessReqTooltipColor">@color/dashboard_tooltip_less_req</item>
         <item name="dashboardLessReqTooltipTextColor">@color/white</item>
     </style>
-
 </resources>

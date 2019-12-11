@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -20,6 +19,7 @@
             android:orientation="vertical"
             >
 
+            <!-- filter locations menu -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_locations"
                 android:layout_width="match_parent"
@@ -27,10 +27,9 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:overScrollMode="never"
-                tools:itemCount="1"
-                tools:listitem="@layout/item_dashboard_location"
                 />
 
+            <!-- bar chart -->
             <com.martinwalls.meatmanager.ui.dashboard.BarChartView
                 android:id="@+id/graph"
                 android:layout_width="match_parent"
@@ -39,13 +38,13 @@
                 android:layout_marginEnd="16dp"
                 />
 
+            <!-- bottom padding -->
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 />
 
         </LinearLayout>
-
     </ScrollView>
 
     <TextView
