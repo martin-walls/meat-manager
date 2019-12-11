@@ -9,8 +9,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Helper class to extract exchange data from the raw JSON response.
+ */
 class JsonParser {
 
+    /**
+     * This shouldn't be instantiated.
+     */
     private JsonParser() {}
 
     /**
@@ -92,6 +98,7 @@ class JsonParser {
             if (success) {
                 return RequestStatus.OK;
             } else {
+                // get error code and return appropriate status
                 JSONObject errorObject = jsonObject.getJSONObject("error");
                 int errorCode = errorObject.getInt("code");
                 return RequestStatus.getStatusByCode(errorCode);

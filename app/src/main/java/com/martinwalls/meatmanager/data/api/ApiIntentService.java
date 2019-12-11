@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Runs in the background to load exchange rate data from the API.
+ * Background service to load exchange rate data from the API.
  */
 public class ApiIntentService extends IntentService {
 
@@ -56,10 +56,13 @@ public class ApiIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        // intent to send data back to calling Activity
         PendingIntent reply = intent.getParcelableExtra(EXTRA_PENDING_RESULT);
-        
+
+        // get exchange data
         String jsonResponse = getJsonResponse();
 
+        // check for API errors
         RequestStatus status = JsonParser.getRequestStatus(jsonResponse);
         // if request error, return
         if (!status.isSuccess()) {
@@ -67,6 +70,7 @@ public class ApiIntentService extends IntentService {
             return;
         }
 
+        // extract data from JSON data
         HashMap<String, Double> rates = JsonParser.parseExchangeRates(jsonResponse);
 
         // save API response to cache
@@ -86,6 +90,7 @@ public class ApiIntentService extends IntentService {
             }
         }
 
+        // pass data back to calling Activity
         Intent result = new Intent();
         result.putExtra(EXTRA_SUCCESS, true);
         result.putExtra(EXTRA_RESULT, rates);

@@ -11,10 +11,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
+/**
+ * Helper class to make HTTP requests and get the JSON response.
+ */
 class QueryUtils {
 
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
+    /**
+     * This shouldn't be instantiated
+     */
     private QueryUtils() {}
 
     /**
@@ -78,12 +84,8 @@ class QueryUtils {
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error retrieving JSON results.", e);
         } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (inputStream != null) {
-                inputStream.close();
-            }
+            if (urlConnection != null) urlConnection.disconnect();
+            if (inputStream != null) inputStream.close();
         }
         return jsonResponse;
     }

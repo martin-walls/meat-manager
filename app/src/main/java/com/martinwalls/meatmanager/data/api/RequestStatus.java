@@ -37,8 +37,8 @@ enum RequestStatus {
      */
     UnknownError(-1);
 
-    private boolean success;
-    private int code;
+    private final boolean success;
+    private final int code;
 
     RequestStatus(int code) {
         this.success = code == 0;
