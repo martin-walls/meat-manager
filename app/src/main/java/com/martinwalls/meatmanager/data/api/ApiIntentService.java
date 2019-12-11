@@ -7,6 +7,7 @@ import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
+import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.cache.CacheHelper;
 import com.martinwalls.meatmanager.data.db.ExchangeDBHandler;
 import com.martinwalls.meatmanager.data.models.Currency;
@@ -25,17 +26,18 @@ public class ApiIntentService extends IntentService {
     public static final String EXTRA_SUCCESS = "success";
     public static final String EXTRA_ERROR_CODE = "error_code";
     public static final String EXTRA_RESULT = "result";
+
     public static final int RESULT_CODE = 0;
 
     private static final String TAG = ApiIntentService.class.getSimpleName();
-
-    private static final String CACHE_KEY_RATES = "rates_cache";
-    private static final String CACHE_KEY_TIMESTAMP = "last_cache_timestamp";
 
     // load native code to get API key
     static {
         System.loadLibrary("native-lib");
     }
+
+    // method to get the API key stored in native code
+    private native String getApiAccessKey();
 
     /**
      * The base URL of the API, to be built upon.
@@ -51,9 +53,6 @@ public class ApiIntentService extends IntentService {
     public ApiIntentService() {
         super(TAG);
     }
-
-    // method to get the API key stored in native code
-    private native String getApiAccessKey();
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -71,11 +70,11 @@ public class ApiIntentService extends IntentService {
         HashMap<String, Double> rates = JsonParser.parseExchangeRates(jsonResponse);
 
         // save API response to cache
-        CacheHelper.save(getApplicationContext(), CACHE_KEY_RATES, jsonResponse);
+        CacheHelper.save(getApplicationContext(), R.string.cache_rates, jsonResponse);
 
         long timestamp = JsonParser.parseTimestamp(jsonResponse);
         CacheHelper.save(getApplicationContext(),
-                CACHE_KEY_TIMESTAMP, String.valueOf(timestamp));
+                R.string.cache_timestamp, String.valueOf(timestamp));
 
         // save list of currencies to db
         ExchangeDBHandler dbHandler = new ExchangeDBHandler(this);
@@ -109,19 +108,25 @@ public class ApiIntentService extends IntentService {
 
     /**
      * Calculates how many seconds ago the last data was retrieved from the API
-     * and stored in cache. Returns 0 if no cached data exists.
+     * and stored in cache.
+     *
+     * @return the age of last cached data, in seconds. Returns -1 if no cached data.
      */
     private long getTimeDiffFromLastCache() {
         long timeDiff = -1;
-        if (CacheHelper.doesCacheExist(getApplicationContext(), CACHE_KEY_TIMESTAMP)) {
+        if (CacheHelper.doesCacheExist(getApplicationContext(), R.string.cache_timestamp)) {
             long lastTimestamp = Long.parseLong(
-                    CacheHelper.retrieve(getApplicationContext(), CACHE_KEY_TIMESTAMP));
+                    CacheHelper.retrieve(getApplicationContext(), R.string.cache_timestamp));
             long timestampNow = System.currentTimeMillis() / 1000;
             timeDiff = timestampNow - lastTimestamp;
         }
         return timeDiff;
     }
 
+    /**
+     * Checks whether there is any up-to-date cached data, if there is it will
+     * fetch the cached JSON, otherwise fetches fresh data from the API.
+     */
     private String getJsonResponse() {
         // if cache doesn't exists, API request will be made
         long timeDiff = getTimeDiffFromLastCache();
@@ -129,7 +134,7 @@ public class ApiIntentService extends IntentService {
         String jsonResponse;
         // if last cache from less than 1 hr ago
         if (timeDiff != -1 && timeDiff < 60 * 60) {
-            jsonResponse = CacheHelper.retrieve(getApplicationContext(), CACHE_KEY_RATES);
+            jsonResponse = CacheHelper.retrieve(getApplicationContext(), R.string.cache_rates);
         } else {
             // make new API request as cache is > 1 hr old
             jsonResponse = fetchExchangeJsonFromApi();
