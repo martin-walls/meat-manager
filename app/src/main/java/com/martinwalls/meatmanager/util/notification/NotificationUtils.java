@@ -8,11 +8,12 @@ import androidx.core.app.NotificationManagerCompat;
 
 public class NotificationUtils {
 
-    public static final String GROUP_CONTRACT_REMINDER =
-            "com.martinwalls.nea.CONTRACT_REMINDER";
-    public static final String GROUP_ORDER_REMINDER =
-            "com.martinwalls.nea.ORDER_REMINDER";
+    static final String GROUP_CONTRACT_REMINDER = "com.martinwalls.nea.CONTRACT_REMINDER";
+    static final String GROUP_ORDER_REMINDER = "com.martinwalls.nea.ORDER_REMINDER";
 
+    /**
+     * This shouldn't be instantiated.
+     */
     private NotificationUtils() {}
 
     /**
@@ -31,6 +32,7 @@ public class NotificationUtils {
                                         PendingIntent pendingIntent,
                                         int notificationId, String groupKey) {
 
+        // build notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(iconId)
                 .setContentTitle(title)
@@ -42,10 +44,9 @@ public class NotificationUtils {
             builder.setContentIntent(pendingIntent);
         }
 
+        // send notification
         NotificationManagerCompat notificationManager =
                 NotificationManagerCompat.from(context);
         notificationManager.notify(notificationId, builder.build());
     }
-
-
 }

@@ -11,6 +11,9 @@ public final class AppTheme {
     public static final int MODE_LIGHT = 1;
     public static final int MODE_DARK = 2;
 
+    /**
+     * This shouldn't be instantiated.
+     */
     private AppTheme() {}
 
     /**
@@ -20,7 +23,7 @@ public final class AppTheme {
         switch (mode) {
             case MODE_AUTO:
                 // "follow system" only available in Android 10 or later
-                // (technically can be enabled in Android 9 in dev options)
+                // (although technically can be enabled in Android 9 in dev options)
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
                     AppCompatDelegate.setDefaultNightMode(
                             AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);

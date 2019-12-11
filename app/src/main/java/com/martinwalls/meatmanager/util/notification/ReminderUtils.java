@@ -19,6 +19,9 @@ public class ReminderUtils {
 
     private static final int REQUEST_CODE_REMINDER = 1;
 
+    /**
+     * Shouldn't be instantiated.
+     */
     private ReminderUtils() {}
 
     /**
@@ -53,7 +56,6 @@ public class ReminderUtils {
      * user in settings.
      */
     public static void scheduleReminderAtDefaultTime(Context context) {
-//        EasyPreferences prefs = EasyPreferences.createForDefaultPreferences(context);
         EasyPreferences prefs = EasyPreferences.getInstance(context);
         int hour = prefs.getInt(R.string.pref_reminder_time_hr, DEFAULT_REMINDER_HR);
         int min = prefs.getInt(R.string.pref_reminder_time_min, DEFAULT_REMINDER_MIN);
@@ -84,8 +86,7 @@ public class ReminderUtils {
         PackageManager packageManager = context.getPackageManager();
 
         packageManager.setComponentEnabledSetting(receiver,
-                enabled
-                        ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                         : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
     }

@@ -13,20 +13,25 @@ import java.util.List;
 
 public class UndoStack {
 
-    private static UndoStack instance = new UndoStack();
+    private static UndoStack INSTANCE = new UndoStack();
 
+    // the maximum number of actions to store
     private final int MAX_SIZE = 100;
 
     private List<UndoableAction> undoStack = new ArrayList<>();
     private List<UndoableAction> redoStack = new ArrayList<>();
 
+    /**
+     * Shouldn't be instantiated, instead this should be accessed via
+     * {@link #getInstance()} as a singleton.
+     */
     private UndoStack() {}
 
     /**
      * Returns the instance of UndoStack.
      */
     public static UndoStack getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     /**

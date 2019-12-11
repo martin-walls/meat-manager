@@ -9,6 +9,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.martinwalls.meatmanager.R;
 
 public abstract class UndoableAction {
+
+    /**
+     * Enum to represent whether the Snackbar shown is for undoing or redoing an
+     * action, and therefore which action to show.
+     */
     private enum SnackbarMode {
         UNDO,
         REDO

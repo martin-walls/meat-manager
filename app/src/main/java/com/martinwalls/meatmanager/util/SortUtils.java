@@ -29,6 +29,9 @@ public class SortUtils {
      */
     public static final int SORT_LOCATION = 4;
 
+    /**
+     * This shouldn't be instantiated.
+     */
     private SortUtils() {}
 
     /**

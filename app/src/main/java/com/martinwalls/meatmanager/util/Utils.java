@@ -11,7 +11,9 @@ public final class Utils {
     // 1 lb ~= 0.45359237 kgs
     private static final double lbsToKgs = 0.45359237;
 
-    // Utils shouldn't be instantiated
+    /**
+     * This shouldn't be instantiated.
+     */
     private Utils() {}
 
     /**
