@@ -28,6 +28,7 @@ public class CacheHelper {
         try {
             File cache = getCacheFile(context, context.getString(key));
 
+            if (cache == null) return;
             ObjectOutput out = new ObjectOutputStream(new FileOutputStream(cache));
             out.writeUTF(value);
             out.close();
