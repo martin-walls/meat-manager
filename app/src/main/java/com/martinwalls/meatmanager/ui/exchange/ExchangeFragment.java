@@ -83,7 +83,6 @@ public class ExchangeFragment extends Fragment {
         bindViews(fragmentView);
 
         dbHandler = new ExchangeDBHandler(getContext());
-//        prefs = EasyPreferences.createForDefaultPreferences(getContext());
         prefs = EasyPreferences.getInstance(getContext());
 
         ratesLayout.setVisibility(View.GONE);
@@ -138,12 +137,7 @@ public class ExchangeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        Log.e("DEBUG", "1");
         initCurrencyPickers();
-//        Log.e("DEBUG", "2");
-//        if (requestCode == REQUEST_REFRESH_ON_DONE) {
-//            initCurrencyPickers();
-//        }
     }
 
     /**
@@ -249,7 +243,6 @@ public class ExchangeFragment extends Fragment {
             return;
         }
 
-        //noinspection unchecked
         rates = (HashMap<String, Double>)
                         data.getSerializableExtra(ApiIntentService.EXTRA_RESULT);
         updateRates();

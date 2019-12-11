@@ -50,7 +50,6 @@ public class DashboardFragment extends Fragment
         View fragmentView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         dbHandler = new DBHandler(getContext());
-//        prefs = EasyPreferences.createForDefaultPreferences(getContext());
         prefs = EasyPreferences.getInstance(getContext());
 
         if (filterLocation == null || !TextUtils.isEmpty(filterLocation.getLocationName())) {
@@ -62,6 +61,7 @@ public class DashboardFragment extends Fragment
         graphView = fragmentView.findViewById(R.id.graph);
         emptyView = fragmentView.findViewById(R.id.empty);
         graphLayout = fragmentView.findViewById(R.id.graph_layout);
+
         loadData();
 
         return fragmentView;
@@ -146,7 +146,6 @@ public class DashboardFragment extends Fragment
      * to show the updated data.
      */
     private void loadData() {
-
         // get data from db and sort it
         List<StockItem> stockList;
         if (filterLocation == null || TextUtils.isEmpty(filterLocation.getLocationName())) {

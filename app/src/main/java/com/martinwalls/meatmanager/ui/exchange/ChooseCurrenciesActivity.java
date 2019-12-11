@@ -19,7 +19,6 @@ import com.martinwalls.meatmanager.util.SortUtils;
 
 import java.util.List;
 
-
 public class ChooseCurrenciesActivity extends AppCompatActivity
         implements CurrencyAdapter.CurrencyAdapterListener {
 

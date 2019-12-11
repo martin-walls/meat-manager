@@ -33,8 +33,9 @@ public class BarChartView extends View {
 
     // colour of bar to show amount of stock held
     private Paint amountBarFillPaint;
-    // colour of required bar
+    // colour of required bar when more required
     private Paint moreReqBarFillPaint;
+    // colour of required bar when less required
     private Paint lessReqBarFillPaint;
 
     // text colour outside bar
@@ -47,12 +48,14 @@ public class BarChartView extends View {
     // text colour in amount tooltip
     private Paint amountTooltipTextPaint;
 
-    // colour of tooltip for required bar
+    // colour of tooltip for required bar when more required
     private Paint moreReqTooltipFillPaint;
-    // text colour in required tooltip
+    // text colour in required tooltip when more required
     private Paint moreReqTooltipTextPaint;
 
+    // colour of tooltip for required bar when less required
     private Paint lessReqTooltipFillPaint;
+    // text color in required tooltip when less required
     private Paint lessReqTooltipTextPaint;
 
     // thickness of each bar, in dp
@@ -340,7 +343,6 @@ public class BarChartView extends View {
                 && data.getAmountRequired() < data.getAmount();
     }
 
-    //region bars
     /**
      * Calculates the y-value of the top edge of the bar at position {@code pos}.
      */
@@ -400,9 +402,7 @@ public class BarChartView extends View {
         float length = getBarLength(data.getAmount());
         drawBar(c, 0, getBarTop(pos), length, getBarBottom(pos), amountBarFillPaint);
     }
-    //endregion bars
 
-    //region label
     /**
      * Calculates the pixel width of a bar label including its margin.
      *
@@ -514,9 +514,7 @@ public class BarChartView extends View {
             c.drawText(label, labelX, labelY, barOuterLabelPaint);
         }
     }
-    //endregion label
 
-    //region tooltips
     /**
      * Calculates the width of a tooltip with text bounds stored in
      * {@link #amountTooltipTextBounds}.
@@ -998,5 +996,4 @@ public class BarChartView extends View {
             }
         }
     }
-    //endregion tooltips
 }

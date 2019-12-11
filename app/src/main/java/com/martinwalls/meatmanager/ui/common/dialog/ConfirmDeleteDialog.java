@@ -35,6 +35,7 @@ public class ConfirmDeleteDialog extends DialogFragment {
             listener.onConfirmDelete();
             dismiss();
         });
+
         btnCancel.setOnClickListener(v -> {
             listener.onConfirmDeleteCancel();
             dismiss();

@@ -12,8 +12,8 @@ public class RecyclerViewMargin extends RecyclerView.ItemDecoration {
     private final int direction;
 
     private final int margin;
-    private int marginStart;
-    private int marginEnd;
+    private final int marginStart;
+    private final int marginEnd;
 
     public RecyclerViewMargin(int margin, int direction) {
         this(margin, margin, margin, direction);

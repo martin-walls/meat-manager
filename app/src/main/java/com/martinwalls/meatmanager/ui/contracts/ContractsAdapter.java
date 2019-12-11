@@ -54,7 +54,6 @@ public class ContractsAdapter extends RecyclerView.Adapter<ContractsAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         Contract contract = contractList.get(position);
         holder.contractDest.setText(contract.getDestName());
-//        holder.contractDest.setText(contract.getDaysToNextRepeat() + "");
         String repeatStr;
         Interval repeatInterval = contract.getRepeatInterval();
         int repeatOn = contract.getRepeatOn();

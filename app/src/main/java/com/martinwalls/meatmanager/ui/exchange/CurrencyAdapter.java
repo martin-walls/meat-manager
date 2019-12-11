@@ -20,7 +20,6 @@ import java.util.List;
 public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHolder>
         implements Filterable {
 
-    @SuppressWarnings("FieldCanBeLocal")
     private final int VIEW_STANDARD = 0;
     private final int VIEW_SECTION = 1;
     private final int VIEW_SECTION_NO_FAV = 2;
@@ -170,7 +169,6 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
 
             @Override
             protected void publishResults(CharSequence filterText, FilterResults results) {
-                //noinspection unchecked
                 currencyListFiltered = (List<Currency>) results.values;
                 notifyDataSetChanged();
             }

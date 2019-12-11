@@ -6,7 +6,6 @@ public class BarChartEntry {
     private float amount;
     private float amountRequired;
 
-
     public BarChartEntry(String name, float amount, float amountRequired) {
         this.name = name;
         this.amount = amount;

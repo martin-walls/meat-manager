@@ -58,12 +58,6 @@ public class ProductsAddedAdapter
         showDeleteBtn = false;
     }
 
-    public ProductsAddedAdapter(List<ProductQuantity> productList,
-                                ProductsAddedAdapterListener listener) {
-        this.productList = productList;
-        this.listener = listener;
-    }
-
     /**
      * Constructor to set which buttons should be showing.
      */
@@ -101,12 +95,8 @@ public class ProductsAddedAdapter
                             productQuantity.getQuantityBoxes(),
                             productQuantity.getQuantityBoxes()));
         }
-        if (!showDeleteBtn) {
-            holder.deleteBtn.setVisibility(View.GONE);
-        }
-        if (!showEditBtn) {
-            holder.editBtn.setVisibility(View.GONE);
-        }
+        if (!showDeleteBtn) holder.deleteBtn.setVisibility(View.GONE);
+        if (!showEditBtn) holder.editBtn.setVisibility(View.GONE);
     }
 
     @Override

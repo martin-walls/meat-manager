@@ -68,18 +68,15 @@ public class RelatedStockAdapter extends RecyclerView.Adapter<RelatedStockAdapte
          * Listener to handle clicks on the item title. Expands or collapses
          * the child views depending on the current state.
          */
-        private View.OnClickListener titleClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int prevExpandedItemPos = expandedItemPos;
-                if (expandedItemPos != getAdapterPosition()) {
-                    expandedItemPos = getAdapterPosition();
-                    notifyItemChanged(prevExpandedItemPos);
-                    notifyItemChanged(expandedItemPos);
-                } else {
-                    expandedItemPos = -1;
-                    notifyItemChanged(prevExpandedItemPos);
-                }
+        private View.OnClickListener titleClickListener = v -> {
+            int prevExpandedItemPos = expandedItemPos;
+            if (expandedItemPos != getAdapterPosition()) {
+                expandedItemPos = getAdapterPosition();
+                notifyItemChanged(prevExpandedItemPos);
+                notifyItemChanged(expandedItemPos);
+            } else {
+                expandedItemPos = -1;
+                notifyItemChanged(prevExpandedItemPos);
             }
         };
 
@@ -88,12 +85,9 @@ public class RelatedStockAdapter extends RecyclerView.Adapter<RelatedStockAdapte
          * {@link RelatedStockListener#onStockItemClicked(int)} to allow the
          * Activity to handle the click action.
          */
-        private View.OnClickListener childClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextView stockId = v.findViewById(R.id.stock_id);
-                listener.onStockItemClicked(Integer.valueOf(stockId.getText().toString()));
-            }
+        private View.OnClickListener childClickListener = v -> {
+            TextView stockId = v.findViewById(R.id.stock_id);
+            listener.onStockItemClicked(Integer.valueOf(stockId.getText().toString()));
         };
     }
 

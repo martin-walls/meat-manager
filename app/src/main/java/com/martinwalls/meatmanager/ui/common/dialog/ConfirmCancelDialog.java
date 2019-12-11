@@ -29,6 +29,7 @@ public class ConfirmCancelDialog extends DialogFragment {
             listener.onConfirmCancelYesAction();
             dismiss();
         });
+
         btnNo.setOnClickListener(v -> {
             listener.onConfirmCancelNoAction();
             dismiss();
@@ -60,7 +61,6 @@ public class ConfirmCancelDialog extends DialogFragment {
          * activity / fragment to go back to the previous page.
          */
         void onConfirmCancelYesAction();
-        // doesn't need to be implemented if NO btn should just cancel dialog
 
         /**
          * This is called when the user stops the cancel action from the dialog.

@@ -27,12 +27,11 @@ public class LocationsMenuAdapter
             super(view);
             locationName = view.findViewById(R.id.name);
 
-            locationName.setOnClickListener(
-                    v -> {
+            locationName.setOnClickListener(v -> {
                         setSelectedItem(getAdapterPosition());
                         listener.onLocationItemClicked(
                                 locationsList.get(getAdapterPosition()));
-                    });
+            });
         }
     }
 
@@ -40,6 +39,7 @@ public class LocationsMenuAdapter
         this.locationsList = locationsList;
         this.listener = listener;
 
+        // add blank location as a placeholder for "ALL" option
         this.locationsList.add(0, new Location());
     }
 
