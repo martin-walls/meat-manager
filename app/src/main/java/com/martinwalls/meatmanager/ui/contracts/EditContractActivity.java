@@ -137,7 +137,7 @@ public class EditContractActivity extends InputFormActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_new_contract, menu);
+        getMenuInflater().inflate(R.menu.activity_edit_contract, menu);
         return true;
     }
 

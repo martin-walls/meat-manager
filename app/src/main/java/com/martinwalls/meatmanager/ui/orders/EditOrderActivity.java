@@ -143,7 +143,7 @@ public class EditOrderActivity extends InputFormActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_new_order, menu);
+        getMenuInflater().inflate(R.menu.activity_edit_order, menu);
         return true;
     }
 

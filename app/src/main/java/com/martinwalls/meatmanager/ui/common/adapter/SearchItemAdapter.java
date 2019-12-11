@@ -85,7 +85,6 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.Vi
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults results) {
-                //noinspection unchecked
                 itemListFiltered = (ArrayList<SearchItem>) results.values;
                 notifyDataSetChanged();
             }

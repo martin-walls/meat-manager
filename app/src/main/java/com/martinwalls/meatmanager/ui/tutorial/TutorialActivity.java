@@ -77,7 +77,8 @@ public class TutorialActivity extends FragmentActivity {
     /**
      * This callback is called when the user navigates to a new page.
      */
-    ViewPager2.OnPageChangeCallback pageChangeCallback = new ViewPager2.OnPageChangeCallback() {
+    ViewPager2.OnPageChangeCallback pageChangeCallback =
+            new ViewPager2.OnPageChangeCallback() {
         @Override
         public void onPageSelected(int position) {
             super.onPageSelected(position);

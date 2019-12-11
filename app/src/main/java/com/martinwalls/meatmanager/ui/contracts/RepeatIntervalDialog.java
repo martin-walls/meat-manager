@@ -186,7 +186,8 @@ public class RepeatIntervalDialog extends DialogFragment {
         timePeriodSpn = dialogView.findViewById(R.id.spn_time_period);
         timePeriodAdapter =
                 new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item);
-        timePeriodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        timePeriodAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
         timePeriodAdapter.addAll(getResources().getStringArray(R.array.time_periods));
         timePeriodAdapter.notifyDataSetChanged();
         timePeriodSpn.setAdapter(timePeriodAdapter);

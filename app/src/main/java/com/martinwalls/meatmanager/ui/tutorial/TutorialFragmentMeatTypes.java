@@ -153,7 +153,8 @@ public class TutorialFragmentMeatTypes extends Fragment
         int cy = (int) (btnCustom.getY() + btnCustom.getHeight() / 2);
         float finalRadius = (float) Math.hypot(cx, cy);
 
-        Animator animator = ViewAnimationUtils.createCircularReveal(greenBg, cx, cy, 0, finalRadius);
+        Animator animator = ViewAnimationUtils.createCircularReveal(
+                greenBg, cx, cy, 0, finalRadius);
 
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -182,7 +183,8 @@ public class TutorialFragmentMeatTypes extends Fragment
         int cy = (int) (btnCustom.getY() + btnCustom.getHeight() / 2);
         float startRadius = (float) Math.hypot(cx, cy);
 
-        Animator animator = ViewAnimationUtils.createCircularReveal(greenBg, cx, cy, startRadius, 0);
+        Animator animator = ViewAnimationUtils.createCircularReveal(
+                greenBg, cx, cy, startRadius, 0);
 
         animator.addListener(new AnimatorListenerAdapter() {
             @Override

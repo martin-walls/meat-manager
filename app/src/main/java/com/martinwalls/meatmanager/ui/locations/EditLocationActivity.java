@@ -208,7 +208,8 @@ public class EditLocationActivity extends AppCompatActivity
                 .map(Location::getLocationName)
                 .collect(Collectors.toList())
                 .contains(editTextName.getText().toString())
-                && !TextUtils.equals(editTextName.getText(), locationToEdit.getLocationName())) {
+                && !TextUtils.equals(
+                        editTextName.getText(), locationToEdit.getLocationName())) {
             inputLayoutName.setError(getString(R.string.input_error_duplicate));
             isValid = false;
         } else {
