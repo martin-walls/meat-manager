@@ -8,6 +8,11 @@
     android:orientation="vertical"
     >
 
+    <com.martinwalls.meatmanager.ui.SearchResultsLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
     <LinearLayout
         android:id="@+id/rates_layout"
         android:layout_width="match_parent"
@@ -15,6 +20,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:orientation="vertical"
+        android:visibility="gone"
         >
 
         <!-- top row with primary and secondary currencies, swap btn -->
