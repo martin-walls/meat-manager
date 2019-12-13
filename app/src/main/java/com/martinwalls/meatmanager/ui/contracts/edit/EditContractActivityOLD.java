@@ -1,4 +1,3 @@
-/*
 package com.martinwalls.meatmanager.ui.contracts.edit;
 
 import android.content.Intent;
@@ -281,11 +280,10 @@ public class EditContractActivityOLD extends AppCompatActivity
         selectedProductId = productAdded.getProduct().getProductId();
     }
 
-    */
-/**
+*
      * This is called when a radio button is clicked in the {@link RepeatIntervalDialog}.
      * Sets the contract's repeat interval to the chosen value.
-     *//*
+
 
     @Override
     public void onRadioBtnClicked(int id) {
@@ -302,12 +300,11 @@ public class EditContractActivityOLD extends AppCompatActivity
         }
     }
 
-    */
-/**
+*
      * Called when the user enters a custom repeat interval in the
      * {@link RepeatIntervalDialog}. Sets the contract's repeat interval to
      * this chosen value.
-     *//*
+
 
     @Override
     public void onCustomIntervalSelected(Interval interval) {
@@ -319,11 +316,10 @@ public class EditContractActivityOLD extends AppCompatActivity
         finish();
     }
 
-    */
-/**
+*
      * Shows a {@link ConfirmCancelDialog} asking the user to confirm
      * the cancel action.
-     *//*
+
 
     private void showConfirmCancelDialog() {
         DialogFragment dialog = new ConfirmCancelDialog();
@@ -346,11 +342,10 @@ public class EditContractActivityOLD extends AppCompatActivity
         }
     }
 
-    */
-/**
+*
      * Initialises all the views in the layout, including any on click listeners
      * and other behaviours.
-     *//*
+
 
     private void initViews() {
         setViewsToHide();
@@ -370,11 +365,10 @@ public class EditContractActivityOLD extends AppCompatActivity
         initReminderInput();
     }
 
-    */
-/**
+*
      * Retrieves the current mass unit set by the user preferences, and updates
      * the input fields accordingly.
-     *//*
+
 
     private void checkMassUnit() {
         if (MassUnit.getMassUnit(this) == MassUnit.LBS) {
@@ -384,10 +378,9 @@ public class EditContractActivityOLD extends AppCompatActivity
         }
     }
 
-    */
-/**
+*
      * Sets which views should be hidden when a search view is opened.
-     *//*
+
 
     private void setViewsToHide() {
         addViewToHide(INPUT_PRODUCT, R.id.input_layout_product);
@@ -401,11 +394,10 @@ public class EditContractActivityOLD extends AppCompatActivity
         addViewToHide("products_added_recycler_view", R.id.products_added_recycler_view);
     }
 
-    */
-/**
+*
      * Initialises the search layout which is shown when the user clicks on a
      * relevant input field. These are set in {@link #initSearchFieldListeners()}.
-     *//*
+
 
     private void initSearchLayout() {
         CustomRecyclerView recyclerView = findViewById(R.id.recycler_view_results);
@@ -419,12 +411,11 @@ public class EditContractActivityOLD extends AppCompatActivity
         setSearchResultsLayout(R.id.search_results_layout);
     }
 
-    */
-/**
+*
      * Sets listeners for the input fields that should open the search layout
      * when clicked. This should include any field that references other objects
      * in the database that the user should choose from.
-     *//*
+
 
     private void initSearchFieldListeners() {
         setListeners(INPUT_PRODUCT,
@@ -436,11 +427,10 @@ public class EditContractActivityOLD extends AppCompatActivity
                 findViewById(R.id.edit_text_destination));
     }
 
-    */
-/**
+*
      * Initialises the view to show a list of products the user has already
      * added to the contract, if they add more than one.
-     *//*
+
 
     private void initProductsAddedView() {
         productsAddedAdapter = new ProductsAddedAdapter(
@@ -455,11 +445,10 @@ public class EditContractActivityOLD extends AppCompatActivity
         addProductBtn.setOnClickListener(v -> addProductToProductsAddedList());
     }
 
-    */
-/**
+*
      * Initialises the repeat interval input field to open a {@link RepeatIntervalDialog}
      * when the user clicks it.
-     *//*
+
 
     private void initRepeatIntervalInput() {
         // show dialog when user selects repeat interval input field
@@ -468,10 +457,9 @@ public class EditContractActivityOLD extends AppCompatActivity
         editTextRepeatInterval.setOnClickListener(v -> showRepeatIntervalDialog());
     }
 
-    */
-/**
+*
      * Initialises the repeat on input field.
-     *//*
+
 
     private void initRepeatOnInput() {
         Spinner repeatOnSpn = findViewById(R.id.spn_repeat_on);
@@ -486,11 +474,10 @@ public class EditContractActivityOLD extends AppCompatActivity
         findViewById(R.id.input_repeat_on).setVisibility(View.GONE);
     }
 
-    */
-/**
+*
      * Initialises the reminder input field, including increment and
      * decrement buttons.
-     *//*
+
 
     private void initReminderInput() {
         TextView txtReminderDaysBefore = findViewById(R.id.reminder_text_days_before);
@@ -520,21 +507,19 @@ public class EditContractActivityOLD extends AppCompatActivity
         btnReminderPlus.setOnClickListener(v -> incrementReminder());
     }
 
-    */
-/**
+*
      * Sets the reminder input field to the specified value.
-     *//*
+
 
     private void setReminderInputValue(int value) {
         editTextReminder.setText(String.valueOf(value));
     }
 
-    */
-/**
+*
      * Gets the product and mass currently entered into the input fields
      * and adds a {@link ProductQuantity} with these values to the contract.
      * Clears the input fields so another product can be added.
-     *//*
+
 
     private void addProductToProductsAddedList() {
         ProductQuantity product = getProductFromInputsAndClear();
@@ -544,12 +529,11 @@ public class EditContractActivityOLD extends AppCompatActivity
         }
     }
 
-    */
-/**
+*
      * Sets listeners on input fields to detect when the user has made any
      * changes, determining whether or not to show call {@link #showConfirmCancelDialog()}
      * when the user wants to go back.
-     *//*
+
 
     private void setTextChangedListeners() {
         TextInputEditText editTextProduct = findViewById(R.id.edit_text_product);
@@ -617,11 +601,10 @@ public class EditContractActivityOLD extends AppCompatActivity
         });
     }
 
-    */
-/**
+*
      * Gets the product and mass currently entered into the input fields and
      * returns this as a {@link ProductQuantity} object. Clears the input fields.
-     *//*
+
 
     private ProductQuantity getProductFromInputsAndClear() {
         hideKeyboard();
@@ -676,10 +659,9 @@ public class EditContractActivityOLD extends AppCompatActivity
         }
     }
 
-    */
-/**
+*
      * Initialises input fields with data from the {@link Contract} being edited.
-     *//*
+
 
     private void fillFields() {
         productsAddedList.clear();
@@ -707,11 +689,10 @@ public class EditContractActivityOLD extends AppCompatActivity
         selectedDestId = contractToEdit.getDestId();
     }
 
-    */
-/**
+*
      * Shows a {@link RepeatIntervalDialog} so the user can select a repeat
      * interval for this contract.
-     *//*
+
 
     private void showRepeatIntervalDialog() {
         DialogFragment dialog = new RepeatIntervalDialog();
@@ -741,10 +722,9 @@ public class EditContractActivityOLD extends AppCompatActivity
         dialog.show(getSupportFragmentManager(), "repeat_interval");
     }
 
-    */
-/**
+*
      * Stores the repeat interval the user has entered.
-     *//*
+
 
     private void setSelectedRepeatInterval(Interval interval) {
         // repeat on input is hidden until repeat interval is set
@@ -797,10 +777,9 @@ public class EditContractActivityOLD extends AppCompatActivity
         }
     }
 
-    */
-/**
+*
      * Increments the value in the reminder input field.
-     *//*
+
 
     private void incrementReminder() {
         EditText editTextReminder = findViewById(R.id.edit_text_reminder);
@@ -812,10 +791,9 @@ public class EditContractActivityOLD extends AppCompatActivity
         }
     }
 
-    */
-/**
+*
      * Decrements the value in the reminder input field, if it is greater than 0.
-     *//*
+
 
     private void decrementReminder() {
         EditText editTextReminder = findViewById(R.id.edit_text_reminder);
@@ -827,15 +805,14 @@ public class EditContractActivityOLD extends AppCompatActivity
         }
     }
 
-    */
-/**
+*
      * Stores the {@link Contract} in the database if it is valid.
      * First checks each input field to check it is valid. If a field is
      * invalid, an appropriate error message is shown to help the user
      * correct the error. If all the fields have valid data, either adds a new
      * contract or edits the existing one depending on the edit mode of this
      * activity.
-     *//*
+
 
     private boolean addContractToDb() {
         boolean isValid = true;
@@ -925,4 +902,3 @@ public class EditContractActivityOLD extends AppCompatActivity
         return false;
     }
 }
-*/

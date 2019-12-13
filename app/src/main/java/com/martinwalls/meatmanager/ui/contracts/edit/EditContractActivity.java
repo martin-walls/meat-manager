@@ -1,37 +1,45 @@
 package com.martinwalls.meatmanager.ui.contracts.edit;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.graphics.fonts.Font;
-import android.opengl.ETC1;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.transition.Transition;
+import androidx.transition.TransitionInflater;
+import androidx.transition.TransitionManager;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.meatmanager.R;
-import com.martinwalls.meatmanager.data.models.Contract;
-import com.martinwalls.meatmanager.data.models.Interval;
+import com.martinwalls.meatmanager.data.models.Product;
 import com.martinwalls.meatmanager.data.models.SearchItem;
 import com.martinwalls.meatmanager.databinding.ActivityEditContractBinding;
-import com.martinwalls.meatmanager.ui.InputFormActivity;
 import com.martinwalls.meatmanager.ui.common.adapter.ProductsAddedAdapter;
 import com.martinwalls.meatmanager.ui.common.adapter.SearchItemAdapter;
+import com.martinwalls.meatmanager.ui.common.dialog.ConfirmCancelDialog;
+import com.martinwalls.meatmanager.ui.products.AddNewProductDialog;
 import com.martinwalls.meatmanager.util.MassUnit;
 import com.martinwalls.meatmanager.util.SimpleTextWatcher;
 
-public class EditContractActivity extends InputFormActivity
-        implements ProductsAddedAdapter.ProductsAddedAdapterListener {
+import java.util.HashMap;
+
+public class EditContractActivity extends AppCompatActivity
+        implements SearchItemAdapter.SearchItemAdapterListener,
+        ProductsAddedAdapter.ProductsAddedAdapterListener,
+        AddNewProductDialog.AddNewProductListener,
+        RepeatIntervalDialog.RepeatIntervalDialogListener,
+        ConfirmCancelDialog.ConfirmCancelListener {
 
     public static final String EXTRA_EDIT_TYPE = "edit_type";
     public static final String EXTRA_CONTRACT_ID = "contract_id";
@@ -57,6 +65,11 @@ public class EditContractActivity extends InputFormActivity
     private ArrayAdapter<CharSequence> repeatOnSpnAdapter;
 
 
+    private SearchItemAdapter searchItemAdapter;
+
+    private HashMap<String, Integer> viewsToHide = new HashMap<>();
+    private String currentSearchType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +77,7 @@ public class EditContractActivity extends InputFormActivity
         binding = ActivityEditContractBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSearchItemViewModel(EditContractSearchItemViewModel.class);
+//        setSearchItemViewModel(EditContractSearchItemViewModel.class);
 
         Bundle extras = getIntent().getExtras();
         int editType = EDIT_TYPE_NEW;
@@ -92,8 +105,12 @@ public class EditContractActivity extends InputFormActivity
 
 
         setViewsToHide();
-        setAddNewView(binding.addNew);
-        setRootView((ViewGroup) binding.getRoot());
+
+        binding.addNew.setOnClickListener(
+                v -> addNewItemFromSearch(binding.addNew.getSearchItemType()));
+
+
+//        setRootView((ViewGroup) binding.getRoot());
 
 
         if (MassUnit.getMassUnit(this) == MassUnit.LBS) {
@@ -104,9 +121,12 @@ public class EditContractActivity extends InputFormActivity
 
         // search results recycler view
         binding.recyclerViewResults.setEmptyView(binding.noResults);
-        binding.recyclerViewResults.setAdapter(getSearchItemAdapter());
+        searchItemAdapter = new SearchItemAdapter(this);
+        binding.recyclerViewResults.setAdapter(searchItemAdapter);
         binding.recyclerViewResults.setLayoutManager(new LinearLayoutManager(this));
-        setSearchResultsLayout(binding.searchResultsLayout);
+
+        viewModel.getSearchItemList().observe(this,
+                searchItems -> searchItemAdapter.setSearchItems(searchItems));
 
 
         setListeners(INPUT_PRODUCT, binding.inputLayoutProduct, binding.editTextProduct);
@@ -243,11 +263,28 @@ public class EditContractActivity extends InputFormActivity
         TextInputEditText editText = (TextInputEditText) getCurrentFocus();
         editText.setText(item.getName());
         editText.clearFocus();
-        cancelSearch();
+        closeSearch();
     }
 
     @Override
-    protected void addNewItemFromSearch(String searchType) {
+    public void onAddNewProductDoneAction(Product newProduct) {
+        boolean success = viewModel.addProduct(newProduct);
+        if (success) {
+            viewModel.setSelectedProductId(newProduct.getProductId());
+            binding.editTextProduct.setText(newProduct.getProductName());
+            binding.editTextProduct.clearFocus();
+            closeSearch();
+        }
+    }
+
+    @Override
+    public void onProductAddedDelete(int position) {
+        viewModel.removeProductAdded(position);
+        productsAddedAdapter.notifyItemRemoved(position); //todo in vm observer
+    }
+
+//    @Override
+    private void addNewItemFromSearch(String searchType) {
         switch (searchType) {
             case INPUT_PRODUCT:
 //                DialogFragment dialog = new AddNewProductDialog();
@@ -269,17 +306,88 @@ public class EditContractActivity extends InputFormActivity
      * Sets which views should be hidden when a search view is opened.
      */
     private void setViewsToHide() {
-        addViewToHide(INPUT_PRODUCT, R.id.input_layout_product);
-        addViewToHide(INPUT_QUANTITY, R.id.input_row_quantity);
-        addViewToHide(INPUT_DESTINATION, R.id.input_layout_destination);
-        addViewToHide(INPUT_REPEAT_INTERVAL, R.id.input_layout_repeat_interval);
-        addViewToHide(INPUT_REPEAT_ON, R.id.input_repeat_on);
-        addViewToHide(INPUT_REMINDER, R.id.input_reminder);
+        viewsToHide.put(INPUT_PRODUCT, R.id.input_layout_product);
+        viewsToHide.put(INPUT_QUANTITY, R.id.input_row_quantity);
+        viewsToHide.put(INPUT_DESTINATION, R.id.input_layout_destination);
+        viewsToHide.put(INPUT_REPEAT_INTERVAL, R.id.input_layout_repeat_interval);
+        viewsToHide.put(INPUT_REPEAT_ON, R.id.input_repeat_on);
+        viewsToHide.put(INPUT_REMINDER, R.id.input_reminder);
 
-        addViewToHide("add_product_btn", R.id.add_product);
-        addViewToHide("products_added_recycler_view", R.id.products_added_recycler_view);
+        viewsToHide.put("add_product_btn", R.id.add_product);
+        viewsToHide.put("products_added_recycler_view", R.id.products_added_recycler_view);
     }
 
+    private void setListeners(String name,
+                              TextInputLayout inputLayout, TextInputEditText editText) {
+        //todo custom view for these?
+
+        inputLayout.setEndIconVisible(false);
+
+        editText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                inputLayout.setEndIconVisible(true);
+                openSearch(name);
+            }
+        });
+
+        inputLayout.setEndIconOnClickListener(v -> {
+            editText.setText("");
+            editText.clearFocus();
+            inputLayout.setEndIconVisible(false);
+            closeSearch();
+        });
+
+        editText.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchItemAdapter.getFilter().filter(s);
+            }
+        });
+    }
+
+    private void openSearch(String name) {
+        Transition transition = TransitionInflater.from(this)
+                .inflateTransition(R.transition.search_open);
+        TransitionManager.beginDelayedTransition((ViewGroup) binding.getRoot(), transition);
+        for (int view : viewsToHide.values()) {
+            if (view != viewsToHide.get(name)) {
+                findViewById(view).setVisibility(View.GONE);
+            }
+        }
+
+        viewModel.loadSearchItems(name);
+
+        currentSearchType = name;
+        searchItemAdapter.setSearchItemType(name);
+
+        TextInputEditText editText = (TextInputEditText) getCurrentFocus();
+        searchItemAdapter.getFilter().filter(editText.getText());
+
+        binding.addNew.setVisibility(View.VISIBLE);
+        binding.addNew.setText(getString(R.string.search_add_new, name.toLowerCase()));
+        binding.addNew.setSearchItemType(name);
+
+        binding.searchResultsLayout.setAlpha(0);
+        binding.searchResultsLayout.setVisibility(View.VISIBLE);
+        binding.searchResultsLayout.animate()
+                .alpha(1)
+                .setStartDelay(getResources().getInteger(R.integer.search_results_fade_delay))
+                .setDuration(getResources().getInteger(R.integer.search_results_fade_duration))
+                .setListener(null);
+    }
+
+    private void closeSearch() {
+        Transition transition = TransitionInflater.from(this)
+                .inflateTransition(R.transition.search_close);
+        TransitionManager.beginDelayedTransition((ViewGroup) binding.getRoot(), transition);
+        for (int view : viewsToHide.values()) {
+            findViewById(view).setVisibility(View.VISIBLE);
+        }
+
+        binding.searchResultsLayout.setVisibility(View.GONE);
+
+        hideKeyboard();
+    }
 
     private void decrementReminder() {
         if (!TextUtils.isEmpty(binding.editTextReminder.getText())) {
@@ -300,4 +408,11 @@ public class EditContractActivity extends InputFormActivity
         }
     }
 
+    protected final void hideKeyboard() {
+        InputMethodManager imm =
+                (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), 0);
+        }
+    }
 }

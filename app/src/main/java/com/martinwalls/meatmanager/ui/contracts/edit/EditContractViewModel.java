@@ -13,7 +13,6 @@ import com.martinwalls.meatmanager.data.models.Location;
 import com.martinwalls.meatmanager.data.models.Product;
 import com.martinwalls.meatmanager.data.models.ProductQuantity;
 import com.martinwalls.meatmanager.data.models.SearchItem;
-import com.martinwalls.meatmanager.ui.SearchItemViewModel;
 import com.martinwalls.meatmanager.util.SortUtils;
 
 import java.util.ArrayList;
@@ -34,6 +33,8 @@ public class EditContractViewModel extends AndroidViewModel {
 
     private int selectedProductId;
     private int selectedDestId;
+
+    private MutableLiveData<List<SearchItem>> searchItemList;
 
     private MutableLiveData<Interval> selectedRepeatInterval;
 
@@ -71,6 +72,60 @@ public class EditContractViewModel extends AndroidViewModel {
 
     public void setSelectedRepeatInterval(Interval interval) {
         selectedRepeatInterval.setValue(interval);
+    }
+
+
+    public boolean addProduct(Product product) {
+        return true;
+    }
+
+
+
+
+    public void setSelectedProductId(int id) {
+        this.selectedProductId = id;
+    }
+
+
+    public void addProductAdded(ProductQuantity product) {
+        if (productsAdded == null) productsAdded = new MutableLiveData<>();
+        productsAdded.getValue().add(product);
+    }
+
+    public void removeProductAdded(int pos) {
+        if (productsAdded.getValue() == null || productsAdded.getValue().size() == 0) return;
+        productsAdded.getValue().remove(pos);
+    }
+
+
+
+
+
+    public LiveData<List<SearchItem>> getSearchItemList() {
+        if (searchItemList == null) searchItemList = new MutableLiveData<>();
+        return searchItemList;
+    }
+
+    public void loadSearchItems(String searchItemType) {
+        List<SearchItem> newSearchItems = new ArrayList<>();
+        switch (searchItemType) {
+            case "product":
+                for (Product product : SortUtils.mergeSort(
+                        dbHandler.getAllProducts(), Product.comparatorAlpha())) {
+                    newSearchItems.add(
+                            new SearchItem(product.getProductName(), product.getProductId()));
+                }
+                break;
+            case "destination":
+                for (Location location : SortUtils.mergeSort(
+                        dbHandler.getAllLocations(Location.LocationType.Destination),
+                        Location.comparatorAlpha())) {
+                    newSearchItems.add(new SearchItem(
+                            location.getLocationName(), location.getLocationId()));
+                }
+                break;
+        }
+        searchItemList.setValue(newSearchItems);
     }
 
 
