@@ -1,4 +1,4 @@
-package com.martinwalls.meatmanager;
+package com.martinwalls.meatmanager.util;
 
 import com.martinwalls.meatmanager.util.Utils;
 
