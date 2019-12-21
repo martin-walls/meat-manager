@@ -1,9 +1,7 @@
 package com.martinwalls.meatmanager.ui.locations.detail;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,14 +13,12 @@ import androidx.fragment.app.DialogFragment;
 
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
+import com.martinwalls.meatmanager.data.location.MapsHelper;
 import com.martinwalls.meatmanager.data.models.Location;
 import com.martinwalls.meatmanager.ui.locations.edit.EditLocationActivity;
 import com.martinwalls.meatmanager.ui.common.dialog.ConfirmDeleteDialog;
 import com.martinwalls.meatmanager.util.undo.UndoStack;
 import com.martinwalls.meatmanager.util.undo.location.DeleteLocationAction;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 public class LocationDetailActivity extends AppCompatActivity
         implements ConfirmDeleteDialog.ConfirmDeleteListener {
@@ -193,29 +189,7 @@ public class LocationDetailActivity extends AppCompatActivity
      * Opens Google Maps and searches for the address of this location.
      */
     private void openAddressInMaps() {
-        String query = null;
-        StringBuilder builder = new StringBuilder();
-        builder.append(location.getAddrLine1());
-        builder.append(", ");
-        if (!TextUtils.isEmpty(location.getAddrLine2())) {
-            builder.append(location.getAddrLine2());
-            builder.append(", ");
-        }
-        if (!TextUtils.isEmpty(location.getCity())) {
-            builder.append(location.getCity());
-            builder.append(", ");
-        }
-        builder.append(location.getPostcode());
-        builder.append(", ");
-        builder.append(location.getCountry());
-        try {
-            query = URLEncoder.encode(builder.toString(), "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String url = "https://www.google.com/maps/search/?api=1&query=" + query;
-
-        Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        Intent mapsIntent = MapsHelper.getMapsIntent(location);
         startActivity(mapsIntent);
     }
 }
