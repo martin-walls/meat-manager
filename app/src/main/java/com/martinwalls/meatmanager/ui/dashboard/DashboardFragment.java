@@ -21,6 +21,8 @@ import com.martinwalls.meatmanager.util.EasyPreferences;
 import com.martinwalls.meatmanager.util.SortUtils;
 import com.martinwalls.meatmanager.util.Utils;
 
+//todo fix grouping by location - currently only shows stock from one location
+
 public class DashboardFragment extends Fragment
         implements LocationsMenuAdapter.LocationsMenuAdapterListener {
 

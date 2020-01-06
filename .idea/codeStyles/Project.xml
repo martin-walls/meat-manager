@@ -1,7 +1,7 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
-    <option name="RIGHT_MARGIN" value="95" />
-    <option name="SOFT_MARGINS" value="80,95" />
+    <option name="RIGHT_MARGIN" value="120" />
+    <option name="SOFT_MARGINS" value="80,120" />
     <AndroidXmlCodeStyleSettings>
       <option name="LAYOUT_SETTINGS">
         <value>

@@ -39,10 +39,11 @@ public class DBHandler extends SQLiteOpenHelper {
         static final String PRODUCT_ID = "ProductId";
         static final String LOCATION_ID = "LocationId";
         static final String SUPPLIER_ID = "SupplierId";
-        static final String DEST_ID = "DestId";
+        static final String DEST_ID = "DestId"; //todo remove dest
         static final String MASS = "Mass";
         static final String NUM_BOXES = "NumBoxes";
         static final String QUALITY = "Quality";
+        //todo add intake date & best before date
     }
 
     private final class OrdersTable {

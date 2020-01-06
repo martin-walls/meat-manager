@@ -63,6 +63,9 @@ public class EditContractViewModel extends AndroidViewModel {
         contract.setValue(dbHandler.getContract(contractId));
     }
 
+
+
+
     public LiveData<Interval> getSelectedRepeatInterval() {
         if (selectedRepeatInterval == null) {
             selectedRepeatInterval = new MutableLiveData<>();
@@ -73,6 +76,10 @@ public class EditContractViewModel extends AndroidViewModel {
     public void setSelectedRepeatInterval(Interval interval) {
         selectedRepeatInterval.setValue(interval);
     }
+
+
+
+
 
 
     public boolean addProduct(Product product) {

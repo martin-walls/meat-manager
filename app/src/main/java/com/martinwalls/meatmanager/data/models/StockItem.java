@@ -13,7 +13,7 @@ public class StockItem implements Serializable {
      * {@link StockItem}.
      */
     public enum Quality implements Serializable {
-        Good,
+        Good, //todo change to "food grade" -- migrate items in database
         Pet_Food,
         Waste;
 

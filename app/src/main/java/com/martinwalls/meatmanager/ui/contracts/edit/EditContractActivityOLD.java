@@ -721,97 +721,97 @@ public class EditContractActivityOLD extends AppCompatActivity
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), "repeat_interval");
     }
+//
+//*
+//     * Stores the repeat interval the user has entered.
+//
 
-*
-     * Stores the repeat interval the user has entered.
+//    private void setSelectedRepeatInterval(Interval interval) {
+//        // repeat on input is hidden until repeat interval is set
+//        LinearLayout inputRepeatOn = findViewById(R.id.input_repeat_on);
+//        inputRepeatOn.setVisibility(View.VISIBLE);
+//
+//        selectedRepeatInterval = interval;
+//        TextInputEditText editTextRepeatInterval =
+//                findViewById(R.id.edit_text_repeat_interval);
+//        if (interval.getValue() == 1) {
+//            editTextRepeatInterval.setText(getString(
+//                    R.string.contracts_repeat_interval_display_one,
+//                    interval.getUnit().name().toLowerCase()));
+//        } else {
+//            editTextRepeatInterval.setText(getString(
+//                    R.string.contracts_repeat_interval_display_multiple,
+//                    interval.getValue(), interval.getUnit().name().toLowerCase()));
+//        }
+//        if (!isWeek && interval.getUnit() == Interval.TimeUnit.WEEK) {
+//            repeatOnSpnAdapter.clear();
+//            repeatOnSpnAdapter.addAll(getResources().getStringArray(R.array.weekdays));
+//            repeatOnSpnAdapter.notifyDataSetChanged();
+//            isWeek = true;
+//        } else if (isWeek && interval.getUnit() == Interval.TimeUnit.MONTH) {
+//            repeatOnSpnAdapter.clear();
+//            for (int i = 1; i <= 31; i++) {
+//                repeatOnSpnAdapter.add("Day " + i);
+//            }
+//            repeatOnSpnAdapter.notifyDataSetChanged();
+//            isWeek = false;
+//        }
+//
+//        TextView repeatOnTxt = findViewById(R.id.text_repeat_on);
+//        if (interval.getUnit() == Interval.TimeUnit.WEEK) {
+//            if (interval.getValue() == 1) {
+//                repeatOnTxt.setText(R.string.contracts_repeat_on_week);
+//            } else if (interval.getValue() == 2) {
+//                repeatOnTxt.setText(R.string.contracts_repeat_on_two_week);
+//            } else {
+//                repeatOnTxt.setText(R.string.contracts_repeat_on_default);
+//            }
+//        } else if (interval.getUnit() == Interval.TimeUnit.MONTH) {
+//            if (interval.getValue() == 1) {
+//                repeatOnTxt.setText(R.string.contracts_repeat_on_month);
+//            } else {
+//                repeatOnTxt.setText(R.string.contracts_repeat_on_default);
+//            }
+//        } else {
+//            repeatOnTxt.setText(R.string.contracts_repeat_on_default);
+//        }
+//    }
+//
+//*
+//     * Increments the value in the reminder input field.
+//
 
-
-    private void setSelectedRepeatInterval(Interval interval) {
-        // repeat on input is hidden until repeat interval is set
-        LinearLayout inputRepeatOn = findViewById(R.id.input_repeat_on);
-        inputRepeatOn.setVisibility(View.VISIBLE);
-
-        selectedRepeatInterval = interval;
-        TextInputEditText editTextRepeatInterval =
-                findViewById(R.id.edit_text_repeat_interval);
-        if (interval.getValue() == 1) {
-            editTextRepeatInterval.setText(getString(
-                    R.string.contracts_repeat_interval_display_one,
-                    interval.getUnit().name().toLowerCase()));
-        } else {
-            editTextRepeatInterval.setText(getString(
-                    R.string.contracts_repeat_interval_display_multiple,
-                    interval.getValue(), interval.getUnit().name().toLowerCase()));
-        }
-        if (!isWeek && interval.getUnit() == Interval.TimeUnit.WEEK) {
-            repeatOnSpnAdapter.clear();
-            repeatOnSpnAdapter.addAll(getResources().getStringArray(R.array.weekdays));
-            repeatOnSpnAdapter.notifyDataSetChanged();
-            isWeek = true;
-        } else if (isWeek && interval.getUnit() == Interval.TimeUnit.MONTH) {
-            repeatOnSpnAdapter.clear();
-            for (int i = 1; i <= 31; i++) {
-                repeatOnSpnAdapter.add("Day " + i);
-            }
-            repeatOnSpnAdapter.notifyDataSetChanged();
-            isWeek = false;
-        }
-
-        TextView repeatOnTxt = findViewById(R.id.text_repeat_on);
-        if (interval.getUnit() == Interval.TimeUnit.WEEK) {
-            if (interval.getValue() == 1) {
-                repeatOnTxt.setText(R.string.contracts_repeat_on_week);
-            } else if (interval.getValue() == 2) {
-                repeatOnTxt.setText(R.string.contracts_repeat_on_two_week);
-            } else {
-                repeatOnTxt.setText(R.string.contracts_repeat_on_default);
-            }
-        } else if (interval.getUnit() == Interval.TimeUnit.MONTH) {
-            if (interval.getValue() == 1) {
-                repeatOnTxt.setText(R.string.contracts_repeat_on_month);
-            } else {
-                repeatOnTxt.setText(R.string.contracts_repeat_on_default);
-            }
-        } else {
-            repeatOnTxt.setText(R.string.contracts_repeat_on_default);
-        }
-    }
-
-*
-     * Increments the value in the reminder input field.
-
-
-    private void incrementReminder() {
-        EditText editTextReminder = findViewById(R.id.edit_text_reminder);
-        if (TextUtils.isEmpty(editTextReminder.getText())) {
-            setReminderInputValue(1);
-        } else {
-            int currentReminder = Integer.valueOf(editTextReminder.getText().toString());
-            setReminderInputValue(currentReminder + 1);
-        }
-    }
-
-*
-     * Decrements the value in the reminder input field, if it is greater than 0.
-
-
-    private void decrementReminder() {
-        EditText editTextReminder = findViewById(R.id.edit_text_reminder);
-        if (!TextUtils.isEmpty(editTextReminder.getText())) {
-            int currentReminder = Integer.valueOf(editTextReminder.getText().toString());
-            if (currentReminder > 0) {
-                setReminderInputValue(currentReminder - 1);
-            }
-        }
-    }
-
-*
-     * Stores the {@link Contract} in the database if it is valid.
-     * First checks each input field to check it is valid. If a field is
-     * invalid, an appropriate error message is shown to help the user
-     * correct the error. If all the fields have valid data, either adds a new
-     * contract or edits the existing one depending on the edit mode of this
-     * activity.
+//    private void incrementReminder() {
+//        EditText editTextReminder = findViewById(R.id.edit_text_reminder);
+//        if (TextUtils.isEmpty(editTextReminder.getText())) {
+//            setReminderInputValue(1);
+//        } else {
+//            int currentReminder = Integer.valueOf(editTextReminder.getText().toString());
+//            setReminderInputValue(currentReminder + 1);
+//        }
+//    }
+//
+//*
+//     * Decrements the value in the reminder input field, if it is greater than 0.
+//
+//
+//    private void decrementReminder() {
+//        EditText editTextReminder = findViewById(R.id.edit_text_reminder);
+//        if (!TextUtils.isEmpty(editTextReminder.getText())) {
+//            int currentReminder = Integer.valueOf(editTextReminder.getText().toString());
+//            if (currentReminder > 0) {
+//                setReminderInputValue(currentReminder - 1);
+//            }
+//        }
+//    }
+//
+//*
+//     * Stores the {@link Contract} in the database if it is valid.
+//     * First checks each input field to check it is valid. If a field is
+//     * invalid, an appropriate error message is shown to help the user
+//     * correct the error. If all the fields have valid data, either adds a new
+//     * contract or edits the existing one depending on the edit mode of this
+//     * activity.
 
 
     private boolean addContractToDb() {

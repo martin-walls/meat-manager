@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.transition.Transition;
@@ -22,12 +24,16 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.meatmanager.R;
+import com.martinwalls.meatmanager.data.models.Interval;
+import com.martinwalls.meatmanager.data.models.Location;
 import com.martinwalls.meatmanager.data.models.Product;
+import com.martinwalls.meatmanager.data.models.ProductQuantity;
 import com.martinwalls.meatmanager.data.models.SearchItem;
 import com.martinwalls.meatmanager.databinding.ActivityEditContractBinding;
 import com.martinwalls.meatmanager.ui.common.adapter.ProductsAddedAdapter;
 import com.martinwalls.meatmanager.ui.common.adapter.SearchItemAdapter;
 import com.martinwalls.meatmanager.ui.common.dialog.ConfirmCancelDialog;
+import com.martinwalls.meatmanager.ui.locations.edit.NewLocationActivity;
 import com.martinwalls.meatmanager.ui.products.AddNewProductDialog;
 import com.martinwalls.meatmanager.util.MassUnit;
 import com.martinwalls.meatmanager.util.SimpleTextWatcher;
@@ -46,6 +52,8 @@ public class EditContractActivity extends AppCompatActivity
 
     public static final int EDIT_TYPE_NEW = 0;
     public static final int EDIT_TYPE_EDIT = 1;
+
+    private final int REQUEST_NEW_DESTINATION = 1;
 
     private final String INPUT_PRODUCT = "product";
     private final String INPUT_QUANTITY = "quantity";
@@ -76,8 +84,6 @@ public class EditContractActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         binding = ActivityEditContractBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-//        setSearchItemViewModel(EditContractSearchItemViewModel.class);
 
         Bundle extras = getIntent().getExtras();
         int editType = EDIT_TYPE_NEW;
@@ -110,9 +116,6 @@ public class EditContractActivity extends AppCompatActivity
                 v -> addNewItemFromSearch(binding.addNew.getSearchItemType()));
 
 
-//        setRootView((ViewGroup) binding.getRoot());
-
-
         if (MassUnit.getMassUnit(this) == MassUnit.LBS) {
             binding.inputLayoutQuantityMass.setHint(
                     getString(R.string.contracts_input_quantity_lbs));
@@ -140,12 +143,22 @@ public class EditContractActivity extends AppCompatActivity
         binding.productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         binding.addProduct.setOnClickListener(v -> {
-            //todo add product btn listener
+            ProductQuantity product = getProductFromInputsAndClear(); //todo
+            if (product != null) {
+                viewModel.addProductAdded(product);
+            }
         });
 
 
+
+        binding.addNew.setOnClickListener(v -> {
+            addNewItemFromSearch(binding.addNew.getSearchItemType());
+        });
+
+
+
         binding.editTextRepeatInterval.setOnClickListener(v -> {
-            //todo show repeat interval dialog
+            showRepeatIntervalDialog();
         });
 
 
@@ -213,8 +226,45 @@ public class EditContractActivity extends AppCompatActivity
 
 
 
+        // update interval fields when selected interval changes
         viewModel.getSelectedRepeatInterval().observe(this, interval -> {
+            binding.inputRepeatOn.setVisibility(View.VISIBLE);
 
+            if (interval.getValue() == 1) {
+                binding.editTextRepeatInterval.setText(getString(
+                        R.string.contracts_repeat_interval_display_one,
+                        interval.getUnit().name().toLowerCase()));
+            } else {
+                binding.editTextRepeatInterval.setText(getString(
+                        R.string.contracts_repeat_interval_display_multiple,
+                        interval.getValue(), interval.getUnit().name().toLowerCase()));
+            }
+
+            repeatOnSpnAdapter.clear();
+            if (interval.getUnit() == Interval.TimeUnit.WEEK) {
+                repeatOnSpnAdapter.addAll(getResources().getStringArray(R.array.weekdays));
+            } else {
+                for (int i = 1; i <= 31; i++) {
+                    repeatOnSpnAdapter.add("Day " + i);
+                }
+            }
+            repeatOnSpnAdapter.notifyDataSetChanged();
+
+            if (interval.getUnit() == Interval.TimeUnit.WEEK) {
+                if (interval.getValue() == 1) {
+                    binding.textRepeatOn.setText(R.string.contracts_repeat_on_week);
+                } else if (interval.getValue() == 2) {
+                    binding.textRepeatOn.setText(R.string.contracts_repeat_on_two_week);
+                } else {
+                    binding.textRepeatOn.setText(R.string.contracts_repeat_on_default);
+                }
+            } else {
+                if (interval.getValue() == 1) {
+                    binding.textRepeatOn.setText(R.string.contracts_repeat_on_month);
+                } else {
+                    binding.textRepeatOn.setText(R.string.contracts_repeat_on_default);
+                }
+            }
         });
 
         //todo text changed listeners (VM?)
@@ -283,19 +333,72 @@ public class EditContractActivity extends AppCompatActivity
         productsAddedAdapter.notifyItemRemoved(position); //todo in vm observer
     }
 
-//    @Override
+    @Override
+    public void onConfirmCancelYesAction() {
+        finish();
+    }
+
+    @Override
+    public void onRadioBtnClicked(int id) {
+        switch (id) {
+            case RepeatIntervalDialog.OPTION_WEEK:
+                viewModel.setSelectedRepeatInterval(new Interval(1, Interval.TimeUnit.WEEK));
+                break;
+            case RepeatIntervalDialog.OPTION_TWO_WEEK:
+                viewModel.setSelectedRepeatInterval(new Interval(2, Interval.TimeUnit.WEEK));
+                break;
+            case RepeatIntervalDialog.OPTION_MONTH:
+                viewModel.setSelectedRepeatInterval(new Interval(1, Interval.TimeUnit.MONTH));
+                break;
+        }
+    }
+
+    @Override
+    public void onCustomIntervalSelected(Interval interval) {
+        viewModel.setSelectedRepeatInterval(interval);
+    }
+
+    private void showRepeatIntervalDialog() {
+        DialogFragment dialog = new RepeatIntervalDialog();
+        Bundle args = new Bundle();
+        Interval interval = viewModel.getSelectedRepeatInterval().getValue();
+        if (interval != null) {
+            if (interval.hasValues(1, Interval.TimeUnit.WEEK)) {
+                // 1 week
+                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                        RepeatIntervalDialog.OPTION_WEEK);
+            } else if (interval.hasValues(2, Interval.TimeUnit.WEEK)) {
+                // 2 weeks
+                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                        RepeatIntervalDialog.OPTION_TWO_WEEK);
+            } else if (interval.hasValues(1, Interval.TimeUnit.MONTH)) {
+                // 1 month
+                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                        RepeatIntervalDialog.OPTION_MONTH);
+            } else {
+                // custom interval
+                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                        RepeatIntervalDialog.OPTION_CUSTOM);
+                args.putSerializable(RepeatIntervalDialog.EXTRA_CUSTOM_INTERVAL,
+                        interval);
+            }
+        }
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), "repeat_interval");
+    }
+
     private void addNewItemFromSearch(String searchType) {
         switch (searchType) {
             case INPUT_PRODUCT:
-//                DialogFragment dialog = new AddNewProductDialog();
-//                dialog.show(getSupportFragmentManager(), "add_new_product");
+                DialogFragment dialog = new AddNewProductDialog();
+                dialog.show(getSupportFragmentManager(), "add_new_product");
                 Toast.makeText(this, "new product", Toast.LENGTH_SHORT).show();
                 break;
             case INPUT_DESTINATION:
-//                Intent newDestIntent = new Intent(this, NewLocationActivity.class);
-//                newDestIntent.putExtra(NewLocationActivity.EXTRA_LOCATION_TYPE,
-//                        Location.LocationType.Destination.name());
-//                startActivityForResult(newDestIntent, REQUEST_NEW_DESTINATION);
+                Intent newDestIntent = new Intent(this, NewLocationActivity.class);
+                newDestIntent.putExtra(NewLocationActivity.EXTRA_LOCATION_TYPE,
+                        Location.LocationType.Destination.name());
+                startActivityForResult(newDestIntent, REQUEST_NEW_DESTINATION);
                 Toast.makeText(this, "new destination", Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -414,5 +517,21 @@ public class EditContractActivity extends AppCompatActivity
         if (imm != null) {
             imm.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), 0);
         }
+    }
+
+    private ProductQuantity getProductFromInputsAndClear() {
+        hideKeyboard();
+
+        // todo move validation to separate method
+        boolean isValid = true;
+
+        if (TextUtils.isEmpty(binding.editTextProduct.getText())) {
+            binding.inputLayoutProduct.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            binding.inputLayoutProduct.setError(null);
+        }
+
+        //todo finish this
     }
 }
