@@ -169,7 +169,6 @@ public class ContractDetailActivity extends AppCompatActivity
      */
     private void initRelatedStockView() {
         // set section title
-//        binding.relatedStockTitle.setText(R.string.related_stock_title); //fixme
         binding.relatedStockTitle.setText(R.string.related_stock_title);
 
         relatedStockAdapter = new RelatedStockAdapter(this);
