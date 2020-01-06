@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -24,6 +24,7 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.meatmanager.R;
+import com.martinwalls.meatmanager.data.models.Contract;
 import com.martinwalls.meatmanager.data.models.Interval;
 import com.martinwalls.meatmanager.data.models.Location;
 import com.martinwalls.meatmanager.data.models.Product;
@@ -37,7 +38,9 @@ import com.martinwalls.meatmanager.ui.locations.edit.NewLocationActivity;
 import com.martinwalls.meatmanager.ui.products.AddNewProductDialog;
 import com.martinwalls.meatmanager.util.MassUnit;
 import com.martinwalls.meatmanager.util.SimpleTextWatcher;
+import com.martinwalls.meatmanager.util.Utils;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 
 public class EditContractActivity extends AppCompatActivity
@@ -143,11 +146,17 @@ public class EditContractActivity extends AppCompatActivity
         binding.productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         binding.addProduct.setOnClickListener(v -> {
-            ProductQuantity product = getProductFromInputsAndClear(); //todo
+            ProductQuantity product = getProductFromInputs();
+            clearProductInputs();
+            hideKeyboard();
             if (product != null) {
                 viewModel.addProductAdded(product);
             }
         });
+
+
+        viewModel.getProductsAdded().observe(this,
+                productsAdded -> productsAddedAdapter.setProductList(productsAdded));
 
 
 
@@ -195,7 +204,7 @@ public class EditContractActivity extends AppCompatActivity
         binding.btnReminderPlus.setOnClickListener(v -> incrementReminder());
 
 
-        if (editType == EDIT_TYPE_NEW) {
+        if (!viewModel.isEditMode()) {
             binding.productBtnDone.setVisibility(View.GONE);
             binding.editTextReminder.setText("1"); //todo method setReminderInputValue(int)
         } else {
@@ -212,6 +221,8 @@ public class EditContractActivity extends AppCompatActivity
 
 
         viewModel.getContract().observe(this, contract -> {
+
+            // maybe do this when load contract in vm??
 
             //todo products added list
 
@@ -280,13 +291,22 @@ public class EditContractActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
+
+                if (saveContract()) {
+                    finish();
+                } else {
+                    Toast.makeText(this,
+                            getString(R.string.db_error_insert, "contract"),
+                            Toast.LENGTH_SHORT).show();
+                }
+
 //                if (addContractToDb()) {
 //                    finish();
 //                } else {
 //                    Toast.makeText(this,
 //                            getString(R.string.db_error_insert, "contract"),
 //                            Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, "done", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "done", Toast.LENGTH_SHORT).show();
 //                }
                 return true;
             case R.id.action_cancel:
@@ -310,6 +330,15 @@ public class EditContractActivity extends AppCompatActivity
 
     @Override
     public void onSearchItemSelected(SearchItem item, String searchItemType) {
+        switch (searchItemType) {
+            case INPUT_PRODUCT:
+                viewModel.setSelectedProductId(item.getId());
+                break;
+            case INPUT_DESTINATION:
+                viewModel.setSelectedDestId(item.getId());
+                break;
+        }
+
         TextInputEditText editText = (TextInputEditText) getCurrentFocus();
         editText.setText(item.getName());
         editText.clearFocus();
@@ -330,7 +359,6 @@ public class EditContractActivity extends AppCompatActivity
     @Override
     public void onProductAddedDelete(int position) {
         viewModel.removeProductAdded(position);
-        productsAddedAdapter.notifyItemRemoved(position); //todo in vm observer
     }
 
     @Override
@@ -420,8 +448,7 @@ public class EditContractActivity extends AppCompatActivity
         viewsToHide.put("products_added_recycler_view", R.id.products_added_recycler_view);
     }
 
-    private void setListeners(String name,
-                              TextInputLayout inputLayout, TextInputEditText editText) {
+    private void setListeners(String name, TextInputLayout inputLayout, TextInputEditText editText) {
         //todo custom view for these?
 
         inputLayout.setEndIconVisible(false);
@@ -430,6 +457,8 @@ public class EditContractActivity extends AppCompatActivity
             if (hasFocus) {
                 inputLayout.setEndIconVisible(true);
                 openSearch(name);
+            } else {
+                inputLayout.setEndIconVisible(false);
             }
         });
 
@@ -519,10 +548,7 @@ public class EditContractActivity extends AppCompatActivity
         }
     }
 
-    private ProductQuantity getProductFromInputsAndClear() {
-        hideKeyboard();
-
-        // todo move validation to separate method
+    private boolean validateProductInputs() {
         boolean isValid = true;
 
         if (TextUtils.isEmpty(binding.editTextProduct.getText())) {
@@ -532,6 +558,128 @@ public class EditContractActivity extends AppCompatActivity
             binding.inputLayoutProduct.setError(null);
         }
 
-        //todo finish this
+        for (ProductQuantity productQuantity : viewModel.getProductsAdded().getValue()) {
+            if (productQuantity.getProduct().getProductName()
+                    .equals(binding.editTextProduct.getText().toString())) {
+                binding.inputLayoutProduct.setError(getString(R.string.input_error_duplicate));
+                isValid = false;
+                break;
+            }
+        }
+
+        if (TextUtils.isEmpty(binding.editTextQuantityMass.getText())) {
+            binding.inputLayoutQuantityMass.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            binding.inputLayoutQuantityMass.setError(null);
+        }
+
+        return isValid;
+    }
+
+    @Nullable
+    private ProductQuantity getProductFromInputs() {
+        boolean isValid = validateProductInputs();
+
+        if (isValid) {
+            ProductQuantity productQuantity = new ProductQuantity(
+                    viewModel.getSelectedProduct(),
+                    Utils.getKgsFromCurrentMassUnit(this,
+                            Double.parseDouble(binding.editTextQuantityMass.getText().toString())),
+                    TextUtils.isEmpty(binding.editTextQuantityBoxes.getText()) ? -1
+                            : Integer.parseInt(binding.editTextQuantityBoxes.getText().toString()));
+
+
+            return productQuantity;
+        } else {
+            return null;
+        }
+    }
+
+    private void clearProductInputs() {
+        binding.editTextProduct.setText("");
+        binding.editTextProduct.clearFocus();
+        binding.editTextQuantityMass.setText("");
+        binding.editTextQuantityMass.clearFocus();
+        binding.editTextQuantityBoxes.setText("");
+        binding.editTextQuantityBoxes.clearFocus();
+    }
+
+
+
+    private boolean validateAll() {
+        boolean isValid = true;
+
+        // product name not empty
+        if (viewModel.getProductsAdded().getValue().size() == 0
+                && TextUtils.isEmpty(binding.editTextProduct.getText())) {
+            binding.inputLayoutProduct.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            binding.inputLayoutProduct.setError(null);
+        }
+
+        // product mass not empty
+        if (viewModel.getProductsAdded().getValue().size() == 0
+                && TextUtils.isEmpty(binding.editTextQuantityMass.getText())) {
+            binding.inputLayoutQuantityMass.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            binding.inputLayoutQuantityMass.setError(null);
+        }
+
+        // destination not empty
+        if (TextUtils.isEmpty(binding.editTextDestination.getText())) {
+            binding.inputLayoutDestination.setError(getString(R.string.input_error_blank));
+            isValid = false;
+        } else {
+            binding.inputLayoutDestination.setError(null);
+        }
+
+        // repeat interval not empty
+        if (TextUtils.isEmpty(binding.editTextRepeatInterval.getText())) {
+            binding.inputLayoutRepeatInterval.setError(getString(R.string.input_error_blank_date));
+            isValid = false;
+        } else {
+            binding.inputLayoutRepeatInterval.setError(null);
+        }
+
+        return isValid;
+    }
+
+
+
+    private boolean saveContract() {
+
+        Contract contract = new Contract();
+
+        boolean isValid = validateAll();
+
+        if (isValid) {
+            if (!TextUtils.isEmpty(binding.editTextProduct.getText())) {
+                viewModel.addProductAdded(new ProductQuantity(
+                        viewModel.getSelectedProduct(),
+                        Utils.getKgsFromCurrentMassUnit(this,
+                                Double.parseDouble(binding.editTextQuantityMass.getText().toString())),
+                        TextUtils.isEmpty(binding.editTextQuantityBoxes.getText()) ? -1
+                                : Integer.parseInt(binding.editTextQuantityBoxes.getText().toString())));
+            }
+            contract.setProductList(viewModel.getProductsAdded().getValue());
+            contract.setDest(viewModel.getSelectedDest());
+            contract.setRepeatInterval(viewModel.getSelectedRepeatInterval().getValue());
+            contract.setRepeatOn(binding.spnRepeatOn.getSelectedItemPosition() + 1);
+            contract.setStartDate(LocalDate.now());
+
+            if (TextUtils.isEmpty(binding.editTextReminder.getText())
+                    || binding.editTextReminder.getText().toString().equals("0")) {
+                contract.setReminder(-1);
+            } else {
+                contract.setReminder(Integer.parseInt(binding.editTextReminder.getText().toString()));
+            }
+
+            return viewModel.saveContract(contract);
+        }
+
+        return false;
     }
 }
