@@ -1,0 +1,51 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.martinwalls.meatmanager.ui.contracts.edit.SelectProductFragment"
+    >
+
+    <EditText
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:hint="@string/search_title"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        />
+
+    <TextView
+        android:id="@+id/btn_add_new"
+        style="@style/SearchResultsItem.Selectable.AddNew"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
+        />
+
+    <com.martinwalls.meatmanager.ui.common.recyclerview.CustomRecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="ifContentScrolls"
+        />
+
+    <TextView
+        android:id="@+id/txt_no_results"
+        style="@style/SearchResultsItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
+        android:text="@string/search_no_matches"
+        />
+
+</LinearLayout>

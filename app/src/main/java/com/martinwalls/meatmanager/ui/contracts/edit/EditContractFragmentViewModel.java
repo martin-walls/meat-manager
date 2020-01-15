@@ -52,6 +52,19 @@ public class EditContractFragmentViewModel extends AndroidViewModel {
 
         selectedProductQuantityValues = new MutableLiveData<>();
         selectedProductQuantityValues.setValue(new ProductQuantity());
+
+        // new contracts initially have a default reminder of 1 day
+        if (isNewContract) {
+            contract.getValue().setReminder(1);
+        }
+    }
+
+    private void refreshSelectedProductQuantityValues() {
+        selectedProductQuantityValues.setValue(selectedProductQuantityValues.getValue()); //todo find better way to do this
+    }
+
+    private void refreshContract() {
+        contract.setValue(contract.getValue());
     }
 
     public LiveData<Contract> getContractObservable() {
@@ -69,21 +82,33 @@ public class EditContractFragmentViewModel extends AndroidViewModel {
 
     public void setSelectedProduct(Product product) {
         selectedProductQuantityValues.getValue().setProduct(product);
-        selectedProductQuantityValues.setValue(selectedProductQuantityValues.getValue());
+        refreshSelectedProductQuantityValues();
     }
 
     public void setSelectedMass(double mass) {
         selectedProductQuantityValues.getValue().setQuantityMass(mass);
-        selectedProductQuantityValues.setValue(selectedProductQuantityValues.getValue()); //todo find better way to do this
+        refreshSelectedProductQuantityValues();
     }
 
     public void setSelectedNumBoxes(int numBoxes) {
         selectedProductQuantityValues.getValue().setQuantityBoxes(numBoxes);
-        selectedProductQuantityValues.setValue(selectedProductQuantityValues.getValue());
+        refreshSelectedProductQuantityValues();
     }
 
     public void commitProductQuantityFields() {
         contract.getValue().getProductList().add(selectedProductQuantityValues.getValue());
         selectedProductQuantityValues.setValue(new ProductQuantity());
+    }
+
+    /**
+     * Adds the specified amount to the reminder. The change can be positive or
+     * negative to increase/decrease the reminder respectively. Doesn't let the
+     * reminder go below 0.
+     */
+    public void updateReminderBy(int change) {
+        int newValue = contract.getValue().getReminder() + change;
+        if (newValue < 0) newValue = 0;
+        contract.getValue().setReminder(newValue);
+        refreshContract();
     }
 }
