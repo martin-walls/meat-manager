@@ -11,6 +11,9 @@ public class ProductQuantity implements Serializable {
     private int quantityBoxes;
 
     public ProductQuantity() {
+        product = new Product();
+        quantityMass = -1;
+        quantityBoxes = -1;
     }
 
     public ProductQuantity(Product product, double quantityMass) {

@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <!-- all inputs -->
+        <LinearLayout
+            android:id="@+id/inputs_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical"
+            >
+
+            <!-- product, mass, num boxes -->
+            <LinearLayout
+                android:id="@+id/product_inputs_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <!-- product input field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_layout_product"
+                    style="@style/AppTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/input_spacing_vertical"
+                    android:hint="@string/contracts_input_product"
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_product"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusableInTouchMode="false"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapWords"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- mass, num boxes-->
+                <LinearLayout
+                    android:id="@+id/quantity_inputs_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/input_spacing_vertical"
+                    android:orientation="horizontal"
+                    >
+
+                    <!-- mass input field -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/input_layout_quantity_mass"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/input_spacing_horizontal"
+                        android:layout_weight="1"
+                        android:hint="@string/contracts_input_quantity_kg"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_text_quantity_mass"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionNext"
+                            android:inputType="numberDecimal"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- num boxes input field-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/input_layout_quantity_boxes"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/contracts_input_quantity_boxes"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edit_text_quantity_boxes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionDone"
+                            android:inputType="number"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- done btn for when editing a product's quantity-->
+                    <ImageButton
+                        android:id="@+id/product_btn_done"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_margin="4dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:padding="4dp"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_done"
+                        />
+                </LinearLayout> <!-- /mass, num boxes -->
+            </LinearLayout> <!-- /product, mass, num boxes -->
+
+            <!-- add another product btn -->
+            <TextView
+                android:id="@+id/add_product"
+                style="@style/AddAnotherProductText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="end|center_vertical"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="8dp"
+                android:text="@string/contracts_add_product"
+                />
+
+            <!-- list of products already added -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/products_added_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                tools:itemCount="1"
+                tools:listitem="@layout/item_product_options"
+                />
+
+            <!-- destination input field -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_destination"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/input_spacing_vertical"
+                android:hint="@string/contracts_input_destination"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_destination"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="false"
+                    android:imeOptions="actionDone"
+                    android:inputType="textCapWords"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- repeat interval input field-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_repeat_interval"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/input_spacing_vertical"
+                android:hint="@string/contracts_input_repeat_interval"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_repeat_interval"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="false"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- repeat on input -->
+            <LinearLayout
+                android:id="@+id/input_repeat_on"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="4dp"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible"
+                >
+
+                <TextView
+                    android:id="@+id/text_repeat_on"
+                    style="@style/InputFormText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="start|center_vertical"
+                    android:text="@string/contracts_repeat_on_week"
+                    />
+
+                <!-- spinner to select repeat on value -->
+                <Spinner
+                    android:id="@+id/spn_repeat_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="24dp"
+                    android:spinnerMode="dropdown"
+                    />
+            </LinearLayout> <!-- /repeat on input -->
+
+            <!-- reminder input -->
+            <LinearLayout
+                android:id="@+id/input_reminder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="4dp"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/text_reminder"
+                    style="@style/InputFormText"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="start|center_vertical"
+                    android:text="@string/contracts_reminder_hint"
+                    />
+
+                <!-- decrement reminder btn -->
+                <ImageButton
+                    android:id="@+id/btn_reminder_minus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:padding="4dp"
+                    app:srcCompat="@drawable/ic_minus"
+                    />
+
+                <!-- input field for reminder value -->
+                <EditText
+                    android:id="@+id/edit_text_reminder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minEms="2"
+                    />
+
+                <!-- increment reminder btn -->
+                <ImageButton
+                    android:id="@+id/btn_reminder_plus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:padding="4dp"
+                    app:srcCompat="@drawable/ic_add"
+                    />
+
+                <TextView
+                    android:id="@+id/reminder_text_days_before"
+                    style="@style/InputFormText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/contracts_reminder_day_before_one"
+                    />
+            </LinearLayout> <!-- /reminder input -->
+
+        </LinearLayout> <!-- /all inputs -->
+    </ScrollView>
+
+</LinearLayout>

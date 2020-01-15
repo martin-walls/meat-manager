@@ -92,7 +92,7 @@
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_edit_contract);
+//        setContentView(R.layout.activity_edit_contract_old);
 //
 //        dbHandler = new DBHandler(this);
 //

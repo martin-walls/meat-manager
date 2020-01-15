@@ -12,7 +12,7 @@ public class Product implements Serializable {
     }
 
     // for testing
-    public Product(String productName) {
+    private Product(String productName) {
         this.productName = productName;
     }
 
