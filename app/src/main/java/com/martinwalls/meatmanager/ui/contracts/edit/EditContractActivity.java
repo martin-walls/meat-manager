@@ -73,7 +73,15 @@ public class EditContractActivity extends AppCompatActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_holder, new SelectProductFragment())
-                .addToBackStack(SelectProductFragment.class.getSimpleName())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void showSelectDestinationFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_holder, new SelectDestinationFragment())
+                .addToBackStack(null)
                 .commit();
     }
 

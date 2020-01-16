@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Product;
+import com.martinwalls.meatmanager.util.SortUtils;
+import com.martinwalls.meatmanager.util.Utils;
 
 import java.util.List;
 
@@ -31,6 +33,9 @@ public class SelectProductViewModel extends AndroidViewModel {
     }
 
     public void loadProducts() {
-        productList.setValue(dbHandler.getAllProducts());
+        productList.setValue(
+                SortUtils.mergeSort(
+                        dbHandler.getAllProducts(),
+                        Product.comparatorAlpha()));
     }
 }

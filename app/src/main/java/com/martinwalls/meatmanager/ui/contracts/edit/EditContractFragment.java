@@ -40,6 +40,12 @@ public class EditContractFragment extends Fragment {
             }
         });
 
+        binding.editTextDestination.setOnClickListener(v -> {
+            if (getActivity() instanceof EditContractActivity) {
+                ((EditContractActivity) getActivity()).showSelectDestinationFragment();
+            }
+        });
+
         // initialise repeat on input spinner with adapter
         spnRepeatOnAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item);
         spnRepeatOnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

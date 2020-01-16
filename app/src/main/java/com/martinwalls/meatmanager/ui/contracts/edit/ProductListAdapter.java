@@ -76,7 +76,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             protected FilterResults performFiltering(CharSequence constraint) {
                 List<Product> filteredList = new ArrayList<>();
                 if (constraint.length() == 0) {
-//                    productListFiltered = productList;
                     filteredList = productList;
                 } else {
                     for (Product product : productList) {
@@ -85,10 +84,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                             filteredList.add(product);
                         }
                     }
-//                    productListFiltered = filteredList;
                 }
                 FilterResults filterResults = new FilterResults();
-//                filterResults.values = productListFiltered;//todo maybe can just use filteredList?
                 filterResults.values = filteredList;
                 return filterResults;
             }
