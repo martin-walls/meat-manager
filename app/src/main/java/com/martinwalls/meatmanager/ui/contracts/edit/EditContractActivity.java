@@ -76,4 +76,8 @@ public class EditContractActivity extends AppCompatActivity {
                 .addToBackStack(SelectProductFragment.class.getSimpleName())
                 .commit();
     }
+
+    public void goBack() {
+        getSupportFragmentManager().popBackStack();
+    }
 }

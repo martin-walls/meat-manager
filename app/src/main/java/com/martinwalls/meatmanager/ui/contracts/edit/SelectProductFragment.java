@@ -2,6 +2,7 @@ package com.martinwalls.meatmanager.ui.contracts.edit;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -22,11 +23,12 @@ public class SelectProductFragment extends Fragment
 
     private FragmentSearchableListBinding binding;
     private SelectProductViewModel viewModel;
+    private EditContractFragmentViewModel contractViewModel;
 
     private ProductListAdapter adapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
 
@@ -50,6 +52,8 @@ public class SelectProductFragment extends Fragment
             }
         });
 
+        binding.btnAddNew.setText(getString(R.string.search_add_new, "product"));
+
         return binding.getRoot();
     }
 
@@ -59,11 +63,20 @@ public class SelectProductFragment extends Fragment
 
         if (getActivity() instanceof EditContractActivity) {
             ((EditContractActivity) getActivity()).setHomeAsUpIcon(R.drawable.ic_back);
+            getActivity().setTitle(R.string.contracts_select_product_title);
+
+            contractViewModel = ((EditContractActivity) getActivity()).getContractViewModel();
         }
+
+        contractViewModel.getSelectedProductQuantityObservable().observe(getViewLifecycleOwner(),
+                productQuantity -> adapter.setSelectedProduct(productQuantity.getProduct()));
     }
 
     @Override
     public void onProductClicked(Product product) {
-        Toast.makeText(getContext(), product.getProductName(), Toast.LENGTH_SHORT).show();
+        contractViewModel.setSelectedProduct(product);
+        if (getActivity() instanceof EditContractActivity) {
+            ((EditContractActivity) getActivity()).goBack();
+        }
     }
 }

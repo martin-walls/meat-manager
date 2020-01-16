@@ -199,6 +199,7 @@
     <string name="contracts_input_repeat_interval">Repeat</string>
     <string name="contracts_input_repeat_on">On…</string>
     <string name="contracts_input_product">Product</string>
+    <string name="contracts_select_product_title">Select product</string>
     <string name="contracts_input_quantity_kg">Quantity (kg)</string>
     <string name="contracts_input_quantity_lbs">Quantity (lbs)</string>
     <string name="contracts_input_quantity_boxes">Number of boxes</string>

@@ -1,5 +1,6 @@
 package com.martinwalls.meatmanager.ui.contracts.edit;
 
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     private List<Product> productList;
     private List<Product> productListFiltered;
+
+    private Product selectedProduct;
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name;
@@ -51,6 +54,13 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.name.setText(productListFiltered.get(position).getProductName());
+        if (selectedProduct != null) {
+            if (selectedProduct.getProductId() == productListFiltered.get(position).getProductId()) {
+                holder.name.setTypeface(Typeface.DEFAULT_BOLD);
+            } else {
+                holder.name.setTypeface(Typeface.DEFAULT);
+            }
+        }
     }
 
     @Override
@@ -96,6 +106,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         this.productList = productList;
         this.productListFiltered = productList;
         notifyDataSetChanged();
+    }
+
+    public void setSelectedProduct(Product product) {
+        this.selectedProduct = product;
     }
 
     public interface ProductListAdapterListener {
