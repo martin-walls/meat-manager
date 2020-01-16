@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -33,6 +35,15 @@ public class AddNewProductDialog extends DialogFragment {
 
     private View dialogView;
 
+    @Deprecated
+    public AddNewProductDialog() {
+
+    }
+
+    public AddNewProductDialog(AddNewProductListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
@@ -53,16 +64,16 @@ public class AddNewProductDialog extends DialogFragment {
         return builder.create();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            listener = (AddNewProductListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString() +
-                    " must implement " + AddNewProductListener.class.getSimpleName());
-        }
-    }
+//    @Override
+//    public void onAttach(@NonNull Context context) {
+//        super.onAttach(context);
+//        try {
+//            listener = (AddNewProductListener) context;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(getActivity().toString() +
+//                    " must implement " + AddNewProductListener.class.getSimpleName());
+//        }
+//    }
 
     /**
      * Binds views in the layout to their variables, so they can be referenced

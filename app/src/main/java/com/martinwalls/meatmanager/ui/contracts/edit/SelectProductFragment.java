@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,16 +17,20 @@ import android.widget.Toast;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.models.Product;
 import com.martinwalls.meatmanager.databinding.FragmentSearchableListBinding;
+import com.martinwalls.meatmanager.ui.products.AddNewProductDialog;
 import com.martinwalls.meatmanager.util.SimpleTextWatcher;
 
 public class SelectProductFragment extends Fragment
-        implements ProductListAdapter.ProductListAdapterListener {
+        implements ProductListAdapter.ProductListAdapterListener,
+        AddNewProductDialog.AddNewProductListener {
 
     private FragmentSearchableListBinding binding;
     private SelectProductViewModel viewModel;
     private EditContractFragmentViewModel contractViewModel;
 
     private ProductListAdapter adapter;
+
+    private LinearLayoutManager recyclerViewLayoutManager;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -43,7 +48,8 @@ public class SelectProductFragment extends Fragment
         // initialise list
         binding.recyclerView.setEmptyView(binding.txtNoResults);
         binding.recyclerView.setAdapter(adapter);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewLayoutManager = new LinearLayoutManager(getContext());
+        binding.recyclerView.setLayoutManager(recyclerViewLayoutManager);
 
         // listen for search
         binding.searchBar.addTextChangedListener(new SimpleTextWatcher() {
@@ -54,6 +60,7 @@ public class SelectProductFragment extends Fragment
         });
 
         binding.btnAddNew.setText(getString(R.string.search_add_new, "product"));
+        binding.btnAddNew.setOnClickListener(v -> addNewProduct());
 
         return binding.getRoot();
     }
@@ -80,5 +87,23 @@ public class SelectProductFragment extends Fragment
         if (getActivity() instanceof EditContractActivity) {
             ((EditContractActivity) getActivity()).goBack();
         }
+    }
+
+    @Override
+    public void onAddNewProductDoneAction(Product newProduct) {
+        int newId = viewModel.addNewProduct(newProduct);
+        if (newId == -1) {
+            Toast.makeText(getContext(), R.string.db_error_insert_product, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        newProduct.setProductId(newId);
+        adapter.setSelectedProduct(newProduct);
+
+        recyclerViewLayoutManager.scrollToPosition(adapter.getPositionOfItemWithId(newId)); //todo smooth scrolling
+    }
+
+    private void addNewProduct() {
+        DialogFragment dialog = new AddNewProductDialog(this);
+        dialog.show(getFragmentManager(), "add_new_product");
     }
 }

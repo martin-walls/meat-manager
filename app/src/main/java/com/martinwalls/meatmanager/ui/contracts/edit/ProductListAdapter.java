@@ -109,6 +109,15 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         this.selectedProduct = product;
     }
 
+    public int getPositionOfItemWithId(int id) {
+        for (int i = 0; i < productListFiltered.size(); i++) {
+            if (productListFiltered.get(i).getProductId() == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public interface ProductListAdapterListener {
         void onProductClicked(Product product);
     }

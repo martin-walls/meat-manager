@@ -49,6 +49,7 @@
     <!-- db -->
     <string name="db_error_insert">Error adding %s</string>
     <string name="db_error_update">Error saving %s</string>
+    <string name="db_error_insert_product">Error adding product</string>
 
     <string name="db_error_delete">Error deleting %s</string>
     <string name="db_delete_stock_success">Deleted %s from %s</string>

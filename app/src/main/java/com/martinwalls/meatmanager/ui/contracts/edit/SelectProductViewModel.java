@@ -38,4 +38,10 @@ public class SelectProductViewModel extends AndroidViewModel {
                         dbHandler.getAllProducts(),
                         Product.comparatorAlpha()));
     }
+
+    public int addNewProduct(Product product) {
+        int id = dbHandler.addProduct(product, true);
+        loadProducts();
+        return id;
+    }
 }

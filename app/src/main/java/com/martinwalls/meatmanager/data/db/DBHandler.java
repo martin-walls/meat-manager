@@ -7,6 +7,9 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import androidx.annotation.NonNull;
+
 import com.martinwalls.meatmanager.data.models.*;
 
 import java.time.Instant;
@@ -351,6 +354,7 @@ public class DBHandler extends SQLiteOpenHelper {
     /**
      * Stores a {@link Product} in the database.
      */
+    @Deprecated
     public boolean addProduct(Product product) {
         ContentValues values = new ContentValues();
         values.put(ProductsTable.NAME, product.getProductName());
@@ -360,6 +364,20 @@ public class DBHandler extends SQLiteOpenHelper {
         long newRowId = db.insert(ProductsTable.TABLE_NAME, null, values);
         db.close();
         return newRowId != -1;
+    }
+
+    /**
+     * Stores a {@link Product} in the database. Returns the new ID.
+     */
+    public int addProduct(@NonNull Product product, boolean getId) {
+        ContentValues values = new ContentValues();
+        values.put(ProductsTable.NAME, product.getProductName());
+        values.put(ProductsTable.MEAT_TYPE, product.getMeatType());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long newRowId = db.insert(ProductsTable.TABLE_NAME, null, values);
+        db.close();
+        return (int) newRowId;
     }
 
     /**
