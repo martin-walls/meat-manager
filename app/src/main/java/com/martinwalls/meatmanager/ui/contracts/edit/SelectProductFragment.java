@@ -8,6 +8,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +32,6 @@ public class SelectProductFragment extends Fragment
 
     private ProductListAdapter adapter;
 
-    private LinearLayoutManager recyclerViewLayoutManager;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -48,8 +49,7 @@ public class SelectProductFragment extends Fragment
         // initialise list
         binding.recyclerView.setEmptyView(binding.txtNoResults);
         binding.recyclerView.setAdapter(adapter);
-        recyclerViewLayoutManager = new LinearLayoutManager(getContext());
-        binding.recyclerView.setLayoutManager(recyclerViewLayoutManager);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // listen for search
         binding.searchBar.addTextChangedListener(new SimpleTextWatcher() {
@@ -100,7 +100,9 @@ public class SelectProductFragment extends Fragment
         adapter.setSelectedProduct(newProduct);
 
         // scroll to make new product visible in list
-        recyclerViewLayoutManager.scrollToPosition(adapter.getPositionOfItemWithId(newId)); //todo smooth scrolling
+        RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(getContext());
+        smoothScroller.setTargetPosition(adapter.getPositionOfItemWithId(newId));
+        binding.recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);
     }
 
     private void addNewProduct() {

@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.models.Location;
@@ -31,8 +33,6 @@ public class SelectDestinationFragment extends Fragment
 
     private DestinationListAdapter adapter;
 
-    private LinearLayoutManager recyclerViewLayoutManager;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,8 +49,7 @@ public class SelectDestinationFragment extends Fragment
         // initialise list
         binding.recyclerView.setEmptyView(binding.txtNoResults);
         binding.recyclerView.setAdapter(adapter);
-        recyclerViewLayoutManager = new LinearLayoutManager(getContext());
-        binding.recyclerView.setLayoutManager(recyclerViewLayoutManager);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // listen for search
         binding.searchBar.addTextChangedListener(new SimpleTextWatcher() {
@@ -72,7 +71,7 @@ public class SelectDestinationFragment extends Fragment
 
         if (getActivity() instanceof EditContractActivity) {
             ((EditContractActivity) getActivity()).setHomeAsUpIcon(R.drawable.ic_back);
-            getActivity().setTitle("Select destination"); //todo string res
+            getActivity().setTitle(R.string.contracts_select_destination_title);
 
             contractViewModel = ((EditContractActivity) getActivity()).getContractViewModel();
         }
@@ -99,7 +98,10 @@ public class SelectDestinationFragment extends Fragment
             viewModel.loadDestinations();
             adapter.setSelectedDestinationId(newId);
 
-            recyclerViewLayoutManager.scrollToPosition(adapter.getPositionOfItemWithId(newId));
+            // scroll to new destination in list
+            RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(getContext());
+            smoothScroller.setTargetPosition(adapter.getPositionOfItemWithId(newId));
+            binding.recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);
         }
     }
 

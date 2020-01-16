@@ -197,6 +197,7 @@
     <string name="contracts_title">Contracts</string>
     <string name="contracts_empty">No contracts to show</string>
     <string name="contracts_input_destination">Destination</string>
+    <string name="contracts_select_destination_title">Select destination</string>
     <string name="contracts_input_repeat_interval">Repeat</string>
     <string name="contracts_input_repeat_on">On…</string>
     <string name="contracts_input_product">Product</string>
