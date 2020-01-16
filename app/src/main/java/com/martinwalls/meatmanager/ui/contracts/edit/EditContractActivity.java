@@ -1,7 +1,9 @@
 package com.martinwalls.meatmanager.ui.contracts.edit;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -28,6 +30,8 @@ public class EditContractActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         binding = ActivityEditContractBinding.inflate(getLayoutInflater());
 
         setContentView(binding.getRoot());
@@ -45,7 +49,31 @@ public class EditContractActivity extends AppCompatActivity {
                 .get(EditContractFragmentViewModel.class);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public EditContractFragmentViewModel getContractViewModel() {
         return contractViewModel;
+    }
+
+    public void setHomeAsUpIcon(@DrawableRes int resId) {
+        if (getSupportActionBar() == null) return;
+        getSupportActionBar().setHomeAsUpIndicator(resId);
+    }
+
+    public void showSelectProductFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_holder, new SelectProductFragment())
+                .addToBackStack(SelectProductFragment.class.getSimpleName())
+                .commit();
     }
 }

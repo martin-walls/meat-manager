@@ -67,6 +67,10 @@ public class EditContractFragmentViewModel extends AndroidViewModel {
         contract.setValue(contract.getValue());
     }
 
+    public boolean isNewContract() {
+        return isNewContract;
+    }
+
     public LiveData<Contract> getContractObservable() {
         return contract;
     }

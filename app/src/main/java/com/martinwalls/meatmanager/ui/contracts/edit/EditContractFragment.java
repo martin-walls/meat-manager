@@ -31,7 +31,14 @@ public class EditContractFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+
         binding = FragmentEditContractBinding.inflate(inflater, container, false);
+
+        binding.editTextProduct.setOnClickListener(v -> {
+            if (getActivity() instanceof EditContractActivity) {
+                ((EditContractActivity) getActivity()).showSelectProductFragment();
+            }
+        });
 
         // initialise repeat on input spinner with adapter
         spnRepeatOnAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item);
@@ -47,6 +54,13 @@ public class EditContractFragment extends Fragment {
 
         if (getActivity() instanceof EditContractActivity) {
             viewModel = ((EditContractActivity) getActivity()).getContractViewModel();
+            ((EditContractActivity) getActivity()).setHomeAsUpIcon(R.drawable.ic_cancel);
+        }
+
+        if (viewModel.isNewContract()) {
+            getActivity().setTitle(R.string.contract_new_title);
+        } else {
+            getActivity().setTitle(R.string.contract_edit_title);
         }
 
         // update product and quantity inputs when values update
