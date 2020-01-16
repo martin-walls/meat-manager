@@ -99,10 +99,12 @@ public class SelectProductFragment extends Fragment
         newProduct.setProductId(newId);
         adapter.setSelectedProduct(newProduct);
 
+        // scroll to make new product visible in list
         recyclerViewLayoutManager.scrollToPosition(adapter.getPositionOfItemWithId(newId)); //todo smooth scrolling
     }
 
     private void addNewProduct() {
+        // show add new product dialog
         DialogFragment dialog = new AddNewProductDialog(this);
         dialog.show(getFragmentManager(), "add_new_product");
     }

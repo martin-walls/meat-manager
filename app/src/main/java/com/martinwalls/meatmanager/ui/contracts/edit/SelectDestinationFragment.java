@@ -1,5 +1,7 @@
 package com.martinwalls.meatmanager.ui.contracts.edit;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +17,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.models.Location;
 import com.martinwalls.meatmanager.databinding.FragmentSearchableListBinding;
+import com.martinwalls.meatmanager.ui.locations.edit.NewLocationActivity;
 import com.martinwalls.meatmanager.util.SimpleTextWatcher;
 
 public class SelectDestinationFragment extends Fragment
         implements DestinationListAdapter.DestinationListAdapterListener {
+
+    private final int REQUEST_NEW_DESTINATION = 1;
 
     private FragmentSearchableListBinding binding;
     private SelectDestinationViewModel viewModel;
     private EditContractFragmentViewModel contractViewModel;
 
     private DestinationListAdapter adapter;
+
+    private LinearLayoutManager recyclerViewLayoutManager;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -42,7 +49,8 @@ public class SelectDestinationFragment extends Fragment
         // initialise list
         binding.recyclerView.setEmptyView(binding.txtNoResults);
         binding.recyclerView.setAdapter(adapter);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewLayoutManager = new LinearLayoutManager(getContext());
+        binding.recyclerView.setLayoutManager(recyclerViewLayoutManager);
 
         // listen for search
         binding.searchBar.addTextChangedListener(new SimpleTextWatcher() {
@@ -53,6 +61,7 @@ public class SelectDestinationFragment extends Fragment
         });
 
         binding.btnAddNew.setText(getString(R.string.search_add_new, "destination"));
+        binding.btnAddNew.setOnClickListener(v -> addNewDestination());
 
         return binding.getRoot();
     }
@@ -79,5 +88,24 @@ public class SelectDestinationFragment extends Fragment
         if (getActivity() instanceof EditContractActivity) {
             ((EditContractActivity) getActivity()).goBack();
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_NEW_DESTINATION) {
+            int newId = data.getIntExtra(NewLocationActivity.RESULT_ID, -1);
+
+            viewModel.loadDestinations();
+            adapter.setSelectedDestinationId(newId);
+
+            recyclerViewLayoutManager.scrollToPosition(adapter.getPositionOfItemWithId(newId));
+        }
+    }
+
+    private void addNewDestination() {
+        Intent newDestinationIntent = new Intent(getContext(), NewLocationActivity.class);
+        newDestinationIntent.putExtra(NewLocationActivity.EXTRA_LOCATION_TYPE, Location.LocationType.Destination.name());
+        startActivityForResult(newDestinationIntent, REQUEST_NEW_DESTINATION);
     }
 }

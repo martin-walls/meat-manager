@@ -109,6 +109,15 @@ public class DestinationListAdapter extends RecyclerView.Adapter<DestinationList
         this.selectedDestinationId = destinationId;
     }
 
+    public int getPositionOfItemWithId(int id) {
+        for (int i = 0; i < destinationListFiltered.size(); i++) {
+            if (destinationListFiltered.get(i).getLocationId() == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public interface DestinationListAdapterListener {
         void onDestinationClicked(Location destination);
     }
