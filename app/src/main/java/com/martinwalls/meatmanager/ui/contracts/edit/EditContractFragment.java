@@ -10,14 +10,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.martinwalls.meatmanager.R;
+import com.martinwalls.meatmanager.data.models.Contract;
 import com.martinwalls.meatmanager.data.models.Interval;
 import com.martinwalls.meatmanager.databinding.FragmentEditContractBinding;
 import com.martinwalls.meatmanager.util.Utils;
 
-public class EditContractFragment extends Fragment {
+public class EditContractFragment extends Fragment implements RepeatIntervalDialog.RepeatIntervalDialogListener {
 
     private final int QUANTITY_MASS_DP = 4;
 
@@ -34,17 +36,24 @@ public class EditContractFragment extends Fragment {
 
         binding = FragmentEditContractBinding.inflate(inflater, container, false);
 
+        // allow user to select a product from list of all added products when they
+        // click the product input field
         binding.editTextProduct.setOnClickListener(v -> {
             if (getActivity() instanceof EditContractActivity) {
                 ((EditContractActivity) getActivity()).showSelectProductFragment();
             }
         });
 
+        // allow user to select a destination from list of all added destinations
+        // when they click the destination input field
         binding.editTextDestination.setOnClickListener(v -> {
             if (getActivity() instanceof EditContractActivity) {
                 ((EditContractActivity) getActivity()).showSelectDestinationFragment();
             }
         });
+
+        // open a dialog to allow user to enter a repeat interval
+        binding.editTextRepeatInterval.setOnClickListener(v -> showRepeatIntervalDialog());
 
         // initialise repeat on input spinner with adapter
         spnRepeatOnAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item);
@@ -109,6 +118,40 @@ public class EditContractFragment extends Fragment {
         // reminder button listeners
         binding.btnReminderPlus.setOnClickListener(v -> incrementReminder());
         binding.btnReminderMinus.setOnClickListener(v -> decrementReminder());
+    }
+
+    //todo TESTME
+    private void showRepeatIntervalDialog() {
+        DialogFragment dialog = new RepeatIntervalDialog(this);
+        Bundle args = new Bundle();
+        Contract contract = viewModel.getContractObservable().getValue();
+        if (contract != null) {
+            Interval currentRepeatInterval = contract.getRepeatInterval();
+            //todo just pass interval, ie. move this logic into the dialog
+            if (currentRepeatInterval != null) {
+                if (currentRepeatInterval.hasValues(1, Interval.TimeUnit.WEEK)) {
+                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                            RepeatIntervalDialog.OPTION_WEEK);
+                } else if (currentRepeatInterval.hasValues(2, Interval.TimeUnit.WEEK)) {
+                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                            RepeatIntervalDialog.OPTION_TWO_WEEK);
+                } else if (currentRepeatInterval.hasValues(1, Interval.TimeUnit.MONTH)) {
+                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                            RepeatIntervalDialog.OPTION_MONTH);
+                } else {
+                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+                            RepeatIntervalDialog.OPTION_CUSTOM);
+                    args.putSerializable(RepeatIntervalDialog.EXTRA_CUSTOM_INTERVAL, currentRepeatInterval);
+                }
+            }
+        }
+        dialog.setArguments(args);
+        dialog.show(getFragmentManager(), "select_repeat_interval");
+    }
+
+    @Override
+    public void onRepeatIntervalSelected(Interval interval) {
+        viewModel.setRepeatInterval(interval);
     }
 
     /**

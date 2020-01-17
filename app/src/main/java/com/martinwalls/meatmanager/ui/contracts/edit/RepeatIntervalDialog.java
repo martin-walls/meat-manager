@@ -57,6 +57,13 @@ public class RepeatIntervalDialog extends DialogFragment {
      */
     private boolean isOne = true;
 
+    @Deprecated
+    public RepeatIntervalDialog() {}
+
+    public RepeatIntervalDialog(RepeatIntervalDialogListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
@@ -89,23 +96,23 @@ public class RepeatIntervalDialog extends DialogFragment {
         return builder.create();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            listener = (RepeatIntervalDialogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement " + RepeatIntervalDialogListener.class.getSimpleName());
-        }
-    }
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        try {
+//            listener = (RepeatIntervalDialogListener) context;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(getActivity().toString()
+//                    + " must implement " + RepeatIntervalDialogListener.class.getSimpleName());
+//        }
+//    }
 
     /**
      * Initialises the radio buttons with on click listeners.
      */
     private void initRadioBtns(View dialogView) {
         radioWeek = dialogView.findViewById(R.id.radio_week);
-        radioWeek.setOnClickListener(v -> onRadioBtnClicked(OPTION_WEEK));
+        radioWeek.setOnClickListener(v -> { onRadioBtnClicked(OPTION_WEEK); });
 
         radioTwoWeek = dialogView.findViewById(R.id.radio_two_week);
         radioTwoWeek.setOnClickListener(v -> onRadioBtnClicked(OPTION_TWO_WEEK));
@@ -295,13 +302,17 @@ public class RepeatIntervalDialog extends DialogFragment {
          * clicked in the {@link RepeatIntervalDialog}. This should be
          * implemented to store the corresponding repeat interval.
          */
-        void onRadioBtnClicked(int id);
+        @Deprecated
+        default void onRadioBtnClicked(int id) {};
 
         /**
          * This is called when the user enters a custom interval in the
          * {@link RepeatIntervalDialog}. This should be implemented to store
          * this repeat interval.
          */
-        void onCustomIntervalSelected(Interval interval);
+        @Deprecated
+        default void onCustomIntervalSelected(Interval interval) {};
+
+        default void onRepeatIntervalSelected(Interval interval) {}; //todo call this
     }
 }

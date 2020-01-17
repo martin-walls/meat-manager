@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Contract;
+import com.martinwalls.meatmanager.data.models.Interval;
 import com.martinwalls.meatmanager.data.models.Location;
 import com.martinwalls.meatmanager.data.models.Product;
 import com.martinwalls.meatmanager.data.models.ProductQuantity;
@@ -107,6 +108,11 @@ public class EditContractFragmentViewModel extends AndroidViewModel {
 
     public void setDestination(Location destination) {
         contract.getValue().setDest(destination);
+        refreshContract();
+    }
+
+    public void setRepeatInterval(Interval repeatInterval) {
+        contract.getValue().setRepeatInterval(repeatInterval);
         refreshContract();
     }
 

@@ -32,7 +32,6 @@ public class SelectProductFragment extends Fragment
 
     private ProductListAdapter adapter;
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
