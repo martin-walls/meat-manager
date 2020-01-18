@@ -151,10 +151,12 @@ public class EditContractFragment extends Fragment
     }
 
     private boolean validateQuantityBoxesInputField() {
+        // quantity boxes field is allowed to be blank
         if (TextUtils.isEmpty(binding.editTextQuantityBoxes.getText())) {
-            binding.inputLayoutQuantityBoxes.setError(getString(R.string.input_error_blank));
-            return false;
-        } else if (Integer.parseInt(binding.editTextQuantityBoxes.getText().toString()) == 0) {
+            binding.inputLayoutQuantityMass.setError(null);
+            return true;
+        }
+        if (Integer.parseInt(binding.editTextQuantityBoxes.getText().toString()) == 0) {
             binding.inputLayoutQuantityBoxes.setError(getString(R.string.input_error_non_zero));
             return false;
         } else {
@@ -177,7 +179,10 @@ public class EditContractFragment extends Fragment
         double mass = Utils.getKgsFromCurrentMassUnit(getContext(),
                 Double.parseDouble(binding.editTextQuantityMass.getText().toString()));
 
-        int numBoxes = Integer.parseInt(binding.editTextQuantityBoxes.getText().toString());
+        int numBoxes = -1;
+        if (!TextUtils.isEmpty(binding.editTextQuantityBoxes.getText())) {
+            numBoxes = Integer.parseInt(binding.editTextQuantityBoxes.getText().toString());
+        }
 
         viewModel.commitSelectedProduct(mass, numBoxes);
         binding.editTextQuantityMass.setText("");
