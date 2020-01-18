@@ -17,14 +17,6 @@ import com.martinwalls.meatmanager.data.models.ProductQuantity;
 
 public class EditContractFragmentViewModel extends AndroidViewModel {
 
-    public static enum FieldStatus {
-        INITIAL,
-        VALID,
-        INVALID_BLANK,
-        INVALID_DATA,
-        INVALID_ZERO;
-    }
-
     private final DBHandler dbHandler;
 
     private final int contractId;
@@ -74,28 +66,28 @@ public class EditContractFragmentViewModel extends AndroidViewModel {
         contract.setValue(contract.getValue()); //todo find better way to do this
     }
 
-    public boolean isNewContract() {
+    boolean isNewContract() {
         return isNewContract;
     }
 
-    public LiveData<Contract> getContractObservable() {
+    LiveData<Contract> getContractObservable() {
         return contract;
     }
 
-    public void loadContract() {
+    void loadContract() {
         if (isNewContract) return;
         contract.setValue(dbHandler.getContract(contractId));
     }
 
-    public LiveData<Product> getSelectedProductObservable() {
+    LiveData<Product> getSelectedProductObservable() {
         return selectedProduct;
     }
 
-    public void setSelectedProduct(Product product) {
+    void setSelectedProduct(Product product) {
         selectedProduct.setValue(product);
     }
 
-    public void commitSelectedProduct(double quantityMass, int numBoxes) {
+    void commitSelectedProduct(double quantityMass, int numBoxes) {
         if (selectedProduct.getValue() == null) return;
         ProductQuantity productQuantity = new ProductQuantity();
         productQuantity.setProduct(selectedProduct.getValue());
@@ -106,17 +98,21 @@ public class EditContractFragmentViewModel extends AndroidViewModel {
         refreshContract();
     }
 
-    public void setDestination(Location destination) {
+    void setDestination(Location destination) {
         contract.getValue().setDest(destination);
         refreshContract();
     }
 
-    public void setRepeatInterval(Interval repeatInterval) {
+    void setRepeatInterval(Interval repeatInterval) {
         contract.getValue().setRepeatInterval(repeatInterval);
         refreshContract();
     }
 
-    public void setReminder(int reminder) {
+    void setRepeatOn(int repeatOn) {
+        contract.getValue().setRepeatOn(repeatOn);
+    }
+
+    void setReminder(int reminder) {
         contract.getValue().setReminder(reminder);
         refreshContract();
     }
@@ -126,10 +122,15 @@ public class EditContractFragmentViewModel extends AndroidViewModel {
      * negative to increase/decrease the reminder respectively. Doesn't let the
      * reminder go below 0.
      */
-    public void updateReminderBy(int change) {
+    void updateReminderBy(int change) {
         int newValue = contract.getValue().getReminder() + change;
         if (newValue < 0) newValue = 0;
         contract.getValue().setReminder(newValue);
         refreshContract();
+    }
+
+    boolean commitContract() {
+        int newRowId = dbHandler.addContract(contract.getValue());
+        return newRowId != -1;
     }
 }

@@ -1708,6 +1708,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(ContractsTable.REPEAT_INTERVAL_UNIT,
                 contract.getRepeatInterval().getUnit().name());
         values.put(ContractsTable.REPEAT_ON, contract.getRepeatOn());
+        if (contract.getStartDate() == null) contract.setStartDate(LocalDate.now());
         values.put(ContractsTable.START_DATE, contract.getStartDate().toEpochDay());
         values.put(ContractsTable.REMINDER, contract.getReminder());
 

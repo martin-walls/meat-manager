@@ -9,7 +9,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +41,8 @@ public class EditContractFragment extends Fragment
 
     private ProductsAddedAdapter productsAddedAdapter;
     private ArrayAdapter<CharSequence> spnRepeatOnAdapter;
+
+    private boolean isRepeatOnSpnInitialised = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -132,6 +136,20 @@ public class EditContractFragment extends Fragment
                     setReminderHintText(contract.getReminder());
                 });
 
+        binding.spnRepeatOn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!isRepeatOnSpnInitialised) {
+                    isRepeatOnSpnInitialised = true;
+                    return;
+                }
+                viewModel.setRepeatOn(position + 1);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
         // reminder button listeners
         binding.btnReminderPlus.setOnClickListener(v -> incrementReminder());
         binding.btnReminderMinus.setOnClickListener(v -> decrementReminder());
@@ -183,9 +201,9 @@ public class EditContractFragment extends Fragment
                 & validateQuantityBoxesInputField();
     }
 
-    private void commitSelectedProduct() {
+    private boolean commitSelectedProduct() {
         boolean isValid = validateSelectedProductValues();
-        if (!isValid) return;
+        if (!isValid) return false;
 
         double mass = Utils.getKgsFromCurrentMassUnit(getContext(),
                 Double.parseDouble(binding.editTextQuantityMass.getText().toString()));
@@ -200,6 +218,7 @@ public class EditContractFragment extends Fragment
         binding.editTextQuantityMass.clearFocus();
         binding.editTextQuantityBoxes.setText("");
         binding.editTextQuantityBoxes.clearFocus();
+        return true;
     }
 
     private void showSelectDestinationFragment() {
@@ -308,7 +327,20 @@ public class EditContractFragment extends Fragment
                 R.plurals.contracts_reminder_days_before, reminderValue));
     }
 
+    private boolean areProductFieldsAllEmpty() {
+        return viewModel.getSelectedProductObservable().getValue() == null
+                && TextUtils.isEmpty(binding.editTextQuantityMass.getText())
+                && TextUtils.isEmpty(binding.editTextQuantityBoxes.getText());
+    }
+
     private void commitContract() {
-        //todo
+        //todo add validation for all fields, ie. that they are not empty (use viewModel)
+        if (!areProductFieldsAllEmpty()) {
+            boolean commitProductSuccess = commitSelectedProduct();
+            if (!commitProductSuccess) return;
+        }
+        boolean success = viewModel.commitContract();
+
+        if (success) getActivity().finish();
     }
 }
