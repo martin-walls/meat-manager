@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.martinwalls.meatmanager.data.db.DBHandler;
@@ -15,6 +16,14 @@ import com.martinwalls.meatmanager.data.models.Product;
 import com.martinwalls.meatmanager.data.models.ProductQuantity;
 
 public class EditContractFragmentViewModel extends AndroidViewModel {
+
+    public static enum FieldStatus {
+        INITIAL,
+        VALID,
+        INVALID_BLANK,
+        INVALID_DATA,
+        INVALID_ZERO;
+    }
 
     private final DBHandler dbHandler;
 

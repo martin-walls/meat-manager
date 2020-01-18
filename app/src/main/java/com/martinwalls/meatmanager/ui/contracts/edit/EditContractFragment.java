@@ -3,6 +3,9 @@ package com.martinwalls.meatmanager.ui.contracts.edit;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -19,6 +22,7 @@ import com.martinwalls.meatmanager.data.models.Contract;
 import com.martinwalls.meatmanager.data.models.Interval;
 import com.martinwalls.meatmanager.databinding.FragmentEditContractBinding;
 import com.martinwalls.meatmanager.ui.common.adapter.ProductsAddedAdapter;
+import com.martinwalls.meatmanager.util.EditTextValidator;
 import com.martinwalls.meatmanager.util.Utils;
 
 public class EditContractFragment extends Fragment
@@ -50,6 +54,15 @@ public class EditContractFragment extends Fragment
         productsAddedAdapter = new ProductsAddedAdapter(this, ProductsAddedAdapter.FLAG_SHOW_ALL);
         binding.productsAddedRecyclerView.setAdapter(productsAddedAdapter);
         binding.productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // validate quantity inputs as user types
+        binding.editTextQuantityMass.addTextChangedListener(
+                new EditTextValidator(binding.inputLayoutQuantityMass, binding.editTextQuantityMass,
+                        EditTextValidator.VALIDATE_EMPTY | EditTextValidator.VALIDATE_NON_ZERO));
+
+        binding.editTextQuantityBoxes.addTextChangedListener(
+                new EditTextValidator(binding.inputLayoutQuantityBoxes, binding.editTextQuantityBoxes,
+                        EditTextValidator.VALIDATE_NON_ZERO));
 
         // allow user to select a destination from list of all added destinations
         // when they click the destination input field
@@ -121,6 +134,20 @@ public class EditContractFragment extends Fragment
         binding.btnReminderMinus.setOnClickListener(v -> decrementReminder());
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.fragment_edit_contract, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_done) {
+            commitContract();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void showSelectProductFragment() {
         if (getActivity() instanceof EditContractActivity) {
             ((EditContractActivity) getActivity()).showSelectProductFragment();
@@ -128,41 +155,23 @@ public class EditContractFragment extends Fragment
     }
 
     private boolean validateProductInputField() {
-        if (viewModel.getSelectedProductObservable().getValue() == null) {
-            binding.inputLayoutProduct.setError(getString(R.string.input_error_blank));
-            return false;
-        } else {
-            binding.inputLayoutProduct.setError(null);
-            return true;
-        }
+        return viewModel.getSelectedProductObservable().getValue() != null;
     }
 
     private boolean validateQuantityMassInputField() {
         if (TextUtils.isEmpty(binding.editTextQuantityMass.getText())) {
-            binding.inputLayoutQuantityMass.setError(getString(R.string.input_error_blank));
-            return false;
-        } else if (Double.parseDouble(binding.editTextQuantityMass.getText().toString()) == 0) {
-            binding.inputLayoutQuantityMass.setError(getString(R.string.input_error_non_zero));
             return false;
         } else {
-            binding.inputLayoutQuantityMass.setError(null);
-            return true;
+            return Double.parseDouble(binding.editTextQuantityMass.getText().toString()) != 0;
         }
     }
 
     private boolean validateQuantityBoxesInputField() {
         // quantity boxes field is allowed to be blank
         if (TextUtils.isEmpty(binding.editTextQuantityBoxes.getText())) {
-            binding.inputLayoutQuantityMass.setError(null);
             return true;
         }
-        if (Integer.parseInt(binding.editTextQuantityBoxes.getText().toString()) == 0) {
-            binding.inputLayoutQuantityBoxes.setError(getString(R.string.input_error_non_zero));
-            return false;
-        } else {
-            binding.inputLayoutQuantityBoxes.setError(null);
-            return true;
-        }
+        return Integer.parseInt(binding.editTextQuantityBoxes.getText().toString()) != 0;
     }
 
     private boolean validateSelectedProductValues() {
@@ -171,7 +180,6 @@ public class EditContractFragment extends Fragment
                 & validateQuantityBoxesInputField();
     }
 
-    //todo validation
     private void commitSelectedProduct() {
         boolean isValid = validateSelectedProductValues();
         if (!isValid) return;
@@ -285,5 +293,9 @@ public class EditContractFragment extends Fragment
 
     private void decrementReminder() {
         viewModel.updateReminderBy(-1);
+    }
+
+    private void commitContract() {
+        //todo
     }
 }
