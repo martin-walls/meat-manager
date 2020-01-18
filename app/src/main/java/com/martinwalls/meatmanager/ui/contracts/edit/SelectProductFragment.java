@@ -76,8 +76,8 @@ public class SelectProductFragment extends Fragment
         }
 
         // highlight already selected product, if there is one
-        contractViewModel.getSelectedProductQuantityObservable().observe(getViewLifecycleOwner(),
-                productQuantity -> adapter.setSelectedProduct(productQuantity.getProduct()));
+        contractViewModel.getSelectedProductObservable().observe(getViewLifecycleOwner(),
+                product -> adapter.setSelectedProduct(product));
     }
 
     @Override

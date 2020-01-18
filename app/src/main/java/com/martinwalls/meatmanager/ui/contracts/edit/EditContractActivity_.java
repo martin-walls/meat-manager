@@ -30,7 +30,6 @@ import com.martinwalls.meatmanager.data.models.Location;
 import com.martinwalls.meatmanager.data.models.Product;
 import com.martinwalls.meatmanager.data.models.ProductQuantity;
 import com.martinwalls.meatmanager.data.models.SearchItem;
-import com.martinwalls.meatmanager.databinding.ActivityEditContractBinding;
 import com.martinwalls.meatmanager.databinding.ActivityEditContractOldBinding;
 import com.martinwalls.meatmanager.ui.common.adapter.ProductsAddedAdapter;
 import com.martinwalls.meatmanager.ui.common.adapter.SearchItemAdapter;
@@ -146,7 +145,7 @@ public class EditContractActivity_ extends AppCompatActivity
         binding.productsAddedRecyclerView.setAdapter(productsAddedAdapter);
         binding.productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        binding.addProduct.setOnClickListener(v -> {
+        binding.btnAddProduct.setOnClickListener(v -> {
             ProductQuantity product = getProductFromInputs();
             clearProductInputs();
             hideKeyboard();
@@ -445,7 +444,7 @@ public class EditContractActivity_ extends AppCompatActivity
         viewsToHide.put(INPUT_REPEAT_ON, R.id.input_repeat_on);
         viewsToHide.put(INPUT_REMINDER, R.id.input_reminder);
 
-        viewsToHide.put("add_product_btn", R.id.add_product);
+        viewsToHide.put("add_product_btn", R.id.btn_add_product);
         viewsToHide.put("products_added_recycler_view", R.id.products_added_recycler_view);
     }
 

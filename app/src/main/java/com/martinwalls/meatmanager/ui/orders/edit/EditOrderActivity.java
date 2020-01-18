@@ -377,7 +377,7 @@ public class EditOrderActivity extends InputFormActivity
         addViewToHide(INPUT_DESTINATION, R.id.input_layout_destination);
         addViewToHide(INPUT_DATE, R.id.input_layout_date);
 
-        addViewToHide("add_product_btn", R.id.add_product);
+        addViewToHide("add_product_btn", R.id.btn_add_product);
         addViewToHide("products_added_recycler_view", R.id.products_added_recycler_view);
         if (editType == EDIT_TYPE_EDIT) {
             addViewToHide("completed_checkbox", R.id.row_completed);
@@ -426,7 +426,7 @@ public class EditOrderActivity extends InputFormActivity
         productsAddedRecyclerView.setAdapter(productsAddedAdapter);
         productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        addProductBtn = findViewById(R.id.add_product);
+        addProductBtn = findViewById(R.id.btn_add_product);
         addProductBtn.setOnClickListener(v -> addProductToProductsAddedList());
     }
 

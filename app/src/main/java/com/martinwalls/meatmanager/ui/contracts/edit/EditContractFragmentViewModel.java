@@ -1,6 +1,7 @@
 package com.martinwalls.meatmanager.ui.contracts.edit;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -22,7 +23,7 @@ public class EditContractFragmentViewModel extends AndroidViewModel {
     private final boolean isNewContract;
 
     private MutableLiveData<Contract> contract;
-    private MutableLiveData<ProductQuantity> selectedProductQuantityValues;
+    private MutableLiveData<Product> selectedProduct;
 
     // new contract
     public EditContractFragmentViewModel(Application application) {
@@ -52,8 +53,7 @@ public class EditContractFragmentViewModel extends AndroidViewModel {
         contract = new MutableLiveData<>();
         contract.setValue(new Contract());
 
-        selectedProductQuantityValues = new MutableLiveData<>();
-        selectedProductQuantityValues.setValue(new ProductQuantity());
+        selectedProduct = new MutableLiveData<>();
 
         // new contracts initially have a default reminder of 1 day
         if (isNewContract) {
@@ -61,12 +61,8 @@ public class EditContractFragmentViewModel extends AndroidViewModel {
         }
     }
 
-    private void refreshSelectedProductQuantityValues() {
-        selectedProductQuantityValues.setValue(selectedProductQuantityValues.getValue()); //todo find better way to do this
-    }
-
     private void refreshContract() {
-        contract.setValue(contract.getValue());
+        contract.setValue(contract.getValue()); //todo find better way to do this
     }
 
     public boolean isNewContract() {
@@ -82,28 +78,23 @@ public class EditContractFragmentViewModel extends AndroidViewModel {
         contract.setValue(dbHandler.getContract(contractId));
     }
 
-    public LiveData<ProductQuantity> getSelectedProductQuantityObservable() {
-        return selectedProductQuantityValues;
+    public LiveData<Product> getSelectedProductObservable() {
+        return selectedProduct;
     }
 
     public void setSelectedProduct(Product product) {
-        selectedProductQuantityValues.getValue().setProduct(product);
-        refreshSelectedProductQuantityValues();
+        selectedProduct.setValue(product);
     }
 
-    public void setSelectedMass(double mass) {
-        selectedProductQuantityValues.getValue().setQuantityMass(mass);
-        refreshSelectedProductQuantityValues();
-    }
-
-    public void setSelectedNumBoxes(int numBoxes) {
-        selectedProductQuantityValues.getValue().setQuantityBoxes(numBoxes);
-        refreshSelectedProductQuantityValues();
-    }
-
-    public void commitProductQuantityFields() {
-        contract.getValue().getProductList().add(selectedProductQuantityValues.getValue());
-        selectedProductQuantityValues.setValue(new ProductQuantity());
+    public void commitSelectedProduct(double quantityMass, int numBoxes) {
+        if (selectedProduct.getValue() == null) return;
+        ProductQuantity productQuantity = new ProductQuantity();
+        productQuantity.setProduct(selectedProduct.getValue());
+        productQuantity.setQuantityMass(quantityMass);
+        productQuantity.setQuantityBoxes(numBoxes);
+        contract.getValue().getProductList().add(productQuantity);
+        selectedProduct.setValue(null);
+        refreshContract();
     }
 
     public void setDestination(Location destination) {

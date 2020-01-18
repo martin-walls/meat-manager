@@ -22,7 +22,7 @@ public class ProductsAddedAdapter
     private List<ProductQuantity> productList;
     private ProductsAddedAdapterListener listener;
 
-    private boolean showEditBtn = true;
+    private boolean showEditBtn = true; //todo change these to bitwise flags
     private boolean showDeleteBtn = true;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -52,6 +52,7 @@ public class ProductsAddedAdapter
     /**
      * Constructor for when both buttons are hidden, so no listener is required.
      */
+    @Deprecated
     public ProductsAddedAdapter() {
         showEditBtn = false;
         showDeleteBtn = false;

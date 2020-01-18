@@ -1,25 +1,29 @@
 package com.martinwalls.meatmanager.ui.contracts.edit;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.models.Contract;
 import com.martinwalls.meatmanager.data.models.Interval;
 import com.martinwalls.meatmanager.databinding.FragmentEditContractBinding;
+import com.martinwalls.meatmanager.ui.common.adapter.ProductsAddedAdapter;
 import com.martinwalls.meatmanager.util.Utils;
 
-public class EditContractFragment extends Fragment implements RepeatIntervalDialog.RepeatIntervalDialogListener {
+public class EditContractFragment extends Fragment
+        implements RepeatIntervalDialog.RepeatIntervalDialogListener,
+        ProductsAddedAdapter.ProductsAddedAdapterListener {
 
     private final int QUANTITY_MASS_DP = 4;
 
@@ -27,6 +31,7 @@ public class EditContractFragment extends Fragment implements RepeatIntervalDial
 
     private EditContractFragmentViewModel viewModel;
 
+    private ProductsAddedAdapter productsAddedAdapter;
     private ArrayAdapter<CharSequence> spnRepeatOnAdapter;
 
     @Override
@@ -38,19 +43,17 @@ public class EditContractFragment extends Fragment implements RepeatIntervalDial
 
         // allow user to select a product from list of all added products when they
         // click the product input field
-        binding.editTextProduct.setOnClickListener(v -> {
-            if (getActivity() instanceof EditContractActivity) {
-                ((EditContractActivity) getActivity()).showSelectProductFragment();
-            }
-        });
+        binding.editTextProduct.setOnClickListener(v -> showSelectProductFragment());
+
+        binding.btnAddProduct.setOnClickListener(v -> commitSelectedProduct());
+
+        productsAddedAdapter = new ProductsAddedAdapter(this, true, true);
+        binding.productsAddedRecyclerView.setAdapter(productsAddedAdapter);
+        binding.productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // allow user to select a destination from list of all added destinations
         // when they click the destination input field
-        binding.editTextDestination.setOnClickListener(v -> {
-            if (getActivity() instanceof EditContractActivity) {
-                ((EditContractActivity) getActivity()).showSelectDestinationFragment();
-            }
-        });
+        binding.editTextDestination.setOnClickListener(v -> showSelectDestinationFragment());
 
         // open a dialog to allow user to enter a repeat interval
         binding.editTextRepeatInterval.setOnClickListener(v -> showRepeatIntervalDialog());
@@ -78,19 +81,15 @@ public class EditContractFragment extends Fragment implements RepeatIntervalDial
             getActivity().setTitle(R.string.contract_edit_title);
         }
 
-        // update product and quantity inputs when values update
-        viewModel.getSelectedProductQuantityObservable()
-                .observe(getViewLifecycleOwner(), productQuantity -> {
-                    if (productQuantity.getProduct() != null) {
-                        binding.editTextProduct.setText(productQuantity.getProduct().getProductName());
+        // update product input field when user selects a different product, or
+        // the current product is committed.
+        viewModel.getSelectedProductObservable()
+                .observe(getViewLifecycleOwner(), product -> {
+                    if (product != null) {
+                        binding.editTextProduct.setText(product.getProductName());
+                    } else {
+                        binding.editTextProduct.setText("");
                     }
-
-                    if (productQuantity.getQuantityMass() == -1) binding.editTextQuantityMass.setText("");
-                    else binding.editTextQuantityMass.setText(
-                            Utils.getMassDisplayValue(getContext(), productQuantity.getQuantityMass(), QUANTITY_MASS_DP));
-
-                    if (productQuantity.getQuantityBoxes() == -1) binding.editTextQuantityBoxes.setText("");
-                    else binding.editTextQuantityBoxes.setText(String.valueOf(productQuantity.getQuantityBoxes()));
                 });
 
         // update fields when contract updates:
@@ -100,6 +99,8 @@ public class EditContractFragment extends Fragment implements RepeatIntervalDial
         //   - reminder
         viewModel.getContractObservable()
                 .observe(getViewLifecycleOwner(), contract -> {
+                    productsAddedAdapter.setProductList(contract.getProductList());
+
                     binding.editTextDestination.setText(contract.getDestName());
 
                     if (contract.getRepeatInterval() != null) {
@@ -120,7 +121,77 @@ public class EditContractFragment extends Fragment implements RepeatIntervalDial
         binding.btnReminderMinus.setOnClickListener(v -> decrementReminder());
     }
 
-    //todo TESTME
+    private void showSelectProductFragment() {
+        if (getActivity() instanceof EditContractActivity) {
+            ((EditContractActivity) getActivity()).showSelectProductFragment();
+        }
+    }
+
+    private boolean validateProductInputField() {
+        if (viewModel.getSelectedProductObservable().getValue() == null) {
+            binding.inputLayoutProduct.setError(getString(R.string.input_error_blank));
+            return false;
+        } else {
+            binding.inputLayoutProduct.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateQuantityMassInputField() {
+        if (TextUtils.isEmpty(binding.editTextQuantityMass.getText())) {
+            binding.inputLayoutQuantityMass.setError(getString(R.string.input_error_blank));
+            return false;
+        } else if (Double.parseDouble(binding.editTextQuantityMass.getText().toString()) == 0) {
+            binding.inputLayoutQuantityMass.setError(getString(R.string.input_error_non_zero));
+            return false;
+        } else {
+            binding.inputLayoutQuantityMass.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateQuantityBoxesInputField() {
+        if (TextUtils.isEmpty(binding.editTextQuantityBoxes.getText())) {
+            binding.inputLayoutQuantityBoxes.setError(getString(R.string.input_error_blank));
+            return false;
+        } else if (Integer.parseInt(binding.editTextQuantityBoxes.getText().toString()) == 0) {
+            binding.inputLayoutQuantityBoxes.setError(getString(R.string.input_error_non_zero));
+            return false;
+        } else {
+            binding.inputLayoutQuantityBoxes.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateSelectedProductValues() {
+        return validateProductInputField()
+                & validateQuantityMassInputField()
+                & validateQuantityBoxesInputField();
+    }
+
+    //todo validation
+    private void commitSelectedProduct() {
+        boolean isValid = validateSelectedProductValues();
+        if (!isValid) return;
+
+        double mass = Utils.getKgsFromCurrentMassUnit(getContext(),
+                Double.parseDouble(binding.editTextQuantityMass.getText().toString()));
+
+        int numBoxes = Integer.parseInt(binding.editTextQuantityBoxes.getText().toString());
+
+        viewModel.commitSelectedProduct(mass, numBoxes);
+        binding.editTextQuantityMass.setText("");
+        binding.editTextQuantityMass.clearFocus();
+        binding.editTextQuantityBoxes.setText("");
+        binding.editTextQuantityBoxes.clearFocus();
+    }
+
+    private void showSelectDestinationFragment() {
+        if (getActivity() instanceof EditContractActivity) {
+            ((EditContractActivity) getActivity()).showSelectDestinationFragment();
+        }
+    }
+
     private void showRepeatIntervalDialog() {
         DialogFragment dialog = new RepeatIntervalDialog(this);
         Bundle args = new Bundle();
@@ -152,6 +223,7 @@ public class EditContractFragment extends Fragment implements RepeatIntervalDial
     @Override
     public void onRepeatIntervalSelected(Interval interval) {
         viewModel.setRepeatInterval(interval);
+        binding.inputRepeatOn.setVisibility(View.VISIBLE);
     }
 
     /**

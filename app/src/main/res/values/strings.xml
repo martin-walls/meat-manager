@@ -87,6 +87,7 @@
     <!-- Input -->
     <string name="input_error_blank">Cannot be blank</string>
     <string name="input_error_invalid">Invalid input</string>
+    <string name="input_error_non_zero">Value cannot be 0</string>
     <string name="input_error_duplicate">Already added</string>
     <string name="input_error_invalid_email">Invalid email</string>
     <string name="input_error_invalid_location_type">
