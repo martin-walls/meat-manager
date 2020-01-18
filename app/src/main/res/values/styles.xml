@@ -110,6 +110,16 @@
         <item name="android:textColor">?textColorSecondary</item>
     </style>
 
+    <style name="InputFormTextAppearanceUnselected">
+        <item name="android:textColor">?textColorSecondary</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="InputFormTextAppearanceSelected">
+        <item name="android:textColor">?textColorPrimary</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <!-- For add another product button for orders/contracts -->
     <style name="AddAnotherProductText">
         <item name="android:textSize">16sp</item>

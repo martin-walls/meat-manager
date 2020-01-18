@@ -30,25 +30,19 @@
                 android:orientation="vertical"
                 >
 
-                <!-- product input field -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/input_layout_product"
-                    style="@style/AppTextInputLayout"
+                <!-- product -->
+                <TextView
+                    android:id="@+id/txt_product"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/input_spacing_vertical"
-                    android:hint="@string/contracts_input_product"
-                    >
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edit_text_product"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusableInTouchMode="false"
-                        android:imeOptions="actionDone"
-                        android:inputType="textCapWords"
-                        />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:background="?selectableItemBackground"
+                    android:clickable="true"
+                    android:paddingStart="4dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="16dp"
+                    android:text="@string/contracts_input_product"
+                    android:textAppearance="@style/InputFormTextAppearanceUnselected"
+                    />
 
                 <!-- mass, num boxes-->
                 <LinearLayout
@@ -139,41 +133,33 @@
                 tools:listitem="@layout/item_product_options"
                 />
 
-            <!-- destination input field -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_layout_destination"
+            <!-- destination -->
+            <TextView
+                android:id="@+id/txt_destination"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/input_spacing_vertical"
-                android:hint="@string/contracts_input_destination"
-                >
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:paddingStart="4dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="16dp"
+                android:text="@string/contracts_input_destination"
+                android:textAppearance="@style/InputFormTextAppearanceUnselected"
+                />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_destination"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusableInTouchMode="false"
-                    android:imeOptions="actionDone"
-                    android:inputType="textCapWords"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- repeat interval input field-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/input_layout_repeat_interval"
+            <!-- repeat interval -->
+            <TextView
+                android:id="@+id/txt_repeat_interval"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/input_spacing_vertical"
-                android:hint="@string/contracts_input_repeat_interval"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_repeat_interval"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusableInTouchMode="false"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:paddingStart="4dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="16dp"
+                android:text="@string/contracts_input_repeat_interval"
+                android:textAppearance="@style/InputFormTextAppearanceUnselected"
+                />
 
             <!-- repeat on input -->
             <LinearLayout

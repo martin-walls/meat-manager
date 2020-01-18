@@ -53,7 +53,8 @@ public class EditContractFragment extends Fragment
 
         // allow user to select a product from list of all added products when they
         // click the product input field
-        binding.editTextProduct.setOnClickListener(v -> showSelectProductFragment());
+//        binding.editTextProduct.setOnClickListener(v -> showSelectProductFragment());
+        binding.txtProduct.setOnClickListener(v -> showSelectProductFragment());
 
         binding.btnAddProduct.setOnClickListener(v -> commitSelectedProduct());
 
@@ -64,7 +65,7 @@ public class EditContractFragment extends Fragment
         // validate quantity inputs as user types
         binding.editTextQuantityMass.addTextChangedListener(
                 new EditTextValidator(binding.inputLayoutQuantityMass, binding.editTextQuantityMass,
-                        EditTextValidator.VALIDATE_EMPTY | EditTextValidator.VALIDATE_NON_ZERO));
+                        EditTextValidator.VALIDATE_NON_ZERO));
 
         binding.editTextQuantityBoxes.addTextChangedListener(
                 new EditTextValidator(binding.inputLayoutQuantityBoxes, binding.editTextQuantityBoxes,
@@ -72,10 +73,10 @@ public class EditContractFragment extends Fragment
 
         // allow user to select a destination from list of all added destinations
         // when they click the destination input field
-        binding.editTextDestination.setOnClickListener(v -> showSelectDestinationFragment());
+        binding.txtDestination.setOnClickListener(v -> showSelectDestinationFragment());
 
         // open a dialog to allow user to enter a repeat interval
-        binding.editTextRepeatInterval.setOnClickListener(v -> showRepeatIntervalDialog());
+        binding.txtRepeatInterval.setOnClickListener(v -> showRepeatIntervalDialog());
 
         // initialise repeat on input spinner with adapter
         spnRepeatOnAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item);
@@ -105,9 +106,9 @@ public class EditContractFragment extends Fragment
         viewModel.getSelectedProductObservable()
                 .observe(getViewLifecycleOwner(), product -> {
                     if (product != null) {
-                        binding.editTextProduct.setText(product.getProductName());
+                        setProductText(product.getProductName());
                     } else {
-                        binding.editTextProduct.setText("");
+                        clearProductText();
                     }
                 });
 
@@ -120,11 +121,14 @@ public class EditContractFragment extends Fragment
                 .observe(getViewLifecycleOwner(), contract -> {
                     productsAddedAdapter.setProductList(contract.getProductList());
 
-                    binding.editTextDestination.setText(contract.getDestName());
+                    if (!TextUtils.isEmpty(contract.getDestName())) {
+                        setDestinationText(contract.getDestName());
+                    } else {
+                        clearDestinationText();
+                    }
 
                     if (contract.getRepeatInterval() != null) {
-                        binding.editTextRepeatInterval.setText(
-                                formatRepeatIntervalDisplayText(contract.getRepeatInterval()));
+                        setRepeatIntervalText(contract.getRepeatInterval());
                         binding.textRepeatOn.setText(formatRepeatOnLabelText(contract.getRepeatInterval()));
 
                         spnRepeatOnAdapter.clear();
@@ -179,6 +183,16 @@ public class EditContractFragment extends Fragment
         return viewModel.getSelectedProductObservable().getValue() != null;
     }
 
+    private void setProductText(String text) {
+        binding.txtProduct.setText(text);
+        binding.txtProduct.setTextAppearance(R.style.InputFormTextAppearanceSelected);
+    }
+
+    private void clearProductText() {
+        binding.txtProduct.setText(R.string.contracts_input_product);
+        binding.txtProduct.setTextAppearance(R.style.InputFormTextAppearanceUnselected);
+    }
+
     private boolean validateQuantityMassInputField() {
         if (TextUtils.isEmpty(binding.editTextQuantityMass.getText())) {
             return false;
@@ -227,6 +241,16 @@ public class EditContractFragment extends Fragment
         }
     }
 
+    private void setDestinationText(String text) {
+        binding.txtDestination.setText(text);
+        binding.txtDestination.setTextAppearance(R.style.InputFormTextAppearanceSelected);
+    }
+
+    private void clearDestinationText() {
+        binding.txtDestination.setText(R.string.contracts_input_destination);
+        binding.txtDestination.setTextAppearance(R.style.InputFormTextAppearanceUnselected);
+    }
+
     private void showRepeatIntervalDialog() {
         DialogFragment dialog = new RepeatIntervalDialog(this);
         Bundle args = new Bundle();
@@ -259,6 +283,16 @@ public class EditContractFragment extends Fragment
     public void onRepeatIntervalSelected(Interval interval) {
         viewModel.setRepeatInterval(interval);
         binding.inputRepeatOn.setVisibility(View.VISIBLE);
+    }
+
+    private void setRepeatIntervalText(Interval interval) {
+        binding.txtRepeatInterval.setText(formatRepeatIntervalDisplayText(interval));
+        binding.txtRepeatInterval.setTextAppearance(R.style.InputFormTextAppearanceSelected);
+    }
+
+    private void clearRepeatIntervalText() {
+        binding.txtRepeatInterval.setText(R.string.contracts_input_repeat_interval);
+        binding.txtRepeatInterval.setTextAppearance(R.style.InputFormTextAppearanceUnselected);
     }
 
     /**
