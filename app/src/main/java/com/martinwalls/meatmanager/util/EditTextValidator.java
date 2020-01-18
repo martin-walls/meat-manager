@@ -4,6 +4,8 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.martinwalls.meatmanager.R;
@@ -13,12 +15,14 @@ public class EditTextValidator implements TextWatcher {
     public static final int VALIDATE_EMPTY = 1;
     public static final int VALIDATE_NON_ZERO = 2;
 
+    @NonNull
     private final TextInputLayout inputLayout;
+    @NonNull
     private final TextInputEditText editText;
     private final int flags;
 
-    public EditTextValidator(TextInputLayout inputLayout,
-                             TextInputEditText editText,
+    public EditTextValidator(@NonNull TextInputLayout inputLayout,
+                             @NonNull TextInputEditText editText,
                              int flags) {
         this.inputLayout = inputLayout;
         this.editText = editText;
@@ -26,11 +30,11 @@ public class EditTextValidator implements TextWatcher {
     }
 
     @Override
-    public void afterTextChanged(Editable s) {
+    public final void afterTextChanged(Editable s) {
         validate();
     }
 
-    public boolean validate() {
+    private boolean validate() {
         if ((flags & VALIDATE_EMPTY) == VALIDATE_EMPTY) {
             if (TextUtils.isEmpty(editText.getText())) {
                 inputLayout.setError(inputLayout.getContext().getString(R.string.input_error_blank));
@@ -66,8 +70,8 @@ public class EditTextValidator implements TextWatcher {
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    public final void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+    public final void onTextChanged(CharSequence s, int start, int before, int count) {}
 }
