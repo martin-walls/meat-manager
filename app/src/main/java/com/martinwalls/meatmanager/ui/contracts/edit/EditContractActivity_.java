@@ -141,7 +141,10 @@ public class EditContractActivity_ extends AppCompatActivity
 
 
         productsAddedAdapter = new ProductsAddedAdapter(
-                this, editType == EDIT_TYPE_EDIT, true);
+                this,
+                editType == EDIT_TYPE_EDIT
+                        ? ProductsAddedAdapter.FLAG_SHOW_ALL
+                        : ProductsAddedAdapter.FLAG_SHOW_DELETE_BTN);
         binding.productsAddedRecyclerView.setAdapter(productsAddedAdapter);
         binding.productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 

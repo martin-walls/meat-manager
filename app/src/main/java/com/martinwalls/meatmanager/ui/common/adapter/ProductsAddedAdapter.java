@@ -19,11 +19,15 @@ import java.util.List;
 public class ProductsAddedAdapter
         extends RecyclerView.Adapter<ProductsAddedAdapter.ViewHolder> {
 
+    public static final int FLAG_NONE = 0;
+    public static final int FLAG_SHOW_EDIT_BTN = 1;
+    public static final int FLAG_SHOW_DELETE_BTN = 2;
+    public static final int FLAG_SHOW_ALL = 3;
+
     private List<ProductQuantity> productList;
     private ProductsAddedAdapterListener listener;
 
-    private boolean showEditBtn = true; //todo change these to bitwise flags
-    private boolean showDeleteBtn = true;
+    private int flags;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private Context context;
@@ -52,38 +56,24 @@ public class ProductsAddedAdapter
     /**
      * Constructor for when both buttons are hidden, so no listener is required.
      */
-    @Deprecated
     public ProductsAddedAdapter() {
-        showEditBtn = false;
-        showDeleteBtn = false;
+        flags = FLAG_NONE;
     }
 
     public ProductsAddedAdapter(ProductsAddedAdapterListener listener) {
         this.listener = listener;
+        flags = FLAG_NONE;
     }
 
-    /**
-     * Constructor to set which buttons should be showing.
-     */
-    public ProductsAddedAdapter(ProductsAddedAdapterListener listener,
-                                 boolean showEditBtn, boolean showDeleteBtn) {
+    public ProductsAddedAdapter(ProductsAddedAdapterListener listener, int flags) {
         this.listener = listener;
-        this.showEditBtn = showEditBtn;
-        this.showDeleteBtn = showDeleteBtn;
+        this.flags = flags;
     }
 
     @Deprecated
     public ProductsAddedAdapter(List<ProductQuantity> productList) {
         this.productList = productList;
-        showEditBtn = false;
-        showDeleteBtn = false;
-    }
-
-    @Deprecated
-    public ProductsAddedAdapter(List<ProductQuantity> productList,
-                                ProductsAddedAdapterListener listener) {
-        this.productList = productList;
-        this.listener = listener;
+        flags = FLAG_NONE;
     }
 
     @Deprecated
@@ -92,8 +82,7 @@ public class ProductsAddedAdapter
                                 boolean showEditBtn, boolean showDeleteBtn) {
         this.productList = productList;
         this.listener = listener;
-        this.showEditBtn = showEditBtn;
-        this.showDeleteBtn = showDeleteBtn;
+        flags = FLAG_NONE;
     }
 
     @Override
@@ -121,10 +110,14 @@ public class ProductsAddedAdapter
                             productQuantity.getQuantityBoxes(),
                             productQuantity.getQuantityBoxes()));
         }
-        if (!showDeleteBtn) {
+        if ((flags & FLAG_SHOW_DELETE_BTN) == FLAG_SHOW_DELETE_BTN) {
+            holder.deleteBtn.setVisibility(View.VISIBLE);
+        } else {
             holder.deleteBtn.setVisibility(View.GONE);
         }
-        if (!showEditBtn) {
+        if ((flags & FLAG_SHOW_EDIT_BTN) == FLAG_SHOW_EDIT_BTN) {
+            holder.editBtn.setVisibility(View.VISIBLE);
+        } else {
             holder.editBtn.setVisibility(View.GONE);
         }
     }

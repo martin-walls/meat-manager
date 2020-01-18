@@ -47,7 +47,7 @@ public class EditContractFragment extends Fragment
 
         binding.btnAddProduct.setOnClickListener(v -> commitSelectedProduct());
 
-        productsAddedAdapter = new ProductsAddedAdapter(this, true, true);
+        productsAddedAdapter = new ProductsAddedAdapter(this, ProductsAddedAdapter.FLAG_SHOW_ALL);
         binding.productsAddedRecyclerView.setAdapter(productsAddedAdapter);
         binding.productsAddedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
