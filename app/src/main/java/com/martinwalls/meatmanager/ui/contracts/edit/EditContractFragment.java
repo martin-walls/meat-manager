@@ -1,6 +1,7 @@
 package com.martinwalls.meatmanager.ui.contracts.edit;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import com.martinwalls.meatmanager.data.models.Interval;
 import com.martinwalls.meatmanager.databinding.FragmentEditContractBinding;
 import com.martinwalls.meatmanager.ui.common.adapter.ProductsAddedAdapter;
 import com.martinwalls.meatmanager.util.EditTextValidator;
+import com.martinwalls.meatmanager.util.SimpleTextWatcher;
 import com.martinwalls.meatmanager.util.Utils;
 
 public class EditContractFragment extends Fragment
@@ -126,7 +128,8 @@ public class EditContractFragment extends Fragment
                         spnRepeatOnAdapter.notifyDataSetChanged();
                     }
 
-                    binding.editTextReminder.setText(String.valueOf(contract.getReminder()));
+                    binding.txtReminderValue.setText(String.valueOf(contract.getReminder()));
+                    setReminderHintText(contract.getReminder());
                 });
 
         // reminder button listeners
@@ -293,6 +296,16 @@ public class EditContractFragment extends Fragment
 
     private void decrementReminder() {
         viewModel.updateReminderBy(-1);
+    }
+
+    private void setReminderHintText(int reminderValue) {
+        if (reminderValue == 0) {
+            binding.txtReminderHint.setText(R.string.contracts_reminder_off_hint);
+        } else {
+            binding.txtReminderHint.setText(R.string.contracts_reminder_hint);
+        }
+        binding.txtReminderDaysBefore.setText(getResources().getQuantityString(
+                R.plurals.contracts_reminder_days_before, reminderValue));
     }
 
     private void commitContract() {

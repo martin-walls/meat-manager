@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     >
 
     <ScrollView
@@ -219,7 +219,7 @@
                 >
 
                 <TextView
-                    android:id="@+id/text_reminder"
+                    android:id="@+id/txt_reminder_hint"
                     style="@style/InputFormText"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -240,14 +240,12 @@
                     />
 
                 <!-- input field for reminder value -->
-                <EditText
-                    android:id="@+id/edit_text_reminder"
+                <TextView
+                    android:id="@+id/txt_reminder_value"
+                    style="@style/InputFormText"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:minEms="2"
                     />
 
                 <!-- increment reminder btn -->
@@ -262,7 +260,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/reminder_text_days_before"
+                    android:id="@+id/txt_reminder_days_before"
                     style="@style/InputFormText"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

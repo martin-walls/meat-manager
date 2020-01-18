@@ -116,6 +116,11 @@ public class EditContractFragmentViewModel extends AndroidViewModel {
         refreshContract();
     }
 
+    public void setReminder(int reminder) {
+        contract.getValue().setReminder(reminder);
+        refreshContract();
+    }
+
     /**
      * Adds the specified amount to the reminder. The change can be positive or
      * negative to increase/decrease the reminder respectively. Doesn't let the

@@ -186,16 +186,16 @@ public class EditContractActivity_ extends AppCompatActivity
 
 
 
-        binding.editTextReminder.addTextChangedListener(new SimpleTextWatcher() {
+        binding.txtReminderValue.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextUtils.isEmpty(s) || s.toString().equals("0")) {
-                    binding.textReminder.setText(R.string.contracts_reminder_off_hint);
+                    binding.txtReminderHint.setText(R.string.contracts_reminder_off_hint);
                 } else {
-                    binding.textReminder.setText(R.string.contracts_reminder_hint);
+                    binding.txtReminderHint.setText(R.string.contracts_reminder_hint);
                 }
                 if (!TextUtils.isEmpty(s)) {
-                    binding.reminderTextDaysBefore.setText(getResources().getQuantityString(
+                    binding.txtReminderDaysBefore.setText(getResources().getQuantityString(
                             R.plurals.contracts_reminder_days_before,
                             Integer.parseInt(s.toString())));
                 }
@@ -209,7 +209,7 @@ public class EditContractActivity_ extends AppCompatActivity
 
         if (!viewModel.isEditMode()) {
             binding.productBtnDone.setVisibility(View.GONE);
-            binding.editTextReminder.setText("1"); //todo method setReminderInputValue(int)
+            binding.txtReminderValue.setText("1"); //todo method setReminderInputValue(int)
         } else {
             binding.productInputs.setVisibility(View.GONE);
 
@@ -525,21 +525,21 @@ public class EditContractActivity_ extends AppCompatActivity
     }
 
     private void decrementReminder() {
-        if (!TextUtils.isEmpty(binding.editTextReminder.getText())) {
+        if (!TextUtils.isEmpty(binding.txtReminderValue.getText())) {
             int currentReminder = Integer.parseInt(
-                    binding.editTextReminder.getText().toString());
+                    binding.txtReminderValue.getText().toString());
             if (currentReminder > 0) {
-                binding.editTextReminder.setText(String.valueOf(currentReminder - 1));
+                binding.txtReminderValue.setText(String.valueOf(currentReminder - 1));
             }
         }
     }
 
     private void incrementReminder() {
-        if (TextUtils.isEmpty(binding.editTextReminder.getText())) {
-            binding.editTextReminder.setText("1");
+        if (TextUtils.isEmpty(binding.txtReminderValue.getText())) {
+            binding.txtReminderValue.setText("1");
         } else {
-            int currentReminder = Integer.parseInt(binding.editTextReminder.getText().toString());
-            binding.editTextReminder.setText(String.valueOf(currentReminder + 1));
+            int currentReminder = Integer.parseInt(binding.txtReminderValue.getText().toString());
+            binding.txtReminderValue.setText(String.valueOf(currentReminder + 1));
         }
     }
 
@@ -673,11 +673,11 @@ public class EditContractActivity_ extends AppCompatActivity
             contract.setRepeatOn(binding.spnRepeatOn.getSelectedItemPosition() + 1);
             contract.setStartDate(LocalDate.now());
 
-            if (TextUtils.isEmpty(binding.editTextReminder.getText())
-                    || binding.editTextReminder.getText().toString().equals("0")) {
+            if (TextUtils.isEmpty(binding.txtReminderValue.getText())
+                    || binding.txtReminderValue.getText().toString().equals("0")) {
                 contract.setReminder(-1);
             } else {
-                contract.setReminder(Integer.parseInt(binding.editTextReminder.getText().toString()));
+                contract.setReminder(Integer.parseInt(binding.txtReminderValue.getText().toString()));
             }
 
             return viewModel.saveContract(contract);

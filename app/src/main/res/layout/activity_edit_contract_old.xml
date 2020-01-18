@@ -205,7 +205,7 @@
                 >
 
                 <TextView
-                    android:id="@+id/text_reminder"
+                    android:id="@+id/txt_reminder_hint"
                     style="@style/InputFormText"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -225,7 +225,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/edit_text_reminder"
+                    android:id="@+id/txt_reminder_value"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -245,7 +245,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/reminder_text_days_before"
+                    android:id="@+id/txt_reminder_days_before"
                     style="@style/InputFormText"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
