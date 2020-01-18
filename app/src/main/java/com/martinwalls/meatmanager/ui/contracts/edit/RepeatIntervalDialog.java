@@ -181,6 +181,16 @@ public class RepeatIntervalDialog extends DialogFragment {
             customInterval.setVisibility(View.VISIBLE);
         } else {
             listener.onRadioBtnClicked(id);
+            switch (id) {
+                case OPTION_WEEK:
+                    listener.onRepeatIntervalSelected(new Interval(1, Interval.TimeUnit.WEEK));
+                    break;
+                case OPTION_TWO_WEEK:
+                    listener.onRepeatIntervalSelected(new Interval(2, Interval.TimeUnit.WEEK));
+                    break;
+                case OPTION_MONTH:
+                    listener.onRepeatIntervalSelected(new Interval(1, Interval.TimeUnit.MONTH));
+            }
             dismiss();
         }
     }
@@ -243,7 +253,7 @@ public class RepeatIntervalDialog extends DialogFragment {
             if (TextUtils.isEmpty(editTextCustomValue.getText())) {
                 return;
             }
-            int value = Integer.valueOf(editTextCustomValue.getText().toString());
+            int value = Integer.parseInt(editTextCustomValue.getText().toString());
 
             Interval interval = new Interval();
             interval.setValue(value);
@@ -256,6 +266,7 @@ public class RepeatIntervalDialog extends DialogFragment {
                     break;
             }
             listener.onCustomIntervalSelected(interval);
+            listener.onRepeatIntervalSelected(interval);
             dismiss();
         });
     }
@@ -274,7 +285,7 @@ public class RepeatIntervalDialog extends DialogFragment {
         if (TextUtils.isEmpty(editTextCustomValue.getText())) {
             setCustomValueInputValue(1);
         } else {
-            int currentValue = Integer.valueOf(editTextCustomValue.getText().toString());
+            int currentValue = Integer.parseInt(editTextCustomValue.getText().toString());
             setCustomValueInputValue(currentValue + 1);
         }
     }
@@ -285,8 +296,9 @@ public class RepeatIntervalDialog extends DialogFragment {
      */
     private void decrementCustomValue() {
         if (!TextUtils.isEmpty(editTextCustomValue.getText())) {
-            int currentValue = Integer.valueOf(editTextCustomValue.getText().toString());
-            if (currentValue > 0) {
+            int currentValue = Integer.parseInt(editTextCustomValue.getText().toString());
+            // don't allow the value to go below 1
+            if (currentValue > 1) {
                 setCustomValueInputValue(currentValue - 1);
             }
         }
@@ -313,6 +325,6 @@ public class RepeatIntervalDialog extends DialogFragment {
         @Deprecated
         default void onCustomIntervalSelected(Interval interval) {};
 
-        default void onRepeatIntervalSelected(Interval interval) {}; //todo call this
+        default void onRepeatIntervalSelected(Interval interval) {};
     }
 }
