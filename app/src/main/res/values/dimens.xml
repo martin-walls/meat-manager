@@ -11,4 +11,13 @@
 
     <dimen name="input_spacing_vertical">16dp</dimen>
     <dimen name="input_spacing_horizontal">8dp</dimen>
+
+
+    <dimen name="input_form_space_left">24dp</dimen>
+    <dimen name="input_form_space_right">16dp</dimen>
+    <dimen name="input_form_text_padding_left">4dp</dimen>
+    <!-- input_form_space_left + input_form_text_padding_left -->
+    <dimen name="input_form_text_padding_left_full">28dp</dimen>
+
+
 </resources>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <integer name="screen_transition_duration">200</integer>
+
     <integer name="search_open_duration">100</integer>
     <integer name="search_close_duration">100</integer>
     <integer name="search_close_fade_delay">50</integer>

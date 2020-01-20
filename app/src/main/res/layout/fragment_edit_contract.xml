@@ -17,8 +17,7 @@
             android:id="@+id/inputs_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
             android:orientation="vertical"
             >
 
@@ -37,8 +36,9 @@
                     android:layout_height="wrap_content"
                     android:background="?selectableItemBackground"
                     android:clickable="true"
-                    android:paddingStart="4dp"
+                    android:paddingStart="@dimen/input_form_text_padding_left_full"
                     android:paddingTop="20dp"
+                    android:paddingEnd="@dimen/input_form_space_right"
                     android:paddingBottom="16dp"
                     android:text="@string/contracts_input_product"
                     android:textAppearance="@style/InputFormTextAppearanceUnselected"
@@ -49,7 +49,9 @@
                     android:id="@+id/quantity_inputs_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/input_form_space_left"
                     android:layout_marginTop="@dimen/input_spacing_vertical"
+                    android:layout_marginEnd="@dimen/input_form_space_right"
                     android:orientation="horizontal"
                     >
 
@@ -112,6 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/input_form_space_right"
                 android:background="?selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
@@ -128,9 +131,18 @@
                 android:id="@+id/products_added_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/input_form_space_left"
+                android:layout_marginEnd="@dimen/input_form_space_right"
                 android:overScrollMode="never"
                 tools:itemCount="1"
                 tools:listitem="@layout/item_product_options"
+                />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:srcCompat="@drawable/divider_thin"
                 />
 
             <!-- destination -->
@@ -138,13 +150,22 @@
                 android:id="@+id/txt_destination"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:background="?selectableItemBackground"
                 android:clickable="true"
-                android:paddingStart="4dp"
-                android:paddingTop="20dp"
+                android:paddingStart="@dimen/input_form_text_padding_left_full"
+                android:paddingTop="16dp"
+                android:paddingEnd="@dimen/input_form_space_right"
                 android:paddingBottom="16dp"
                 android:text="@string/contracts_input_destination"
                 android:textAppearance="@style/InputFormTextAppearanceUnselected"
+                />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/divider_thin"
                 />
 
             <!-- repeat interval -->
@@ -152,10 +173,13 @@
                 android:id="@+id/txt_repeat_interval"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:background="?selectableItemBackground"
                 android:clickable="true"
-                android:paddingStart="4dp"
-                android:paddingTop="20dp"
+                android:paddingStart="@dimen/input_form_text_padding_left_full"
+                android:paddingTop="16dp"
+                android:paddingEnd="@dimen/input_form_space_right"
                 android:paddingBottom="16dp"
                 android:text="@string/contracts_input_repeat_interval"
                 android:textAppearance="@style/InputFormTextAppearanceUnselected"
@@ -166,9 +190,9 @@
                 android:id="@+id/input_repeat_on"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="4dp"
+                android:layout_marginStart="@dimen/input_form_space_left"
+                android:layout_marginEnd="@dimen/input_form_space_right"
+                android:layout_marginBottom="4dp"
                 android:orientation="horizontal"
                 android:visibility="gone"
                 tools:visibility="visible"
@@ -180,6 +204,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="start|center_vertical"
+                    android:paddingStart="@dimen/input_form_text_padding_left"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
                     android:text="@string/contracts_repeat_on_week"
                     />
 
@@ -193,14 +220,20 @@
                     />
             </LinearLayout> <!-- /repeat on input -->
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/divider_thin"
+                />
+
             <!-- reminder input -->
             <LinearLayout
                 android:id="@+id/input_reminder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="4dp"
+                android:layout_marginStart="@dimen/input_form_space_left"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="@dimen/input_form_space_right"
                 android:orientation="horizontal"
                 >
 
@@ -211,6 +244,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="start|center_vertical"
+                    android:paddingStart="@dimen/input_form_text_padding_left"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
                     android:text="@string/contracts_reminder_hint"
                     />
 
@@ -231,6 +267,8 @@
                     style="@style/InputFormText"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     android:gravity="center"
                     />
 
@@ -258,5 +296,4 @@
 
         </LinearLayout> <!-- /all inputs -->
     </ScrollView>
-
 </LinearLayout>

@@ -72,6 +72,10 @@ public class EditContractActivity extends AppCompatActivity {
     public void showSelectProductFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_bottom_fade, // new fragment slide in
+                        R.anim.fade_out, // old fragment fade out
+                        R.anim.fade_in, // fade in when returning to old fragment from back stack
+                        R.anim.slide_out_bottom_fade) // slide out fragment when pop back stack
                 .replace(R.id.fragment_holder, new SelectProductFragment())
                 .addToBackStack(null)
                 .commit();
@@ -80,6 +84,10 @@ public class EditContractActivity extends AppCompatActivity {
     public void showSelectDestinationFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_bottom_fade, // new fragment slide in
+                        R.anim.fade_out, // old fragment fade out
+                        R.anim.fade_in, // fade in when returning to old fragment from back stack
+                        R.anim.slide_out_bottom_fade) // slide out fragment when pop back stack
                 .replace(R.id.fragment_holder, new SelectDestinationFragment())
                 .addToBackStack(null)
                 .commit();
