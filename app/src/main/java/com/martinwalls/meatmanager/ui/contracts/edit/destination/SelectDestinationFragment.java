@@ -1,12 +1,10 @@
-package com.martinwalls.meatmanager.ui.contracts.edit;
+package com.martinwalls.meatmanager.ui.contracts.edit.destination;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.models.Location;
 import com.martinwalls.meatmanager.databinding.FragmentSearchableListBinding;
+import com.martinwalls.meatmanager.ui.contracts.edit.EditContractActivity;
+import com.martinwalls.meatmanager.ui.contracts.edit.EditContractViewModel;
 import com.martinwalls.meatmanager.ui.locations.edit.NewLocationActivity;
 import com.martinwalls.meatmanager.util.SimpleTextWatcher;
 
@@ -29,7 +29,7 @@ public class SelectDestinationFragment extends Fragment
 
     private FragmentSearchableListBinding binding;
     private SelectDestinationViewModel viewModel;
-    private EditContractFragmentViewModel contractViewModel;
+    private EditContractViewModel contractViewModel;
 
     private DestinationListAdapter adapter;
 

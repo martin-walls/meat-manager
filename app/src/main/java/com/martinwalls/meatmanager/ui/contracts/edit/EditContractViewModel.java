@@ -6,207 +6,248 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.martinwalls.meatmanager.data.ValidationState;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.models.Contract;
 import com.martinwalls.meatmanager.data.models.Interval;
 import com.martinwalls.meatmanager.data.models.Location;
 import com.martinwalls.meatmanager.data.models.Product;
 import com.martinwalls.meatmanager.data.models.ProductQuantity;
-import com.martinwalls.meatmanager.data.models.SearchItem;
-import com.martinwalls.meatmanager.util.SortUtils;
-import com.martinwalls.meatmanager.util.undo.UndoStack;
-import com.martinwalls.meatmanager.util.undo.contract.AddContractAction;
-import com.martinwalls.meatmanager.util.undo.contract.EditContractAction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EditContractViewModel extends AndroidViewModel {
 
-    public static final int CONTRACT_NONE = -1;
+    public class State {
+/*        public class FieldStatus {
+            private String name;
+            private ValidationState state;
+
+            public FieldStatus(@NonNull String name, @NonNull ValidationState state) {
+                this.name = name;
+                this.state = state;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public ValidationState getState() {
+                return state;
+            }
+
+            public void setState(ValidationState state) {
+                this.state = state;
+            }
+        }*/
+
+        private ValidationState productState;
+        private ValidationState productListState;
+        private ValidationState destinationState;
+        private ValidationState repeatIntervalState;
+        private ValidationState repeatOnState;
+        private ValidationState reminderState;
+
+        private State() {
+            productState = ValidationState.INITIAL;
+            productListState = ValidationState.INITIAL;
+            destinationState = ValidationState.INITIAL;
+            repeatIntervalState = ValidationState.INITIAL;
+            repeatOnState = ValidationState.INITIAL;
+            reminderState = ValidationState.INITIAL;
+        }
+
+        public boolean isTotalStateValid() {
+            if (productState != ValidationState.VALID
+                    && productListState != ValidationState.VALID) return false;
+            if (destinationState != ValidationState.VALID) return false;
+            if (repeatIntervalState != ValidationState.VALID) return false;
+            if (repeatOnState != ValidationState.VALID) return false;
+            if (reminderState != ValidationState.VALID) return false;
+            return true;
+        }
+
+        private void setProductState(ValidationState productState) {
+            this.productState = productState;
+        }
+
+        public ValidationState getProductState() {
+            return productState;
+        }
+
+        private void setProductListState(ValidationState productListState) {
+            this.productListState = productListState;
+        }
+
+        public ValidationState getProductListState() {
+            return productListState;
+        }
+
+        public ValidationState getDestinationState() {
+            return destinationState;
+        }
+
+        private void setDestinationState(ValidationState destinationState) {
+            this.destinationState = destinationState;
+        }
+
+        public ValidationState getRepeatIntervalState() {
+            return repeatIntervalState;
+        }
+
+        private void setRepeatIntervalState(ValidationState repeatIntervalState) {
+            this.repeatIntervalState = repeatIntervalState;
+        }
+
+        public ValidationState getRepeatOnState() {
+            return repeatOnState;
+        }
+
+        private void setRepeatOnState(ValidationState repeatOnState) {
+            this.repeatOnState = repeatOnState;
+        }
+
+        public ValidationState getReminderState() {
+            return reminderState;
+        }
+
+        private void setReminderState(ValidationState reminderState) {
+            this.reminderState = reminderState;
+        }
+    }
 
     private final DBHandler dbHandler;
 
-    private final int editType;
     private final int contractId;
 
+    private final boolean isNewContract;
+
     private MutableLiveData<Contract> contract;
+    private MutableLiveData<Product> selectedProduct;
 
-    private MutableLiveData<List<ProductQuantity>> productsAdded;
+    private State state;
 
-    private int selectedProductId;
-    private int selectedDestId;
-
-    private MutableLiveData<List<SearchItem>> searchItemList;
-
-    private MutableLiveData<Interval> selectedRepeatInterval;
-
-    public EditContractViewModel(Application application, int editType, int contractId) {
+    // new contract
+    public EditContractViewModel(Application application) {
         super(application);
 
-        this.editType = editType;
+        isNewContract = true;
+        contractId = -1;
+
+        dbHandler = new DBHandler(application);
+
+        initLiveData();
+    }
+
+    // edit existing contract
+    public EditContractViewModel(Application application, int contractId) {
+        super(application);
+
+        isNewContract = false;
         this.contractId = contractId;
 
         dbHandler = new DBHandler(application);
+
+        initLiveData();
     }
 
-    public boolean isEditMode() {
-        return editType == EditContractActivity.EDIT_TYPE_EDIT;
-    }
+    private void initLiveData() {
+        contract = new MutableLiveData<>();
+        contract.setValue(new Contract());
 
-    public LiveData<Contract> getContract() {
-        if (contract == null) {
-            contract = new MutableLiveData<>();
-            loadContract();
+        selectedProduct = new MutableLiveData<>();
+
+        state = new State();
+
+        // new contracts initially have a default reminder of 1 day
+        if (isNewContract) {
+            contract.getValue().setReminder(1);
+            state.setReminderState(ValidationState.VALID);
+            contract.getValue().setRepeatOn(1);
+            state.setRepeatOnState(ValidationState.VALID);
         }
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    private void refreshContract() {
+        contract.setValue(contract.getValue()); //todo find better way to do this
+    }
+
+    public boolean isNewContract() {
+        return isNewContract;
+    }
+
+    public LiveData<Contract> getContractObservable() {
         return contract;
     }
 
     public void loadContract() {
+        if (isNewContract) return;
         contract.setValue(dbHandler.getContract(contractId));
     }
 
-    public boolean saveContract(Contract newContract) {
-        if (!isEditMode()) {
-            int newRowId = dbHandler.addContract(newContract);
-            newContract.setContractId(newRowId);
-            UndoStack.getInstance().push(new AddContractAction(newContract));
-            return newRowId != -1;
-        } else {
-            newContract.setContractId(contract.getValue().getContractId());
-            boolean success = dbHandler.updateContract(newContract);
-            UndoStack.getInstance().push(new EditContractAction(contract.getValue(), newContract));
-            return success;
-        }
+    public LiveData<Product> getSelectedProductObservable() {
+        return selectedProduct;
     }
 
-
-
-
-    public LiveData<Interval> getSelectedRepeatInterval() {
-        if (selectedRepeatInterval == null) {
-            selectedRepeatInterval = new MutableLiveData<>();
-        }
-        return selectedRepeatInterval;
+    public void setSelectedProduct(Product product) {
+        selectedProduct.setValue(product);
+        state.setProductState(ValidationState.VALID);
     }
 
-    public void setSelectedRepeatInterval(Interval interval) {
-        selectedRepeatInterval.setValue(interval);
+    public void commitSelectedProduct(double quantityMass, int numBoxes) {
+        if (selectedProduct.getValue() == null) return;
+        ProductQuantity productQuantity = new ProductQuantity();
+        productQuantity.setProduct(selectedProduct.getValue());
+        productQuantity.setQuantityMass(quantityMass);
+        productQuantity.setQuantityBoxes(numBoxes);
+        contract.getValue().getProductList().add(productQuantity);
+        selectedProduct.setValue(null);
+        refreshContract();
+        state.setProductState(ValidationState.INITIAL);
+        state.setProductListState(ValidationState.INITIAL);
     }
 
-
-
-
-
-
-    public boolean addProduct(Product product) {
-        return true;
+    public void setDestination(Location destination) {
+        contract.getValue().setDest(destination);
+        refreshContract();
+        state.setDestinationState(ValidationState.VALID);
     }
 
+    public void setRepeatInterval(Interval repeatInterval) {
+        contract.getValue().setRepeatInterval(repeatInterval);
 
-
-    public void setSelectedProductId(int id) {
-        this.selectedProductId = id;
+        refreshContract();
+        state.setRepeatIntervalState(ValidationState.VALID);
     }
 
-    public Product getSelectedProduct() {
-        return dbHandler.getProduct(selectedProductId);
+    public void setRepeatOn(int repeatOn) {
+        contract.getValue().setRepeatOn(repeatOn);
+        state.setRepeatIntervalState(ValidationState.VALID);
     }
 
-
-
-
-    public void setSelectedDestId(int id) {
-        this.selectedDestId = id;
+    public void setReminder(int reminder) {
+        contract.getValue().setReminder(reminder);
+        refreshContract();
+        state.setRepeatIntervalState(ValidationState.VALID);
     }
 
-    public Location getSelectedDest() {
-        return dbHandler.getLocation(selectedDestId);
+    /**
+     * Adds the specified amount to the reminder. The change can be positive or
+     * negative to increase/decrease the reminder respectively. Doesn't let the
+     * reminder go below 0.
+     */
+    public void updateReminderBy(int change) {
+        int newValue = contract.getValue().getReminder() + change;
+        if (newValue < 0) newValue = 0;
+        contract.getValue().setReminder(newValue);
+        refreshContract();
+        state.setRepeatIntervalState(ValidationState.VALID);
     }
 
-
-    public LiveData<List<ProductQuantity>> getProductsAdded() {
-        if (productsAdded == null) productsAdded = new MutableLiveData<>();
-        if (productsAdded.getValue() == null) productsAdded.setValue(new ArrayList<>());
-        return productsAdded;
+    public boolean commitContract() {
+        int newRowId = dbHandler.addContract(contract.getValue());
+        return newRowId != -1;
     }
-
-
-    public void addProductAdded(ProductQuantity product) {
-        if (productsAdded == null) productsAdded = new MutableLiveData<>();
-        productsAdded.getValue().add(product);
-    }
-
-    public void removeProductAdded(int pos) {
-        if (productsAdded.getValue() == null || productsAdded.getValue().size() == 0) return;
-        productsAdded.getValue().remove(pos);
-        productsAdded.postValue(productsAdded.getValue()); // refresh LiveData so UI updates
-    }
-
-
-
-
-
-    public LiveData<List<SearchItem>> getSearchItemList() {
-        if (searchItemList == null) searchItemList = new MutableLiveData<>();
-        return searchItemList;
-    }
-
-    public void loadSearchItems(String searchItemType) {
-        List<SearchItem> newSearchItems = new ArrayList<>();
-        switch (searchItemType) {
-            case "product":
-                for (Product product : SortUtils.mergeSort(
-                        dbHandler.getAllProducts(), Product.comparatorAlpha())) {
-                    newSearchItems.add(
-                            new SearchItem(product.getProductName(), product.getProductId()));
-                }
-                break;
-            case "destination":
-                for (Location location : SortUtils.mergeSort(
-                        dbHandler.getAllLocations(Location.LocationType.Destination),
-                        Location.comparatorAlpha())) {
-                    newSearchItems.add(new SearchItem(
-                            location.getLocationName(), location.getLocationId()));
-                }
-                break;
-        }
-        searchItemList.setValue(newSearchItems);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    public LiveData<Location> getLocation() {
-//
-//    }
-//
-//    public LiveData<List<Product>> getAllProducts() {
-//
-//    }
-//
-//    public LiveData<List<Location>> getAllDestinations() {
-//
-//    }
-//
-//    public boolean addNewProduct(Product product) {
-//
-//    }
-//
-//    public LiveData<Product> getProduct(int productId) {
-//        // ??
-//    }
-//
-//    public boolean updateContract() {
-//
-//    }
 }

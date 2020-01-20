@@ -1,4 +1,4 @@
-package com.martinwalls.meatmanager.ui.contracts.edit;
+package com.martinwalls.meatmanager.ui.contracts.edit.product;
 
 import android.graphics.Typeface;
 import android.view.LayoutInflater;

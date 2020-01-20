@@ -13,6 +13,7 @@ import com.martinwalls.meatmanager.data.models.SearchItem;
 import java.util.HashMap;
 import java.util.List;
 
+@Deprecated
 public abstract class SearchItemViewModel extends AndroidViewModel {
 
     private final DBHandler dbHandler;

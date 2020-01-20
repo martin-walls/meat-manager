@@ -1,4 +1,4 @@
-package com.martinwalls.meatmanager.ui.contracts.edit;
+package com.martinwalls.meatmanager.ui.contracts.edit.product;
 
 import android.os.Bundle;
 
@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.models.Product;
 import com.martinwalls.meatmanager.databinding.FragmentSearchableListBinding;
+import com.martinwalls.meatmanager.ui.contracts.edit.EditContractActivity;
+import com.martinwalls.meatmanager.ui.contracts.edit.EditContractViewModel;
 import com.martinwalls.meatmanager.ui.products.AddNewProductDialog;
 import com.martinwalls.meatmanager.util.SimpleTextWatcher;
 
@@ -28,7 +30,7 @@ public class SelectProductFragment extends Fragment
 
     private FragmentSearchableListBinding binding;
     private SelectProductViewModel viewModel;
-    private EditContractFragmentViewModel contractViewModel;
+    private EditContractViewModel contractViewModel;
 
     private ProductListAdapter adapter;
 

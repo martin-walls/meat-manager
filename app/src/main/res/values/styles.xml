@@ -110,14 +110,22 @@
         <item name="android:textColor">?textColorSecondary</item>
     </style>
 
-    <style name="InputFormTextAppearanceUnselected">
-        <item name="android:textColor">?textColorSecondary</item>
+    <style name="InputFormTextAppearance">
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="InputFormTextAppearanceSelected">
+    <style name="InputFormTextAppearance.Unselected">
+        <item name="android:textColor">?textColorSecondary</item>
+    </style>
+
+    <style name="InputFormTextAppearance.Selected">
         <item name="android:textColor">?textColorPrimary</item>
-        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="InputFormTextAppearance.Invalid">
+        <item name="android:textColor">?colorError</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
     <!-- For add another product button for orders/contracts -->

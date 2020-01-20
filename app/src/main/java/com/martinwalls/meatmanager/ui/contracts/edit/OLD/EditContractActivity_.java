@@ -1,4 +1,4 @@
-package com.martinwalls.meatmanager.ui.contracts.edit;
+package com.martinwalls.meatmanager.ui.contracts.edit.OLD;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -34,6 +34,7 @@ import com.martinwalls.meatmanager.databinding.ActivityEditContractOldBinding;
 import com.martinwalls.meatmanager.ui.common.adapter.ProductsAddedAdapter;
 import com.martinwalls.meatmanager.ui.common.adapter.SearchItemAdapter;
 import com.martinwalls.meatmanager.ui.common.dialog.ConfirmCancelDialog;
+import com.martinwalls.meatmanager.ui.contracts.edit.RepeatIntervalDialog;
 import com.martinwalls.meatmanager.ui.locations.edit.NewLocationActivity;
 import com.martinwalls.meatmanager.ui.products.AddNewProductDialog;
 import com.martinwalls.meatmanager.util.MassUnit;
@@ -65,7 +66,7 @@ public class EditContractActivity_ extends AppCompatActivity
     private final String INPUT_REPEAT_ON = "repeat_on";
     private final String INPUT_REMINDER = "reminder";
 
-    private EditContractViewModel viewModel;
+    private EditContractViewModelOLD viewModel;
 
     private ActivityEditContractOldBinding binding;
 
@@ -98,14 +99,14 @@ public class EditContractActivity_ extends AppCompatActivity
             }
         }
 
-        EditContractViewModelFactory factory =
-                new EditContractViewModelFactory(getApplication(), editType);
+        EditContractViewModelFactoryOLD factory =
+                new EditContractViewModelFactoryOLD(getApplication(), editType);
         if (editType == EDIT_TYPE_EDIT) {
             factory.setContractId(contractId);
         }
 
         viewModel = ViewModelProviders.of(this, factory)
-                .get(EditContractViewModel.class);
+                .get(EditContractViewModelOLD.class);
 
         // set page title
         getSupportActionBar().setTitle(viewModel.isEditMode()

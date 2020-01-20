@@ -41,7 +41,7 @@
                     android:paddingEnd="@dimen/input_form_space_right"
                     android:paddingBottom="16dp"
                     android:text="@string/contracts_input_product"
-                    android:textAppearance="@style/InputFormTextAppearanceUnselected"
+                    android:textAppearance="@style/InputFormTextAppearance.Unselected"
                     />
 
                 <!-- mass, num boxes-->
@@ -159,7 +159,7 @@
                 android:paddingEnd="@dimen/input_form_space_right"
                 android:paddingBottom="16dp"
                 android:text="@string/contracts_input_destination"
-                android:textAppearance="@style/InputFormTextAppearanceUnselected"
+                android:textAppearance="@style/InputFormTextAppearance.Unselected"
                 />
 
             <ImageView
@@ -182,7 +182,7 @@
                 android:paddingEnd="@dimen/input_form_space_right"
                 android:paddingBottom="16dp"
                 android:text="@string/contracts_input_repeat_interval"
-                android:textAppearance="@style/InputFormTextAppearanceUnselected"
+                android:textAppearance="@style/InputFormTextAppearance.Unselected"
                 />
 
             <!-- repeat on input -->

@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.databinding.ActivityEditContractBinding;
+import com.martinwalls.meatmanager.ui.contracts.edit.destination.SelectDestinationFragment;
+import com.martinwalls.meatmanager.ui.contracts.edit.product.SelectProductFragment;
 
 public class EditContractActivity extends AppCompatActivity {
 
@@ -24,7 +26,7 @@ public class EditContractActivity extends AppCompatActivity {
 
     private ActivityEditContractBinding binding;
 
-    private EditContractFragmentViewModel contractViewModel;
+    private EditContractViewModel contractViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +43,12 @@ public class EditContractActivity extends AppCompatActivity {
                 .add(R.id.fragment_holder, new EditContractFragment())
                 .commit();
 
-        EditContractFragmentViewModelFactory factory =
-                new EditContractFragmentViewModelFactory(getApplication(),
-                        EditContractFragmentViewModelFactory.Mode.CREATE_NEW); //todo get real mode
+        EditContractViewModelFactory factory =
+                new EditContractViewModelFactory(getApplication(),
+                        EditContractViewModelFactory.Mode.CREATE_NEW); //todo get real mode
 
         contractViewModel = ViewModelProviders.of(this, factory)
-                .get(EditContractFragmentViewModel.class);
+                .get(EditContractViewModel.class);
     }
 
     @Override
@@ -60,7 +62,7 @@ public class EditContractActivity extends AppCompatActivity {
         }
     }
 
-    public EditContractFragmentViewModel getContractViewModel() {
+    public EditContractViewModel getContractViewModel() {
         return contractViewModel;
     }
 

@@ -28,13 +28,13 @@ import com.martinwalls.meatmanager.util.SimpleTextWatcher;
  */
 public class RepeatIntervalDialog extends DialogFragment {
 
-    static final String EXTRA_SELECTED = "selected";
-    static final String EXTRA_CUSTOM_INTERVAL = "customInterval";
+    public static final String EXTRA_SELECTED = "selected";
+    public static final String EXTRA_CUSTOM_INTERVAL = "customInterval";
 
-    static final int OPTION_WEEK = 1;
-    static final int OPTION_TWO_WEEK = 2;
-    static final int OPTION_MONTH = 3;
-    static final int OPTION_CUSTOM = 4;
+    public static final int OPTION_WEEK = 1;
+    public static final int OPTION_TWO_WEEK = 2;
+    public static final int OPTION_MONTH = 3;
+    public static final int OPTION_CUSTOM = 4;
 
     private RepeatIntervalDialogListener listener;
 

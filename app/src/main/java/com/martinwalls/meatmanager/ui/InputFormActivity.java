@@ -30,6 +30,7 @@ import java.util.List;
  * in input forms throughout the app. This handles opening and closing search
  * views.
  */
+@Deprecated
 public abstract class InputFormActivity extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener {
 

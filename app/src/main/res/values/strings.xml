@@ -252,6 +252,8 @@
     <string name="contract_edit_title">Edit contract</string>
     <string name="contract_details_title">Contract details</string>
 
+    <string name="contract_commit_error_msg">Please enter all required data</string>
+
     <plurals name="contract_alert_upcoming_days">
         <item quantity="one">Upcoming contract tomorrow</item>
         <item quantity="other">Upcoming contract in %d days</item>

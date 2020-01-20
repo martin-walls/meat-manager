@@ -6,31 +6,44 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class EditContractViewModelFactory implements ViewModelProvider.Factory {
+
+    public static enum Mode {
+        CREATE_NEW,
+        EDIT_EXISTING
+    }
 
     private final Application application;
 
-    private final int editType;
+    private final Mode mode;
     private int contractId = -1;
 
-    public EditContractViewModelFactory(@NonNull Application application, int editType) {
+    public EditContractViewModelFactory(@NonNull Application application, Mode mode) {
         this.application = application;
-        this.editType = editType;
+        this.mode = mode;
     }
 
     public void setContractId(int contractId) {
         this.contractId = contractId;
     }
 
-    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (editType == EditContractActivity.EDIT_TYPE_EDIT) {
-            return (T) new EditContractViewModel(application, editType, contractId);
-        } else {
-            return (T) new EditContractViewModel(application, editType,
-                    EditContractViewModel.CONTRACT_NONE);
+        try {
+            if (mode == Mode.CREATE_NEW) {
+                    return modelClass.getConstructor(Application.class)
+                            .newInstance(application);
+            } else {
+                return modelClass.getConstructor(Application.class, Integer.TYPE)
+                        .newInstance(application, contractId);
+            }
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
         }
+
+        throw new IllegalArgumentException("Unknown ViewModel class");
     }
 }

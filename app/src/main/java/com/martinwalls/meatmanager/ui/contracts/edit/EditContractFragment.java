@@ -1,7 +1,7 @@
 package com.martinwalls.meatmanager.ui.contracts.edit;
 
+import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,12 +21,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.martinwalls.meatmanager.R;
+import com.martinwalls.meatmanager.data.ValidationState;
 import com.martinwalls.meatmanager.data.models.Contract;
 import com.martinwalls.meatmanager.data.models.Interval;
 import com.martinwalls.meatmanager.databinding.FragmentEditContractBinding;
 import com.martinwalls.meatmanager.ui.common.adapter.ProductsAddedAdapter;
 import com.martinwalls.meatmanager.util.EditTextValidator;
-import com.martinwalls.meatmanager.util.SimpleTextWatcher;
 import com.martinwalls.meatmanager.util.Utils;
 
 public class EditContractFragment extends Fragment
@@ -37,7 +37,7 @@ public class EditContractFragment extends Fragment
 
     private FragmentEditContractBinding binding;
 
-    private EditContractFragmentViewModel viewModel;
+    private EditContractViewModel viewModel;
 
     private ProductsAddedAdapter productsAddedAdapter;
     private ArrayAdapter<CharSequence> spnRepeatOnAdapter;
@@ -185,12 +185,12 @@ public class EditContractFragment extends Fragment
 
     private void setProductText(String text) {
         binding.txtProduct.setText(text);
-        binding.txtProduct.setTextAppearance(R.style.InputFormTextAppearanceSelected);
+        binding.txtProduct.setTextAppearance(R.style.InputFormTextAppearance_Selected);
     }
 
     private void clearProductText() {
         binding.txtProduct.setText(R.string.contracts_input_product);
-        binding.txtProduct.setTextAppearance(R.style.InputFormTextAppearanceUnselected);
+        binding.txtProduct.setTextAppearance(R.style.InputFormTextAppearance_Unselected);
     }
 
     private boolean validateQuantityMassInputField() {
@@ -243,12 +243,12 @@ public class EditContractFragment extends Fragment
 
     private void setDestinationText(String text) {
         binding.txtDestination.setText(text);
-        binding.txtDestination.setTextAppearance(R.style.InputFormTextAppearanceSelected);
+        binding.txtDestination.setTextAppearance(R.style.InputFormTextAppearance_Selected);
     }
 
     private void clearDestinationText() {
         binding.txtDestination.setText(R.string.contracts_input_destination);
-        binding.txtDestination.setTextAppearance(R.style.InputFormTextAppearanceUnselected);
+        binding.txtDestination.setTextAppearance(R.style.InputFormTextAppearance_Unselected);
     }
 
     private void showRepeatIntervalDialog() {
@@ -287,12 +287,12 @@ public class EditContractFragment extends Fragment
 
     private void setRepeatIntervalText(Interval interval) {
         binding.txtRepeatInterval.setText(formatRepeatIntervalDisplayText(interval));
-        binding.txtRepeatInterval.setTextAppearance(R.style.InputFormTextAppearanceSelected);
+        binding.txtRepeatInterval.setTextAppearance(R.style.InputFormTextAppearance_Selected);
     }
 
     private void clearRepeatIntervalText() {
         binding.txtRepeatInterval.setText(R.string.contracts_input_repeat_interval);
-        binding.txtRepeatInterval.setTextAppearance(R.style.InputFormTextAppearanceUnselected);
+        binding.txtRepeatInterval.setTextAppearance(R.style.InputFormTextAppearance_Unselected);
     }
 
     /**
@@ -369,12 +369,41 @@ public class EditContractFragment extends Fragment
 
     private void commitContract() {
         //todo add validation for all fields, ie. that they are not empty (use viewModel)
-        if (!areProductFieldsAllEmpty()) {
-            boolean commitProductSuccess = commitSelectedProduct();
-            if (!commitProductSuccess) return;
-        }
-        boolean success = viewModel.commitContract();
 
-        if (success) getActivity().finish();
+        boolean isValid = true;
+
+        EditContractViewModel.State state = viewModel.getState();
+        if (!state.isTotalStateValid()) {
+            isValid = false;
+
+            //todo make invalid text appearance persist between switching fragments
+            if (state.getProductState() != ValidationState.VALID
+                    && state.getProductListState() != ValidationState.VALID) {
+                binding.txtProduct.setTextAppearance(R.style.InputFormTextAppearance_Invalid);
+            }
+            if (state.getDestinationState() != ValidationState.VALID) {
+                binding.txtDestination.setTextAppearance(R.style.InputFormTextAppearance_Invalid);
+            }
+            if (state.getRepeatIntervalState() != ValidationState.VALID) {
+                binding.txtRepeatInterval.setTextAppearance(R.style.InputFormTextAppearance_Invalid);
+            }
+
+            Toast.makeText(getContext(), R.string.contract_commit_error_msg, Toast.LENGTH_SHORT).show();
+        }
+
+        if (isValid) {
+            if (!areProductFieldsAllEmpty()) {
+                boolean commitProductSuccess = commitSelectedProduct();
+                if (!commitProductSuccess) {
+                    if (TextUtils.isEmpty(binding.editTextQuantityMass.getText())) {
+                        binding.inputLayoutQuantityMass.setError(getString(R.string.input_error_blank));
+                    }
+                    return;
+                }
+            }
+            boolean success = viewModel.commitContract();
+
+            if (success) getActivity().finish();
+        }
     }
 }
