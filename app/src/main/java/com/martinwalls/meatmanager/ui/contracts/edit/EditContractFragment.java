@@ -126,8 +126,12 @@ public class EditContractFragment extends Fragment
                 .observe(getViewLifecycleOwner(), product -> {
                     if (product != null) {
                         setProductText(product.getProductName());
+                        binding.quantityInputsLayout.setVisibility(View.VISIBLE);
+                        binding.btnAddProduct.setVisibility(View.VISIBLE);
                     } else {
                         clearProductText();
+                        binding.quantityInputsLayout.setVisibility(View.GONE);
+                        binding.btnAddProduct.setVisibility(View.GONE);
                     }
                 });
 

@@ -53,6 +53,8 @@
                     android:layout_marginTop="@dimen/input_spacing_vertical"
                     android:layout_marginEnd="@dimen/input_form_space_right"
                     android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible"
                     >
 
                     <!-- mass input field -->
@@ -120,6 +122,8 @@
                 android:focusable="true"
                 android:gravity="end|center_vertical"
                 android:paddingStart="8dp"
+                android:visibility="gone"
+                tools:visibility="visible"
                 android:paddingTop="8dp"
                 android:paddingEnd="8dp"
                 android:paddingBottom="8dp"
