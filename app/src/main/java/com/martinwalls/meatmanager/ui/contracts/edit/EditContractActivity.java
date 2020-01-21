@@ -28,6 +28,8 @@ public class EditContractActivity extends AppCompatActivity {
 
     private EditContractViewModel contractViewModel;
 
+    private EditContractFragment editContractFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,10 +40,15 @@ public class EditContractActivity extends AppCompatActivity {
 
         setContentView(binding.getRoot());
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment_holder, new EditContractFragment())
-                .commit();
+        if (savedInstanceState != null) {
+            editContractFragment = (EditContractFragment) getSupportFragmentManager().getFragment(savedInstanceState, "editContractFragment");
+        } else {
+            editContractFragment = new EditContractFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_holder, editContractFragment)
+                    .commit();
+        }
 
         EditContractViewModelFactory factory =
                 new EditContractViewModelFactory(getApplication(),
@@ -49,6 +56,13 @@ public class EditContractActivity extends AppCompatActivity {
 
         contractViewModel = ViewModelProviders.of(this, factory)
                 .get(EditContractViewModel.class);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getSupportFragmentManager().putFragment(outState, "editContractFragment", editContractFragment);
     }
 
     @Override

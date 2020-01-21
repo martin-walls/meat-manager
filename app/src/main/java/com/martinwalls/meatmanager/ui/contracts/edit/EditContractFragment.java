@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.annotation.StyleRes;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,6 +36,11 @@ public class EditContractFragment extends Fragment
 
     private final int QUANTITY_MASS_DP = 4;
 
+    private final String SAVED_PRODUCT_TEXT_APPEARANCE = "productTextAppearance";
+    private final String SAVED_DESTINATION_TEXT_APPEARANCE = "destinationTextAppearance";
+    private final String SAVED_REPEAT_INTERVAL_TEXT_APPEARANCE = "repeatIntervalTextAppearance";
+    private final String SAVED_REPEAT_ON_VISIBILITY = "repeatOnVisibility";
+
     private FragmentEditContractBinding binding;
 
     private EditContractViewModel viewModel;
@@ -42,7 +48,14 @@ public class EditContractFragment extends Fragment
     private ProductsAddedAdapter productsAddedAdapter;
     private ArrayAdapter<CharSequence> spnRepeatOnAdapter;
 
-    private boolean isRepeatOnSpnInitialised = false;
+    private Bundle savedState;
+
+    @StyleRes
+    private int productTextAppearanceResId = R.style.InputFormTextAppearance_Unselected;
+    @StyleRes
+    private int destinationTextAppearanceResId = R.style.InputFormTextAppearance_Unselected;
+    @StyleRes
+    private int repeatIntervalTextAppearanceResId = R.style.InputFormTextAppearance_Unselected;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,7 +66,6 @@ public class EditContractFragment extends Fragment
 
         // allow user to select a product from list of all added products when they
         // click the product input field
-//        binding.editTextProduct.setOnClickListener(v -> showSelectProductFragment());
         binding.txtProduct.setOnClickListener(v -> showSelectProductFragment());
 
         binding.btnAddProduct.setOnClickListener(v -> commitSelectedProduct());
@@ -89,6 +101,13 @@ public class EditContractFragment extends Fragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        if (savedState != null) {
+            savedInstanceState = savedState;
+        }
+        if (savedInstanceState != null) {
+            restoreState(savedInstanceState);
+        }
 
         if (getActivity() instanceof EditContractActivity) {
             viewModel = ((EditContractActivity) getActivity()).getContractViewModel();
@@ -143,10 +162,6 @@ public class EditContractFragment extends Fragment
         binding.spnRepeatOn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (!isRepeatOnSpnInitialised) {
-                    isRepeatOnSpnInitialised = true;
-                    return;
-                }
                 viewModel.setRepeatOn(position + 1);
             }
 
@@ -157,6 +172,43 @@ public class EditContractFragment extends Fragment
         // reminder button listeners
         binding.btnReminderPlus.setOnClickListener(v -> incrementReminder());
         binding.btnReminderMinus.setOnClickListener(v -> decrementReminder());
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        saveState(outState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if (savedState == null) {
+            savedState = new Bundle();
+        }
+        saveState(savedState);
+    }
+
+    private void saveState(@NonNull Bundle outState) {
+        outState.putInt(SAVED_PRODUCT_TEXT_APPEARANCE, productTextAppearanceResId);
+        outState.putInt(SAVED_DESTINATION_TEXT_APPEARANCE, destinationTextAppearanceResId);
+        outState.putInt(SAVED_REPEAT_INTERVAL_TEXT_APPEARANCE, repeatIntervalTextAppearanceResId);
+
+        //todo save quantities row visibility
+        outState.putInt(SAVED_REPEAT_ON_VISIBILITY, binding.inputRepeatOn.getVisibility());
+    }
+
+    private void restoreState(@NonNull Bundle savedState) {
+        binding.inputRepeatOn.setVisibility(savedState.getInt(SAVED_REPEAT_ON_VISIBILITY));
+
+        productTextAppearanceResId = savedState.getInt(SAVED_PRODUCT_TEXT_APPEARANCE);
+        binding.txtProduct.setTextAppearance(productTextAppearanceResId);
+        destinationTextAppearanceResId = savedState.getInt(SAVED_DESTINATION_TEXT_APPEARANCE);
+        binding.txtDestination.setTextAppearance(destinationTextAppearanceResId);
+        repeatIntervalTextAppearanceResId = savedState.getInt(SAVED_REPEAT_INTERVAL_TEXT_APPEARANCE);
+        binding.txtRepeatInterval.setTextAppearance(repeatIntervalTextAppearanceResId);
     }
 
     @Override
@@ -185,12 +237,16 @@ public class EditContractFragment extends Fragment
 
     private void setProductText(String text) {
         binding.txtProduct.setText(text);
-        binding.txtProduct.setTextAppearance(R.style.InputFormTextAppearance_Selected);
+        productTextAppearanceResId = R.style.InputFormTextAppearance_Selected;
+        binding.txtProduct.setTextAppearance(productTextAppearanceResId);
     }
 
     private void clearProductText() {
         binding.txtProduct.setText(R.string.contracts_input_product);
-        binding.txtProduct.setTextAppearance(R.style.InputFormTextAppearance_Unselected);
+        if (productTextAppearanceResId != R.style.InputFormTextAppearance_Invalid) {
+            productTextAppearanceResId = R.style.InputFormTextAppearance_Unselected;
+            binding.txtProduct.setTextAppearance(productTextAppearanceResId);
+        }
     }
 
     private boolean validateQuantityMassInputField() {
@@ -243,12 +299,16 @@ public class EditContractFragment extends Fragment
 
     private void setDestinationText(String text) {
         binding.txtDestination.setText(text);
-        binding.txtDestination.setTextAppearance(R.style.InputFormTextAppearance_Selected);
+        destinationTextAppearanceResId = R.style.InputFormTextAppearance_Selected;
+        binding.txtDestination.setTextAppearance(destinationTextAppearanceResId);
     }
 
     private void clearDestinationText() {
         binding.txtDestination.setText(R.string.contracts_input_destination);
-        binding.txtDestination.setTextAppearance(R.style.InputFormTextAppearance_Unselected);
+        if (destinationTextAppearanceResId != R.style.InputFormTextAppearance_Invalid) {
+            destinationTextAppearanceResId = R.style.InputFormTextAppearance_Unselected;
+            binding.txtDestination.setTextAppearance(destinationTextAppearanceResId);
+        }
     }
 
     private void showRepeatIntervalDialog() {
@@ -287,12 +347,16 @@ public class EditContractFragment extends Fragment
 
     private void setRepeatIntervalText(Interval interval) {
         binding.txtRepeatInterval.setText(formatRepeatIntervalDisplayText(interval));
-        binding.txtRepeatInterval.setTextAppearance(R.style.InputFormTextAppearance_Selected);
+        repeatIntervalTextAppearanceResId = R.style.InputFormTextAppearance_Selected;
+        binding.txtRepeatInterval.setTextAppearance(repeatIntervalTextAppearanceResId);
     }
 
     private void clearRepeatIntervalText() {
         binding.txtRepeatInterval.setText(R.string.contracts_input_repeat_interval);
-        binding.txtRepeatInterval.setTextAppearance(R.style.InputFormTextAppearance_Unselected);
+        if (repeatIntervalTextAppearanceResId != R.style.InputFormTextAppearance_Invalid) {
+            repeatIntervalTextAppearanceResId = R.style.InputFormTextAppearance_Unselected;
+            binding.txtRepeatInterval.setTextAppearance(repeatIntervalTextAppearanceResId);
+        }
     }
 
     /**
@@ -379,13 +443,16 @@ public class EditContractFragment extends Fragment
             //todo make invalid text appearance persist between switching fragments
             if (state.getProductState() != ValidationState.VALID
                     && state.getProductListState() != ValidationState.VALID) {
-                binding.txtProduct.setTextAppearance(R.style.InputFormTextAppearance_Invalid);
+                productTextAppearanceResId = R.style.InputFormTextAppearance_Invalid;
+                binding.txtProduct.setTextAppearance(productTextAppearanceResId);
             }
             if (state.getDestinationState() != ValidationState.VALID) {
-                binding.txtDestination.setTextAppearance(R.style.InputFormTextAppearance_Invalid);
+                destinationTextAppearanceResId = R.style.InputFormTextAppearance_Invalid;
+                binding.txtDestination.setTextAppearance(destinationTextAppearanceResId);
             }
             if (state.getRepeatIntervalState() != ValidationState.VALID) {
-                binding.txtRepeatInterval.setTextAppearance(R.style.InputFormTextAppearance_Invalid);
+                repeatIntervalTextAppearanceResId = R.style.InputFormTextAppearance_Invalid;
+                binding.txtRepeatInterval.setTextAppearance(repeatIntervalTextAppearanceResId);
             }
 
             Toast.makeText(getContext(), R.string.contract_commit_error_msg, Toast.LENGTH_SHORT).show();

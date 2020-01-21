@@ -112,6 +112,8 @@
 
     <style name="InputFormTextAppearance">
         <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
 
     <style name="InputFormTextAppearance.Unselected">
