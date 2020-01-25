@@ -185,7 +185,7 @@ public class ContractDetailActivity extends AppCompatActivity
     private List<RelatedStock> getRelatedStock() {
         List<StockItem> stockForContract = SortUtils.mergeSort(
                 dbHandler.getAllStockForContract(contract.getContractId()),
-                StockItem.comparatorLocation());
+                StockItem.comparatorProductAlpha()); //doc see OrderDetailActivity
 
         // get list of related stock by product, with child stock items for each location
         List<RelatedStock> relatedStockList = new ArrayList<>();

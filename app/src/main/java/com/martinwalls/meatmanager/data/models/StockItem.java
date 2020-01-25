@@ -197,9 +197,9 @@ public class StockItem implements Serializable {
     }
 
     /**
-     * {@link Comparator} to sort stock alphabetically.
+     * {@link Comparator} to sort stock alphabetically by product name.
      */
-    public static Comparator<StockItem> comparatorAlpha() {
+    public static Comparator<StockItem> comparatorProductAlpha() {
         return (stock1, stock2) ->
                 stock1.getProduct().getProductName()
                         .compareTo(stock2.getProduct().getProductName());

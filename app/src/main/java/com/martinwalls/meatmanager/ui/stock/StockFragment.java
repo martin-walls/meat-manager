@@ -205,7 +205,7 @@ public class StockFragment extends Fragment
         List<StockItem> stock = dbHandler.getAllStock();
         switch (prefs.getInt(R.string.pref_stock_sort_by, SORT_BY_DEFAULT)) {
             case SortUtils.SORT_NAME:
-                stockList.addAll(SortUtils.mergeSort(stock, StockItem.comparatorAlpha()));
+                stockList.addAll(SortUtils.mergeSort(stock, StockItem.comparatorProductAlpha()));
                 break;
             case SortUtils.SORT_LOCATION:
                 stockList.addAll(SortUtils.mergeSort(stock, StockItem.comparatorLocation()));

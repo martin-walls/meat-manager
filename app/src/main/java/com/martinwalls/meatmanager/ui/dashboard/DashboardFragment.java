@@ -163,7 +163,7 @@ public class DashboardFragment extends Fragment
         // sort data by chosen sort mode
         switch (prefs.getInt(R.string.pref_dashboard_sort_by, SORT_BY_DEFAULT)) {
             case SortUtils.SORT_NAME:
-                stockList = SortUtils.mergeSort(stockList, StockItem.comparatorAlpha());
+                stockList = SortUtils.mergeSort(stockList, StockItem.comparatorProductAlpha());
                 break;
             case SortUtils.SORT_AMOUNT_DESC:
                 stockList = SortUtils.mergeSort(stockList, StockItem.comparatorAmount(false));

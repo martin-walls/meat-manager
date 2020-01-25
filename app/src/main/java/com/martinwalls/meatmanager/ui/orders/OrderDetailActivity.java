@@ -173,7 +173,13 @@ public class OrderDetailActivity extends AppCompatActivity
     private void initStockForOrder() {
         List<StockItem> stockForOrder = SortUtils.mergeSort(
                 dbHandler.getAllStockForOrder(order.getOrderId()),
-                StockItem.comparatorLocation());
+                StockItem.comparatorProductAlpha());
+        //doc this fixed bug found in test 3.3, 4.3:
+        // was: StockItem.comparatorLocation(),
+        // now:          .comparatorProductAlpha()
+        // The stock items should be sorted by product so the next loop can group
+        // them by product by comparing each product to the one before and seeing
+        // if they are different.
 
         // get list of related stock by product, with child stock items for each location
         List<RelatedStock> relatedStockList = new ArrayList<>();
