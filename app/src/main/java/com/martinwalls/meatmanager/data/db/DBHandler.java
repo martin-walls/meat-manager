@@ -640,6 +640,8 @@ public class DBHandler extends SQLiteOpenHelper {
         final String ALIAS_DEST = "Dest";
         final String ALIAS_DEST_ID = "DestId";
         final String ALIAS_DEST_NAME = "DestName";
+        final String ALIAS_TOTAL_MASS = "TotalMass";
+        final String ALIAS_TOTAL_BOXES = "TotalBoxes";
         String query = "SELECT "
                 + StockTable.ID + ","
                 + StockTable.TABLE_NAME + "." + StockTable.PRODUCT_ID + ","
@@ -650,8 +652,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 + " AS " + ALIAS_SUPPLIER_NAME + ","
                 + ALIAS_DEST + "." + LocationsTable.ID + " AS " + ALIAS_DEST_ID + ","
                 + ALIAS_DEST + "." + LocationsTable.NAME + " AS " + ALIAS_DEST_NAME + ","
-                + StockTable.MASS + ","
-                + StockTable.NUM_BOXES + ","
+                + "SUM(" + StockTable.MASS + ") " + ALIAS_TOTAL_MASS + ","
+                + "SUM(" + StockTable.NUM_BOXES + ") " + ALIAS_TOTAL_BOXES + ","
                 + StockTable.QUALITY + ","
                 + ProductsTable.TABLE_NAME + "." + ProductsTable.NAME + ","
                 + ProductsTable.TABLE_NAME + "." + ProductsTable.MEAT_TYPE
@@ -701,10 +703,10 @@ public class DBHandler extends SQLiteOpenHelper {
             stockItem.setDestName(
                     cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_DEST_NAME)));
             stockItem.setMass(
-                    cursor.getDouble(cursor.getColumnIndexOrThrow(StockTable.MASS)));
-            if (!cursor.isNull(cursor.getColumnIndexOrThrow(StockTable.NUM_BOXES))) {
+                    cursor.getDouble(cursor.getColumnIndexOrThrow(ALIAS_TOTAL_MASS)));
+            if (!cursor.isNull(cursor.getColumnIndexOrThrow(ALIAS_TOTAL_BOXES))) {
                 stockItem.setNumBoxes(
-                        cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.NUM_BOXES)));
+                        cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_TOTAL_BOXES)));
             } else {
                 stockItem.setNumBoxes(-1);
             }
@@ -730,6 +732,8 @@ public class DBHandler extends SQLiteOpenHelper {
         final String ALIAS_DEST = "Dest";
         final String ALIAS_DEST_ID = "DestId";
         final String ALIAS_DEST_NAME = "DestName";
+        final String ALIAS_TOTAL_MASS = "TotalMass";
+        final String ALIAS_TOTAL_BOXES = "TotalBoxes";
         String query = "SELECT "
                 + StockTable.ID + ","
                 + StockTable.TABLE_NAME + "." + StockTable.PRODUCT_ID + ","
@@ -740,8 +744,8 @@ public class DBHandler extends SQLiteOpenHelper {
                     + " AS " + ALIAS_SUPPLIER_NAME + ","
                 + ALIAS_DEST + "." + LocationsTable.ID + " AS " + ALIAS_DEST_ID + ","
                 + ALIAS_DEST + "." + LocationsTable.NAME + " AS " + ALIAS_DEST_NAME + ","
-                + StockTable.MASS + ","
-                + StockTable.NUM_BOXES + ","
+                + "SUM(" + StockTable.MASS + ") " + ALIAS_TOTAL_MASS + ","
+                + "SUM(" + StockTable.NUM_BOXES + ") " + ALIAS_TOTAL_BOXES + ","
                 + StockTable.QUALITY + ","
                 + ProductsTable.TABLE_NAME + "." + ProductsTable.NAME + ","
                 + ProductsTable.TABLE_NAME + "." + ProductsTable.MEAT_TYPE
@@ -792,10 +796,10 @@ public class DBHandler extends SQLiteOpenHelper {
             stockItem.setDestName(
                     cursor.getString(cursor.getColumnIndexOrThrow(ALIAS_DEST_NAME)));
             stockItem.setMass(
-                    cursor.getDouble(cursor.getColumnIndexOrThrow(StockTable.MASS)));
-            if (!cursor.isNull(cursor.getColumnIndexOrThrow(StockTable.NUM_BOXES))) {
+                    cursor.getDouble(cursor.getColumnIndexOrThrow(ALIAS_TOTAL_MASS)));
+            if (!cursor.isNull(cursor.getColumnIndexOrThrow(ALIAS_TOTAL_BOXES))) {
                 stockItem.setNumBoxes(
-                        cursor.getInt(cursor.getColumnIndexOrThrow(StockTable.NUM_BOXES)));
+                        cursor.getInt(cursor.getColumnIndexOrThrow(ALIAS_TOTAL_BOXES)));
             } else {
                 stockItem.setNumBoxes(-1);
             }
