@@ -160,24 +160,12 @@ public class DashboardFragment extends Fragment
         // handle case for no data
         showEmptyView(stockList.size() == 0);
 
-        // sort data by chosen sort mode
-//        switch (prefs.getInt(R.string.pref_dashboard_sort_by, SORT_BY_DEFAULT)) {
-//            case SortUtils.SORT_NAME:
-//                stockList = SortUtils.mergeSort(stockList, StockItem.comparatorProductAlpha());
-//                break;
-//            case SortUtils.SORT_AMOUNT_DESC:
-//                stockList = SortUtils.mergeSort(stockList, StockItem.comparatorAmount(false));
-//                break;
-//            case SortUtils.SORT_AMOUNT_ASC:
-//                stockList = SortUtils.mergeSort(stockList, StockItem.comparatorAmount(true));
-//                break;
-//        }
-
         List<ProductQuantity> productsRequiredList = dbHandler.getAllProductsRequired();
 
         // get data to pass to the chart view
         List<BarChartEntry> entries = getChartData(stockList, productsRequiredList);
 
+        // sort data by chosen sort mode
         switch (prefs.getInt(R.string.pref_dashboard_sort_by, SORT_BY_DEFAULT)) {
             case SortUtils.SORT_NAME:
                 entries = SortUtils.mergeSort(entries, BarChartEntry.comparatorNameAlpha());
