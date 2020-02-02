@@ -231,22 +231,21 @@
                 />
 
             <!-- reminder input -->
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/input_reminder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/input_form_space_left"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="@dimen/input_form_space_right"
-                android:orientation="horizontal"
                 >
 
                 <TextView
                     android:id="@+id/txt_reminder_hint"
                     style="@style/InputFormText"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:gravity="start|center_vertical"
                     android:paddingStart="@dimen/input_form_text_padding_left"
                     android:paddingTop="16dp"
@@ -254,38 +253,49 @@
                     android:text="@string/contracts_reminder_hint"
                     />
 
-                <!-- decrement reminder btn -->
-                <ImageButton
-                    android:id="@+id/btn_reminder_minus"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_margin="4dp"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:padding="4dp"
-                    app:srcCompat="@drawable/ic_minus"
-                    />
+                    android:orientation="horizontal"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="100dp"
+                    >
 
-                <!-- input field for reminder value -->
-                <TextView
-                    android:id="@+id/txt_reminder_value"
-                    style="@style/InputFormText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:gravity="center"
-                    />
+                    <!-- decrement reminder btn -->
+                    <ImageButton
+                        android:id="@+id/btn_reminder_minus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_margin="4dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_minus"
+                        />
 
-                <!-- increment reminder btn -->
-                <ImageButton
-                    android:id="@+id/btn_reminder_plus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="4dp"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:padding="4dp"
-                    app:srcCompat="@drawable/ic_add"
-                    />
+                    <!-- input field for reminder value -->
+                    <TextView
+                        android:id="@+id/txt_reminder_value"
+                        style="@style/InputFormText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:gravity="center"
+                        tools:text="1"
+                        />
+
+                    <!-- increment reminder btn -->
+                    <ImageButton
+                        android:id="@+id/btn_reminder_plus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_margin="4dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_add"
+                        />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/txt_reminder_days_before"
@@ -295,8 +305,10 @@
                     android:layout_marginStart="8dp"
                     android:gravity="center_vertical"
                     android:text="@string/contracts_reminder_day_before_one"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     />
-            </LinearLayout> <!-- /reminder input -->
+            </RelativeLayout> <!-- /reminder input -->
 
         </LinearLayout> <!-- /all inputs -->
     </ScrollView>
