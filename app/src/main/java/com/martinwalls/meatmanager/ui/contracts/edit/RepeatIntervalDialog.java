@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -28,8 +30,7 @@ import com.martinwalls.meatmanager.util.SimpleTextWatcher;
  */
 public class RepeatIntervalDialog extends DialogFragment {
 
-    public static final String EXTRA_SELECTED = "selected";
-    public static final String EXTRA_CUSTOM_INTERVAL = "customInterval";
+    public static final String EXTRA_SELECTED_INTERVAL = "selectedInterval";
 
     public static final int OPTION_WEEK = 1;
     public static final int OPTION_TWO_WEEK = 2;
@@ -72,21 +73,16 @@ public class RepeatIntervalDialog extends DialogFragment {
         View dialogView = inflater.inflate(R.layout.dialog_repeat_interval, null);
 
         Bundle args = getArguments();
-        int selectedOption = -1;
-        Interval selectedCustomInterval = new Interval();
+        Interval selectedInterval = null;
         if (args != null) {
-            selectedOption = args.getInt(EXTRA_SELECTED);
-            if (selectedOption == OPTION_CUSTOM) {
-                selectedCustomInterval =
-                        (Interval) args.getSerializable(EXTRA_CUSTOM_INTERVAL);
-            }
+            selectedInterval = (Interval) args.getSerializable(EXTRA_SELECTED_INTERVAL);
         }
 
         radioGroup = dialogView.findViewById(R.id.radio_group);
         customInterval = dialogView.findViewById(R.id.custom_interval);
 
         initRadioBtns(dialogView);
-        setRadioBtnSelected(selectedOption, selectedCustomInterval);
+        setRadioBtnSelected(selectedInterval);
 
         initTimePeriodSpinner(dialogView);
         initCustomValueInput(dialogView);
@@ -95,17 +91,6 @@ public class RepeatIntervalDialog extends DialogFragment {
         builder.setView(dialogView);
         return builder.create();
     }
-
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        try {
-//            listener = (RepeatIntervalDialogListener) context;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(getActivity().toString()
-//                    + " must implement " + RepeatIntervalDialogListener.class.getSimpleName());
-//        }
-//    }
 
     /**
      * Initialises the radio buttons with on click listeners.
@@ -130,22 +115,20 @@ public class RepeatIntervalDialog extends DialogFragment {
     }
 
     /**
-     * Selects the radio button corresponding to the stored interval.
+     * Selects the radio button corresponding to the stored interval. If null, no
+     * radio button is selected.
      */
-    private void setRadioBtnSelected(int selectedOption, Interval selectedCustomInterval) {
-        switch (selectedOption) {
-            case OPTION_WEEK:
+    private void setRadioBtnSelected(@Nullable Interval selectedInterval) {
+        if (selectedInterval != null) {
+            if (selectedInterval.hasValues(1, Interval.TimeUnit.WEEK)) {
                 radioWeek.setChecked(true);
-                break;
-            case OPTION_TWO_WEEK:
+            } else if (selectedInterval.hasValues(2, Interval.TimeUnit.WEEK)) {
                 radioTwoWeek.setChecked(true);
-                break;
-            case OPTION_MONTH:
+            } else if (selectedInterval.hasValues(1, Interval.TimeUnit.MONTH)) {
                 radioMonth.setChecked(true);
-                break;
-            case OPTION_CUSTOM:
-                setCustomRadioBtnSelected(selectedCustomInterval);
-                break;
+            } else {
+                setCustomRadioBtnSelected(selectedInterval);
+            }
         }
     }
 
@@ -153,7 +136,7 @@ public class RepeatIntervalDialog extends DialogFragment {
      * Shows a radio button for a custom interval that the user has entered,
      * and sets it to selected.
      */
-    private void setCustomRadioBtnSelected(Interval selectedCustomInterval) {
+    private void setCustomRadioBtnSelected(@NonNull Interval selectedCustomInterval) {
         if (selectedCustomInterval.getUnit() != null) {
             radioCustomSelected.setVisibility(View.VISIBLE);
             radioCustomSelected.setChecked(true);

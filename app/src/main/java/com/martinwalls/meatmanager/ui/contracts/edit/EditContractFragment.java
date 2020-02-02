@@ -39,7 +39,6 @@ public class EditContractFragment extends Fragment
     private final String SAVED_PRODUCT_TEXT_APPEARANCE = "productTextAppearance";
     private final String SAVED_DESTINATION_TEXT_APPEARANCE = "destinationTextAppearance";
     private final String SAVED_REPEAT_INTERVAL_TEXT_APPEARANCE = "repeatIntervalTextAppearance";
-    private final String SAVED_REPEAT_ON_VISIBILITY = "repeatOnVisibility";
 
     private FragmentEditContractBinding binding;
 
@@ -152,6 +151,7 @@ public class EditContractFragment extends Fragment
 
                     if (contract.getRepeatInterval() != null) {
                         setRepeatIntervalText(contract.getRepeatInterval());
+                        binding.inputRepeatOn.setVisibility(View.VISIBLE);
                         binding.textRepeatOn.setText(formatRepeatOnLabelText(contract.getRepeatInterval()));
 
                         spnRepeatOnAdapter.clear();
@@ -199,14 +199,9 @@ public class EditContractFragment extends Fragment
         outState.putInt(SAVED_PRODUCT_TEXT_APPEARANCE, productTextAppearanceResId);
         outState.putInt(SAVED_DESTINATION_TEXT_APPEARANCE, destinationTextAppearanceResId);
         outState.putInt(SAVED_REPEAT_INTERVAL_TEXT_APPEARANCE, repeatIntervalTextAppearanceResId);
-
-        //todo save quantities row visibility
-        outState.putInt(SAVED_REPEAT_ON_VISIBILITY, binding.inputRepeatOn.getVisibility());
     }
 
     private void restoreState(@NonNull Bundle savedState) {
-        binding.inputRepeatOn.setVisibility(savedState.getInt(SAVED_REPEAT_ON_VISIBILITY));
-
         productTextAppearanceResId = savedState.getInt(SAVED_PRODUCT_TEXT_APPEARANCE);
         binding.txtProduct.setTextAppearance(productTextAppearanceResId);
         destinationTextAppearanceResId = savedState.getInt(SAVED_DESTINATION_TEXT_APPEARANCE);
@@ -321,23 +316,7 @@ public class EditContractFragment extends Fragment
         Contract contract = viewModel.getContractObservable().getValue();
         if (contract != null) {
             Interval currentRepeatInterval = contract.getRepeatInterval();
-            //todo just pass interval, ie. move this logic into the dialog
-            if (currentRepeatInterval != null) {
-                if (currentRepeatInterval.hasValues(1, Interval.TimeUnit.WEEK)) {
-                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
-                            RepeatIntervalDialog.OPTION_WEEK);
-                } else if (currentRepeatInterval.hasValues(2, Interval.TimeUnit.WEEK)) {
-                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
-                            RepeatIntervalDialog.OPTION_TWO_WEEK);
-                } else if (currentRepeatInterval.hasValues(1, Interval.TimeUnit.MONTH)) {
-                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
-                            RepeatIntervalDialog.OPTION_MONTH);
-                } else {
-                    args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
-                            RepeatIntervalDialog.OPTION_CUSTOM);
-                    args.putSerializable(RepeatIntervalDialog.EXTRA_CUSTOM_INTERVAL, currentRepeatInterval);
-                }
-            }
+            args.putSerializable(RepeatIntervalDialog.EXTRA_SELECTED_INTERVAL, currentRepeatInterval);
         }
         dialog.setArguments(args);
         dialog.show(getFragmentManager(), "select_repeat_interval");
@@ -346,7 +325,6 @@ public class EditContractFragment extends Fragment
     @Override
     public void onRepeatIntervalSelected(Interval interval) {
         viewModel.setRepeatInterval(interval);
-        binding.inputRepeatOn.setVisibility(View.VISIBLE);
     }
 
     private void setRepeatIntervalText(Interval interval) {
