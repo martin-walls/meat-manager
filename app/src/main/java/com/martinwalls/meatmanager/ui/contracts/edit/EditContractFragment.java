@@ -27,6 +27,7 @@ import com.martinwalls.meatmanager.data.models.Contract;
 import com.martinwalls.meatmanager.data.models.Interval;
 import com.martinwalls.meatmanager.databinding.FragmentEditContractBinding;
 import com.martinwalls.meatmanager.ui.common.adapter.ProductsAddedAdapter;
+import com.martinwalls.meatmanager.ui.common.dialog.ConfirmCancelDialog;
 import com.martinwalls.meatmanager.util.EditTextValidator;
 import com.martinwalls.meatmanager.util.Utils;
 
@@ -217,11 +218,30 @@ public class EditContractFragment extends Fragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_done) {
-            commitContract();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_done:
+                commitContract();
+                return true;
+            case android.R.id.home:
+                showConfirmCancelDialog();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showConfirmCancelDialog() {
+        if (viewModel.getState().areAllStatesInitial()) {
+            onConfirmCancelDialogYesBtn();
+            return;
+        }
+
+        ConfirmCancelDialog dialog = new ConfirmCancelDialog();
+        dialog.setListener(this::onConfirmCancelDialogYesBtn);
+        dialog.show(getFragmentManager(), "confirm_cancel");
+    }
+
+    private void onConfirmCancelDialogYesBtn() {
+        getActivity().finish();
     }
 
     private void showSelectProductFragment() {
@@ -414,15 +434,12 @@ public class EditContractFragment extends Fragment
     }
 
     private void commitContract() {
-        //todo add validation for all fields, ie. that they are not empty (use viewModel)
-
         boolean isValid = true;
 
         EditContractViewModel.State state = viewModel.getState();
         if (!state.isTotalStateValid()) {
             isValid = false;
 
-            //todo make invalid text appearance persist between switching fragments
             if (state.getProductState() != ValidationState.VALID
                     && state.getProductListState() != ValidationState.VALID) {
                 productTextAppearanceResId = R.style.InputFormTextAppearance_Invalid;

@@ -25,30 +25,38 @@ public class ConfirmCancelDialog extends DialogFragment {
         Button btnYes = dialogView.findViewById(R.id.btn_yes);
         Button btnNo = dialogView.findViewById(R.id.btn_no);
 
-        btnYes.setOnClickListener(v -> {
-            listener.onConfirmCancelYesAction();
-            dismiss();
-        });
-        btnNo.setOnClickListener(v -> {
-            listener.onConfirmCancelNoAction();
-            dismiss();
-        });
+        btnYes.setOnClickListener(v -> onYesBtnClick());
+        btnNo.setOnClickListener(v -> onNoBtnClick());
 
         builder.setView(dialogView);
 
         return builder.create();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            listener = (ConfirmCancelListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement " + ConfirmCancelListener.class.getSimpleName());
-        }
+    public void setListener(ConfirmCancelListener listener) {
+        this.listener = listener;
     }
+
+    private void onYesBtnClick() {
+        if (listener != null) listener.onConfirmCancelYesAction();
+        dismiss();
+    }
+
+    private void onNoBtnClick() {
+        if (listener != null) listener.onConfirmCancelNoAction();
+        dismiss();
+    }
+
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        try {
+//            listener = (ConfirmCancelListener) context;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(getActivity().toString()
+//                    + " must implement " + ConfirmCancelListener.class.getSimpleName());
+//        }
+//    }
 
     /**
      * Interface to handle clicks on dialog buttons.

@@ -69,8 +69,11 @@ public class EditContractActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                super.onBackPressed();
-                return true;
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    goBack();
+                    return true;
+                }
+                return false;
             default:
                 return super.onOptionsItemSelected(item);
         }

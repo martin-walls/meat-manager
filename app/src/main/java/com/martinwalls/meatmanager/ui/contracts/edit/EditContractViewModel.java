@@ -16,104 +16,6 @@ import com.martinwalls.meatmanager.data.models.ProductQuantity;
 
 public class EditContractViewModel extends AndroidViewModel {
 
-    public class State {
-/*        public class FieldStatus {
-            private String name;
-            private ValidationState state;
-
-            public FieldStatus(@NonNull String name, @NonNull ValidationState state) {
-                this.name = name;
-                this.state = state;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public ValidationState getState() {
-                return state;
-            }
-
-            public void setState(ValidationState state) {
-                this.state = state;
-            }
-        }*/
-
-        private ValidationState productState;
-        private ValidationState productListState;
-        private ValidationState destinationState;
-        private ValidationState repeatIntervalState;
-        private ValidationState repeatOnState;
-        private ValidationState reminderState;
-
-        private State() {
-            productState = ValidationState.INITIAL;
-            productListState = ValidationState.INITIAL;
-            destinationState = ValidationState.INITIAL;
-            repeatIntervalState = ValidationState.INITIAL;
-            repeatOnState = ValidationState.INITIAL;
-            reminderState = ValidationState.INITIAL;
-        }
-
-        public boolean isTotalStateValid() {
-            if (productState != ValidationState.VALID
-                    && productListState != ValidationState.VALID) return false;
-            if (destinationState != ValidationState.VALID) return false;
-            if (repeatIntervalState != ValidationState.VALID) return false;
-            if (repeatOnState != ValidationState.VALID) return false;
-            if (reminderState != ValidationState.VALID) return false;
-            return true;
-        }
-
-        private void setProductState(ValidationState productState) {
-            this.productState = productState;
-        }
-
-        public ValidationState getProductState() {
-            return productState;
-        }
-
-        private void setProductListState(ValidationState productListState) {
-            this.productListState = productListState;
-        }
-
-        public ValidationState getProductListState() {
-            return productListState;
-        }
-
-        public ValidationState getDestinationState() {
-            return destinationState;
-        }
-
-        private void setDestinationState(ValidationState destinationState) {
-            this.destinationState = destinationState;
-        }
-
-        public ValidationState getRepeatIntervalState() {
-            return repeatIntervalState;
-        }
-
-        private void setRepeatIntervalState(ValidationState repeatIntervalState) {
-            this.repeatIntervalState = repeatIntervalState;
-        }
-
-        public ValidationState getRepeatOnState() {
-            return repeatOnState;
-        }
-
-        private void setRepeatOnState(ValidationState repeatOnState) {
-            this.repeatOnState = repeatOnState;
-        }
-
-        public ValidationState getReminderState() {
-            return reminderState;
-        }
-
-        private void setReminderState(ValidationState reminderState) {
-            this.reminderState = reminderState;
-        }
-    }
-
     private final DBHandler dbHandler;
 
     private final int contractId;
@@ -121,8 +23,8 @@ public class EditContractViewModel extends AndroidViewModel {
     private final boolean isNewContract;
 
     private MutableLiveData<Contract> contract;
-    private MutableLiveData<Product> selectedProduct;
 
+    private MutableLiveData<Product> selectedProduct;
     private State state;
 
     // new contract
@@ -160,9 +62,7 @@ public class EditContractViewModel extends AndroidViewModel {
         // new contracts initially have a default reminder of 1 day
         if (isNewContract) {
             contract.getValue().setReminder(1);
-            state.setReminderState(ValidationState.VALID);
             contract.getValue().setRepeatOn(1);
-            state.setRepeatOnState(ValidationState.VALID);
         }
     }
 
@@ -206,7 +106,7 @@ public class EditContractViewModel extends AndroidViewModel {
         selectedProduct.setValue(null);
         refreshContract();
         state.setProductState(ValidationState.INITIAL);
-        state.setProductListState(ValidationState.INITIAL);
+        state.setProductListState(ValidationState.VALID);
     }
 
     public void setDestination(Location destination) {
@@ -224,13 +124,13 @@ public class EditContractViewModel extends AndroidViewModel {
 
     public void setRepeatOn(int repeatOn) {
         contract.getValue().setRepeatOn(repeatOn);
-        state.setRepeatIntervalState(ValidationState.VALID);
+        state.setRepeatOnState(ValidationState.VALID);
     }
 
     public void setReminder(int reminder) {
         contract.getValue().setReminder(reminder);
         refreshContract();
-        state.setRepeatIntervalState(ValidationState.VALID);
+        state.setReminderState(ValidationState.VALID);
     }
 
     /**
@@ -243,11 +143,95 @@ public class EditContractViewModel extends AndroidViewModel {
         if (newValue < 0) newValue = 0;
         contract.getValue().setReminder(newValue);
         refreshContract();
-        state.setRepeatIntervalState(ValidationState.VALID);
+        state.setReminderState(ValidationState.VALID);
     }
 
     public boolean commitContract() {
         int newRowId = dbHandler.addContract(contract.getValue());
         return newRowId != -1;
+    }
+
+    public class State {
+        private ValidationState productState;
+        private ValidationState productListState;
+        private ValidationState destinationState;
+        private ValidationState repeatIntervalState;
+        private ValidationState repeatOnState;
+        private ValidationState reminderState;
+
+        private State() {
+            productState = ValidationState.INITIAL;
+            productListState = ValidationState.INITIAL;
+            destinationState = ValidationState.INITIAL;
+            repeatIntervalState = ValidationState.INITIAL;
+            repeatOnState = ValidationState.INITIAL;
+            reminderState = ValidationState.INITIAL;
+        }
+
+        public boolean isTotalStateValid() {
+            if (productState != ValidationState.VALID
+                    && productListState != ValidationState.VALID) return false;
+            if (destinationState != ValidationState.VALID) return false;
+            if (repeatIntervalState != ValidationState.VALID) return false;
+            return true;
+        }
+
+        public boolean areAllStatesInitial() {
+            if (productState != ValidationState.INITIAL) return false;
+            if (productListState != ValidationState.INITIAL) return false;
+            if (destinationState != ValidationState.INITIAL) return false;
+            if (repeatIntervalState != ValidationState.INITIAL) return false;
+            if (repeatOnState != ValidationState.INITIAL) return false;
+            if (reminderState != ValidationState.INITIAL) return false;
+            return true;
+        }
+
+        private void setProductState(ValidationState productState) {
+            this.productState = productState;
+        }
+
+        public ValidationState getProductState() {
+            return productState;
+        }
+
+        private void setProductListState(ValidationState productListState) {
+            this.productListState = productListState;
+        }
+
+        public ValidationState getProductListState() {
+            return productListState;
+        }
+
+        public ValidationState getDestinationState() {
+            return destinationState;
+        }
+
+        private void setDestinationState(ValidationState destinationState) {
+            this.destinationState = destinationState;
+        }
+
+        public ValidationState getRepeatIntervalState() {
+            return repeatIntervalState;
+        }
+
+        private void setRepeatIntervalState(ValidationState repeatIntervalState) {
+            this.repeatIntervalState = repeatIntervalState;
+        }
+
+        private void setRepeatOnState(ValidationState repeatOnState) {
+            this.repeatOnState = repeatOnState;
+        }
+
+        public ValidationState getRepeatOnState() {
+            return repeatOnState;
+        }
+
+        private void setReminderState(ValidationState reminderState) {
+            this.reminderState = reminderState;
+        }
+
+        public ValidationState getReminderState() {
+            return reminderState;
+        }
     }
 }

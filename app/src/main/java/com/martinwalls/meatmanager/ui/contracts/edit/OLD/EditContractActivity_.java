@@ -395,25 +395,25 @@ public class EditContractActivity_ extends AppCompatActivity
         Bundle args = new Bundle();
         Interval interval = viewModel.getSelectedRepeatInterval().getValue();
         if (interval != null) {
-            if (interval.hasValues(1, Interval.TimeUnit.WEEK)) {
-                // 1 week
-                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
-                        RepeatIntervalDialog.OPTION_WEEK);
-            } else if (interval.hasValues(2, Interval.TimeUnit.WEEK)) {
-                // 2 weeks
-                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
-                        RepeatIntervalDialog.OPTION_TWO_WEEK);
-            } else if (interval.hasValues(1, Interval.TimeUnit.MONTH)) {
-                // 1 month
-                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
-                        RepeatIntervalDialog.OPTION_MONTH);
-            } else {
-                // custom interval
-                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
-                        RepeatIntervalDialog.OPTION_CUSTOM);
-                args.putSerializable(RepeatIntervalDialog.EXTRA_CUSTOM_INTERVAL,
-                        interval);
-            }
+//            if (interval.hasValues(1, Interval.TimeUnit.WEEK)) {
+//                // 1 week
+//                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+//                        RepeatIntervalDialog.OPTION_WEEK);
+//            } else if (interval.hasValues(2, Interval.TimeUnit.WEEK)) {
+//                // 2 weeks
+//                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+//                        RepeatIntervalDialog.OPTION_TWO_WEEK);
+//            } else if (interval.hasValues(1, Interval.TimeUnit.MONTH)) {
+//                // 1 month
+//                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+//                        RepeatIntervalDialog.OPTION_MONTH);
+//            } else {
+//                // custom interval
+//                args.putInt(RepeatIntervalDialog.EXTRA_SELECTED,
+//                        RepeatIntervalDialog.OPTION_CUSTOM);
+//                args.putSerializable(RepeatIntervalDialog.EXTRA_CUSTOM_INTERVAL,
+//                        interval);
+//            }
         }
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), "repeat_interval");
