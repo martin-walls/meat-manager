@@ -22,6 +22,7 @@ import com.martinwalls.meatmanager.util.undo.contract.EditContractAction;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class EditContractViewModelOLD extends AndroidViewModel {
 
     public static final int CONTRACT_NONE = -1;

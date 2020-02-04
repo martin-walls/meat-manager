@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
 import com.martinwalls.meatmanager.data.models.Location;
+
+import org.jetbrains.annotations.Contract;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -18,7 +22,7 @@ public class MapsHelper {
 
     private MapsHelper() {}
 
-    public static Intent getMapsIntent(Location location) {
+    public static Intent getMapsIntent(@NonNull Location location) {
         String query = getEncodedQuery(location);
         String url = BASE_URL + query;
 

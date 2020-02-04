@@ -1,5 +1,6 @@
 package com.martinwalls.meatmanager.ui.contracts.edit.OLD;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,6 +45,8 @@ import com.martinwalls.meatmanager.util.Utils;
 import java.time.LocalDate;
 import java.util.HashMap;
 
+@SuppressLint("Registered")
+@Deprecated
 public class EditContractActivity_ extends AppCompatActivity
         implements SearchItemAdapter.SearchItemAdapterListener,
         ProductsAddedAdapter.ProductsAddedAdapterListener,

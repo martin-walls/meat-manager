@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.martinwalls.meatmanager.ui.contracts.edit.EditContractActivity;
 
+@Deprecated
 public class EditContractViewModelFactoryOLD implements ViewModelProvider.Factory {
 
     private final Application application;

@@ -2,6 +2,7 @@ package com.martinwalls.meatmanager.ui.locations.detail;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,11 +11,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.martinwalls.meatmanager.R;
 import com.martinwalls.meatmanager.data.db.DBHandler;
 import com.martinwalls.meatmanager.data.location.MapsHelper;
 import com.martinwalls.meatmanager.data.models.Location;
+import com.martinwalls.meatmanager.databinding.ActivityLocationDetailBinding;
 import com.martinwalls.meatmanager.ui.locations.edit.EditLocationActivity;
 import com.martinwalls.meatmanager.ui.common.dialog.ConfirmDeleteDialog;
 import com.martinwalls.meatmanager.util.undo.UndoStack;
@@ -27,37 +30,57 @@ public class LocationDetailActivity extends AppCompatActivity
 
     public static final int REQUEST_REFRESH_ON_DONE = 1;
 
-    private DBHandler dbHandler; //todo ViewModel
-    private Location location;
+    private LocationDetailViewModel viewModel;
+
+    private ActivityLocationDetailBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location_detail);
+        binding = ActivityLocationDetailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         getSupportActionBar().setTitle(R.string.location_details_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        dbHandler = new DBHandler(this);
-
+        // get location ID passed in extras bundle
         Bundle extras = getIntent().getExtras();
+        int locationId = -1;
         if (extras != null) {
-            int locationId = extras.getInt(EXTRA_LOCATION_ID);
-            location = dbHandler.getLocation(locationId);
+            locationId = extras.getInt(EXTRA_LOCATION_ID);
         }
 
-        TextView address = findViewById(R.id.address);
-        address.setOnClickListener(v -> openAddressInMaps());
+        // get ViewModel
+        LocationDetailViewModelFactory factory =
+                new LocationDetailViewModelFactory(getApplication(), locationId);
+        viewModel = ViewModelProviders.of(this, factory)
+                .get(LocationDetailViewModel.class);
 
-        fillData();
-    }
+        viewModel.getLocation().observe(this, location -> {
+            binding.name.setText(location.getLocationName());
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (dbHandler == null) {
-            dbHandler = new DBHandler(this);
-        }
+            binding.locationType.setText(location.getLocationType().name());
+
+            binding.address.setText(getAddressDisplayString(location));
+
+            if (!TextUtils.isEmpty(location.getEmail())) {
+                binding.email.setVisibility(View.VISIBLE);
+                binding.email.setText(location.getEmail());
+            } else {
+                binding.email.setVisibility(View.GONE);
+            }
+
+            if (!TextUtils.isEmpty(location.getPhone())) {
+                binding.phone.setVisibility(View.VISIBLE);
+                binding.phone.setText(location.getPhone());
+            } else {
+                binding.phone.setVisibility(View.GONE);
+            }
+        });
+
+        //todo test this now that VM is added
+
+        binding.address.setOnClickListener(v -> openAddressInMaps());
     }
 
     @Override
@@ -93,15 +116,12 @@ public class LocationDetailActivity extends AppCompatActivity
 
     @Override
     public void onConfirmDelete() {
-        boolean success = dbHandler.deleteLocation(location.getLocationId());
+        boolean success = viewModel.deleteLocation();
         if (success) {
-            Toast.makeText(this, R.string.location_delete_success, Toast.LENGTH_SHORT)
-                    .show();
-            UndoStack.getInstance().push(new DeleteLocationAction(location));
+            Toast.makeText(this, R.string.location_delete_success, Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Toast.makeText(this, R.string.location_delete_error, Toast.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(this, R.string.location_delete_error, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -111,7 +131,7 @@ public class LocationDetailActivity extends AppCompatActivity
     private void startEditLocationActivity() {
         Intent editIntent = new Intent(this, EditLocationActivity.class);
         editIntent.putExtra(EditLocationActivity.EXTRA_LOCATION_ID,
-                location.getLocationId());
+                viewModel.getLocationId());
         startActivityForResult(editIntent, REQUEST_REFRESH_ON_DONE);
     }
 
@@ -121,45 +141,16 @@ public class LocationDetailActivity extends AppCompatActivity
      * error message to the user if not.
      */
     private void showConfirmDeleteDialog() {
-        if (dbHandler.isLocationSafeToDelete(location.getLocationId())) {
+        if (viewModel.isLocationSafeToDelete()) {
             DialogFragment dialog = new ConfirmDeleteDialog();
             Bundle args = new Bundle();
-            args.putString(ConfirmDeleteDialog.EXTRA_NAME, location.getLocationName());
+            args.putString(ConfirmDeleteDialog.EXTRA_NAME, viewModel.getLocation().getValue().getLocationName());
             dialog.setArguments(args);
             dialog.show(getSupportFragmentManager(), "confirm_delete");
         } else {
             Toast.makeText(this,
-                    getString(R.string.db_error_delete_location, location.getLocationName()),
+                    getString(R.string.db_error_delete_location, viewModel.getLocation().getValue().getLocationName()),
                     Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * Initialises fields with data from the {@link Location} being shown.
-     */
-    private void fillData() {
-        TextView name = findViewById(R.id.name);
-        name.setText(location.getLocationName());
-
-        TextView locationType = findViewById(R.id.location_type);
-        locationType.setText(location.getLocationType().name());
-
-        // combine address fields into one textview
-        TextView address = findViewById(R.id.address);
-        address.setText(getAddressDisplayString());
-
-        TextView email = findViewById(R.id.email);
-        if (!location.getEmail().isEmpty()) {
-            email.setText(location.getEmail());
-        } else {
-            email.setVisibility(View.GONE);
-        }
-
-        TextView phone = findViewById(R.id.phone);
-        if (!location.getPhone().isEmpty()) {
-            phone.setText(location.getPhone());
-        } else {
-            phone.setVisibility(View.GONE);
         }
     }
 
@@ -167,7 +158,7 @@ public class LocationDetailActivity extends AppCompatActivity
      * Combines the location's address fields into one string, so it can
      * be displayed in a single TextView.
      */
-    private String getAddressDisplayString() {
+    private String getAddressDisplayString(Location location) {
         StringBuilder builder = new StringBuilder();
         builder.append(location.getAddrLine1());
         if (!location.getAddrLine2().isEmpty()) {
@@ -189,7 +180,9 @@ public class LocationDetailActivity extends AppCompatActivity
      * Opens Google Maps and searches for the address of this location.
      */
     private void openAddressInMaps() {
-        Intent mapsIntent = MapsHelper.getMapsIntent(location);
+        if (viewModel.getLocation().getValue() == null) return;
+
+        Intent mapsIntent = MapsHelper.getMapsIntent(viewModel.getLocation().getValue());
         startActivity(mapsIntent);
     }
 }

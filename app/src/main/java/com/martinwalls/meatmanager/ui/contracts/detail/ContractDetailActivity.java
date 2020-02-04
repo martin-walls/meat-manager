@@ -119,14 +119,11 @@ public class ContractDetailActivity extends AppCompatActivity
     @Override
     public void onConfirmDelete() {
         boolean success = viewModel.deleteContract();
-
         if (success) {
-            Toast.makeText(this, R.string.db_delete_contract_success, Toast.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(this, R.string.db_delete_contract_success, Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Toast.makeText(this, R.string.db_delete_contract_error, Toast.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(this, R.string.db_delete_contract_error, Toast.LENGTH_SHORT).show();
         }
     }
 
