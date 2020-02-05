@@ -16,7 +16,7 @@ public class UndoStack {
     private static UndoStack INSTANCE = new UndoStack();
 
     // the maximum number of actions to store
-    private final int MAX_SIZE = 100;
+    private final int MAX_SIZE = 5;
 
     private List<UndoableAction> undoStack = new ArrayList<>();
     private List<UndoableAction> redoStack = new ArrayList<>();
