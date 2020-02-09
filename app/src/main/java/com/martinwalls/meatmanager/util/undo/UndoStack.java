@@ -104,6 +104,10 @@ public class UndoStack {
         return lastAction;
     }
 
+    public UndoableAction getLastAction() {
+        return undoStack.get(undoStack.size() - 1);
+    }
+
     /**
      * Shows a message to the user in the form of a {@link Snackbar}. If no
      * suitable View can be found to show a Snackbar, a {@link Toast} message
